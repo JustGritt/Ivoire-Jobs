@@ -104,6 +104,7 @@ func GetUsers(c *fiber.Ctx) error {
 // @Success 200 {object} User
 // @Failure 404 {string} string "User not found"
 // @Router /api/users/{id} [get]
+// @Security BearerAuth
 func GetUser(c *fiber.Ctx) error {
 	id := c.Params("id")
 	var user models.User

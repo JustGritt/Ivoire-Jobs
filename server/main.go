@@ -3,8 +3,8 @@ package main
 import (
 	"github.com/JustGritt/Ivoire-Jobs/database"
 	_ "github.com/JustGritt/Ivoire-Jobs/docs"
+	"github.com/JustGritt/Ivoire-Jobs/routes"
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/monitor"
 	jwtware "github.com/gofiber/jwt/v3"
@@ -19,36 +19,34 @@ const (
 func restricted(c *fiber.Ctx) error {
 	user := c.Locals("user").(*jwt.Token)
 	claims := user.Claims.(jwt.MapClaims)
-	name := claims["name"].(string)
-	c.SendString("Welcome " + name + "!")
+	id := claims["user_id"].(float64)
+	param, err := c.ParamsInt("id")
+
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"message": "Invalid ID",
+		})
+	}
+
+	if int(id) != param {
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+			"message": "Unauthorized",
+		})
+	}
+
 	return c.Next()
+
 }
 
-// @title Fiber Example API
-// @version 1.0
-// @description This is a sample swagger for Fiber
-// @termsOfService http://swagger.io/terms/
-// @contact.name API Support
-// @contact.email fiber@swagger.io
-// @license.name Apache 2.0
-// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
-// @host localhost:8080
-// @BasePath /
-func main() {
-	database.Connect()
-	app := fiber.New()
-	app.Use(cors.New())
-	app.Use(logger.New())
-	app.Use(logger.New(logger.Config{
-		Format: "[${ip}]:${port} ${status} - ${method} ${path}\n",
-	}))
+func setupRoutes(app *fiber.App) {
 	app.Get("/swagger/*", swagger.HandlerDefault)
 
-	app.Get("/", func(c *fiber.Ctx) error {
-		return c.SendString("Hello, World!")
-	})
-
 	app.Get("/metrics", monitor.New())
+
+	// Login route
+	app.Post("/login", routes.Login)
+	app.Post("/api/users", routes.CreateUser)
+	app.Get("/api/users", routes.GetUsers)
 
 	app.Use(jwtware.New(jwtware.Config{
 		ErrorHandler: func(c *fiber.Ctx, err error) error {
@@ -60,8 +58,35 @@ func main() {
 		SigningKey: []byte("secret"),
 	}))
 
+	app.Get("/api/users/:id", restricted, routes.GetUser)
+
 	// Restricted Routes
-	app.Get("/restricted", restricted)
+	//app.Get("/restricted")
+}
+
+// @title Fiber API - Ivoire Job
+// @version 1.0
+// @description This is a sample swagger for Fiber
+// @termsOfService http://swagger.io/terms/
+// @contact.name API Support
+// @contact.email fiber@swagger.io
+// @license.name Apache 2.0
+// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
+// @host fuzzy-space-guacamole-4vgqq7x6qw9fqjx6-3000.app.github.dev
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
+// @BasePath /
+func main() {
+	database.Connect()
+	app := fiber.New()
+	//app.Use(cors.New())
+	app.Use(logger.New())
+	app.Use(logger.New(logger.Config{
+		Format: "[${ip}]:${port} ${status} - ${method} ${path}\n",
+	}))
+
+	setupRoutes(app)
 
 	app.Listen(":3000")
 }
