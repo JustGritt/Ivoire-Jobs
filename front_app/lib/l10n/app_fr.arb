@@ -1,0 +1,21 @@
+{
+    "language": "Français",
+    "@language":{
+        "description": "Français"
+    },
+    "welcome_back": "Bienvenue à vous !",
+    "welcome_back_description": "Connectez-vous à votre compte pour continuer.",
+    "welcome_register": "Commencez par vous enregistrer !",
+    "no_account_text": "Vous n'avez pas de compte ?",
+    "firstname": "Prénom",
+    "lastname": "Nom",
+    "email": "Email",
+    "have_account_text": "Vous avez déjà un compte ?",
+    "username": "Nom d'utilisateur",
+    "password": "Mot de passe",
+    "btn_create ": "Créer un",
+    "btn_cancel"   : "Annuler",
+    "btn_register" : "S'enregistrer",
+    "btn_login"    : "Se connecter",
+    "btn_forgot_password": "Mot de passe oublié ?"
+}

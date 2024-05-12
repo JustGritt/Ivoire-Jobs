@@ -1,21 +1,60 @@
 name: clean_architecture
 description: "A new Flutter project."
-publish_to: 'none'
+publish_to: "none"
 version: 0.1.0
 
 environment:
-  sdk: '>=3.2.0 <4.0.0'
+  sdk: ">=3.2.0 <4.0.0"
 
 dependencies:
   dio: ^5.3.3
   flutter:
     sdk: flutter
+  flutter_animated_button: ^2.0.3
   flutter_dotenv: ^5.1.0
   flutter_local_notifications: ^17.0.1
+  flutter_localizations:
+    sdk: flutter
+  flutter_svg: ^2.0.10+1
+  intl: any
   local_auth: ^2.1.7
   provider: ^6.1.1
   shared_preferences: ^2.2.2
   url_launcher: ^6.2.1
+
+fonts:
+  - family: Okta
+    fonts:
+      - asset: assets/fonts/Groteskly-Yours-Okta-Neue-Black-Italic.otf
+      - asset: assets/fonts/Groteskly-Yours-Okta-Neue-Bold-Italic.otf
+      - asset: assets/fonts/Groteskly-Yours-Okta-Neue-ExtraLight-Italic.otf
+      - asset: assets/fonts/Groteskly-Yours-Okta-Neue-Heavy-Italic
+      - asset: assets/fonts/Groteskly-Yours-Okta-Neue-Italic.otf
+      - asset: assets/fonts/Groteskly-Yours-Okta-Neue-Medium-Italic.otf
+      - asset: assets/fonts/Groteskly-Yours-Okta-Neue-Normal-Italic.otf
+      - asset: assets/fonts/Groteskly-Yours-Okta-Neue-SemiBold-Italic.otf
+      - asset: assets/fonts/Groteskly-Yours-Okta-Neue-Thin-Italic.otf
+      - asset: assets/fonts/Groteskly-Yours-Okta-Neue-UltraLight-Italic.otf
+        style: italic
+
+      - asset: assets/fonts/Groteskly-Yours-Okta-Neue-Black.otf
+        style: 900
+      - asset: assets/fonts/Groteskly-Yours-Okta-Neue-Bold.otf
+        weight: 700
+      - asset: assets/fonts/Groteskly-Yours-Okta-Neue-ExtraLight.otf
+        weight: 200
+      - asset: assets/fonts/Groteskly-Yours-Okta-Neue-Heavy.otf
+        weight: 900
+      - asset: assets/fonts/Groteskly-Yours-Okta-Neue-Medium.otf
+        weight: 500
+      - asset: assets/fonts/Groteskly-Yours-Okta-Neue-Normal.otf
+        weight: 400
+      - asset: assets/fonts/Groteskly-Yours-Okta-Neue-SemiBold.otf
+        weight: 600
+      - asset: assets/fonts/Groteskly-Yours-Okta-Neue-Thin.otf
+        weight: 100
+      - asset: assets/fonts/Groteskly-Yours-Okta-Neue-UltraLight.otf
+        weight: 200
 
 dev_dependencies:
   build_runner: ^2.4.6
@@ -27,6 +66,8 @@ dev_dependencies:
   mockito: ^5.4.3
 
 flutter:
+  generate: true
   uses-material-design: true
   assets:
     - .env
+    - assets/images/ill_dx.svg

@@ -2,11 +2,10 @@ import '../../core/classes/route_manager.dart';
 import 'controllers/controllers.dart';
 
 class AuthApp extends RouteManager {
-  static const String name = '';
-  static const String login = '${AuthApp.name}/login';
-  static const String profile = '${AuthApp.name}/profile';
-  static const String forget = '${AuthApp.name}/forget';
-  static const String register = '${AuthApp.name}/register';
+  static const String login = 'login';
+  static const String profile = 'profile';
+  static const String forget = 'forget';
+  static const String register = 'register';
 
   AuthApp() {
     addRoute(AuthApp.login, (context) => const LoginController());

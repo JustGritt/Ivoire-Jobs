@@ -33,7 +33,7 @@ class _LoginDesktopScreenState extends State<LoginDesktopScreen> {
             ),
 
             // Username Fields
-            usernameField(),
+            // usernameField(),
 
             // Password Fields
             passwordField(passHide: _isPasswordHide),

@@ -1,0 +1,21 @@
+{
+    "language": "English",
+    "@language":{
+        "description": "English"
+    },
+    "welcome_back": "Welcome to you !",
+    "welcome_back_description": "Connect to your account to continue.",
+    "welcome_register": "Start by registering !",
+    "no_account_text": "Don't have an account yet ?",
+    "firstname": "Firstname",
+    "lastname": "Lastname",
+    "email": "Email",
+    "have_account_text": "Have already an account ?",
+    "username": "Username",
+    "password": "Password",
+    "btn_create": "Create",
+    "btn_cancel"   : "Cancel",
+    "btn_register" : "Register",
+    "btn_login"    : "Login",
+    "btn_forgot_password": "Forgot password ?"
+}

@@ -3,6 +3,51 @@ import 'package:flutter/material.dart';
 
 import '../../config/config.dart';
 
+ThemeData defaultTheme = ThemeData(
+  fontFamily: 'Okta',
+  brightness: Brightness.light,
+  primarySwatch: AppColors.teal,
+  bottomAppBarColor: Colors.white,
+  scaffoldBackgroundColor: const Color.fromARGB(255, 222, 255, 252),
+  appBarTheme: const AppBarTheme(
+    titleTextStyle: TextStyle(
+      color: Colors.white,
+      fontSize: 20,
+      fontWeight: FontWeight.w500,
+    ),
+    backgroundColor: AppColors.white,
+    iconTheme: IconThemeData(color: Colors.white),
+  ),
+  navigationBarTheme: const NavigationBarThemeData(
+    backgroundColor: AppColors.white,
+  ),
+  
+  textTheme: TextTheme(
+    displayLarge: const TextStyle(
+        color: AppColors.black, fontSize: 25, fontWeight: FontWeight.w600),
+    displayMedium: const TextStyle(
+        color: AppColors.grey, fontSize: 16, fontWeight: FontWeight.w500),
+  ),
+  popupMenuTheme: const PopupMenuThemeData(
+    color: Color.fromARGB(255, 11, 238, 250),
+    elevation: 15,
+    enableFeedback: true,
+  ),
+  drawerTheme: const DrawerThemeData(
+    backgroundColor: Color.fromARGB(255, 213, 247, 249),
+    elevation: 10,
+  ),
+  bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+    backgroundColor: AppColors.teal,
+    selectedItemColor: Colors.white,
+    elevation: 10,
+    showSelectedLabels: true,
+  ),
+  primaryColorDark: AppColors.black,
+  bottomAppBarTheme: const BottomAppBarTheme(color: AppColors.teal),
+  useMaterial3: true,
+);
+
 class AppTheme {
   ThemeData? light;
   ThemeData? dark;
@@ -11,50 +56,23 @@ class AppTheme {
     this.light,
     this.dark,
   ]) {
-    light = light ??
-        ThemeData(
-          brightness: Brightness.light,
-          primarySwatch: AppColors.teal,
-          bottomAppBarColor: Colors.white,
-          scaffoldBackgroundColor: const Color.fromARGB(255, 222, 255, 252),
-          appBarTheme: const AppBarTheme(
-            titleTextStyle: TextStyle(
-              color: Colors.white,
-              fontSize: 20,
-              fontWeight: FontWeight.w500,
-            ),
-            backgroundColor: AppColors.teal,
-            iconTheme: IconThemeData(color: Colors.white),
-          ),
-          navigationBarTheme: const NavigationBarThemeData(
-            backgroundColor: AppColors.teal,
-          ),
-          popupMenuTheme: const PopupMenuThemeData(
-            color: Color.fromARGB(255, 11, 238, 250),
-            elevation: 15,
-            enableFeedback: true,
-          ),
-          drawerTheme: const DrawerThemeData(
-            backgroundColor: Color.fromARGB(255, 213, 247, 249),
-            elevation: 10,
-          ),
-          bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-            backgroundColor: AppColors.teal,
-            selectedItemColor: Colors.white,
-            elevation: 10,
-            showSelectedLabels: true,
-          ),
-          bottomAppBarTheme: const BottomAppBarTheme(color: AppColors.teal),
-          useMaterial3: true,
-        );
+    light = light ?? defaultTheme;
 
     dark = dark ??
-        ThemeData(
+        defaultTheme.copyWith(
           brightness: Brightness.dark,
-          primarySwatch: Colors.yellow,
           buttonTheme: const ButtonThemeData(
             textTheme: ButtonTextTheme.primary,
             buttonColor: Colors.white,
+          ),
+          primaryColorDark: AppColors.white,
+          textTheme: TextTheme(
+            displayLarge: const TextStyle(
+                color: Colors.white, fontWeight: FontWeight.w600),
+            displayMedium: const TextStyle(
+                color: AppColors.grey,
+                fontSize: 16,
+                fontWeight: FontWeight.w500),
           ),
           bottomNavigationBarTheme: const BottomNavigationBarThemeData(
             backgroundColor: AppColors.space,
@@ -62,7 +80,6 @@ class AppTheme {
             elevation: 10,
             showSelectedLabels: true,
           ),
-          useMaterial3: true,
         );
   }
 

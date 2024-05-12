@@ -1,3 +1,4 @@
+import 'package:clean_architecture/config/app_colors.dart';
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
@@ -19,7 +20,7 @@ class CALinkButton extends StatelessWidget {
         child: Center(
           child: Text(
             labelStr,
-            style: const TextStyle(color: Colors.blue),
+            style: const TextStyle(color: AppColors.grey),
           ),
         ),
       ),

@@ -1,133 +1,185 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/classes/route_manager.dart';
-import '../../../../core/widgets/day_night_switch.dart';
-import '../../widgets/auth_button.dart';
-import '../../widgets/text_input_field.dart';
+import 'dart:developer';
+import 'dart:ui';
 
-class RegisterMobileScreen extends StatelessWidget {
-  const RegisterMobileScreen({Key? key}) : super(key: key);
+import 'package:clean_architecture/core/helpers/login_helper.dart';
+import 'package:clean_architecture/features/auth_mod/widgets/app_button.dart';
+import 'package:flutter/gestures.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_svg/svg.dart';
+
+import '../../widgets/widget_functions.dart';
+
+class RegisterMobileScreen extends StatefulWidget {
+  const RegisterMobileScreen({
+    Key? key,
+    void Function(String username, String password)? onLogged,
+  }) : super(key: key);
+
+  @override
+  State<RegisterMobileScreen> createState() => _RegisterMobileScreenState();
+}
+
+class _RegisterMobileScreenState extends State<RegisterMobileScreen> {
+  final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
+  bool _isPasswordHide = true;
+  String? username, password;
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
+    AppLocalizations appLocalizations = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Register Screen'),
-        leading: IconButton(
-          onPressed: () {
-            Nav.to(context, '/login');
-          },
-          icon: const Icon(Icons.arrow_back),
-        ),
-        actions: const [DayNightSwitch()],
-      ),
-      body: Form(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ListView(
-            children: [
-              const SizedBox(
-                height: 50,
-              ),
-              const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text(
-                  "If you don't have your account. Then",
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text(
-                  "Register Yourself",
-                  style: TextStyle(fontSize: 24),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              TextInputField(
-                prefixIcon: Icons.account_circle_outlined,
-                labelTextStr: 'Enter Your Name',
-              ),
-              TextInputField(
-                prefixIcon: Icons.email_outlined,
-                labelTextStr: 'Enter Your Email',
-              ),
-              TextInputField(
-                prefixIcon: Icons.security,
-                labelTextStr: 'Enter Your Password',
-                obscureText: true,
-                suffixIcon: IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.visibility_rounded),
-                ),
-              ),
-              TextInputField(
-                prefixIcon: Icons.security,
-                labelTextStr: 'Enter Your Confirm Password',
-                obscureText: true,
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              AuthButton(
-                  label: 'Register Now',
-                  onPressed: () {
-                    Nav.to(context, '/profile');
-                  }),
-              const SizedBox(
-                height: 15,
-              ),
-              const Divider(
-                height: 4,
-                thickness: 2,
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              const Text(
-                'Register With',
-                style: TextStyle(
-                  fontSize: 20,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              socialButtons(),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+        backgroundColor: theme.cardColor,
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Form(
+              key: _globalKey,
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 14.0),
+                child: Column(children: [
+                  Stack(children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(vertical: 18.0),
+                      child: SvgPicture.asset(
+                        fit: BoxFit.fill,
+                        'assets/images/ill_dx.svg',
+                        width: 200,
+                        semanticsLabel: 'Acme Logo',
+                      ),
+                    ),
+                    Positioned(
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      child: ClipRect(
+                        child: BackdropFilter(
+                          filter: ImageFilter.blur(sigmaX: 2.0, sigmaY: 2.0),
+                          child: Container(
+                            // the size where the blurring starts
+                            height: 40,
+                            color: Colors.transparent,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      child: ClipRect(
+                        child: BackdropFilter(
+                          filter: ImageFilter.blur(sigmaX: 2.0, sigmaY: 2.0),
+                          child: Container(
+                            // the size where the blurring starts
+                            height: 50,
+                            color: Colors.transparent,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ]),
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 30.0),
+                    child: Column(
+                      children: [
+                        Text(
+                          appLocalizations.welcome_back,
+                          style: theme.textTheme.displayLarge,
+                          textAlign: TextAlign.center,
+                        ),
+                        Text(
+                          appLocalizations.welcome_register,
+                          style: theme.textTheme.displayMedium,
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  ),
 
-  Padding socialButtons() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          AuthButton(
-            label: 'Facebook',
-            onPressed: () {},
-            backgroundColor: const Color.fromARGB(255, 7, 108, 191),
-            stretch: true,
-            textColor: Colors.white,
+                  const SizedBox(
+                    height: 5,
+                  ),
+
+                  // Username Fields
+                  Field(
+                    nameField: appLocalizations.lastname,
+                    onValid: (user) => username = user,
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Field(
+                    nameField: appLocalizations.firstname,
+                    onValid: (user) => username = user,
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Field(
+                    nameField: appLocalizations.email,
+                    onValid: (user) => username = user,
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+          
+                  // Password Fields
+                  passwordField(
+                    onValid: (pass) => password = pass,
+                    passHide: _isPasswordHide,
+                    onKeyBtnPressed: (val) {
+                      setState(() {
+                        _isPasswordHide = val;
+                      });
+                    },
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+
+                  // Buttons Fields
+                
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  AppButton(
+                    onPressed: () {
+                      if (_globalKey.currentState!.validate()) {
+                        log('username: $username, password: $password');
+                        doAuth(context, username!, password!);
+                        debugPrint('Login Validate');
+                      }
+                    },
+                    backgroundColor: theme.primaryColorDark,
+                    label: appLocalizations.btn_register,
+                    stretch: true,
+                  ),
+        
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  Text.rich(
+                      TextSpan(
+                          text: '${appLocalizations.have_account_text} ',
+                          children: <InlineSpan>[
+                            TextSpan(
+                              text: appLocalizations.btn_login,
+                              style: theme.textTheme.displayMedium?.copyWith(
+                                  color: theme.primaryColorDark,
+                                  fontWeight: FontWeight.bold),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () =>Navigator.of(context).pop(),
+                            )
+                          ]),
+                      style: theme.textTheme.displayMedium),
+                ]),
+              ),
+            ),
           ),
-          AuthButton(
-            label: 'Google',
-            onPressed: () {},
-            backgroundColor: const Color.fromARGB(255, 235, 53, 17),
-            stretch: true,
-            textColor: Colors.white,
-          ),
-          AuthButton(
-            label: 'LinkedIn',
-            onPressed: () {},
-            backgroundColor: const Color.fromARGB(255, 17, 126, 235),
-            stretch: true,
-            textColor: Colors.white,
-          ),
-        ],
-      ),
-    );
+        ));
   }
 }

@@ -5,10 +5,11 @@ import '../features/features.dart';
 class ApiEndpoint {
   // News Server
   static const rapidUrl = 'https://free-news.p.rapidapi.com';
+  static const apiUrl = 'http://localhost:3000';
   static const news = '$rapidUrl/v1/search';
 
   // Server Links
-  static const baseUrl = 'https://apps.shibajidebnath.com/';
+  static const baseUrl = 'http://localhost:3000/';
   static const api = '${baseUrl}api/';
 
   // Enqueries Endpoints
