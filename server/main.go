@@ -44,7 +44,7 @@ func setupRoutes(app *fiber.App) {
 	app.Get("/metrics", monitor.New())
 
 	// Login route
-	app.Post("/login", routes.Login)
+	app.Post("/api/login", routes.Login)
 	app.Post("/api/users", routes.CreateUser)
 	app.Get("/api/users", routes.GetUsers)
 

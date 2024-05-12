@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 
 class AppColors {
   static const int _black = 0xFF222831;
+  static const int _white = 0xFFEEEEEE;
   static const MaterialColor black = MaterialColor(_black, {
     500: Color(_black),
+  });
+  static const MaterialColor white = MaterialColor(_white, {
+    500: Color(_white),
   });
 
   static const int _space = 0xFF393E46;
@@ -12,10 +16,7 @@ class AppColors {
     500: Color(_space),
   });
 
-  static const int _grey = 0xEEEEEEEE;
-  static const MaterialColor grey = MaterialColor(_grey, {
-    500: Color(_grey),
-  });
+  static const Color grey = Color.fromARGB(228, 161, 161, 161);
 
   static const int _teal = 0xFF00ADB5;
   static const MaterialColor teal = MaterialColor(

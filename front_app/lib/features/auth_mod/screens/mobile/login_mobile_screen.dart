@@ -1,9 +1,15 @@
 import 'dart:developer';
+import 'dart:ui';
 
+import 'package:clean_architecture/core/classes/route_manager.dart';
+import 'package:clean_architecture/core/helpers/login_helper.dart';
+import 'package:clean_architecture/features/auth_mod/widgets/app_button.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_svg/svg.dart';
 
-import '../../../../core/core.dart';
-import '../../widgets/auth_button.dart';
 import '../../widgets/widget_functions.dart';
 
 class LoginMobileScreen extends StatefulWidget {
@@ -23,105 +29,165 @@ class _LoginMobileScreenState extends State<LoginMobileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
+    AppLocalizations appLocalizations = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Login Screen'),
-        centerTitle: true,
-        actions: const [DayNightSwitch()],
-      ),
-      body: Form(
-        key: _globalKey,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ListView(
-            children: [
-              SizedBox(
-                height: MediaQuery.of(context).size.height / 5.5,
-              ),
+        backgroundColor: theme.cardColor,
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Form(
+              key: _globalKey,
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 14.0),
+                child: Column(children: [
+                  Stack(children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(vertical: 18.0),
+                      child: SvgPicture.asset(
+                        fit: BoxFit.fill,
+                        'assets/images/ill_dx.svg',
+                        width: 200,
+                        semanticsLabel: 'Acme Logo',
+                      ),
+                    ),
+                    Positioned(
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      child: ClipRect(
+                        child: BackdropFilter(
+                          filter: ImageFilter.blur(sigmaX: 2.0, sigmaY: 2.0),
+                          child: Container(
+                            // the size where the blurring starts
+                            height: 40,
+                            color: Colors.transparent,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      child: ClipRect(
+                        child: BackdropFilter(
+                          filter: ImageFilter.blur(sigmaX: 2.0, sigmaY: 2.0),
+                          child: Container(
+                            // the size where the blurring starts
+                            height: 50,
+                            color: Colors.transparent,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ]),
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 30.0),
+                    child: Column(
+                      children: [
+                        Text(
+                          appLocalizations.welcome_back,
+                          style: theme.textTheme.displayLarge,
+                          textAlign: TextAlign.center,
+                        ),
+                        Text(
+                          appLocalizations.welcome_back_description,
+                          style: theme.textTheme.displayMedium,
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  ),
 
-              const Text(
-                'Login Area',
-                style: TextStyle(fontSize: 30),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(
-                height: 5,
-              ),
+                  const SizedBox(
+                    height: 5,
+                  ),
 
-              // Username Fields
-              usernameField(
-                onValid: (user) => username = user,
-              ),
-              const SizedBox(
-                height: 10,
-              ),
+                  // Username Fields
+                  Field(
+                    nameField: appLocalizations.email,
+                    onValid: (user) => username = user,
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
 
-              // Password Fields
-              passwordField(
-                onValid: (pass) => password = pass,
-                passHide: _isPasswordHide,
-                onKeyBtnPressed: (val) {
-                  setState(() {
-                    _isPasswordHide = val;
-                  });
-                },
-              ),
-              const SizedBox(
-                height: 15,
-              ),
+                  // Password Fields
+                  passwordField(
+                    onValid: (pass) => password = pass,
+                    passHide: _isPasswordHide,
+                    onKeyBtnPressed: (val) {
+                      setState(() {
+                        _isPasswordHide = val;
+                      });
+                    },
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
 
-              // Buttons Fields
-              forgetButton(
-                context,
-                onForget: () {
-                  return true;
-                },
+                  // Buttons Fields
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      forgetButton(
+                        context,
+                        onForget: () {
+                          return true;
+                        },
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  AppButton(
+                    onPressed: () {
+                      if (_globalKey.currentState!.validate()) {
+                        log('username: $username, password: $password');
+                        doAuth(context, username!, password!);
+                        debugPrint('Login Validate');
+                      }
+                    },
+                    backgroundColor: theme.primaryColorDark,
+                    label: 'Login',
+                    stretch: true,
+                  ),
+                  // loginRegisterButtons(
+                  //   context,
+                  //   key: _globalKey,
+                  //   onLogin: () {
+                  //     log('username: $username, password: $password');
+                  //     doAuth(context, username!, password!);
+                  //     return true;
+                  //   },
+                  //   onRegister: () {
+                  //     return true;
+                  //   },
+                  // ),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  Text.rich(
+                      TextSpan(
+                          text: '${appLocalizations.no_account_text} ',
+                          children: <InlineSpan>[
+                            TextSpan(
+                              text: appLocalizations.btn_create,
+                              style: theme.textTheme.displayMedium?.copyWith(
+                                  color: theme.primaryColorDark,
+                                  fontWeight: FontWeight.bold),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () => Navigator.of(context)
+                                    .pushNamed('/register'),
+                            )
+                          ]),
+                      style: theme.textTheme.displayMedium),
+                ]),
               ),
-              const SizedBox(
-                height: 15,
-              ),
-              loginRegisterButtons(
-                context,
-                key: _globalKey,
-                onLogin: () {
-                  log('username: $username, password: $password');
-                  doAuth(context, username!, password!);
-                  return true;
-                },
-                onRegister: () {
-                  return true;
-                },
-              ),
-              const Divider(
-                thickness: 3,
-              ),
-
-              // Social Login Buttons
-              AuthButton(
-                label: 'Login by Facebook',
-                onPressed: () {},
-                backgroundColor: const Color.fromARGB(255, 7, 108, 191),
-                textColor: Colors.white,
-                paddingValue: 15,
-              ),
-              AuthButton(
-                label: 'Login by Google',
-                onPressed: () {},
-                backgroundColor: const Color.fromARGB(255, 235, 53, 17),
-                textColor: Colors.white,
-                paddingValue: 15,
-              ),
-              AuthButton(
-                label: 'Login by LinkedIn',
-                onPressed: () {},
-                backgroundColor: const Color.fromARGB(255, 17, 126, 235),
-                textColor: Colors.white,
-                paddingValue: 15,
-              ),
-            ],
+            ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 }

@@ -3,6 +3,7 @@ package routes
 import (
 	"github.com/JustGritt/Ivoire-Jobs/database"
 	"github.com/JustGritt/Ivoire-Jobs/models"
+	"github.com/JustGritt/Ivoire-Jobs/validations"
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v4"
 	"golang.org/x/crypto/bcrypt"
@@ -83,6 +84,10 @@ func GetUserId(id int, user *models.User) error {
 // @Failure 404 {string} string "User not found"
 // @Router /api/users [get]
 func GetUsers(c *fiber.Ctx) error {
+	token := c.Locals("user").(*jwt.Token)
+	if !validateToken(token) {
+		return c.Status(500).JSON(fiber.Map{"status": "error", "message": "Invalid Token Given", "data": nil})
+	}
 	var users []models.User
 	database.Database.Db.Find(&users)
 

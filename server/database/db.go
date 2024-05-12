@@ -13,7 +13,7 @@ type DbInstance struct {
 var Database DbInstance
 
 func Connect() {
-	dsn := "postgres://pg:pass@localhost:5432/ivoirejob"
+	dsn := "postgres://user:password@127.0.0.1:5432/ivoirejob"
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 
 	if err != nil {
