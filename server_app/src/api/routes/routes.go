@@ -17,7 +17,7 @@ func SetupRoutes(app *fiber.App) {
 
 	v1 := api.Group("/v1")
 
-	v1.Use("/docs", swagger.HandlerDefault)
+	v1.Use("/docs/*", swagger.HandlerDefault)
 
 	v1.Get("/", func(c *fiber.Ctx) error {
 		return c.JSON(fiber.Map{

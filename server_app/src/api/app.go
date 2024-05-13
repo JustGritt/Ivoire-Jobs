@@ -34,6 +34,7 @@ import (
 // @contact.email devcosmas@gmail.com
 // @license.name MIT
 // @license.url https://github.com/ItsCosmas/barassage/blob/master/LICENSE
+// @host https://postman-echo.com
 // @BasePath /api/v1
 func Run() {
 	app := fiber.New()

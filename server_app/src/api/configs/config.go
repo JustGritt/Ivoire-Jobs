@@ -46,9 +46,13 @@ func LoadConfig() {
 
 // GetConfig gets all config for the application
 func GetConfig() Config {
+	postgresStrategy := AutoDetectConfigStrategy{}
+	postgresConfig := NewPostgresConfig(postgresStrategy)
+	log.Println("Postgres Config  Strategy: ", postgresConfig.Strategy.Name())
+
 	return Config{
 		Env:      os.Getenv("ENV"),
-		Postgres: GetPostgresConfig(),
+		Postgres: postgresConfig,
 		// Mailgun:   GetMailgunConfig(),
 		JWTAccessSecret:  os.Getenv("JWT_ACCESS_SIGN_KEY"),
 		JWTRefreshSecret: os.Getenv("JWT_REFRESH_SIGN_KEY"),
