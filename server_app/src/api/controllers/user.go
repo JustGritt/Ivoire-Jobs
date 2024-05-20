@@ -138,7 +138,7 @@ func Login(c *fiber.Ctx) error {
 			errorList,
 			&Response{
 				Code:    http.StatusNotFound,
-				Message: "User Already Exist",
+				Message: "User Doesn't Exist",
 				Data:    err.Error(),
 			},
 		)

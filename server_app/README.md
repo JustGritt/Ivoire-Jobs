@@ -29,6 +29,7 @@ go get -u github.com/swaggo/swag/cmd/swag
 - Generate Swagger Docs. You have to generate swagger docs before packaging the app.
 
 ```sh
+export PATH=$(go env GOPATH)/bin:$PATH
 swag init -g src/api/app.go --output ./src/api/docs # Generates Swagger
 ```
 

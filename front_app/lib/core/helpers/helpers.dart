@@ -1,2 +1,2 @@
 export './actions_helper.dart';
-export './login_helper.dart';
+export 'auth_helper.dart';

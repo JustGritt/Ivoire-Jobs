@@ -127,7 +127,7 @@ CALinkButton forgetButton(
         debugPrint('Forget Password Click');
         var check = onForget!();
         if (check && check == true) {
-          Nav.to(context, '/forget');
+          Nav.toNamed(context, '/forget');
         }
       },
       labelStr: appLocalizations.btn_forgot_password);

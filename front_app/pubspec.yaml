@@ -71,3 +71,4 @@ flutter:
   assets:
     - .env
     - assets/images/ill_dx.svg
+    - assets/images/ill_register.svg

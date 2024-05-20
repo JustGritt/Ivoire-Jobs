@@ -2,7 +2,7 @@ import 'dart:developer';
 import 'dart:ui';
 
 import 'package:clean_architecture/core/classes/route_manager.dart';
-import 'package:clean_architecture/core/helpers/login_helper.dart';
+import 'package:clean_architecture/core/helpers/auth_helper.dart';
 import 'package:clean_architecture/features/auth_mod/widgets/app_button.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
