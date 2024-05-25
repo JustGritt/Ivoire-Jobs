@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:clean_architecture/features/lead_mod/lead_mod.dart';
 import 'package:flutter/material.dart';
 

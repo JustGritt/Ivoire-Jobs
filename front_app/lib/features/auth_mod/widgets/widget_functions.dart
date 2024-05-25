@@ -13,7 +13,7 @@ TextFormField passwordField({
     style: const TextStyle(fontFamily: 'Okta'),
     obscureText: passHide,
     decoration: InputDecoration(
-      contentPadding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 15),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15),
       hintText: 'Password',
       suffixIcon: IconButton(
         onPressed: () {
@@ -42,6 +42,7 @@ TextFormField passwordField({
   );
 }
 
+// ignore: non_constant_identifier_names
 TextFormField Field({
   required String nameField,
   String? Function(String?)? onValid,
@@ -50,7 +51,7 @@ TextFormField Field({
     keyboardType: TextInputType.emailAddress,
     style: const TextStyle(fontFamily: 'Okta'),
     decoration: InputDecoration(
-      contentPadding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 15),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15),
       hintText: nameField,
       border: const OutlineInputBorder(
           borderSide: BorderSide(
