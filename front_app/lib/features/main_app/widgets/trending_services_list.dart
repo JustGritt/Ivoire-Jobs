@@ -1,3 +1,4 @@
+import 'package:clean_architecture/features/main_app/Screens/mobile/services_details.dart';
 import 'package:flutter/material.dart';
 import '../models/main/trending_services_model.dart';
 import 'trending_service.dart';
@@ -17,7 +18,19 @@ class TrendingServicesList extends StatelessWidget {
         itemBuilder: (context, index) {
           return Padding(
             padding: const EdgeInsets.only(left: 8.0),
-            child: TrendingService(service: trendingServices.trendingServices[index]),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ServiceDetailPage(
+                      service: trendingServices.trendingServices[index],
+                    ),
+                  ),
+                );
+              },
+              child: TrendingService(service: trendingServices.trendingServices[index]),
+            ),
           );
         },
       ),

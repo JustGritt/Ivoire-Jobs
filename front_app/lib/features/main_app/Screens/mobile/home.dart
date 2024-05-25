@@ -1,4 +1,3 @@
-import 'package:clean_architecture/features/main_app/widgets/service_entry.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

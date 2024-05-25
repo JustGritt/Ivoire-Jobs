@@ -12,6 +12,7 @@ class ServiceEntries {
       rating: 9.12,
       paymentType: PaymentType.perJobCompletion,
       location: 'Venice, Italy',
+      duration: 60,
     ),
     const Service(
       providerName: 'Jane Doe',
@@ -23,6 +24,7 @@ class ServiceEntries {
       rating: 8.91,
       paymentType: PaymentType.perHour,
       location: 'Tokyo, Japan',
+      duration: 60,
     ),
     const Service(
       providerName: 'Jim Doe',
@@ -34,6 +36,7 @@ class ServiceEntries {
       rating: 8.4,
       paymentType: PaymentType.perHour,
       location: 'Hedland, Sweden',
+      duration: 30,
     ),
     const Service(
       providerName: 'Jill Doe',
@@ -45,6 +48,7 @@ class ServiceEntries {
       rating: 7.9,
       paymentType: PaymentType.perJobCompletion,
       location: 'New York, USA',
+      duration: 60,
     ),
     const Service(
       providerName: 'Jimmy Doe',
@@ -56,6 +60,7 @@ class ServiceEntries {
       rating: 7.8,
       paymentType: PaymentType.perJobCompletion,
       location: 'Paris, France',
+      duration: 60,
     ),
   ];
 

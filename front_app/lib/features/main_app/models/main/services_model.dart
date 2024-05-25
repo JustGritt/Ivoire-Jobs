@@ -52,6 +52,7 @@ class Service {
   final double rating;
   final PaymentType paymentType;
   final String location;
+  final int duration;
 
   const Service({
     required this.providerName,
@@ -63,6 +64,7 @@ class Service {
     required this.rating,
     required this.paymentType,
     required this.location,
+    required this.duration,
   });
 }
 

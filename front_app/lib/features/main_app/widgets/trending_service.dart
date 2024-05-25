@@ -72,13 +72,24 @@ class TrendingService extends StatelessWidget {
                       color: Colors.black54,
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: Text(
-                      service.rating.toString(),
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    child: Row(
+                      children: [
+                        Text(
+                          service.rating.toString(),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(width: 4),
+                        const Icon(
+                          Icons.star,
+                          color: Colors.white,
+                          size: 12,
+                        ),
+                      ],
+
                     ),
                   ),
                 ),
@@ -96,31 +107,28 @@ class TrendingService extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 8),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(width: 8),
-                Text(
-                  service.providerName,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
+            const SizedBox(height: 4),
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: Colors.black,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Text(
+                    '\$${service.price.toStringAsFixed(2)}${service.paymentType == PaymentType.perHour ? ' /h' : ''}',
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
-                const SizedBox(width: 8),
-                const Text('-'),
-                const SizedBox(width: 8),
-                Text(
-                  '\$${service.price.toStringAsFixed(2)}${service.paymentType == PaymentType.perHour ? ' /h' : ''}',
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
+              ),
             ),
-            const SizedBox(height: 8),
           ],
         ),
       ),
