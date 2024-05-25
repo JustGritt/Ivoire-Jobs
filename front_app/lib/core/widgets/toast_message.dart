@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
 
-void showMessage(BuildContext context, String massage) {
+
+void showMessage(BuildContext context, String message) {
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-    content: Text(massage),
+    content: Text(message),
+  ));
+}
+
+void showError(BuildContext context, String message) {
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    backgroundColor: Colors.red,
+    behavior: SnackBarBehavior.floating,
+    content: Text(message),
   ));
 }

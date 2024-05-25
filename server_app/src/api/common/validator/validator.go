@@ -12,7 +12,6 @@ var validate = validator.New()
 // Validate validates the input struct
 func Validate(payload interface{}) []*fiber.Error {
 	err := validate.Struct(payload)
-
 	if err != nil {
 		// Empty errors slice to store the errors
 		var errorList []*fiber.Error
@@ -25,7 +24,7 @@ func Validate(payload interface{}) []*fiber.Error {
 				message = fmt.Sprintf("%s is required", err.StructField())
 			case "email":
 				message = fmt.Sprintf("%s must be a valid email address", err.StructField())
-			// Add more cases for other validation tags as needed
+				// Add more cases for other validation tags as needed
 			default:
 				message = fmt.Sprintf("%s is not valid", err.StructField())
 			}

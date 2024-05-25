@@ -1,3 +1,4 @@
+import 'package:clean_architecture/features/auth_mod/auth_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../core/core.dart';
@@ -107,7 +108,7 @@ Column loginRegisterButtons(
           debugPrint('Register now');
           bool isRegister = onRegister!();
           if (isRegister && isRegister == true) {
-            Nav.to(context, '/register');
+            Nav.to(context, AuthApp.register);
           }
         },
         label: 'Register Now',

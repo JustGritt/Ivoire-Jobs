@@ -79,7 +79,7 @@ class HttpManager {
       );
       return response;
     } catch (e) {
-      log(e.toString());
+      rethrow;
     }
     return response!;
   }

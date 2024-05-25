@@ -17,7 +17,7 @@ class ForgetMobileScreen extends StatelessWidget {
         title: const Text('Forget Screen'),
         leading: IconButton(
           onPressed: () {
-            Nav.to(context, '/login');
+            Nav.to(context, AuthApp.login);
           },
           icon: const Icon(Icons.arrow_back),
         ),

@@ -21,7 +21,7 @@ type UserObject struct {
 	FirstName      string `json:"firstname" validate:"required,min=2,max=30"`
 	LastName       string `json:"lastname" validate:"required,min=2,max=30"`
 	Email          string `json:"email" validate:"required,min=5,max=100,email"`
-	Password       string `json:"password" validate:"required,min=6"`
+	Password       string `json:"password" validate:"required"`
 	ProfilePicture string `json:"profilePicture"`
 	Bio            string `json:"bio"`
 	Role           string `json:"role"`
@@ -30,7 +30,7 @@ type UserObject struct {
 // UserLogin is the login format expected
 type UserLogin struct {
 	Email    string `json:"email" validate:"required,min=5,max=100,email"`
-	Password string `json:"password" validate:"required,min=6"`
+	Password string `json:"password" validate:"password"`
 }
 
 // UserOutput is the output format of the user
@@ -56,7 +56,6 @@ type UserOutput struct {
 // @Router /auth/register [post]
 func Register(c *fiber.Ctx) error {
 	var userInput UserObject
-
 	// Validate Input
 	if err := validator.ParseBodyAndValidate(c, &userInput); err != nil {
 		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(err))
@@ -68,22 +67,23 @@ func Register(c *fiber.Ctx) error {
 	hashedPass, _ := passwordUtil.HashPassword(userInput.Password)
 	u.Password = hashedPass
 
-	// user, _ := userRepo.GetByEmail(userInput.Email)
-	// if user != nil {
-	// 	errorList = nil
-	// 	errorList = append(
-	// 		errorList,
-	// 		&Response{
-	// 			Code:    http.StatusConflict,
-	// 			Message: "User Already Exist",
-	// 			Data:    nil,
-	// 		},
-	// 	)
-	// 	return c.Status(http.StatusNotFound).JSON(HTTPErrorResponse(errorList))
-	// }
+	user, _ := userRepo.GetByEmail(userInput.Email)
+	if user != nil {
+		errorList = nil
+		errorList = append(
+			errorList,
+			&Response{
+				Code:    http.StatusConflict,
+				Message: "User Already Exist",
+				Data:    nil,
+			},
+		)
+		return c.Status(http.StatusNotFound).JSON(HTTPErrorResponse(errorList))
+	}
 
 	// Save User To DB
 	if err := userRepo.Create(&u); err != nil {
+		errorList = nil
 		// Check if the error is a validation error
 		if err == gorm.ErrInvalidField {
 			// Print a custom error message for the validation error
@@ -93,7 +93,6 @@ func Register(c *fiber.Ctx) error {
 			fmt.Println("Database error:", err.Error())
 		}
 
-		errorList = nil
 		errorList = append(
 			errorList,
 			&Response{
@@ -123,7 +122,7 @@ func Register(c *fiber.Ctx) error {
 // @Router /auth/login [post]
 func Login(c *fiber.Ctx) error {
 	var userInput UserLogin
-
+	fmt.Println("Hello,", &userInput)
 	// Validate Input
 	if err := validator.ParseBodyAndValidate(c, &userInput); err != nil {
 		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(err))
@@ -144,6 +143,7 @@ func Login(c *fiber.Ctx) error {
 		)
 		return c.Status(http.StatusNotFound).JSON(HTTPErrorResponse(errorList))
 	}
+	fmt.Println("Validation error:", err)
 
 	// Check if Password is Correct (Hash and Compare DB Hash)
 	passwordIsCorrect := passwordUtil.CheckPasswordHash(userInput.Password, user.Password)
@@ -154,7 +154,7 @@ func Login(c *fiber.Ctx) error {
 			&Response{
 				Code:    http.StatusUnauthorized,
 				Message: "Email or Password is Incorrect",
-				Data:    err.Error(),
+				Data:    err,
 			},
 		)
 		return c.Status(http.StatusUnauthorized).JSON(HTTPErrorResponse(errorList))

@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:developer';
 
+import 'package:clean_architecture/features/auth_mod/models/api_response.dart';
 import 'package:clean_architecture/features/auth_mod/models/user.dart';
 import 'package:clean_architecture/features/auth_mod/models/user_login.dart';
 import 'package:dio/dio.dart';
@@ -48,16 +50,18 @@ class UserService {
     return null;
   }
 
-  // Future<User?> login(UserLogin userLogin) async {
-  //   Map<String, dynamic> _data = userLogin.toJson();
-  //   Response res = await _http.put(
-  //     '${ApiEndpoint.enquery}/$id',
-  //     data: jsonEncode(_data),
-  //   );
-  //   if (res.statusCode == 200 || res.statusCode == 201) {
-  //     EnquerySingle enquery = EnquerySingle.fromJson(jsonEncode(res.data));
-  //     return enquery;
-  //   }
-  //   return null;
-  // }
+  Future<User?> login(UserLogin userLogin) async {
+    Map<String, dynamic> _data = userLogin.toJson();
+    Response res = await _http.post(
+      '${ApiEndpoint.api}${ApiEndpoint.appLoginUrl}',
+      data: jsonEncode(_data),
+    );
+    inspect(res.data);
+    if (res.statusCode == 200) {
+      ApiResponse apiResponse = ApiResponse.fromJson(res.data);
+      User user = User.fromJson(apiResponse.body);
+      return user;
+    }
+    throw res.data['message'];
+  }
 }

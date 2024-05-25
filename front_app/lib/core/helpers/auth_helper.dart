@@ -1,22 +1,44 @@
+
+import 'dart:developer';
+
+import 'package:clean_architecture/core/exceptions/dio_exceptions.dart';
+import 'package:clean_architecture/features/auth_mod/models/user.dart';
+import 'package:clean_architecture/features/auth_mod/models/user_login.dart';
+import 'package:clean_architecture/features/auth_mod/services/user_service.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:logger/logger.dart';
 
 import '../../config/config.dart';
 import '../core.dart';
 
-void doAuth(BuildContext context, String username, String password) async {
+doAuth(BuildContext context, String email, String password) async {
+
+       var logger = Logger();
   AppCache ac = AppCache();
-  ac.doLogin(username, password);
+  UserService us = UserService();
+  try {
+  User? user = await us.login(UserLogin(email: email, password: password));
+
+
+debugPrint('User: $user');
+  }  on DioException catch (e) {
+    logger.e(DioExceptionHandler(e).error.message);
+    showError(context, DioExceptionHandler(e).title!);
+  }
+  // inspect('User: $user');
   if (await ac.isLogin()) {
-    SchedulerBinding.instance.addPostFrameCallback((_) {
-      Nav.to(context, '/');
-      showMessage(context, 'Login Successful');
-    });
+    // SchedulerBinding.instance.addPostFrameCallback((_) {
+    //   Nav.to(context, '/');
+    //   showMessage(context, 'Login Successful');
+    // });
   }
 }
 
 Future<Map<String, String>> authData() async {
   AppCache ac = AppCache();
+
   return ac.auth();
 }
 
