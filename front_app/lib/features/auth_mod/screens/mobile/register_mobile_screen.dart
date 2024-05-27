@@ -158,7 +158,7 @@ class _RegisterMobileScreenState extends State<RegisterMobileScreen> {
                         onPressed: () {
                           if (_globalKey.currentState!.validate()) {
                             log('username: $username, password: $password');
-                          //  doAuth(context, username!, password!);
+                            doAuth(context, username!, password!);
                             context.read<AuthenticationBloc>().add(
                               SignUpUser(username!, password!),
                             );

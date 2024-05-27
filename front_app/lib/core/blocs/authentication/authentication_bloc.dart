@@ -31,16 +31,16 @@ class AuthenticationBloc
 
     on<InitiateAuth>((event, emit) async {
       emit(AuthenticationLoadingState(isLoading: true));
-      try {
+      // try {
 
-        if (user != null) {
-          emit(AuthenticationSuccessState(user));
-        } else {
-          emit(const AuthenticationFailureState('create user failed'));
-        }
-      } catch (e) {
-        print(e.toString());
-      }
+      //   if (user != null) {
+      //     emit(AuthenticationSuccessState(user));
+      //   } else {
+      //     emit(const AuthenticationFailureState('create user failed'));
+      //   }
+      // } catch (e) {
+      //   print(e.toString());
+      // }
       emit(AuthenticationLoadingState(isLoading: false));
     });
 
