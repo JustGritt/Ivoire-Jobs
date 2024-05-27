@@ -7,7 +7,7 @@ import (
 	cfg "barassage/api/configs"
 
 	// Swagger
-	// docs "barassage/api/docs" // Swagger Docs
+	docs "barassage/api/docs" // Swagger Docs
 
 	// routes
 	"barassage/api/routes"
@@ -85,7 +85,7 @@ func Run() {
 	*/
 
 	// FIXME, In Production, Port Should not be added to the Swagger Host
-	// docs.SwaggerInfo.Host = config.Host + ":" + config.Port
+	docs.SwaggerInfo.Host = config.Host + ":" + config.Port
 
 	// Run the app and listen on given port
 	port := fmt.Sprintf(":%s", config.Port)
