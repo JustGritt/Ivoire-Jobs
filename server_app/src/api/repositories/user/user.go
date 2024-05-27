@@ -23,6 +23,15 @@ func GetByEmail(email string) (*user.User, error) {
 	return &user, nil
 }
 
+// GetByEmail gets user with the given email
+func GetById(id string) (*user.User, error) {
+	var user user.User
+	if err := db.PgDB.Where("id = ?", id).First(&user).Error; err != nil {
+		return nil, err
+	}
+	return &user, nil
+}
+
 func GetErrors() error {
 	return db.PgDB.Error
 }

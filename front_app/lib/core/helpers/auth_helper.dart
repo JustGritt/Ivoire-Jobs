@@ -1,4 +1,3 @@
-
 import 'dart:developer';
 
 import 'package:clean_architecture/core/exceptions/dio_exceptions.dart';
@@ -14,16 +13,14 @@ import '../../config/config.dart';
 import '../core.dart';
 
 doAuth(BuildContext context, String email, String password) async {
-
-       var logger = Logger();
+  var logger = Logger();
   AppCache ac = AppCache();
   UserService us = UserService();
   try {
-  User? user = await us.login(UserLogin(email: email, password: password));
+    User? user = await us.login(UserLogin(email: email, password: password));
 
-
-debugPrint('User: $user');
-  }  on DioException catch (e) {
+    debugPrint('User: $user');
+  } on DioException catch (e) {
     logger.e(DioExceptionHandler(e).error.message);
     showError(context, DioExceptionHandler(e).title!);
   }

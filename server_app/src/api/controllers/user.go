@@ -181,6 +181,76 @@ func Login(c *fiber.Ctx) error {
 
 }
 
+// Get User Godoc
+// @Summary Get User
+// @Description Get User Details
+// @Tags Auth
+// @Produce json
+// @Param payload body UserLogin true "Login Body"
+// @Success 200 {object} Response
+// @Failure 400 {array} ErrorResponse
+// @Router /auth/login [post]
+func GetMyProfile(c *fiber.Ctx) error {
+	var userInput UserLogin
+	fmt.Println("Hello,", &userInput)
+	// Validate Input
+	if err := validator.ParseBodyAndValidate(c, &userInput); err != nil {
+		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(err))
+
+	}
+
+	// Check If User Exists
+	user, err := userRepo.GetByEmail(userInput.Email)
+	if err != nil {
+		errorList = nil
+		errorList = append(
+			errorList,
+			&Response{
+				Code:    http.StatusNotFound,
+				Message: "User Doesn't Exist",
+				Data:    err.Error(),
+			},
+		)
+		return c.Status(http.StatusNotFound).JSON(HTTPErrorResponse(errorList))
+	}
+	fmt.Println("Validation error:", err)
+
+	// Check if Password is Correct (Hash and Compare DB Hash)
+	passwordIsCorrect := passwordUtil.CheckPasswordHash(userInput.Password, user.Password)
+	if !passwordIsCorrect {
+		errorList = nil
+		errorList = append(
+			errorList,
+			&Response{
+				Code:    http.StatusUnauthorized,
+				Message: "Email or Password is Incorrect",
+				Data:    err,
+			},
+		)
+		return c.Status(http.StatusUnauthorized).JSON(HTTPErrorResponse(errorList))
+	}
+
+	// Issue Token
+	accessToken, _ := auth.IssueAccessToken(*user)
+	refreshToken, err := auth.IssueRefreshToken(*user)
+
+	if err != nil {
+		errorList = nil
+		errorList = append(
+			errorList,
+			&Response{
+				Code:    http.StatusInternalServerError,
+				Message: "Something Went Wrong: Could Not Issue Token",
+				Data:    err.Error(),
+			},
+		)
+		return c.Status(http.StatusInternalServerError).JSON(HTTPErrorResponse(errorList))
+	}
+	// Return User and Token
+	return c.Status(http.StatusOK).JSON(HTTPResponse(http.StatusOK, "Login Success", fiber.Map{"user": mapUserToOutPut(user), "access_token": accessToken.Token, "refresh_token": refreshToken.Token}))
+
+}
+
 // Logout Godoc
 // @Summary Login
 // @Description Logs in a user

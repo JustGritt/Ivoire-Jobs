@@ -1,3 +1,5 @@
+import 'package:clean_architecture/core/blocs/authentication/authentication_bloc.dart';
+import 'package:clean_architecture/core/init_dependencies.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
@@ -5,6 +7,7 @@ import '../core/core.dart';
 import '../features/features.dart';
 import '../features/main_app/providers/news_provider.dart';
 import 'app_theme.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 List<SingleChildWidget> appProviders = [
   ChangeNotifierProvider<ThemeProvider>(
@@ -18,5 +21,5 @@ List<SingleChildWidget> appProviders = [
   ),
   ChangeNotifierProvider<EnqueryProvider>(
     create: (context) => EnqueryProvider(),
-  )
+  ),
 ];
