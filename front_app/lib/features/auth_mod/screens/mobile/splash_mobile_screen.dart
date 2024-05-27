@@ -27,7 +27,7 @@ class _SplashMobileScreenState extends State<SplashMobileScreen> with TickerProv
   void initState() {
     super.initState();
     _authenticationBloc = serviceLocator<AuthenticationBloc>();
-    _authenticationBloc.add(AuthenticationStartedEvent());
+    // _authenticationBloc.add(AuthenticationStartedEvent());
     _subscription = _authenticationBloc.stream.listen((state) {
       if (state is AuthenticationSuccessState) {
 
