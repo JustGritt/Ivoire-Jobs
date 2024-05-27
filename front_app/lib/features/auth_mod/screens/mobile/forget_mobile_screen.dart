@@ -1,4 +1,6 @@
+import 'package:clean_architecture/features/auth_mod/auth_mod.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 import '../../../../core/classes/route_manager.dart';
 import '../../../../core/widgets/day_night_switch.dart';
@@ -15,7 +17,7 @@ class ForgetMobileScreen extends StatelessWidget {
         title: const Text('Forget Screen'),
         leading: IconButton(
           onPressed: () {
-            Nav.to(context, '/login');
+            Nav.to(context, AuthApp.login);
           },
           icon: const Icon(Icons.arrow_back),
         ),
@@ -27,9 +29,14 @@ class ForgetMobileScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text(
-              'Forget Password?',
-              style: TextStyle(fontSize: 24),
+            GestureDetector(
+              onTap: () => {
+                Navigator.of(context).pushNamed('/forget')
+              },
+              child: const Text(
+                'Forget Password?',
+                style: TextStyle(fontSize: 24),
+              ),
             ),
             const SizedBox(
               height: 15,

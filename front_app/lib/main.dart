@@ -1,4 +1,8 @@
+import 'package:clean_architecture/core/blocs/authentication/authentication_bloc.dart';
+import 'package:clean_architecture/core/classes/app_context.dart';
+import 'package:clean_architecture/core/init_dependencies.dart';
 import 'package:clean_architecture/l10n/l10n.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -10,12 +14,18 @@ import 'config/config.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Provider.debugCheckInvalidValueType = null;
-
+  await initDependencies();
   await dotenv.load(fileName: ".env");
-  runApp(MultiProvider(
-    providers: appProviders,
-    child: const BarassageApp(),
-  ));
+  runApp(MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => serviceLocator<AuthenticationBloc>(),
+        )
+      ],
+      child: MultiProvider(
+        providers: appProviders,
+        child: const BarassageApp(),
+      )));
 }
 
 class BarassageApp extends StatelessWidget {
@@ -27,7 +37,8 @@ class BarassageApp extends StatelessWidget {
     var tm = context.watch<ThemeProvider>();
     // print("My App: " + tm.isDarkMode.toString());
     return MaterialApp(
-      title: 'Clean App',
+      title: 'Barassage App',
+      navigatorKey: serviceLocator<AppContext>().navigatorKey,
       supportedLocales: L10n.all,
       localizationsDelegates: const [
         AppLocalizations.delegate,
