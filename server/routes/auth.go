@@ -4,7 +4,9 @@ import (
 	"time"
 
 	"github.com/JustGritt/Ivoire-Jobs/database"
+	"github.com/JustGritt/Ivoire-Jobs/helpers/errors/requestError"
 	"github.com/JustGritt/Ivoire-Jobs/models"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v4"
 	"golang.org/x/crypto/bcrypt"
@@ -21,10 +23,13 @@ import (
 // @Failure 400 {string} string "Invalid credentials"
 // @Router /login [post]
 func Login(c *fiber.Ctx) error {
-	var user models.User
+	var user models.UserLogin
 
 	if err := c.BodyParser(&user); err != nil {
-		return c.Status(400).JSON(err.Error())
+		return c.Status(400).JSON(&RequestError{
+			StatusCode: 400,
+			Err:        "Invalid request",
+		})
 	}
 
 	if user.Email == "" || user.Password == "" {
@@ -60,4 +65,3 @@ func Login(c *fiber.Ctx) error {
 	return c.JSON(fiber.Map{"token": t})
 
 }
-

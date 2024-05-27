@@ -1,0 +1,29 @@
+# text editor
+.vscode/
+
+# jetbrains IDEs
+.idea/
+
+# swagger docs
+src/api/docs/
+
+# static files
+static
+
+# postgres persistence folder
+postgres_data
+
+# Log
+*.log
+.debug
+tmp
+
+# Env
+*.env
+
+# misc
+.DS_Store
+
+# Build and dist folders created while building docker prod image
+build/
+dist/

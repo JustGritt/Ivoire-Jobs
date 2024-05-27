@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'dart:developer';
 import 'dart:ui';
 
-import 'package:clean_architecture/core/helpers/login_helper.dart';
+import 'package:clean_architecture/core/helpers/auth_helper.dart';
 import 'package:clean_architecture/features/auth_mod/widgets/app_button.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
@@ -43,11 +43,11 @@ class _RegisterMobileScreenState extends State<RegisterMobileScreen> {
                 child: Column(children: [
                   Stack(children: [
                     Container(
-                      padding: const EdgeInsets.symmetric(vertical: 18.0),
+                      padding: const EdgeInsets.only(bottom: 8.0),
                       child: SvgPicture.asset(
                         fit: BoxFit.fill,
-                        'assets/images/ill_dx.svg',
-                        width: 200,
+                        'assets/images/ill_register.svg',
+                        width: 180,
                         semanticsLabel: 'Acme Logo',
                       ),
                     ),
@@ -83,7 +83,7 @@ class _RegisterMobileScreenState extends State<RegisterMobileScreen> {
                     ),
                   ]),
                   Container(
-                    padding: const EdgeInsets.symmetric(vertical: 30.0),
+                    padding: const EdgeInsets.only(bottom: 12.0),
                     child: Column(
                       children: [
                         Text(

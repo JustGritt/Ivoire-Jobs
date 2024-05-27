@@ -2,7 +2,8 @@ import 'dart:developer';
 import 'dart:ui';
 
 import 'package:clean_architecture/core/classes/route_manager.dart';
-import 'package:clean_architecture/core/helpers/login_helper.dart';
+import 'package:clean_architecture/core/helpers/auth_helper.dart';
+import 'package:clean_architecture/features/auth_mod/auth_app.dart';
 import 'package:clean_architecture/features/auth_mod/widgets/app_button.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -143,11 +144,11 @@ class _LoginMobileScreenState extends State<LoginMobileScreen> {
                     height: 15,
                   ),
                   AppButton(
-                    onPressed: () {
+                    onPressed:  () async {
                       if (_globalKey.currentState!.validate()) {
-                        log('username: $username, password: $password');
-                        doAuth(context, username!, password!);
-                        debugPrint('Login Validate');
+                        // log('username: $username, password: $password');
+                        await doAuth(context, username!, password!);
+                        // debugPrint('Login Validate');
                       }
                     },
                     backgroundColor: theme.primaryColorDark,
@@ -180,7 +181,7 @@ class _LoginMobileScreenState extends State<LoginMobileScreen> {
                                   fontWeight: FontWeight.bold),
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () => Navigator.of(context)
-                                    .pushNamed('/register'),
+                                    .pushNamed(AuthApp.register),
                             )
                           ]),
                       style: theme.textTheme.displayMedium),
