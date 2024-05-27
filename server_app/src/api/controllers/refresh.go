@@ -11,6 +11,7 @@ import "github.com/gofiber/fiber/v2"
 // @Success 200 {object} Response
 // @Failure 400 {array} ErrorResponse
 // @Router /auth/refresh [post]
+// @Security Bearer
 func RefreshAuth(c *fiber.Ctx) error {
 	return c.SendString("Refresh Auth Endpoint")
 }

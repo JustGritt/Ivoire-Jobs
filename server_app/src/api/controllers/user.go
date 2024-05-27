@@ -192,6 +192,7 @@ func Login(c *fiber.Ctx) error {
 // @Failure 401 {array} ErrorResponse "Incorrect email or password"
 // @Failure 500 {array} ErrorResponse "Token issuing error"
 // @Router /auth/me [post]
+// @Security Bearer
 func GetMyProfile(c *fiber.Ctx) error {
 	var userInput UserLogin
 	fmt.Println("Hello,", &userInput)
@@ -260,6 +261,7 @@ func GetMyProfile(c *fiber.Ctx) error {
 // @Success 200 {object} Response
 // @Failure 500 {array} ErrorResponse
 // @Router /auth/logout [post]
+// @Security Bearer
 func Logout(c *fiber.Ctx) error {
 	// Here We get the token meta from access and refresh token passed from header
 	// We delete the refresh
