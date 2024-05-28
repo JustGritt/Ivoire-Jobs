@@ -5,7 +5,7 @@ class AppCache {
   Map<String, String>? udata;
 
   void doLogin(String username, String password) {
-    udata = {'user': username, 'pass': password};
+    udata = {'email': username, 'pass': password};
     Cache.saveData('auth_data', jsonEncode(udata));
   }
 
