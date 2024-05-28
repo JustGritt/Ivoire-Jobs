@@ -6,7 +6,7 @@ import '../../../../core/core.dart';
 class Contact extends StatelessWidget {
   String? title;
 
-  Contact({Key? key, this.title}) : super(key: key);
+  Contact({super.key, this.title});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,7 +18,6 @@ class Contact extends StatelessWidget {
         width: double.infinity,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const Text('This is the first page'),
             ElevatedButton(

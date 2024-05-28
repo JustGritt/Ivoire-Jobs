@@ -14,9 +14,9 @@ import '../../widgets/widget_functions.dart';
 
 class RegisterMobileScreen extends StatefulWidget {
   const RegisterMobileScreen({
-    Key? key,
+    super.key,
     void Function(String username, String password)? onLogged,
-  }) : super(key: key);
+  });
 
   @override
   State<RegisterMobileScreen> createState() => _RegisterMobileScreenState();

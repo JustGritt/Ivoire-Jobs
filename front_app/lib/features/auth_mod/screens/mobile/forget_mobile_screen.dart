@@ -1,14 +1,11 @@
 import 'package:barassage_app/features/auth_mod/auth_mod.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 import '../../../../core/classes/route_manager.dart';
 import '../../../../core/widgets/day_night_switch.dart';
-import '../../widgets/auth_button.dart';
-import '../../widgets/text_input_field.dart';
 
 class ForgetMobileScreen extends StatelessWidget {
-  const ForgetMobileScreen({Key? key}) : super(key: key);
+  const ForgetMobileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -30,9 +27,7 @@ class ForgetMobileScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             GestureDetector(
-              onTap: () => {
-                Navigator.of(context).pushNamed('/forget')
-              },
+              onTap: () => {Navigator.of(context).pushNamed('/forget')},
               child: const Text(
                 'Forget Password?',
                 style: TextStyle(fontSize: 24),

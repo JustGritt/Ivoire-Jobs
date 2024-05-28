@@ -6,7 +6,7 @@ import '../../widgets/menu_buttons.dart';
 
 class Home extends StatefulWidget {
   final String? title;
-  const Home({Key? key, this.title}) : super(key: key);
+  const Home({super.key, this.title});
 
   @override
   State<Home> createState() => _HomeState();
@@ -25,7 +25,6 @@ class _HomeState extends State<Home> {
         width: double.infinity,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const Text('This is the first page'),
             ElevatedButton(

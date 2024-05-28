@@ -4,7 +4,7 @@ import '../../../../core/core.dart';
 import '../../widgets/auth_button.dart';
 
 class ProfileMobileScreen extends StatelessWidget {
-  const ProfileMobileScreen({Key? key}) : super(key: key);
+  const ProfileMobileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

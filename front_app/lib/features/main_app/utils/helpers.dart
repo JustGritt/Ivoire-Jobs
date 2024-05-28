@@ -1,3 +1,1 @@
-/**
- * Here We will be writing here All features related Helper Functions
- */
+// Here We will be writing here All features related Helper Functions

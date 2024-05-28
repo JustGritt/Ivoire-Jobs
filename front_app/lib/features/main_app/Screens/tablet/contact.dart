@@ -6,7 +6,7 @@ import '../../widgets/menu_buttons.dart';
 
 class Contact extends StatefulWidget {
   final String? title;
-  const Contact({Key? key, this.title}) : super(key: key);
+  const Contact({super.key, this.title});
 
   @override
   State<Contact> createState() => _ContactState();
@@ -24,7 +24,6 @@ class _ContactState extends State<Contact> {
         width: double.infinity,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const Text('This is the Contact page'),
             ElevatedButton(

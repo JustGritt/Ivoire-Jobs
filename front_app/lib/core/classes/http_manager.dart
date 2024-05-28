@@ -17,7 +17,8 @@ class HttpManager {
     _dio.options.baseUrl = baseUrl;
     _dio.options.headers = headers;
 
-    // how to solve flutter CERTIFICATE_VERIFY_FAILED error while performing a POST request?
+    // how to solve flutter CERTIFICATE_VERIFY_FAILED error
+    // while performing a POST request?
     if (kIsWeb) {
       _dio.options.headers['content-Type'] = '*';
       _dio.options.headers['Access-Control-Allow-Origin'] = '*';
@@ -31,7 +32,7 @@ class HttpManager {
         client.badCertificateCallback =
             (X509Certificate cert, String host, int port) => true;
         return client;
-      };      
+      };
     }
   }
 
@@ -82,7 +83,6 @@ class HttpManager {
     } catch (e) {
       rethrow;
     }
-    return response!;
   }
 
   Future<Response> put(

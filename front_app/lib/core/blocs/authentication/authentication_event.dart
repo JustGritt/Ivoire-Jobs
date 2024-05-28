@@ -1,12 +1,9 @@
 part of 'authentication_bloc.dart';
 
-
-
 abstract class AuthenticationEvent {
   const AuthenticationEvent();
 
   List<Object> get props => [];
- 
 }
 
 class SignUpUser extends AuthenticationEvent {
@@ -19,9 +16,6 @@ class SignUpUser extends AuthenticationEvent {
   List<Object> get props => [email, password];
 }
 
-class InitiateAuth extends AuthenticationEvent {
-
-}
-
+class InitiateAuth extends AuthenticationEvent {}
 
 class SignOut extends AuthenticationEvent {}

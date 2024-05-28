@@ -19,7 +19,8 @@ doAuth(String email, String password) async {
   AppCache ac = AppCache();
   UserService us = UserService();
   try {
-    UserLoginResponse userLoginResponse = await us.login(UserLogin(email: email, password: password));
+    UserLoginResponse userLoginResponse =
+        await us.login(UserLogin(email: email, password: password));
     ac.doLogin(userLoginResponse.user, userLoginResponse.accessToken);
     debugPrint('User: $userLoginResponse');
   } on DioException catch (e) {
