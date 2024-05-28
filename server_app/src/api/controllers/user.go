@@ -181,22 +181,24 @@ func Login(c *fiber.Ctx) error {
 
 }
 
-// Get User Godoc
-// @Summary Get User
-// @Description Get User Details
+// GetMyProfile Godoc
+// @Summary Get My Profile
+// @Description Get details of the logged-in user
 // @Tags Auth
 // @Produce json
 // @Param payload body UserLogin true "Login Body"
-// @Success 200 {object} Response
-// @Failure 400 {array} ErrorResponse
-// @Router /auth/login [post]
+// @Success 200 {object} Response "User profile data along with access and refresh tokens"
+// @Failure 400 {array} ErrorResponse "Validation error or user not found"
+// @Failure 401 {array} ErrorResponse "Incorrect email or password"
+// @Failure 500 {array} ErrorResponse "Token issuing error"
+// @Router /auth/me [post]
+// @Security Bearer
 func GetMyProfile(c *fiber.Ctx) error {
 	var userInput UserLogin
 	fmt.Println("Hello,", &userInput)
 	// Validate Input
 	if err := validator.ParseBodyAndValidate(c, &userInput); err != nil {
 		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(err))
-
 	}
 
 	// Check If User Exists
@@ -259,6 +261,7 @@ func GetMyProfile(c *fiber.Ctx) error {
 // @Success 200 {object} Response
 // @Failure 500 {array} ErrorResponse
 // @Router /auth/logout [post]
+// @Security Bearer
 func Logout(c *fiber.Ctx) error {
 	// Here We get the token meta from access and refresh token passed from header
 	// We delete the refresh

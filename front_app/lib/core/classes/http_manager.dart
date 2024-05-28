@@ -25,6 +25,7 @@ class HttpManager {
     }
 
     if (!kIsWeb) {
+      // ignore: deprecated_member_use
       (_dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
           (HttpClient client) {
         client.badCertificateCallback =

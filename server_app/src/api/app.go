@@ -7,7 +7,7 @@ import (
 	cfg "barassage/api/configs"
 
 	// Swagger
-	// docs "barassage/api/docs" // Swagger Docs
+	docs "barassage/api/docs" // Swagger Docs
 
 	// routes
 	"barassage/api/routes"
@@ -34,6 +34,10 @@ import (
 // @contact.email devcosmas@gmail.com
 // @license.name MIT
 // @license.url https://github.com/ItsCosmas/barassage/blob/master/LICENSE
+// @securityDefinitions.apikey Bearer
+// @in header
+// @name Authorization
+// @description Type "Bearer" followed by a space and JWT token.
 // @host https://postman-echo.com
 // @BasePath /api/v1
 func Run() {
@@ -85,7 +89,7 @@ func Run() {
 	*/
 
 	// FIXME, In Production, Port Should not be added to the Swagger Host
-	// docs.SwaggerInfo.Host = config.Host + ":" + config.Port
+	docs.SwaggerInfo.Host = config.Host + ":" + config.Port
 
 	// Run the app and listen on given port
 	port := fmt.Sprintf(":%s", config.Port)

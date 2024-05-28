@@ -24,6 +24,7 @@ cp src/.env.example src/.env
 
 ```sh
 go get -u github.com/swaggo/swag/cmd/swag
+go install github.com/swaggo/swag/cmd/swag@latest
 ```
 
 - Generate Swagger Docs. You have to generate swagger docs before packaging the app.

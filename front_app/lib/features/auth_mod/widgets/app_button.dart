@@ -1,8 +1,8 @@
 import 'package:clean_architecture/config/config.dart';
-import 'package:flutter/cupertino.dart';
+// import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_animated_button/flutter_animated_button.dart';
+// import 'package:flutter/widgets.dart';
+// import 'package:flutter_animated_button/flutter_animated_button.dart';
 
 // ignore: must_be_immutable
 class AppButton extends StatefulWidget {
@@ -55,7 +55,7 @@ class _AppButtonState extends State<AppButton> {
             _position = 4;
           });
         },
-        child: Container(
+        child: SizedBox(
           height: height + AppButton._shadowHeight,
           width: width,
           child: Stack(
@@ -82,7 +82,7 @@ class _AppButtonState extends State<AppButton> {
                   width: width,
                   decoration:  BoxDecoration(
                     color: widget.backgroundColor ?? AppColors.teal,
-                    borderRadius: BorderRadius.all(
+                    borderRadius: const BorderRadius.all(
                       Radius.circular(16),
                     ),
                   ),

@@ -8,9 +8,9 @@ Future<void> deleteConfirmDialog(BuildContext context,
     builder: (BuildContext context) {
       return AlertDialog(
         title: const Text('Are you sure?'),
-        content: SingleChildScrollView(
+        content: const SingleChildScrollView(
           child: ListBody(
-            children: const <Widget>[
+            children: <Widget>[
               Text('This is data will be deleted Permanently.'),
               Text('Re-Thinking about your action.'),
             ],
