@@ -59,8 +59,8 @@ jobs:
       - name: Build and push Docker image for ivoirejobs-api
         uses: docker/build-push-action@v2
         with:
-          context: ./server_app/src/api/
-          file: ./server_app/src/api/Dockerfile.prod
+          context: ./server_app/
+          file: ./server_app/Dockerfile.prod
           push: true
           tags: popokola/ivoirejobs-api:${{ steps.get_latest_tag.outputs.NEW_TAG }}
 
