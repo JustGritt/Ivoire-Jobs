@@ -24,8 +24,19 @@ func InitMailer() error {
 		return fmt.Errorf("failed to initialize Postmark client")
 	}
 
+	//get from env the app_host
+
+	host := cfg.GetConfig().Host
+	var path string
+
+	if host == "localhost" {
+		path = "/opt/gofiber-app/src/api/templates/email"
+	} else {
+		path = "/opt/gofiber-app/api/templates/email"
+	}
+
 	// Adjust the path according to your project structure
-	err := LoadTemplates("/opt/gofiber-app/src/api/templates/email")
+	err := LoadTemplates(path)
 	if err != nil {
 		log.Println("Failed to load email templates:", err)
 		return fmt.Errorf("failed to load email templates: %w", err)
