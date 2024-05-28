@@ -33,6 +33,7 @@ func SetupRoutes(app *fiber.App) {
 	auth.Post("/login", ctl.Login)
 	auth.Post("/logout", ctl.Logout)
 	auth.Post("/refresh", ctl.RefreshAuth)
+	auth.Get("/auth/verify-email", ctl.VerifyEmail)
 	// Requires authentication
 	auth.Post("/me", middlewares.RequireLoggedIn(), ctl.GetMyProfile)
 
