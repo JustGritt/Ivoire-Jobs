@@ -48,7 +48,7 @@ class ActionButtons extends StatelessWidget {
 
   void handleClick(String link, BuildContext context) {
     if (link == '/logout') {
-      doLogout(context);
+      doLogout();
     }
     Nav.to(context, link);
     // switch (index) {

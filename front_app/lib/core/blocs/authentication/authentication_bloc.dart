@@ -16,8 +16,7 @@ class AuthenticationBloc
     on<SignUpUser>((event, emit) async {
       emit(AuthenticationLoadingState(isLoading: true));
       try {
-        BuildContext context = serviceLocator<AppContext>().navigatorContext;
-        User? user = await doAuth(context, event.email, event.password);
+        User? user = await doAuth(event.email, event.password);
         if (user != null) {
           emit(AuthenticationSuccessState(user));
         } else {
@@ -32,11 +31,11 @@ class AuthenticationBloc
     on<InitiateAuth>((event, emit) async {
       emit(AuthenticationLoadingState(isLoading: true));
       try {
-
+        User? user = await getMyProfile();
         if (user != null) {
           emit(AuthenticationSuccessState(user));
         } else {
-          emit(const AuthenticationFailureState('create user failed'));
+          emit(const AuthenticationFailureState('get user failed'));
         }
       } catch (e) {
         print(e.toString());
@@ -46,12 +45,12 @@ class AuthenticationBloc
 
     on<SignOut>((event, emit) async {
       emit(AuthenticationLoadingState(isLoading: true));
-      // try {
-      //   authService.signOutUser();
-      // } catch (e) {
-      //   print('error');
-      //   print(e.toString());
-      // }
+      try {
+        doLogout();
+      } catch (e) {
+        print('error');
+        print(e.toString());
+      }
       emit(AuthenticationLoadingState(isLoading: false));
     });
   }

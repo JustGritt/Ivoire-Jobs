@@ -51,7 +51,7 @@ class BarassageApp extends StatelessWidget {
       theme: MyTheme().lightTheme,
       darkTheme: MyTheme().darkTheme,
       themeMode: tm.themeMode,
-      initialRoute: '/',
+      initialRoute: '/auth/splashScreen',
       routes: Routes().routes,
     );
   }
