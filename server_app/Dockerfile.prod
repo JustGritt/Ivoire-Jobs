@@ -37,6 +37,8 @@ WORKDIR /opt/gofiber-app
 # Copy the Pre-built binary file from the previous stage
 COPY --from=builder /app/main .
 COPY --from=builder /app/.env .
+COPY --from=builder /app/api/templates/email /opt/gofiber-app/src/api/templates/email
+
 
 # Expose port 80
 EXPOSE 80
