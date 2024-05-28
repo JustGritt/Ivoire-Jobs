@@ -7,7 +7,7 @@ import '../../Screens/tablet/contact.dart' as tablet;
 
 class ContactController extends StatelessController {
   final String _title = 'Contact Page';
-  const ContactController({Key? key}) : super(key: key);
+  const ContactController({super.key});
 
   @override
   bool get auth => false;

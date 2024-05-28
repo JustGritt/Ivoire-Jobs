@@ -6,8 +6,8 @@ import '../lead_mod.dart';
 
 // ignore: must_be_immutable
 class LeadAppBottomBar extends BottomBar {
-  LeadAppBottomBar({Key? key})
-      : super(key: key, buttonDatas: [
+  LeadAppBottomBar({super.key})
+      : super(buttonDatas: [
           ButtonData(
             icon: Icons.dashboard,
             label: 'Dashboard',

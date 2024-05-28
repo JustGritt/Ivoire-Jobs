@@ -9,7 +9,7 @@ import 'package:flutter/widgets.dart';
 import '../../../../core/init_dependencies.dart';
 
 class SplashMobileScreen extends StatefulWidget {
-  const SplashMobileScreen({Key? key}) : super(key: key);
+  const SplashMobileScreen({super.key});
 
   @override
   State<SplashMobileScreen> createState() => _SplashMobileScreenState();

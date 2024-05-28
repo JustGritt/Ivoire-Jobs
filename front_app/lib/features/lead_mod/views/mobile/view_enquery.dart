@@ -13,7 +13,7 @@ import '../../utils/utils.dart';
 import '../../widgets/button_bar.dart';
 
 class ViewEnqueryForMobile extends StatefulWidget {
-  const ViewEnqueryForMobile({Key? key}) : super(key: key);
+  const ViewEnqueryForMobile({super.key});
 
   @override
   State<ViewEnqueryForMobile> createState() => _ViewEnqueryForMobileState();

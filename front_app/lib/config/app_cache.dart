@@ -14,7 +14,7 @@ class AppCache {
   Future<Map<String, String>> auth() async {
     var data = await Cache.readData('auth_data');
     return udata = jsonDecode(data);
-  }                                                                                                                                                                                                                                       
+  }
 
   Future<String?> getToken() async {
     String? token = await Cache.readData('token');

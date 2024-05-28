@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../widgets/widget_functions.dart';
 
 class LoginDesktopScreen extends StatefulWidget {
-  const LoginDesktopScreen({Key? key}) : super(key: key);
+  const LoginDesktopScreen({super.key});
 
   @override
   State<LoginDesktopScreen> createState() => _LoginDesktopScreenState();

@@ -5,10 +5,9 @@ import '../../Screens/desktop/about.dart' as desktop;
 import '../../Screens/mobile/about.dart' as mobile;
 import '../../Screens/tablet/about.dart' as tablet;
 
-
 class AboutController extends StatefulController {
   final String _title = 'About Page';
-  const AboutController({Key? key}) : super(key: key);
+  const AboutController({super.key});
 
   @override
   State<AboutController> createState() => _AboutControllerState();

@@ -14,14 +14,14 @@ class AppButton extends StatefulWidget {
   bool? stretch;
 
   AppButton({
-    Key? key,
+    super.key,
     this.backgroundColor,
     this.textColor,
     required this.label,
     this.paddingValue = 8.0,
     required this.onPressed,
     this.stretch = false,
-  }) : super(key: key);
+  });
 
   static const double _shadowHeight = 4;
 
@@ -80,7 +80,7 @@ class _AppButtonState extends State<AppButton> {
                 child: Container(
                   height: height,
                   width: width,
-                  decoration:  BoxDecoration(
+                  decoration: BoxDecoration(
                     color: widget.backgroundColor ?? AppColors.teal,
                     borderRadius: const BorderRadius.all(
                       Radius.circular(16),

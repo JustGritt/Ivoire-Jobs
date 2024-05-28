@@ -6,8 +6,8 @@ import '../../../core/core.dart';
 
 class BottomBar extends StatefulWidget {
   const BottomBar({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<BottomBar> createState() => _BottomBarState();

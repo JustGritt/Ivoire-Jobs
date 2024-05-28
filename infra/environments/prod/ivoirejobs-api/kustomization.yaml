@@ -1,0 +1,10 @@
+---
+namespace: ivoirejobs-api
+replicas:
+  - name: ivoirejobs-api
+    count: 1
+images:
+  - name: popokola/ivoirejobs-api
+    newTag: v0.1.1
+resources:
+  - ../../../base-app

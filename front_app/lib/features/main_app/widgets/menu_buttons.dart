@@ -4,8 +4,8 @@ import '../../../core/classes/classes.dart';
 
 class MenuButtons extends StatelessWidget {
   const MenuButtons({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

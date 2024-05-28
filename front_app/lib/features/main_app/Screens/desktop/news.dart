@@ -9,7 +9,7 @@ import '../../widgets/day_night_switch.dart';
 import '../../widgets/menu_buttons.dart';
 
 class News extends StatefulWidget {
-  const News({Key? key}) : super(key: key);
+  const News({super.key});
 
   @override
   State<News> createState() => _NewsState();
@@ -96,7 +96,8 @@ class _NewsState extends State<News> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Published At: ${articles[index].publishedDate!}'),
+                          Text(
+                              'Published At: ${articles[index].publishedDate!}'),
                           ElevatedButton(
                             onPressed: () {
                               log(articles[index].link!);
