@@ -1,4 +1,4 @@
-import 'package:clean_architecture/features/auth_mod/auth_mod.dart';
+import 'package:barassage_app/features/auth_mod/auth_mod.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 

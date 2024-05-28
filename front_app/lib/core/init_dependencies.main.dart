@@ -16,6 +16,9 @@ void _initAuth() {
 
     ..registerLazySingleton(
       () => AppContext(),
+    )
+    ..registerLazySingleton(
+      () => UserService(),
     );
 
     // // Bloc

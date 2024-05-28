@@ -1,4 +1,4 @@
-import 'package:clean_architecture/features/main_app/Screens/mobile/services_details.dart';
+import 'package:barassage_app/features/main_app/Screens/mobile/services_details.dart';
 import 'package:flutter/material.dart';
 import '../models/main/trending_services_model.dart';
 import 'trending_service.dart';

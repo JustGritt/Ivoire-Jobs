@@ -1,11 +1,11 @@
-// import 'package:clean_architecture/main.dart';
+// import 'package:barassage_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   testWidgets('Find Dashboard', (tester) async {
     // Build our app and trigger a frame.
-    // await tester.pumpWidget(const CleanApp());
+    // await tester.pumpWidget(const BarassageApp());
 
     // Verify that our counter starts at 0.
     expect(find.widgetWithText(Text, 'Dashboard'), findsOneWidget);

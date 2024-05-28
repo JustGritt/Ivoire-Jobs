@@ -1,4 +1,4 @@
-name: clean_architecture
+name: barassage_app
 description: "A new Flutter project."
 publish_to: "none"
 version: 0.1.0
@@ -25,9 +25,6 @@ dependencies:
   provider: ^6.1.1
   shared_preferences: ^2.2.2
   url_launcher: ^6.2.1
-
-  flutter_bloc: any
-  flutter_gen: any
 fonts:
   - family: Okta
     fonts:

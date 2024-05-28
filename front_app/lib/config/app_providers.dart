@@ -1,5 +1,5 @@
-import 'package:clean_architecture/core/blocs/authentication/authentication_bloc.dart';
-import 'package:clean_architecture/core/init_dependencies.dart';
+import 'package:barassage_app/core/blocs/authentication/authentication_bloc.dart';
+import 'package:barassage_app/core/init_dependencies.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
