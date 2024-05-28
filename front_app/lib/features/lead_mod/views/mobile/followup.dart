@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/core.dart';
 
 class FollowupForMobile extends StatelessWidget {
-  const FollowupForMobile({Key? key}) : super(key: key);
+  const FollowupForMobile({super.key});
 
   @override
   Widget build(BuildContext context) {

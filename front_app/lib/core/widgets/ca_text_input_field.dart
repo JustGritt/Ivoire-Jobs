@@ -14,7 +14,7 @@ class CATextInputField extends StatelessWidget {
   Widget? suffixIcon;
 
   CATextInputField({
-    Key? key,
+    super.key,
     this.prefixIcon,
     this.labelTextStr,
     this.hintTextStr,
@@ -26,7 +26,7 @@ class CATextInputField extends StatelessWidget {
     this.validator,
     this.onSaved,
     this.suffixIcon,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

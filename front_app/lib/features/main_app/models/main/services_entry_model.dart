@@ -5,7 +5,8 @@ class ServiceEntries {
     const Service(
       providerName: 'John Doe',
       title: 'Spa for dogs and cats',
-      description: 'Provides a relaxing and pampering spa experience for dogs and cats.',
+      description:
+          'Provides a relaxing and pampering spa experience for dogs and cats.',
       image: 'https://source.unsplash.com/random/200x128',
       category: ServiceCategory.animalCare,
       price: 49.99,
@@ -17,7 +18,8 @@ class ServiceEntries {
     const Service(
       providerName: 'Jane Doe',
       title: 'Japanese tutoring',
-      description: 'Learn the basics of Japanese conversation and communication.',
+      description:
+          'Learn the basics of Japanese conversation and communication.',
       image: 'https://source.unsplash.com/random/200x128',
       category: ServiceCategory.privateTuition,
       price: 22.99,
@@ -29,7 +31,8 @@ class ServiceEntries {
     const Service(
       providerName: 'Jim Doe',
       title: 'Trimming your lawn',
-      description: 'Cutting your lawn is a great way to get rid of the weeds and keep your lawn looking fresh.',
+      description:
+          'Cutting your lawn is a great way to get rid of the weeds and keep your lawn looking fresh.',
       image: 'https://source.unsplash.com/random/200x128',
       category: ServiceCategory.gardening,
       price: 12.59,
@@ -41,7 +44,8 @@ class ServiceEntries {
     const Service(
       providerName: 'Jill Doe',
       title: 'Plumbing',
-      description: 'We are a plumbing service that will help you to fix any plumbing issues.',
+      description:
+          'We are a plumbing service that will help you to fix any plumbing issues.',
       image: 'https://source.unsplash.com/random/200x128',
       category: ServiceCategory.housework,
       price: 149.99,
@@ -66,4 +70,3 @@ class ServiceEntries {
 
   List<Service> get serviceEntries => _serviceEntries;
 }
-

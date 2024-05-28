@@ -5,9 +5,9 @@ class TrendingService extends StatelessWidget {
   final Service service;
 
   const TrendingService({
-    Key? key,
+    super.key,
     required this.service,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +48,8 @@ class TrendingService extends StatelessWidget {
                   top: 8,
                   left: 8,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
                       color: Colors.black54,
                       borderRadius: BorderRadius.circular(8),
@@ -67,7 +68,8 @@ class TrendingService extends StatelessWidget {
                   top: 8,
                   right: 8,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
                       color: Colors.black54,
                       borderRadius: BorderRadius.circular(8),
@@ -89,7 +91,6 @@ class TrendingService extends StatelessWidget {
                           size: 12,
                         ),
                       ],
-
                     ),
                   ),
                 ),

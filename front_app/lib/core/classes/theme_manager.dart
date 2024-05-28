@@ -20,7 +20,6 @@ ThemeData defaultTheme = ThemeData(
   navigationBarTheme: const NavigationBarThemeData(
     backgroundColor: AppColors.white,
   ),
-  
   textTheme: const TextTheme(
     displayLarge: TextStyle(
         color: AppColors.black, fontSize: 25, fontWeight: FontWeight.w600),
@@ -66,8 +65,8 @@ class AppTheme {
           ),
           primaryColorDark: AppColors.white,
           textTheme: const TextTheme(
-            displayLarge: TextStyle(
-                color: Colors.white, fontWeight: FontWeight.w600),
+            displayLarge:
+                TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
             displayMedium: TextStyle(
                 color: AppColors.grey,
                 fontSize: 16,

@@ -5,7 +5,7 @@ import '../../../core/core.dart';
 import '../views/views.dart';
 
 class SearchController extends StatelessController {
-  const SearchController({Key? key}) : super(key: key);
+  const SearchController({super.key});
 
   @override
   Display view(BuildContext context) {

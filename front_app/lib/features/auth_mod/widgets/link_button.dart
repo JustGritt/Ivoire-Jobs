@@ -5,10 +5,10 @@ class LinkButton extends StatelessWidget {
   Function() onPressed;
   String labelStr;
   LinkButton({
-    Key? key,
+    super.key,
     required this.onPressed,
     required this.labelStr,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

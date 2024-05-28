@@ -1,14 +1,10 @@
-import 'dart:developer';
 import 'dart:ui';
 
 import 'package:barassage_app/core/blocs/authentication/authentication_bloc.dart';
-import 'package:barassage_app/core/classes/route_manager.dart';
-import 'package:barassage_app/core/helpers/auth_helper.dart';
 import 'package:barassage_app/features/auth_mod/auth_app.dart';
 import 'package:barassage_app/features/auth_mod/widgets/app_button.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/svg.dart';
@@ -17,9 +13,9 @@ import '../../widgets/widget_functions.dart';
 
 class LoginMobileScreen extends StatefulWidget {
   const LoginMobileScreen({
-    Key? key,
+    super.key,
     void Function(String username, String password)? onLogged,
-  }) : super(key: key);
+  });
 
   @override
   State<LoginMobileScreen> createState() => _LoginMobileScreenState();
@@ -39,7 +35,7 @@ class _LoginMobileScreenState extends State<LoginMobileScreen> {
         body: SafeArea(
           child: BlocConsumer<AuthenticationBloc, AuthenticationState>(
             listener: (context, state) {
-              // TODO: implement listener
+              // !TODO: implement listener
             },
             builder: (context, state) {
               return SingleChildScrollView(

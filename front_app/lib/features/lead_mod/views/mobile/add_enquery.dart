@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/core.dart';
 
 class AddEnqueryForMobile extends StatefulWidget {
-  const AddEnqueryForMobile({Key? key}) : super(key: key);
+  const AddEnqueryForMobile({super.key});
 
   @override
   State<AddEnqueryForMobile> createState() => _AddEnqueryForMobileState();

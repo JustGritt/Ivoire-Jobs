@@ -8,9 +8,9 @@ import '../core.dart';
 class ActionButtons extends StatelessWidget {
   List<ButtonData>? buttonDatas;
   ActionButtons({
-    Key? key,
+    super.key,
     this.buttonDatas,
-  }) : super(key: key) {
+  }) {
     buttonDatas = buttonDatas ??
         [
           ButtonData(icon: Icons.home, label: 'Home', link: '/'),

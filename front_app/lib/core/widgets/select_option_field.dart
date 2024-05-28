@@ -10,7 +10,7 @@ class SelectOptionField extends StatefulWidget {
   Function(String?)? validator, onSaved;
 
   SelectOptionField({
-    Key? key,
+    super.key,
     this.options,
     this.selected,
     this.prefixIcon,
@@ -19,7 +19,7 @@ class SelectOptionField extends StatefulWidget {
     this.suffixIcon,
     this.validator,
     this.onSaved,
-  }) : super(key: key) {
+  }) {
     options = options ?? ['One', 'Two', 'Three', 'Four'];
     selected = selected ?? 'One';
   }

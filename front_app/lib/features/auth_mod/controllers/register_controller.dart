@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../screens/mobile/register_mobile_screen.dart';
 
 class RegisterController extends StatelessWidget {
-  const RegisterController({Key? key}) : super(key: key);
+  const RegisterController({super.key});
 
   @override
   Widget build(BuildContext context) {

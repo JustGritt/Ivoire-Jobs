@@ -32,7 +32,8 @@ class ServiceEntry extends StatelessWidget {
               child: Row(
                 children: [
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
                       color: Colors.black54,
                       borderRadius: BorderRadius.circular(8),
@@ -48,13 +49,13 @@ class ServiceEntry extends StatelessWidget {
                   ),
                   const SizedBox(width: 8),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: Colors.black54,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Row(
-                      children: [
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: Colors.black54,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Row(children: [
                         Text(
                           service.rating.toStringAsFixed(2),
                           style: const TextStyle(
@@ -65,9 +66,7 @@ class ServiceEntry extends StatelessWidget {
                         ),
                         const SizedBox(width: 4),
                         const Icon(Icons.star, color: Colors.white, size: 12),
-                      ]
-                    )
-                  ),
+                      ])),
                 ],
               ),
             ),
@@ -89,13 +88,13 @@ class ServiceEntry extends StatelessWidget {
                         ),
                       ),
                     ),
-
                   ],
                 ),
                 Padding(
                   padding: const EdgeInsets.only(right: 16.0),
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
                       color: Colors.black,
                       borderRadius: BorderRadius.circular(8),
@@ -115,7 +114,6 @@ class ServiceEntry extends StatelessWidget {
                 ),
               ],
             ),
-
             const SizedBox(height: 8),
             Row(
               children: [

@@ -15,7 +15,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Provider.debugCheckInvalidValueType = null;
   await initDependencies();
-  await dotenv.load(fileName: ".env");
+  await dotenv.load();
   runApp(MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -29,7 +29,7 @@ void main() async {
 }
 
 class BarassageApp extends StatelessWidget {
-  const BarassageApp({Key? key}) : super(key: key);
+  const BarassageApp({super.key});
 
   // This widget is the root of your application.
   @override

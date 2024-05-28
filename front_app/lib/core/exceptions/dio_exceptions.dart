@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:dio/dio.dart';
 
 import '../../features/auth_mod/services/api_exceptions.dart';

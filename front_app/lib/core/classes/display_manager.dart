@@ -9,7 +9,7 @@ class Display extends StatelessWidget {
   Widget? desktopLarge, desktop, tabletLandscape, tablet, mobileLandscape;
 
   Display({
-    Key? key,
+    super.key,
     required this.title,
     required this.mobile,
     this.mobileLandscape,
@@ -18,7 +18,7 @@ class Display extends StatelessWidget {
     this.desktop,
     this.desktopLarge,
     this.headerColor,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

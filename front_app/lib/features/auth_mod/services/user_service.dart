@@ -53,10 +53,10 @@ class UserService {
   }
 
   Future<User?> register(UserSignup userSignup) async {
-    Map<String, dynamic> _data = userSignup.toJson();
+    Map<String, dynamic> data = userSignup.toJson();
     Response res = await _http.post(
       ApiEndpoint.enquery,
-      data: jsonEncode(_data),
+      data: jsonEncode(data),
     );
     if (res.statusCode == 200 || res.statusCode == 201) {
       User user = User.fromJson(res.data);
@@ -66,10 +66,10 @@ class UserService {
   }
 
   Future<UserLoginResponse> login(UserLogin userLogin) async {
-    Map<String, dynamic> _data = userLogin.toJson();
+    Map<String, dynamic> data = userLogin.toJson();
     Response res = await _http.post(
       '${ApiEndpoint.api}${ApiEndpoint.appLoginUrl}',
-      data: jsonEncode(_data),
+      data: jsonEncode(data),
     );
     inspect(res.data);
     if (res.statusCode == 200) {

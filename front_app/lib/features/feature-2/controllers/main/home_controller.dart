@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/core.dart';
 
 class HomeController extends StatelessWidget {
-  const HomeController({Key? key}) : super(key: key);
+  const HomeController({super.key});
 
   @override
   Widget build(BuildContext context) {
