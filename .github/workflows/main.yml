@@ -14,6 +14,7 @@ jobs:
 
     env:
       APP_HOST: ${{ secrets.APP_HOST }}
+      APP_PORT: ${{ secrets.APP_PORT }}
       JWT_ACCESS_SIGN_KEY: ${{ secrets.JWT_ACCESS_SIGN_KEY }}
       JWT_REFRESH_SIGN_KEY: ${{ secrets.JWT_REFRESH_SIGN_KEY }}
       JWT_ISSUER: ${{ secrets.JWT_ISSUER }}
@@ -22,7 +23,7 @@ jobs:
       EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
       FRONTEND_URL: ${{ secrets.FRONTEND_URL }}
       DB_URL: ${{ secrets.DB_URL }}
-
+      
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -47,6 +48,7 @@ jobs:
       - name: Generate .env File
         run: |
           echo "APP_HOST=${{ secrets.APP_HOST }}" >> ./server_app/src/.env
+          echo "APP_PORT=${{ secrets.APP_PORT }}" >> ./server_app/src/.env
           echo "JWT_ACCESS_SIGN_KEY=${{ secrets.JWT_ACCESS_SIGN_KEY }}" >> ./server_app/src/.env
           echo "JWT_REFRESH_SIGN_KEY=${{ secrets.JWT_REFRESH_SIGN_KEY }}" >> ./server_app/src/.env
           echo "JWT_ISSUER=${{ secrets.JWT_ISSUER }}" >> ./server_app/src/.env
