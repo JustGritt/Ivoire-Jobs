@@ -46,15 +46,15 @@ jobs:
 
       - name: Generate .env File
         run: |
-          echo "APP_HOST=${{ secrets.APP_HOST }}" >> ./server_app/src/api/.env
-          echo "JWT_ACCESS_SIGN_KEY=${{ secrets.JWT_ACCESS_SIGN_KEY }}" >> ./server_app/src/api/.env
-          echo "JWT_REFRESH_SIGN_KEY=${{ secrets.JWT_REFRESH_SIGN_KEY }}" >> ./server_app/src/api/.env
-          echo "JWT_ISSUER=${{ secrets.JWT_ISSUER }}" >> ./server_app/src/api/.env
-          echo "POSTMARK_SERVER_TOKEN=${{ secrets.POSTMARK_SERVER_TOKEN }}" >> ./server_app/src/api/.env
-          echo "POSTMARK_ACCOUNT_TOKEN=${{ secrets.POSTMARK_ACCOUNT_TOKEN }}" >> ./server_app/src/api/.env
-          echo "EMAIL_FROM=${{ secrets.EMAIL_FROM }}" >> ./server_app/src/api/.env
-          echo "FRONTEND_URL=${{ secrets.FRONTEND_URL }}" >> ./server_app/src/api/.env
-          echo "DB_URL=${{ secrets.DB_URL }}" >> ./server_app/src/api/.env
+          echo "APP_HOST=${{ secrets.APP_HOST }}" >> ./server_app/src/.env
+          echo "JWT_ACCESS_SIGN_KEY=${{ secrets.JWT_ACCESS_SIGN_KEY }}" >> ./server_app/src/.env
+          echo "JWT_REFRESH_SIGN_KEY=${{ secrets.JWT_REFRESH_SIGN_KEY }}" >> ./server_app/src/.env
+          echo "JWT_ISSUER=${{ secrets.JWT_ISSUER }}" >> ./server_app/src/.env
+          echo "POSTMARK_SERVER_TOKEN=${{ secrets.POSTMARK_SERVER_TOKEN }}" >> ./server_app/src/.env
+          echo "POSTMARK_ACCOUNT_TOKEN=${{ secrets.POSTMARK_ACCOUNT_TOKEN }}" >> ./server_app/src/.env
+          echo "EMAIL_FROM=${{ secrets.EMAIL_FROM }}" >> ./server_app/src/.env
+          echo "FRONTEND_URL=${{ secrets.FRONTEND_URL }}" >> ./server_app/src/.env
+          echo "DB_URL=${{ secrets.DB_URL }}" >> ./server_app/src/.env
 
       - name: Build and push Docker image for ivoirejobs-api
         uses: docker/build-push-action@v2
