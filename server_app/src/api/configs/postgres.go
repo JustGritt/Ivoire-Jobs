@@ -42,7 +42,7 @@ func (s URLConfigStrategy) Name() string {
 type AutoDetectConfigStrategy struct{}
 
 func (s AutoDetectConfigStrategy) GetPostgresConnectionInfo() string {
-	url := os.Getenv("DATABASE_URL")
+	url := os.Getenv("DB_URL")
 	if url != "" {
 		return url
 	}
