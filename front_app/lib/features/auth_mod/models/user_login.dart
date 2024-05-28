@@ -41,11 +41,10 @@ class UserLoginResponse {
         refreshToken: refreshToken ?? this.refreshToken,
         user: user ?? this.user,
       );
-
   factory UserLoginResponse.fromJson(Map<String, dynamic> json) =>
       UserLoginResponse(
-        accessToken: json["accessToken"],
-        refreshToken: json["refreshToken"],
+        accessToken: json["access_token"],
+        refreshToken: json["refresh_token"],
         user: User.fromJson(json["user"]),
       );
 }

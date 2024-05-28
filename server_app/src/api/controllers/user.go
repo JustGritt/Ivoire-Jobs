@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net/http"
 	"time"
-
 	passwordUtil "barassage/api/common/passwordutil"
 	validator "barassage/api/common/validator"
 	cfg "barassage/api/configs"
@@ -12,16 +11,19 @@ import (
 	"barassage/api/models/user"
 	userRepo "barassage/api/repositories/user"
 	"barassage/api/services/auth"
+	"fmt"
+	"net/http"
 
 	"github.com/form3tech-oss/jwt-go"
 	"github.com/gofiber/fiber/v2"
+	jwt "github.com/golang-jwt/jwt/v4"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
 // UserObject is the structure of the user
 type UserObject struct {
-	ExternalID     string `json:"-"`
+	UserID         string `json:"-"`
 	FirstName      string `json:"firstname" validate:"required,min=2,max=30"`
 	LastName       string `json:"lastname" validate:"required,min=2,max=30"`
 	Email          string `json:"email" validate:"required,min=5,max=100,email"`
@@ -235,15 +237,19 @@ func Login(c *fiber.Ctx) error {
 // @Router /auth/me [post]
 // @Security Bearer
 func GetMyProfile(c *fiber.Ctx) error {
-	var userInput UserLogin
-	fmt.Println("Hello,", &userInput)
+	fmt.Println("Hello,", c.Locals("user"))
+	user := c.Locals("user").(*jwt.Token)
+	claims := user.Claims.(jwt.MapClaims)
+	userID := claims["userID"]
 	// Validate Input
-	if err := validator.ParseBodyAndValidate(c, &userInput); err != nil {
-		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(err))
+	if userID == nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"msg": "can't extract user info from request",
+		})
 	}
-
+	fmt.Println("Hello,", userID)
 	// Check If User Exists
-	user, err := userRepo.GetByEmail(userInput.Email)
+	dbUser, err := userRepo.GetById(userID.(string))
 	if err != nil {
 		errorList = nil
 		errorList = append(
@@ -258,24 +264,9 @@ func GetMyProfile(c *fiber.Ctx) error {
 	}
 	fmt.Println("Validation error:", err)
 
-	// Check if Password is Correct (Hash and Compare DB Hash)
-	passwordIsCorrect := passwordUtil.CheckPasswordHash(userInput.Password, user.Password)
-	if !passwordIsCorrect {
-		errorList = nil
-		errorList = append(
-			errorList,
-			&Response{
-				Code:    http.StatusUnauthorized,
-				Message: "Email or Password is Incorrect",
-				Data:    err,
-			},
-		)
-		return c.Status(http.StatusUnauthorized).JSON(HTTPErrorResponse(errorList))
-	}
-
 	// Issue Token
-	accessToken, _ := auth.IssueAccessToken(*user)
-	refreshToken, err := auth.IssueRefreshToken(*user)
+	accessToken, _ := auth.IssueAccessToken(*dbUser)
+	refreshToken, err := auth.IssueRefreshToken(*dbUser)
 
 	if err != nil {
 		errorList = nil
@@ -290,8 +281,7 @@ func GetMyProfile(c *fiber.Ctx) error {
 		return c.Status(http.StatusInternalServerError).JSON(HTTPErrorResponse(errorList))
 	}
 	// Return User and Token
-	return c.Status(http.StatusOK).JSON(HTTPResponse(http.StatusOK, "Login Success", fiber.Map{"user": mapUserToOutPut(user), "access_token": accessToken.Token, "refresh_token": refreshToken.Token}))
-
+	return c.Status(http.StatusOK).JSON(HTTPResponse(http.StatusOK, "This is your profile", fiber.Map{"user": mapUserToOutPut(dbUser), "access_token": accessToken.Token, "refresh_token": refreshToken.Token}))
 }
 
 // Logout Godoc
@@ -315,17 +305,17 @@ func Logout(c *fiber.Ctx) error {
 
 func mapInputToUser(userInput UserObject) user.User {
 	return user.User{
-		Firstname:  userInput.FirstName,
-		Lastname:   userInput.LastName,
-		Email:      userInput.Email,
-		Password:   userInput.Password,
-		ExternalID: uuid.New().String(),
+		Firstname: userInput.FirstName,
+		Lastname:  userInput.LastName,
+		Email:     userInput.Email,
+		Password:  userInput.Password,
+		ID:        uuid.New().String(),
 	}
 }
 
 func mapUserToOutPut(u *user.User) *UserOutput {
 	return &UserOutput{
-		ID:             u.ExternalID,
+		ID:             u.ID,
 		FirstName:      u.Firstname,
 		LastName:       u.Lastname,
 		Email:          u.Email,

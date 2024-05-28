@@ -13,6 +13,9 @@ void _initAuth() {
     ..registerFactory<AuthenticationBloc>(
       () => AuthenticationBloc(),
     )
+    ..registerFactory(
+      () => AppCache(),
+    )
     ..registerLazySingleton(
       () => AppContext(),
     )

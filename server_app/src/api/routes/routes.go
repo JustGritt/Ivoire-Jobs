@@ -35,7 +35,7 @@ func SetupRoutes(app *fiber.App) {
 	auth.Post("/refresh", ctl.RefreshAuth)
 	auth.Get("/auth/verify-email", ctl.VerifyEmail)
 	// Requires authentication
-	auth.Post("/me", middlewares.RequireLoggedIn(), ctl.GetMyProfile)
+	auth.Get("/me", middlewares.RequireLoggedIn(), ctl.GetMyProfile)
 
 	// Authenticated Routes
 	// books.Post("/", middlewares.RequireLoggedIn(), ctl.CreateBook)

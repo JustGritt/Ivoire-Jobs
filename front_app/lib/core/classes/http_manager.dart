@@ -36,6 +36,10 @@ class HttpManager {
     }
   }
 
+  void setToken(String token) {
+    _dio.options.headers['Authorization'] = 'Bearer $token';
+  }
+
   Future<Response> get(
     String url, {
     Map<String, dynamic>? params,
@@ -54,9 +58,8 @@ class HttpManager {
       );
       return response;
     } catch (e) {
-      log(e.toString());
+      rethrow;
     }
-    return response!;
   }
 
   Future<Response> post(

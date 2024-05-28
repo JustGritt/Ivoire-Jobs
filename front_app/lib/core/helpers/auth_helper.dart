@@ -3,6 +3,7 @@ import 'package:barassage_app/core/exceptions/dio_exceptions.dart';
 import 'package:barassage_app/core/init_dependencies.dart';
 import 'package:barassage_app/features/auth_mod/models/user.dart';
 import 'package:barassage_app/features/auth_mod/models/user_login.dart';
+import 'package:barassage_app/features/auth_mod/models/user_signup.dart';
 import 'package:barassage_app/features/auth_mod/services/user_service.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +23,6 @@ doAuth(String email, String password) async {
     UserLoginResponse userLoginResponse =
         await us.login(UserLogin(email: email, password: password));
     ac.doLogin(userLoginResponse.user, userLoginResponse.accessToken);
-    debugPrint('User: $userLoginResponse');
   } on DioException catch (e) {
     logger.e(DioExceptionHandler(e).error.message);
     showError(context, DioExceptionHandler(e).title);
@@ -35,17 +35,35 @@ doAuth(String email, String password) async {
   }
 }
 
-Future<User?> getMyProfile() async {
-  AppCache ac = AppCache();
+doRegister(UserSignup userSignup) async {
+  UserService us = serviceLocator<UserService>();
+  try {
+    User? user = await us.register(userSignup);
+    debugPrint('User: $user');
+  } on DioException catch (e) {
+    logger.e(DioExceptionHandler(e).error.message);
+    showError(context, DioExceptionHandler(e).title);
+  }
+  if (await AppCache().isLogin()) {
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      Nav.to(context, '/');
+      showMessage(context, 'Register Successful');
+    });
+  }
+}
 
-  UserService us = UserService();
+Future<User?> getMyProfile() async {
+  UserService us = serviceLocator<UserService>();
   try {
     UserLoginResponse userLogin = await us.getMyProfile();
-    ac.auth();
     return userLogin.user;
   } on DioException catch (e) {
     logger.e(DioExceptionHandler(e).error.message);
     showError(context, DioExceptionHandler(e).title);
+    return null;
+  } catch (e) {
+    print("here $e");
+    logger.e(e);
     return null;
   }
 }

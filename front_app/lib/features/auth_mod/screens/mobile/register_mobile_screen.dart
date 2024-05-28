@@ -1,7 +1,7 @@
 import 'package:barassage_app/core/blocs/authentication/authentication_bloc.dart';
+import 'package:barassage_app/features/auth_mod/models/user_signup.dart';
 import 'package:flutter/material.dart';
 
-import 'dart:developer';
 import 'dart:ui';
 
 import 'package:barassage_app/features/auth_mod/widgets/app_button.dart';
@@ -25,7 +25,7 @@ class RegisterMobileScreen extends StatefulWidget {
 class _RegisterMobileScreenState extends State<RegisterMobileScreen> {
   final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
   bool _isPasswordHide = true;
-  String? username, password;
+  String? email, password, firstname, lastname;
 
   @override
   Widget build(BuildContext context) {
@@ -112,21 +112,21 @@ class _RegisterMobileScreenState extends State<RegisterMobileScreen> {
                       // Username Fields
                       Field(
                         nameField: appLocalizations.lastname,
-                        onValid: (user) => username = user,
+                        onValid: (user) => lastname = user,
                       ),
                       const SizedBox(
                         height: 10,
                       ),
                       Field(
                         nameField: appLocalizations.firstname,
-                        onValid: (user) => username = user,
+                        onValid: (user) => firstname = user,
                       ),
                       const SizedBox(
                         height: 10,
                       ),
                       Field(
                         nameField: appLocalizations.email,
-                        onValid: (user) => username = user,
+                        onValid: (user) => email = user,
                       ),
                       const SizedBox(
                         height: 10,
@@ -154,9 +154,12 @@ class _RegisterMobileScreenState extends State<RegisterMobileScreen> {
                       AppButton(
                         onPressed: () {
                           if (_globalKey.currentState!.validate()) {
-                            log('username: $username, password: $password');
                             context.read<AuthenticationBloc>().add(
-                                  SignUpUser(username!, password!),
+                                  SignUpUser(UserSignup(
+                                      firstName: firstname!,
+                                      lastName: lastname!,
+                                      email: email!,
+                                      password: password!)),
                                 );
                             debugPrint('Login Validate');
                           }

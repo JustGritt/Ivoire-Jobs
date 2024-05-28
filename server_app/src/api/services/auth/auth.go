@@ -7,7 +7,7 @@ import (
 
 	cfg "barassage/api/configs"
 
-	jwt "github.com/form3tech-oss/jwt-go"
+	jwt "github.com/golang-jwt/jwt/v4"
 	"github.com/google/uuid"
 )
 
@@ -21,17 +21,17 @@ type TokenDetails struct {
 // RefreshClaims represents refresh token JWT claims
 type RefreshClaims struct {
 	RefreshTokenID string `json:"refreshTokenID"`
-	ExternalID     string `json:"userID"`
+	UserID         string `json:"userID"`
 	Role           string `json:"role"`
-	jwt.StandardClaims
+	jwt.MapClaims
 }
 
 // AccessClaims represents access token JWT claims
 type AccessClaims struct {
 	AccessTokenID string `json:"accessTokenID"`
-	ExternalID    string `json:"userID"`
+	UserID        string `json:"userID"`
 	Role          string `json:"role"`
-	jwt.StandardClaims
+	jwt.MapClaims
 }
 
 // IssueAccessToken generate access tokens used for auth
@@ -41,11 +41,11 @@ func IssueAccessToken(u user.User) (*TokenDetails, error) {
 	// Generate encoded token
 	claims := AccessClaims{
 		tokenUUID,
-		u.ExternalID,
+		u.ID,
 		u.Role,
-		jwt.StandardClaims{
-			ExpiresAt: expireTime.Unix(),
-			Issuer:    cfg.GetConfig().JWTIssuer,
+		jwt.MapClaims{
+			"exp": expireTime.Unix(),
+			"iss": cfg.GetConfig().JWTIssuer,
 		},
 	}
 
@@ -71,11 +71,11 @@ func IssueRefreshToken(u user.User) (*TokenDetails, error) {
 	// Generate encoded token
 	claims := RefreshClaims{
 		tokenUUID,
-		u.ExternalID,
+		u.ID,
 		u.Role,
-		jwt.StandardClaims{
-			ExpiresAt: expireTime.Unix(),
-			Issuer:    cfg.GetConfig().JWTIssuer,
+		jwt.MapClaims{
+			"exp": expireTime.Unix(),
+			"iss": cfg.GetConfig().JWTIssuer,
 		},
 	}
 

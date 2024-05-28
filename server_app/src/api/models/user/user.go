@@ -7,8 +7,7 @@ import (
 // User domain model
 type User struct {
 	gorm.Model
-	ID             int
-	ExternalID     string `gorm:"unique;NOT NULL;"`
+	ID             string `gorm:"type:uuid;default:gen_random_uuid();unique"`
 	Firstname      string `gorm:"NOT NULL;size:255"`
 	Lastname       string `gorm:"NOT NULL;size:255"`
 	ProfilePicture string `gorm:"size:255"`
