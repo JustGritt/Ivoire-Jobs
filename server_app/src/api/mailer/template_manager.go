@@ -5,7 +5,7 @@ import (
 	"html/template"
 	"log"
 	"os"
-	"path/filepath"
+	"path"
 )
 
 var templates map[string]*template.Template
@@ -23,8 +23,8 @@ func LoadTemplates(dir string) error {
 	for _, d := range dirs {
 		if d.IsDir() {
 			emailType := d.Name()
-			htmlFile := filepath.Join(dir, emailType, emailType+".html")
-			txtFile := filepath.Join(dir, emailType, emailType+".txt")
+			htmlFile := path.Join(dir, emailType, emailType+".html")
+			txtFile := path.Join(dir, emailType, emailType+".txt")
 
 			// Load HTML template if exists
 			htmlTmpl, err := template.ParseFiles(htmlFile)
