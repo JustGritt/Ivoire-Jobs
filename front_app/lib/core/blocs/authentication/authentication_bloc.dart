@@ -51,7 +51,6 @@ class AuthenticationBloc
           emit(const AuthenticationFailureState('get user failed'));
         }
       } catch (e) {
-
         print(e);
       }
       emit(AuthenticationLoadingState(isLoading: false));

@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:barassage_app/config/app_cache.dart';
 import 'package:barassage_app/core/init_dependencies.dart';
@@ -9,7 +8,6 @@ import 'package:barassage_app/features/auth_mod/models/user_login.dart';
 import 'package:dio/dio.dart';
 
 import '../../../config/api_endpoints.dart';
-import '../../../config/app_config.dart';
 import '../../../config/app_http.dart';
 import '../models/user_signup.dart';
 
