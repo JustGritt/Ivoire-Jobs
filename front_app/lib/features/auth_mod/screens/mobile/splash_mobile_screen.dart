@@ -37,6 +37,35 @@ class _SplashMobileScreenState extends State<SplashMobileScreen> with TickerProv
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Image.asset('assets/onboarding.png'),
+            SizedBox(height: 20),
+            Text(
+              'Welcome to Ivory Jobs',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 20),
+            Text(
+              'Discover amazing features and enjoy a seamless experience.',
+              style: TextStyle(fontSize: 16),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 40),
+            ElevatedButton(
+              onPressed: () {
+                Nav.to(context, '/login');
+              },
+              child: Text('Get Started'),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

@@ -6,8 +6,10 @@ class AuthApp extends RouteManager {
   static const String profile = '/profile';
   static const String forget = '/forget';
   static const String register = '/auth/register';
+  static const String splash = '/splash';
 
   AuthApp() {
+    addRoute(AuthApp.splash, (context) => const SplashController());
     addRoute(AuthApp.login, (context) => const LoginController());
     addRoute(AuthApp.profile, (context) => const ProfileController());
     addRoute(AuthApp.forget, (context) => const ForgetController());

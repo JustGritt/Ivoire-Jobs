@@ -4,3 +4,4 @@ export './mobile/login_mobile_screen.dart';
 export './mobile/profile_mobile.screen.dart';
 export './mobile/register_mobile_screen.dart';
 export './tablet/login_tablet_screen.dart';
+export './mobile/splash_mobile_screen.dart';
