@@ -45,7 +45,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: api.ivoirejobs.com
+    - host: api.barassage.com
       http:
         paths:
           - path: /
