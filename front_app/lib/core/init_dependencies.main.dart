@@ -13,7 +13,9 @@ void _initAuth() {
     ..registerFactory<AuthenticationBloc>(
       () => AuthenticationBloc(),
     )
-
+    ..registerFactory(
+      () => AppCache(),
+    )
     ..registerLazySingleton(
       () => AppContext(),
     )
@@ -21,17 +23,15 @@ void _initAuth() {
       () => UserService(),
     );
 
-    // // Bloc
-    // ..registerLazySingleton(
-    //   () => AuthBloc(
-    //     userSignUp: serviceLocator(),
-    //     userLogin: serviceLocator(),
-    //     currentUser: serviceLocator(),
-    //     appUserCubit: serviceLocator(),
-    //   ),
-    // );
+  // // Bloc
+  // ..registerLazySingleton(
+  //   () => AuthBloc(
+  //     userSignUp: serviceLocator(),
+  //     userLogin: serviceLocator(),
+  //     currentUser: serviceLocator(),
+  //     appUserCubit: serviceLocator(),
+  //   ),
+  // );
 }
 
-void _initInventory() {
-
-}
+void _initInventory() {}

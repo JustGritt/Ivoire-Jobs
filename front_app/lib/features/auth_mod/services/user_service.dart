@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:barassage_app/config/app_cache.dart';
+import 'package:barassage_app/core/init_dependencies.dart';
 import 'package:barassage_app/features/auth_mod/models/api_response.dart';
 import 'package:barassage_app/features/auth_mod/models/user.dart';
 import 'package:barassage_app/features/auth_mod/models/user_login.dart';
@@ -16,7 +18,6 @@ class UserService {
   UserService({this.token});
   final AppHttp _http = AppHttp(
     baseUrl: ApiEndpoint.baseUrl,
-    headers: {'token': Config.token},
   );
 
   Future<User?> getAll() async {
@@ -29,7 +30,17 @@ class UserService {
   }
 
   Future<UserLoginResponse> getMyProfile() async {
-    Response res = await _http.get(ApiEndpoint.appProfileUrl);
+    AppCache ac = serviceLocator<AppCache>();
+    String? token = await ac.getToken();
+    if (token == null) {
+      throw 'Token is null';
+    }
+    _http.setToken(token);
+    Response res = await _http
+        .get(
+          '${ApiEndpoint.api}${ApiEndpoint.appProfileUrl}',
+        )
+        .timeout(const Duration(seconds: 4));
     if (res.statusCode == 200) {
       ApiResponse apiResponse = ApiResponse.fromJson(res.data);
       UserLoginResponse userLogin =
@@ -71,7 +82,6 @@ class UserService {
       '${ApiEndpoint.api}${ApiEndpoint.appLoginUrl}',
       data: jsonEncode(_data),
     );
-    inspect(res.data);
     if (res.statusCode == 200) {
       ApiResponse apiResponse = ApiResponse.fromJson(res.data);
       UserLoginResponse userLogin =

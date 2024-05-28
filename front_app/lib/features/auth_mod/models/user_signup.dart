@@ -1,12 +1,12 @@
 class UserSignup {
-  int id;
+  int? id;
   String firstName;
   String lastName;
   String email;
   String password;
 
   UserSignup({
-    required this.id,
+     this.id,
     required this.firstName,
     required this.lastName,
     required this.email,

@@ -31,8 +31,12 @@ class HttpManager {
         client.badCertificateCallback =
             (X509Certificate cert, String host, int port) => true;
         return client;
-      };      
+      };
     }
+  }
+
+  void setToken(String token) {
+    _dio.options.headers['Authorization'] = 'Bearer $token';
   }
 
   Future<Response> get(
@@ -53,9 +57,8 @@ class HttpManager {
       );
       return response;
     } catch (e) {
-      log(e.toString());
+      rethrow;
     }
-    return response!;
   }
 
   Future<Response> post(
@@ -82,7 +85,6 @@ class HttpManager {
     } catch (e) {
       rethrow;
     }
-    return response!;
   }
 
   Future<Response> put(

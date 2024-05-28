@@ -15,7 +15,7 @@ abstract class StatelessController extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    checkLogin(context, auth: auth, loginUrl: loginUrl);
+    //checkLogin(context, auth: auth, loginUrl: loginUrl);
     return view(context);
   }
 }
@@ -34,7 +34,7 @@ abstract class ControllerState<T extends StatefulController> extends State<T> {
 
   @override
   Widget build(BuildContext context) {
-    checkLogin(context, auth: auth, loginUrl: loginUrl);
+    //checkLogin(context, auth: auth, loginUrl: loginUrl);
     return view(context);
   }
 }

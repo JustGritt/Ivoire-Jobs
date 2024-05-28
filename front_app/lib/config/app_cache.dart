@@ -16,8 +16,8 @@ class AppCache {
     return udata = jsonDecode(data);
   }                                                                                                                                                                                                                                       
 
-  Future<String> getToken() async {
-    String token = await Cache.readData('token');
+  Future<String?> getToken() async {
+    String? token = await Cache.readData('token');
     return token;
   }
 
@@ -27,7 +27,7 @@ class AppCache {
   }
 
   Future<bool> isLogin() async {
-    var data = await Cache.readData('auth_data');
+    var data = await Cache.readData('token');
     if (data != null) {
       return true;
     }

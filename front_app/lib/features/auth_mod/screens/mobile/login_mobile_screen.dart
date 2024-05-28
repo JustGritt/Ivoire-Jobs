@@ -156,7 +156,7 @@ class _LoginMobileScreenState extends State<LoginMobileScreen> {
                         onPressed: () async {
                           if (_globalKey.currentState!.validate()) {
                             context.read<AuthenticationBloc>().add(
-                                  SignUpUser(username!, password!),
+                                  SignInUser(username!, password!),
                                 );
                           }
                         },

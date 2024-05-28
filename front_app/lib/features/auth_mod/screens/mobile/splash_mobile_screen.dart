@@ -15,8 +15,8 @@ class SplashMobileScreen extends StatefulWidget {
   State<SplashMobileScreen> createState() => _SplashMobileScreenState();
 }
 
-class _SplashMobileScreenState extends State<SplashMobileScreen> with TickerProviderStateMixin {
-
+class _SplashMobileScreenState extends State<SplashMobileScreen>
+    with TickerProviderStateMixin {
   late final AuthenticationBloc _authenticationBloc;
   late StreamSubscription<AuthenticationState> _subscription;
 
