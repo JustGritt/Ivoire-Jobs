@@ -9,6 +9,7 @@ require (
 	github.com/gofiber/swagger v0.0.1
 	github.com/google/uuid v1.3.0
 	github.com/joho/godotenv v1.4.0
+	github.com/mrz1836/postmark v1.6.4
 	github.com/swaggo/swag v1.16.3
 	go.uber.org/zap v1.21.0
 	golang.org/x/crypto v0.23.0

@@ -15,6 +15,9 @@ import (
 	// database
 	db "barassage/api/database"
 
+	//mailer
+	mail "barassage/api/mailer"
+
 	// models
 	"barassage/api/models/user"
 
@@ -64,6 +67,13 @@ func Run() {
 	db.PgDB.AutoMigrate(&user.User{})
 
 	/*
+		============ Set Up Utils ============
+	*/
+
+	// Mailer
+	mail.InitMailer()
+
+	/*
 		============ Set Up Middlewares ============
 	*/
 
@@ -89,7 +99,11 @@ func Run() {
 	*/
 
 	// FIXME, In Production, Port Should not be added to the Swagger Host
-	docs.SwaggerInfo.Host = config.Host + ":" + config.Port
+	if config.Host == "localhost" {
+		docs.SwaggerInfo.Host = config.Host + ":" + config.Port
+	} else {
+		docs.SwaggerInfo.Host = config.Host
+	}
 
 	// Run the app and listen on given port
 	port := fmt.Sprintf(":%s", config.Port)

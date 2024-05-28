@@ -4,7 +4,7 @@ import '../../../../core/core.dart';
 import '../../lead_mod.dart';
 
 class SearchForMobile extends StatelessWidget {
-  const SearchForMobile({Key? key}) : super(key: key);
+  const SearchForMobile({super.key});
 
   @override
   Widget build(BuildContext context) {

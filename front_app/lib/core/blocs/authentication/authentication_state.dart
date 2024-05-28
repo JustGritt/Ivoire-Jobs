@@ -9,7 +9,7 @@ abstract class AuthenticationState {
 class AuthenticationInitialState extends AuthenticationState {}
 
 class AuthenticationLoadingState extends AuthenticationState {
- final bool isLoading;
+  final bool isLoading;
 
   AuthenticationLoadingState({required this.isLoading});
 }
@@ -21,6 +21,7 @@ class AuthenticationSuccessState extends AuthenticationState {
   @override
   List<Object> get props => [user];
 }
+
 class AuthenticationFailureState extends AuthenticationState {
   final String errorMessage;
 

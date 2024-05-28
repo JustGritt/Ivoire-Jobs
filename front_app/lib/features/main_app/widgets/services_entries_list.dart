@@ -13,7 +13,6 @@ class ServicesEntriesList extends StatelessWidget {
     return SizedBox(
       height: 300, // Adjust the height as needed to avoid overflow
       child: ListView.builder(
-        scrollDirection: Axis.vertical,
         itemCount: serviceEntries.serviceEntries.length,
         itemBuilder: (context, index) {
           return Padding(
@@ -29,7 +28,8 @@ class ServicesEntriesList extends StatelessWidget {
                   ),
                 );
               },
-              child: ServiceEntry(service: serviceEntries.serviceEntries[index]),
+              child:
+                  ServiceEntry(service: serviceEntries.serviceEntries[index]),
             ),
           );
         },

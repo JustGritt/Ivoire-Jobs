@@ -15,5 +15,5 @@ type User struct {
 	Email          string `gorm:"NOT NULL;UNIQUE"`
 	Password       string `gorm:"NOT NULL"`
 	Role           string `gorm:"NOT NULL;size:255;DEFAULT:'standard'"`
-	Active         bool   `gorm:"NOT NULL;DEFAULT:true"`
+	Active         bool   `gorm:"NOT NULL;DEFAULT:false"`
 }

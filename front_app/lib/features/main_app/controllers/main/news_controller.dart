@@ -6,7 +6,7 @@ import '../../Screens/mobile/news.dart' as mobile;
 import '../../Screens/tablet/news.dart' as tablet;
 
 class NewsController extends StatelessController {
-  const NewsController({Key? key}) : super(key: key);
+  const NewsController({super.key});
 
   @override
   bool get auth => true;

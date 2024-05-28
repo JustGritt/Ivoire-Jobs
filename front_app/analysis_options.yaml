@@ -1,1 +1,20 @@
 include: package:flutter_lints/flutter.yaml
+
+linter:
+  rules:
+    use_super_parameters: true
+    unnecessary_new: true
+    camel_case_types: true
+    library_names: true
+    avoid_catches_without_on_clauses: true
+    avoid_catching_errors: true
+    avoid_empty_else: true
+    unnecessary_brace_in_string_interps: true
+    avoid_redundant_argument_values: true
+    leading_newlines_in_multiline_strings: true
+    curly_braces_in_flow_control_structures: true
+    slash_for_doc_comments: true
+
+analyzer:
+  errors:
+    unused_import: error

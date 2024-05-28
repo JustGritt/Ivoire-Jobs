@@ -13,7 +13,7 @@ class TextInputField extends StatelessWidget {
   Widget? suffixIcon;
 
   TextInputField({
-    Key? key,
+    super.key,
     this.prefixIcon,
     this.labelTextStr,
     this.hintTextStr,
@@ -23,7 +23,7 @@ class TextInputField extends StatelessWidget {
     this.controller,
     this.validator,
     this.suffixIcon,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

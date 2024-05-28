@@ -5,7 +5,7 @@ import '../../../core/core.dart';
 import '../views/views.dart';
 
 class EditEnqueryController extends StatelessController {
-  const EditEnqueryController({Key? key}) : super(key: key);
+  const EditEnqueryController({super.key});
 
   @override
   Display view(BuildContext context) {

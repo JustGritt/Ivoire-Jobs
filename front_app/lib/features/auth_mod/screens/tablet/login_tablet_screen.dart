@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class LoginTabletScreen extends StatefulWidget {
-  const LoginTabletScreen({Key? key}) : super(key: key);
+  const LoginTabletScreen({super.key});
 
   @override
   State<LoginTabletScreen> createState() => _LoginTabletScreenState();

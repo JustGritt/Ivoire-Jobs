@@ -67,4 +67,3 @@ class Service {
     required this.duration,
   });
 }
-

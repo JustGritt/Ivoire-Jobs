@@ -14,7 +14,8 @@ TextFormField passwordField({
     style: const TextStyle(fontFamily: 'Okta'),
     obscureText: passHide,
     decoration: InputDecoration(
-      contentPadding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15),
+      contentPadding:
+          const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15),
       hintText: 'Password',
       suffixIcon: IconButton(
         onPressed: () {
@@ -52,7 +53,8 @@ TextFormField Field({
     keyboardType: TextInputType.emailAddress,
     style: const TextStyle(fontFamily: 'Okta'),
     decoration: InputDecoration(
-      contentPadding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15),
+      contentPadding:
+          const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15),
       hintText: nameField,
       border: const OutlineInputBorder(
           borderSide: BorderSide(

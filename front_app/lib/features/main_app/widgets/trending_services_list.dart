@@ -29,7 +29,8 @@ class TrendingServicesList extends StatelessWidget {
                   ),
                 );
               },
-              child: TrendingService(service: trendingServices.trendingServices[index]),
+              child: TrendingService(
+                  service: trendingServices.trendingServices[index]),
             ),
           );
         },

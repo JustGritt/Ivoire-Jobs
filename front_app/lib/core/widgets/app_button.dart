@@ -10,14 +10,14 @@ class AppButton extends StatelessWidget {
   bool? stretch;
 
   AppButton({
-    Key? key,
+    super.key,
     this.backgroundColor,
     this.textColor,
     required this.label,
     this.paddingValue = 8.0,
     required this.onPressed,
     this.stretch = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -7,7 +7,7 @@ import '../../../../core/core.dart';
 import '../../lead_mod.dart';
 
 class DashboardForMobile extends StatefulWidget {
-  const DashboardForMobile({Key? key}) : super(key: key);
+  const DashboardForMobile({super.key});
 
   @override
   State<DashboardForMobile> createState() => _DashboardForMobileState();
@@ -55,7 +55,8 @@ class _DashboardForMobileState extends State<DashboardForMobile> {
             Lead lead = ep.enqueries![index].attributes!;
 
             String title = lead.customer_name ?? 'No Name';
-            String details = '${lead.customer_email ?? 'No Email'} | ${lead.customer_mobile ?? 'No Number'}';
+            String details =
+                '${lead.customer_email ?? 'No Email'} | ${lead.customer_mobile ?? 'No Number'}';
             return Padding(
               padding: const EdgeInsets.all(3.0),
               child: ListTile(

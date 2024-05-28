@@ -6,10 +6,10 @@ class CABadge extends StatelessWidget {
   String label;
 
   CABadge({
-    Key? key,
+    super.key,
     this.color,
     required this.label,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

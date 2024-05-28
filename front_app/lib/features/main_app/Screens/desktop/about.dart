@@ -5,7 +5,7 @@ import '../../widgets/widget.dart';
 
 class About extends StatefulWidget {
   final String? title;
-  const About({Key? key, this.title}) : super(key: key);
+  const About({super.key, this.title});
 
   @override
   State<About> createState() => _AboutState();
@@ -23,7 +23,6 @@ class _AboutState extends State<About> {
         width: double.infinity,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const Text('This is the first page'),
             ElevatedButton(

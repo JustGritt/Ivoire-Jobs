@@ -14,13 +14,14 @@ class ServiceDetailPage extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         // Black return button
-        leading: Builder(builder: (context) => IconButton(
-          icon: const Icon(
-            Icons.arrow_back,
-            color: Colors.black,
-          ),
-          onPressed: () => Navigator.pop(context),
-        )),
+        leading: Builder(
+            builder: (context) => IconButton(
+                  icon: const Icon(
+                    Icons.arrow_back,
+                    color: Colors.black,
+                  ),
+                  onPressed: () => Navigator.pop(context),
+                )),
         title: Text(
           service.title,
           style: const TextStyle(
@@ -123,30 +124,28 @@ class ServiceDetailPage extends StatelessWidget {
           const Padding(
             padding: EdgeInsets.only(left: 16.0),
             child: Align(
-              alignment: Alignment.centerLeft,
-              child: Row(
-                children: [
-                  Text(
-                    'Reviews',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+                alignment: Alignment.centerLeft,
+                child: Row(
+                  children: [
+                    Text(
+                      'Reviews',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  SizedBox(width: 8),
-                  Text(
-                    '(6)',
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 16,
+                    SizedBox(width: 8),
+                    Text(
+                      '(6)',
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 16,
+                      ),
                     ),
-                  ),
-                ],
-              )
-            ),
+                  ],
+                )),
           ),
-
 
           ElevatedButton(
             onPressed: () {},
