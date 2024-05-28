@@ -5,9 +5,10 @@ import (
 
 	cfg "barassage/api/configs"
 
-	jwt "github.com/form3tech-oss/jwt-go"
-	"github.com/gofiber/fiber/v2"
 	jwtware "github.com/gofiber/jwt/v2"
+	jwt "github.com/golang-jwt/jwt/v4"
+
+	fiber "github.com/gofiber/fiber/v2"
 )
 
 // RequireLoggedIn ensures access only to logged in users by checking for token presence and validity

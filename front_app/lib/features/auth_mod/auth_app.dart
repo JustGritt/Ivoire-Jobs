@@ -5,7 +5,7 @@ import 'controllers/controllers.dart';
 
 class AuthApp extends RouteManager {
   static const String login = '/auth/login';
-  static const String profile = '/auth/getMyProfile';
+  static const String profile = '/auth/me';
   static const String splashScreen = '/auth/splashScreen';
   static const String forget = '/forget';
   static const String register = '/auth/register';
