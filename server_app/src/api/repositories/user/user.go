@@ -35,3 +35,7 @@ func GetById(id string) (*user.User, error) {
 func GetErrors() error {
 	return db.PgDB.Error
 }
+
+func Update(user *user.User) error {
+	return db.PgDB.Save(user).Error
+}

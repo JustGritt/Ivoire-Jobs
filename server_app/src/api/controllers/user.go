@@ -3,13 +3,17 @@ package controllers
 import (
 	"fmt"
 	"net/http"
+	"time"
 
 	passwordUtil "barassage/api/common/passwordutil"
 	validator "barassage/api/common/validator"
+	cfg "barassage/api/configs"
+	"barassage/api/mailer"
 	"barassage/api/models/user"
 	userRepo "barassage/api/repositories/user"
 	"barassage/api/services/auth"
 
+	"github.com/form3tech-oss/jwt-go"
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
@@ -105,6 +109,29 @@ func Register(c *fiber.Ctx) error {
 		return c.Status(http.StatusInternalServerError).JSON(response)
 	}
 
+	// Generate email verification token
+	expireTime := time.Now().Add(1 * time.Hour) // Token expires in 1 hour
+	verificationToken := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"user_id": u.ID,
+		"exp":     expireTime.Unix(),
+	})
+	tokenString, err := verificationToken.SignedString([]byte(cfg.GetConfig().JWTAccessSecret))
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{"error": "Could not generate verification token"})
+	}
+
+	// Send verification email
+	verificationLink := fmt.Sprintf("%s/verify-email?token=%s", cfg.GetConfig().FrontendURL, tokenString)
+	emailData := map[string]interface{}{
+		"action_url": verificationLink,
+		"email":      u.Email,
+	}
+
+	_, err = mailer.SendEmail("welcome", u.Email, "Email Verification", emailData)
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{"error": "Could not send verification email"})
+	}
+
 	userOutput := mapUserToOutPut(&u)
 	response := HTTPResponse(http.StatusCreated, "User Registered", userOutput)
 	return c.Status(http.StatusCreated).JSON(response)
@@ -154,6 +181,20 @@ func Login(c *fiber.Ctx) error {
 			&Response{
 				Code:    http.StatusUnauthorized,
 				Message: "Email or Password is Incorrect",
+				Data:    err,
+			},
+		)
+		return c.Status(http.StatusUnauthorized).JSON(HTTPErrorResponse(errorList))
+	}
+
+	// Check if User is Active
+	if !user.Active {
+		errorList = nil
+		errorList = append(
+			errorList,
+			&Response{
+				Code:    http.StatusUnauthorized,
+				Message: "Please Activate Your Account first",
 				Data:    err,
 			},
 		)

@@ -23,7 +23,8 @@ type Config struct {
 	JWTIssuer        string `env:"JWT_ISSUER"`
 	Host             string `env:"APP_HOST"`
 	Port             string `env:"APP_PORT"`
-	FromEmail string         `env:"EMAIL_FROM"`
+	FromEmail        string `env:"EMAIL_FROM"`
+	FrontendURL      string `env:"FRONTEND_URL"`
 }
 
 // IsProd Checks if env is production
@@ -54,12 +55,13 @@ func GetConfig() Config {
 		Env:      os.Getenv("ENV"),
 		Postgres: postgresConfig,
 		// Mailgun:   GetMailgunConfig(),
-		Postmark:   GetPostMakrConfig(),
+		Postmark:         GetPostMakrConfig(),
 		JWTAccessSecret:  os.Getenv("JWT_ACCESS_SIGN_KEY"),
 		JWTRefreshSecret: os.Getenv("JWT_REFRESH_SIGN_KEY"),
 		JWTIssuer:        os.Getenv("JWT_ISSUER"),
 		Host:             os.Getenv("APP_HOST"),
 		Port:             os.Getenv("APP_PORT"),
-		FromEmail: os.Getenv("EMAIL_FROM"),
+		FromEmail:        os.Getenv("EMAIL_FROM"),
+		FrontendURL:      os.Getenv("FRONTEND_URL"),
 	}
 }
