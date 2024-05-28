@@ -1,4 +1,4 @@
-import 'package:clean_architecture/config/app_colors.dart';
+import 'package:barassage_app/config/app_colors.dart';
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable

@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
-import 'package:clean_architecture/core/classes/app_context.dart';
-import 'package:clean_architecture/core/helpers/auth_helper.dart';
-import 'package:clean_architecture/core/init_dependencies.dart';
-import 'package:clean_architecture/features/auth_mod/models/user.dart';
+import 'package:barassage_app/core/classes/app_context.dart';
+import 'package:barassage_app/core/helpers/auth_helper.dart';
+import 'package:barassage_app/core/init_dependencies.dart';
+import 'package:barassage_app/features/auth_mod/models/user.dart';
 import 'package:flutter/material.dart';
 
 part 'authentication_event.dart';

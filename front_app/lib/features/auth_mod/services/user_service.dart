@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:clean_architecture/features/auth_mod/models/api_response.dart';
-import 'package:clean_architecture/features/auth_mod/models/user.dart';
-import 'package:clean_architecture/features/auth_mod/models/user_login.dart';
+import 'package:barassage_app/features/auth_mod/models/api_response.dart';
+import 'package:barassage_app/features/auth_mod/models/user.dart';
+import 'package:barassage_app/features/auth_mod/models/user_login.dart';
 import 'package:dio/dio.dart';
 
 import '../../../config/api_endpoints.dart';

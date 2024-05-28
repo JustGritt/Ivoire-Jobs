@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:clean_architecture/core/blocs/authentication/authentication_bloc.dart';
-import 'package:clean_architecture/features/auth_mod/auth_app.dart';
-import 'package:clean_architecture/features/main_app/app.dart';
+import 'package:barassage_app/core/blocs/authentication/authentication_bloc.dart';
+import 'package:barassage_app/features/auth_mod/auth_app.dart';
+import 'package:barassage_app/features/main_app/app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 

@@ -1,7 +1,7 @@
-import 'package:clean_architecture/core/blocs/authentication/authentication_bloc.dart';
-import 'package:clean_architecture/core/classes/app_context.dart';
-import 'package:clean_architecture/core/init_dependencies.dart';
-import 'package:clean_architecture/l10n/l10n.dart';
+import 'package:barassage_app/core/blocs/authentication/authentication_bloc.dart';
+import 'package:barassage_app/core/classes/app_context.dart';
+import 'package:barassage_app/core/init_dependencies.dart';
+import 'package:barassage_app/l10n/l10n.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter/material.dart';

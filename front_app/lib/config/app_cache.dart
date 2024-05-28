@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:clean_architecture/features/auth_mod/models/models.dart';
+import 'package:barassage_app/features/auth_mod/models/models.dart';
 
 import '../core/classes/cache_manager.dart';
 

@@ -1,4 +1,4 @@
-import 'package:clean_architecture/features/auth_mod/screens/mobile/splash_mobile_screen.dart';
+import 'package:barassage_app/features/auth_mod/screens/mobile/splash_mobile_screen.dart';
 
 import '../../core/classes/route_manager.dart';
 import 'controllers/controllers.dart';

@@ -1,11 +1,10 @@
-import 'package:clean_architecture/core/blocs/authentication/authentication_bloc.dart';
+import 'package:barassage_app/core/blocs/authentication/authentication_bloc.dart';
 import 'package:flutter/material.dart';
 
 import 'dart:developer';
 import 'dart:ui';
 
-import 'package:clean_architecture/core/helpers/auth_helper.dart';
-import 'package:clean_architecture/features/auth_mod/widgets/app_button.dart';
+import 'package:barassage_app/features/auth_mod/widgets/app_button.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -36,9 +35,7 @@ class _RegisterMobileScreenState extends State<RegisterMobileScreen> {
         backgroundColor: theme.cardColor,
         body: SafeArea(
           child: BlocConsumer<AuthenticationBloc, AuthenticationState>(
-            listener: (context, state) {
-              
-            },
+            listener: (context, state) {},
             builder: (context, state) {
               return SingleChildScrollView(
                 child: Form(
@@ -158,10 +155,9 @@ class _RegisterMobileScreenState extends State<RegisterMobileScreen> {
                         onPressed: () {
                           if (_globalKey.currentState!.validate()) {
                             log('username: $username, password: $password');
-                            doAuth(context, username!, password!);
                             context.read<AuthenticationBloc>().add(
-                              SignUpUser(username!, password!),
-                            );
+                                  SignUpUser(username!, password!),
+                                );
                             debugPrint('Login Validate');
                           }
                         },
