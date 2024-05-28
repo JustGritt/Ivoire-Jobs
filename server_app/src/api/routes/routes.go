@@ -36,6 +36,9 @@ func SetupRoutes(app *fiber.App) {
 	// Requires authentication
 	auth.Post("/me", middlewares.RequireLoggedIn(), ctl.GetMyProfile)
 
+	//Demo route for sending email
+	v1.Get("/test", ctl.SendMail)
+
 	// Authenticated Routes
 	// books.Post("/", middlewares.RequireLoggedIn(), ctl.CreateBook)
 }

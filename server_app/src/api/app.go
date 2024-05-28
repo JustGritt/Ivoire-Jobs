@@ -15,6 +15,9 @@ import (
 	// database
 	db "barassage/api/database"
 
+	//mailer
+	mail "barassage/api/mailer"
+
 	// models
 	"barassage/api/models/user"
 
@@ -62,6 +65,13 @@ func Run() {
 
 	// Migration
 	db.PgDB.AutoMigrate(&user.User{})
+
+	/*
+		============ Set Up Utils ============
+	*/
+
+	// Mailer
+	mail.InitMailer()
 
 	/*
 		============ Set Up Middlewares ============
