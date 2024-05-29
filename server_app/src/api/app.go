@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	// Configs
+	"barassage/api/bucket"
 	cfg "barassage/api/configs"
 
 	// Swagger
@@ -70,6 +71,9 @@ func Run() {
 
 	// Mailer
 	mail.InitMailer()
+
+	// S3
+	bucket.InitS3Manager()
 
 	/*
 		============ Set Up Middlewares ============

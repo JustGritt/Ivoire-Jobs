@@ -1,28 +1,31 @@
 package controllers
 
 import (
+	"barassage/api/bucket"
 	validator "barassage/api/common/validator"
 	"barassage/api/models/service"
 	serviceRepo "barassage/api/repositories/service"
 	"fmt"
+	"log"
+	"mime/multipart"
 	"net/http"
 
-	"github.com/form3tech-oss/jwt-go"
 	"github.com/gofiber/fiber/v2"
+	"github.com/golang-jwt/jwt/v4"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
 type ServiceObject struct {
-	ServiceID   string  `json:"-"`
-	UserID      string  `json:"userId"`
-	Name        string  `json:"name" validate:"required,min=2,max=30"`
-	Description string  `json:"description" validate:"required,min=2,max=30"`
-	Price       float64 `json:"price" validate:"required"`
-	Status      bool    `json:"status"`
-	Duration    int     `json:"duration" validate:"required"`
-	IsBanned    bool    `json:"isBanned"`
-	Thumbnail   string  `json:"thumbnail"`
+	ServiceID   string                `json:"-"`
+	UserID      string                `json:"-"`
+	Name        string                `json:"name" validate:"required,min=2,max=30"`
+	Description string                `json:"description" validate:"required,min=2,max=30"`
+	Price       float64               `json:"price" validate:"required,min=5,max=1000000"`
+	Status      bool                  `json:"status" default:"false"`
+	Duration    int                   `json:"duration" validate:"required,min=30,max=1440" message:"Duration must be between 30 and 1440 minutes"`
+	IsBanned    bool                  `json:"-"`
+	Thumbnail   *multipart.FileHeader `json:"thumbnail"`
 }
 
 type ServiceOutput struct {
@@ -55,14 +58,6 @@ func CreateService(c *fiber.Ctx) error {
 		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(err))
 	}
 
-	s := mapInputToServiceObject(serviceInput)
-
-	// Check if the service already exists for the given user
-	if _, err := serviceRepo.GetServiceByNameForUser(s.Name, s.UserID); err == nil {
-		response := HTTPResponse(http.StatusForbidden, "Service Already Exist", nil)
-		return c.Status(http.StatusForbidden).JSON(response)
-	}
-
 	user := c.Locals("user").(*jwt.Token)
 	claims := user.Claims.(jwt.MapClaims)
 	userID := claims["userID"]
@@ -73,7 +68,62 @@ func CreateService(c *fiber.Ctx) error {
 		})
 	}
 
+	// Handle file upload
+	file, err := c.FormFile("thumbnail")
+	if err != nil {
+		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
+			"msg": "thumbnail file is required",
+		})
+	}
+
+	allowedMimeTypes := []string{"jpeg", "webp", "png", "jpg"}
+	maxFileSize := "100KB"
+
+	if err := validator.ValidateFile(file, maxFileSize, allowedMimeTypes); err != nil {
+		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
+			"msg": err.Error(),
+		})
+	}
+
+	//store in s3 Bucket
+	// Upload the file to S3
+	s3URL, err := bucket.UploadFile(file)
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"msg": "unable to upload thumbnail to S3",
+		})
+	}
+
+	//get the presigned url
+	mytest, err := bucket.GetPresignedURL(s3URL)
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"msg": "unable to get presigned url",
+		})
+	}
+
+	log.Println("Presigned URL: ", mytest)
+
+	//map the input to service model
+	s := service.Service{
+		UserID:      serviceInput.UserID,
+		Name:        serviceInput.Name,
+		Description: serviceInput.Description,
+		Price:       serviceInput.Price,
+		Status:      serviceInput.Status,
+		Duration:    serviceInput.Duration,
+		IsBanned:    serviceInput.IsBanned,
+		Thumbnail:   s3URL,
+		ID:          uuid.New().String(),
+	}
+
 	s.UserID = userID.(string)
+
+	// Check if the service already exists for the given user
+	if _, err := serviceRepo.GetServiceByNameForUser(s.Name, s.UserID); err == nil {
+		response := HTTPResponse(http.StatusForbidden, "Service Already Exist", nil)
+		return c.Status(http.StatusForbidden).JSON(response)
+	}
 
 	// Save Service to DB
 	if err := serviceRepo.Create(&s); err != nil {
@@ -189,6 +239,7 @@ func GetServiceById(c *fiber.Ctx) error {
 // =================== Private Methods ========================
 // ============================================================
 
+/*
 func mapInputToServiceObject(service ServiceObject) service.Service {
 	return service.Service{
 		UserID:    service.UserID,
@@ -200,6 +251,7 @@ func mapInputToServiceObject(service ServiceObject) service.Service {
 		Thumbnail: service.Thumbnail,
 	}
 }
+*/
 
 func mapServiceToOutPut(u *service.Service) *ServiceOutput {
 	return &ServiceOutput{

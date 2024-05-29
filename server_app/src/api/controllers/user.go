@@ -12,8 +12,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/form3tech-oss/jwt-go"
 	"github.com/gofiber/fiber/v2"
+	"github.com/golang-jwt/jwt/v4"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
