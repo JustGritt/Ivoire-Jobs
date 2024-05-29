@@ -19,6 +19,7 @@ import (
 	mail "barassage/api/mailer"
 
 	// models
+	"barassage/api/models/service"
 	"barassage/api/models/user"
 
 	"github.com/gofiber/fiber/v2"
@@ -28,21 +29,18 @@ import (
 )
 
 // Run starts the app
-// @title Gofiber Boilerplate API
+// @title Barassage API
 // @version 1.0
-// @description This is my gofiber boilerplate api server.
+// @description This is the Barassage API
 // @termsOfService http://swagger.io/terms/
-// @contact.name Cozy
-// @contact.url https://github.com/ItsCosmas
-// @contact.email devcosmas@gmail.com
+// @contact.name barassage
 // @license.name MIT
-// @license.url https://github.com/ItsCosmas/barassage/blob/master/LICENSE
+// @BasePath /api/v1
+// @schemes http https
 // @securityDefinitions.apikey Bearer
 // @in header
 // @name Authorization
 // @description Type "Bearer" followed by a space and JWT token.
-// @host https://postman-echo.com
-// @BasePath /api/v1
 func Run() {
 	app := fiber.New()
 
@@ -64,7 +62,7 @@ func Run() {
 	//db.PgDB.Migrator().DropTable(&user.User{})
 
 	// Migration
-	db.PgDB.AutoMigrate(&user.User{})
+	db.PgDB.AutoMigrate(&user.User{}, &service.Service{})
 
 	/*
 		============ Set Up Utils ============

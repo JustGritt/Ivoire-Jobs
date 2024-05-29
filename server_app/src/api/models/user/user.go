@@ -1,6 +1,8 @@
 package user
 
 import (
+	"barassage/api/models/service"
+
 	"gorm.io/gorm"
 )
 
@@ -16,4 +18,5 @@ type User struct {
 	Password       string `gorm:"NOT NULL"`
 	Role           string `gorm:"NOT NULL;size:255;DEFAULT:'standard'"`
 	Active         bool   `gorm:"NOT NULL;DEFAULT:false"`
+	Services []service.Service   `gorm:"foreignKey:UserID"`
 }
