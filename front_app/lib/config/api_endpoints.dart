@@ -21,4 +21,5 @@ class ApiEndpoint {
   static const appRegiaterUrl = AuthApp.register;
   static const appForgetUrl = AuthApp.forget;
   static const appProfileUrl = AuthApp.profile;
+  static const appEmailValidationUrl = AuthApp.emailValidation;
 }

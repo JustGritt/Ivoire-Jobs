@@ -64,4 +64,15 @@ class UserService {
     }
     throw res.data['message'];
   }
+
+  Future<bool> verifyEmailToken(String token) async {
+    Response res = await _http.post(
+      '${ApiEndpoint.api}${ApiEndpoint.appEmailValidationUrl}',
+      data: {'token': token},
+    );
+    if (res.statusCode == 200) {
+      return true;
+    }
+    return false;
+  }
 }

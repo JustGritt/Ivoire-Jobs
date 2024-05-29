@@ -17,5 +17,9 @@
     "btn_cancel"   : "Cancel",
     "btn_register" : "Register",
     "btn_login"    : "Login",
-    "btn_forgot_password": "Forgot password ?"
+    "btn_forgot_password": "Forgot password ?",
+    "email_validation_success_title" : "Your email has been verified !",
+    "email_validation_failure_title" : "Your email could not be verified !",
+    "email_validation_success_description": "You can now connect to your account.",
+    "email_validation_failure_description": "An error occurred during the verification of your email."
 }

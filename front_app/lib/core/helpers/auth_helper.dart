@@ -60,3 +60,17 @@ void checkLogin(
     }
   });
 }
+
+void checkRegisterToken(BuildContext context, String token) {
+  UserService us = UserService();
+  us.verifyEmailToken(token).then((value) {
+    if (value == false) {
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        // setState(() {
+        //   isEmailValidated = false;
+        //   isLoading = false;
+        // });
+      });
+    }
+  });
+}

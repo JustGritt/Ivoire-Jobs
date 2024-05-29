@@ -30,7 +30,7 @@ class _SplashMobileScreenState extends State<SplashMobileScreen> with TickerProv
     // _authenticationBloc.add(AuthenticationStartedEvent());
     _subscription = _authenticationBloc.stream.listen((state) {
       if (state is AuthenticationSuccessState) {
-
+        Nav.to(context, AuthApp.login);
       }
     });
   }
