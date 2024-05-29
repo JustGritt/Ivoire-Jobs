@@ -1,4 +1,4 @@
-package com.example.clean_architecture
+package com.example.barassage_app
 
 import io.flutter.embedding.android.FlutterActivity
 

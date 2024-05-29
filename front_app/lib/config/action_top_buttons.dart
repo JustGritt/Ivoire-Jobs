@@ -6,8 +6,8 @@ import '../features/main_app/app.dart';
 
 // ignore: must_be_immutable
 class ActionTopButtons extends ActionButtons {
-  ActionTopButtons({Key? key})
-      : super(key: key, buttonDatas: [
+  ActionTopButtons({super.key})
+      : super(buttonDatas: [
           ButtonData(
             icon: Icons.home,
             label: 'Main App',

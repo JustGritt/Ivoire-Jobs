@@ -8,9 +8,9 @@ import '../core.dart';
 class ActionButtons extends StatelessWidget {
   List<ButtonData>? buttonDatas;
   ActionButtons({
-    Key? key,
+    super.key,
     this.buttonDatas,
-  }) : super(key: key) {
+  }) {
     buttonDatas = buttonDatas ??
         [
           ButtonData(icon: Icons.home, label: 'Home', link: '/'),
@@ -48,7 +48,7 @@ class ActionButtons extends StatelessWidget {
 
   void handleClick(String link, BuildContext context) {
     if (link == '/logout') {
-      doLogout(context);
+      doLogout();
     }
     Nav.to(context, link);
     // switch (index) {

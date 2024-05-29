@@ -1,4 +1,4 @@
-import 'package:clean_architecture/features/auth_mod/auth_app.dart';
+import 'package:barassage_app/features/auth_mod/auth_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../core/core.dart';
@@ -14,7 +14,8 @@ TextFormField passwordField({
     style: const TextStyle(fontFamily: 'Okta'),
     obscureText: passHide,
     decoration: InputDecoration(
-      contentPadding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 15),
+      contentPadding:
+          const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15),
       hintText: 'Password',
       suffixIcon: IconButton(
         onPressed: () {
@@ -43,6 +44,7 @@ TextFormField passwordField({
   );
 }
 
+// ignore: non_constant_identifier_names
 TextFormField Field({
   required String nameField,
   String? Function(String?)? onValid,
@@ -51,7 +53,8 @@ TextFormField Field({
     keyboardType: TextInputType.emailAddress,
     style: const TextStyle(fontFamily: 'Okta'),
     decoration: InputDecoration(
-      contentPadding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 15),
+      contentPadding:
+          const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15),
       hintText: nameField,
       border: const OutlineInputBorder(
           borderSide: BorderSide(

@@ -9,7 +9,7 @@ import '../../Screens/tablet/home.dart' as tablet;
 
 class HomeController extends StatelessController {
   final String _title = 'Home Page';
-  const HomeController({Key? key}) : super(key: key);
+  const HomeController({super.key});
 
   @override
   bool get auth => true;

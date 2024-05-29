@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../config/app_theme.dart';
 
 class DayNightSwitch extends StatefulWidget {
-  const DayNightSwitch({Key? key}) : super(key: key);
+  const DayNightSwitch({super.key});
 
   @override
   State<DayNightSwitch> createState() => _DayNightSwitchState();

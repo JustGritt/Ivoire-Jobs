@@ -5,7 +5,7 @@ import '../core.dart';
 
 // ignore: must_be_immutable
 abstract class StatelessController extends StatelessWidget {
-  const StatelessController({Key? key}) : super(key: key);
+  const StatelessController({super.key});
 
   bool get auth => false;
 
@@ -15,14 +15,14 @@ abstract class StatelessController extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // checkLogin(context, auth: auth, loginUrl: loginUrl);
+    //checkLogin(context, auth: auth, loginUrl: loginUrl);
     return view(context);
   }
 }
 
 // ignore: must_be_immutable
 abstract class StatefulController extends StatefulWidget {
-  const StatefulController({Key? key}) : super(key: key);
+  const StatefulController({super.key});
 }
 
 abstract class ControllerState<T extends StatefulController> extends State<T> {
@@ -34,7 +34,7 @@ abstract class ControllerState<T extends StatefulController> extends State<T> {
 
   @override
   Widget build(BuildContext context) {
-    // checkLogin(context, auth: auth, loginUrl: loginUrl);
+    //checkLogin(context, auth: auth, loginUrl: loginUrl);
     return view(context);
   }
 }

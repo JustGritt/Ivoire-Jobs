@@ -12,7 +12,7 @@ class BottomBar extends StatelessWidget {
   int len = 0;
 
   List<ButtonData>? buttonDatas;
-  BottomBar({Key? key, this.buttonDatas}) : super(key: key) {
+  BottomBar({super.key, this.buttonDatas}) {
     buttonDatas = buttonDatas ??
         [
           ButtonData(icon: Icons.home, label: 'Home', link: '/'),

@@ -7,7 +7,6 @@ ThemeData defaultTheme = ThemeData(
   fontFamily: 'Okta',
   brightness: Brightness.light,
   primarySwatch: AppColors.teal,
-  bottomAppBarColor: Colors.white,
   scaffoldBackgroundColor: const Color.fromARGB(255, 222, 255, 252),
   appBarTheme: const AppBarTheme(
     titleTextStyle: TextStyle(
@@ -21,11 +20,10 @@ ThemeData defaultTheme = ThemeData(
   navigationBarTheme: const NavigationBarThemeData(
     backgroundColor: AppColors.white,
   ),
-  
-  textTheme: TextTheme(
-    displayLarge: const TextStyle(
+  textTheme: const TextTheme(
+    displayLarge: TextStyle(
         color: AppColors.black, fontSize: 25, fontWeight: FontWeight.w600),
-    displayMedium: const TextStyle(
+    displayMedium: TextStyle(
         color: AppColors.grey, fontSize: 16, fontWeight: FontWeight.w500),
   ),
   popupMenuTheme: const PopupMenuThemeData(
@@ -66,10 +64,10 @@ class AppTheme {
             buttonColor: Colors.white,
           ),
           primaryColorDark: AppColors.white,
-          textTheme: TextTheme(
-            displayLarge: const TextStyle(
-                color: Colors.white, fontWeight: FontWeight.w600),
-            displayMedium: const TextStyle(
+          textTheme: const TextTheme(
+            displayLarge:
+                TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+            displayMedium: TextStyle(
                 color: AppColors.grey,
                 fontSize: 16,
                 fontWeight: FontWeight.w500),

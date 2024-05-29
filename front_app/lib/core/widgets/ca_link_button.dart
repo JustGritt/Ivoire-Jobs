@@ -1,4 +1,4 @@
-import 'package:clean_architecture/config/app_colors.dart';
+import 'package:barassage_app/config/app_colors.dart';
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
@@ -6,10 +6,10 @@ class CALinkButton extends StatelessWidget {
   Function() onPressed;
   String labelStr;
   CALinkButton({
-    Key? key,
+    super.key,
     required this.onPressed,
     required this.labelStr,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -1,7 +1,7 @@
-import 'package:clean_architecture/core/blocs/authentication/authentication_bloc.dart';
-import 'package:clean_architecture/core/classes/app_context.dart';
-import 'package:clean_architecture/core/init_dependencies.dart';
-import 'package:clean_architecture/l10n/l10n.dart';
+import 'package:barassage_app/core/blocs/authentication/authentication_bloc.dart';
+import 'package:barassage_app/core/classes/app_context.dart';
+import 'package:barassage_app/core/init_dependencies.dart';
+import 'package:barassage_app/l10n/l10n.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +15,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Provider.debugCheckInvalidValueType = null;
   await initDependencies();
-  await dotenv.load(fileName: ".env");
+  await dotenv.load();
   runApp(MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -29,7 +29,7 @@ void main() async {
 }
 
 class BarassageApp extends StatelessWidget {
-  const BarassageApp({Key? key}) : super(key: key);
+  const BarassageApp({super.key});
 
   // This widget is the root of your application.
   @override
@@ -51,7 +51,7 @@ class BarassageApp extends StatelessWidget {
       theme: MyTheme().lightTheme,
       darkTheme: MyTheme().darkTheme,
       themeMode: tm.themeMode,
-      initialRoute: '/',
+      initialRoute: '/auth/splashScreen',
       routes: Routes().routes,
     );
   }

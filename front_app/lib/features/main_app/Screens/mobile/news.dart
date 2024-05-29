@@ -8,7 +8,7 @@ import '../../models/model.dart';
 import '../../providers/news_provider.dart';
 
 class News extends StatefulWidget {
-  const News({Key? key}) : super(key: key);
+  const News({super.key});
 
   @override
   State<News> createState() => _NewsState();
@@ -52,7 +52,7 @@ class _NewsState extends State<News> {
             borderRadius: BorderRadius.all(Radius.circular(8)),
           ),
           enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.black87, width: 1.0),
+            borderSide: BorderSide(color: Colors.black87),
             // borderRadius: BorderRadius.all(Radius.circular(32.0)),
           ),
           helperText: 'Search News By Topics / Cities etc.',
@@ -104,7 +104,8 @@ class _NewsState extends State<News> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Expanded(
-                            child: Text('Published At: ${articles[index].publishedDate!}'),
+                            child: Text(
+                                'Published At: ${articles[index].publishedDate!}'),
                           ),
                           ElevatedButton(
                             onPressed: () {

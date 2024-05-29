@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../screens/mobile/login_mobile_screen.dart';
 
 class SplashController extends StatelessWidget {
   const SplashController({Key? key}) : super(key: key);

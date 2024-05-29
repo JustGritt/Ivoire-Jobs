@@ -16,13 +16,15 @@ const (
 type Config struct {
 	Env      string         `env:"ENV"`
 	Postgres PostgresConfig `json:"postgres"`
+	Postmark PostmarkConfig `json:"postmark"`
 	// Mailgun   MailgunConfig  `json:"mailgun"`
 	JWTAccessSecret  string `env:"JWT_ACCESS_SIGN_KEY"`
 	JWTRefreshSecret string `env:"JWT_REFRESH_SIGN_KEY"`
 	JWTIssuer        string `env:"JWT_ISSUER"`
 	Host             string `env:"APP_HOST"`
 	Port             string `env:"APP_PORT"`
-	// FromEmail string         `env:"EMAIL_FROM"`
+	FromEmail        string `env:"EMAIL_FROM"`
+	FrontendURL      string `env:"FRONTEND_URL"`
 }
 
 // IsProd Checks if env is production
@@ -48,17 +50,18 @@ func LoadConfig() {
 func GetConfig() Config {
 	postgresStrategy := AutoDetectConfigStrategy{}
 	postgresConfig := NewPostgresConfig(postgresStrategy)
-	log.Println("Postgres Config  Strategy: ", postgresConfig.Strategy.Name())
 
 	return Config{
 		Env:      os.Getenv("ENV"),
 		Postgres: postgresConfig,
 		// Mailgun:   GetMailgunConfig(),
+		Postmark:         GetPostMakrConfig(),
 		JWTAccessSecret:  os.Getenv("JWT_ACCESS_SIGN_KEY"),
 		JWTRefreshSecret: os.Getenv("JWT_REFRESH_SIGN_KEY"),
 		JWTIssuer:        os.Getenv("JWT_ISSUER"),
 		Host:             os.Getenv("APP_HOST"),
 		Port:             os.Getenv("APP_PORT"),
-		// FromEmail: os.Getenv("EMAIL_FROM"),
+		FromEmail:        os.Getenv("EMAIL_FROM"),
+		FrontendURL:      os.Getenv("FRONTEND_URL"),
 	}
 }

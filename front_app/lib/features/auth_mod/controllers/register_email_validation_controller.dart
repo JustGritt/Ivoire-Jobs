@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../screens/desktop/register_email_validation.dart';
-import '../screens/mobile/forget_mobile_screen.dart';
 
 
 class EmailValidationController extends StatelessWidget {

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class StatusText extends StatelessWidget {
   String label;
   double? size;
-  StatusText({Key? key, required this.label, this.size = 12}) : super(key: key);
+  StatusText({super.key, required this.label, this.size = 12});
 
   @override
   Widget build(BuildContext context) {

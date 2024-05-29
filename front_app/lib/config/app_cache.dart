@@ -1,12 +1,14 @@
 import 'dart:convert';
+import 'package:barassage_app/features/auth_mod/models/models.dart';
+
 import '../core/classes/cache_manager.dart';
 
 class AppCache {
   Map<String, String>? udata;
 
-  void doLogin(String username, String password) {
-    udata = {'email': username, 'pass': password};
-    Cache.saveData('auth_data', jsonEncode(udata));
+  void doLogin(User user, String token) {
+    Cache.saveData('user', jsonEncode(user));
+    Cache.saveData('token', token);
   }
 
   Future<Map<String, String>> auth() async {
@@ -14,8 +16,18 @@ class AppCache {
     return udata = jsonDecode(data);
   }
 
+  Future<String?> getToken() async {
+    String? token = await Cache.readData('token');
+    return token;
+  }
+
+  Future<String> setToken() async {
+    String token = await Cache.readData('token');
+    return token;
+  }
+
   Future<bool> isLogin() async {
-    var data = await Cache.readData('auth_data');
+    var data = await Cache.readData('token');
     if (data != null) {
       return true;
     }

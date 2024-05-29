@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -5,7 +7,7 @@ import '../../../../core/core.dart';
 import '../../lead_mod.dart';
 
 class EditEnqueryForMobile extends StatefulWidget {
-  const EditEnqueryForMobile({Key? key}) : super(key: key);
+  const EditEnqueryForMobile({super.key});
 
   @override
   State<EditEnqueryForMobile> createState() => _EditEnqueryForMobileState();

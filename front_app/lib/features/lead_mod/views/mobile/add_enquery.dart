@@ -1,10 +1,12 @@
-import 'package:clean_architecture/features/lead_mod/lead_mod.dart';
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:barassage_app/features/lead_mod/lead_mod.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/core.dart';
 
 class AddEnqueryForMobile extends StatefulWidget {
-  const AddEnqueryForMobile({Key? key}) : super(key: key);
+  const AddEnqueryForMobile({super.key});
 
   @override
   State<AddEnqueryForMobile> createState() => _AddEnqueryForMobileState();

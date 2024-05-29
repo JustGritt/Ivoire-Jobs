@@ -1,8 +1,8 @@
-import 'package:clean_architecture/config/config.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:barassage_app/config/config.dart';
+// import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_animated_button/flutter_animated_button.dart';
+// import 'package:flutter/widgets.dart';
+// import 'package:flutter_animated_button/flutter_animated_button.dart';
 
 // ignore: must_be_immutable
 class AppButton extends StatefulWidget {
@@ -14,14 +14,14 @@ class AppButton extends StatefulWidget {
   bool? stretch;
 
   AppButton({
-    Key? key,
+    super.key,
     this.backgroundColor,
     this.textColor,
     required this.label,
     this.paddingValue = 8.0,
     required this.onPressed,
     this.stretch = false,
-  }) : super(key: key);
+  });
 
   static const double _shadowHeight = 4;
 
@@ -55,7 +55,7 @@ class _AppButtonState extends State<AppButton> {
             _position = 4;
           });
         },
-        child: Container(
+        child: SizedBox(
           height: height + AppButton._shadowHeight,
           width: width,
           child: Stack(
@@ -80,9 +80,9 @@ class _AppButtonState extends State<AppButton> {
                 child: Container(
                   height: height,
                   width: width,
-                  decoration:  BoxDecoration(
+                  decoration: BoxDecoration(
                     color: widget.backgroundColor ?? AppColors.teal,
-                    borderRadius: BorderRadius.all(
+                    borderRadius: const BorderRadius.all(
                       Radius.circular(16),
                     ),
                   ),

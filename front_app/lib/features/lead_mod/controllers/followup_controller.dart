@@ -4,7 +4,7 @@ import '../../../core/core.dart';
 import '../views/mobile/followup.dart';
 
 class FollowupController extends StatelessController {
-  const FollowupController({Key? key}) : super(key: key);
+  const FollowupController({super.key});
 
   @override
   Display view(BuildContext context) {

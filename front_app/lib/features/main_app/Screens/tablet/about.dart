@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 
 import '../../../../core/classes/route_manager.dart';
@@ -6,7 +8,7 @@ import '../../widgets/menu_buttons.dart';
 
 class About extends StatefulWidget {
   final String? title;
-  const About({Key? key, this.title}) : super(key: key);
+  const About({super.key, this.title});
 
   @override
   State<About> createState() => _AboutState();
@@ -35,7 +37,6 @@ class _AboutState extends State<About> {
         width: double.infinity,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(display),
             Center(
