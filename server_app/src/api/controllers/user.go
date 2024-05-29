@@ -1,9 +1,6 @@
 package controllers
 
 import (
-	"fmt"
-	"net/http"
-	"time"
 	passwordUtil "barassage/api/common/passwordutil"
 	validator "barassage/api/common/validator"
 	cfg "barassage/api/configs"
@@ -13,10 +10,10 @@ import (
 	"barassage/api/services/auth"
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/form3tech-oss/jwt-go"
 	"github.com/gofiber/fiber/v2"
-	jwt "github.com/golang-jwt/jwt/v4"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
