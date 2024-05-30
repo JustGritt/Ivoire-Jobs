@@ -6,7 +6,6 @@ import (
 	"barassage/api/models/service"
 	serviceRepo "barassage/api/repositories/service"
 	"fmt"
-	"log"
 	"mime/multipart"
 	"net/http"
 
@@ -16,6 +15,7 @@ import (
 	"gorm.io/gorm"
 )
 
+// ServiceObject represents the service data structure.
 type ServiceObject struct {
 	ServiceID   string                `json:"-"`
 	UserID      string                `json:"-"`
@@ -25,7 +25,7 @@ type ServiceObject struct {
 	Status      bool                  `json:"status" default:"false"`
 	Duration    int                   `json:"duration" validate:"required,min=30,max=1440" message:"Duration must be between 30 and 1440 minutes"`
 	IsBanned    bool                  `json:"-"`
-	Thumbnail   *multipart.FileHeader `json:"thumbnail"`
+	Thumbnail   *multipart.FileHeader `json:"thumbnail" form:"thumbnail" swaggertype:"string"`
 }
 
 type ServiceOutput struct {
@@ -77,7 +77,7 @@ func CreateService(c *fiber.Ctx) error {
 	}
 
 	allowedMimeTypes := []string{"jpeg", "webp", "png", "jpg"}
-	maxFileSize := "100KB"
+	maxFileSize := "5MB"
 
 	if err := validator.ValidateFile(file, maxFileSize, allowedMimeTypes); err != nil {
 		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
@@ -94,15 +94,17 @@ func CreateService(c *fiber.Ctx) error {
 		})
 	}
 
-	//get the presigned url
-	mytest, err := bucket.GetPresignedURL(s3URL)
-	if err != nil {
-		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
-			"msg": "unable to get presigned url",
-		})
-	}
+	/*
+		//get the presigned url
+		mytest, err := bucket.GetPresignedURL(s3URL)
+		if err != nil {
+			return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+				"msg": "unable to get presigned url",
+			})
+		}
 
-	log.Println("Presigned URL: ", mytest)
+		log.Println("Presigned URL: ", mytest)
+	*/
 
 	//map the input to service model
 	s := service.Service{

@@ -196,3 +196,8 @@ func ValidateFile(file *multipart.FileHeader, maxSize string, allowedExts []stri
 	return fmt.Errorf("file must be one of the following types: %s", strings.Join(allowedExts, ", "))
 }
 
+var _ = validate.RegisterValidation("password", func(fl validator.FieldLevel) bool {
+	l := len(fl.Field().String())
+
+	return l >= 6 && l < 100
+})

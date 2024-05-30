@@ -86,12 +86,9 @@ func UploadFile(file *multipart.FileHeader) (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("failed to upload file to S3: %w", err)
 	}
-
-	log.Printf("Uploading file %s to bucket %s with content type %s", fileName, bucketName, contentType)
-
-	// Construct the file URL
-	fileURL := fmt.Sprintf("https://%s.s3.%samazonaws.com/%s", bucketName, os.Getenv("AWS_REGION"), fileName)
-	log.Printf("File uploaded successfully, URL: %s", result.Location)
+	log.Println("File uploaded to", result.Location)
+	// Construct the file URL using couldfront distribution url
+	fileURL := "https://d34lpad8kmnoic.cloudfront.net/" + fileName
 	return fileURL, nil
 }
 
