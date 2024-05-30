@@ -9,7 +9,7 @@ import (
 	"barassage/api/services/auth"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/golang-jwt/jwt/v4"
+	jwt "github.com/golang-jwt/jwt/v4"
 )
 
 // RefreshRequest represents the request structure for refreshing tokens

@@ -15,16 +15,16 @@ class UserSignup {
 
   factory UserSignup.fromJson(Map<String, dynamic> json) => UserSignup(
         id: json["id"],
-        firstName: json["first_name"],
-        lastName: json["last_name"],
+        firstName: json["firstName"],
+        lastName: json["lastName"],
         email: json["email"],
         password: json["password"],
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "first_name": firstName,
-        "last_name": lastName,
+        "firstname": firstName,
+        "lastname": lastName,
         "email": email,
         "password": password,
       };

@@ -81,7 +81,7 @@ func Register(c *fiber.Ctx) error {
 				Data:    nil,
 			},
 		)
-		return c.Status(http.StatusNotFound).JSON(HTTPErrorResponse(errorList))
+		return c.Status(http.StatusConflict).JSON(HTTPErrorResponse(errorList))
 	}
 
 	// Save User To DB

@@ -36,7 +36,7 @@ class UserService {
     _http.setToken(token);
     Response res = await _http
         .get(
-          '${ApiEndpoint.api}${ApiEndpoint.appProfileUrl}',
+          ApiEndpoint.appProfileUrl,
         )
         .timeout(const Duration(seconds: 4));
     if (res.statusCode == 200) {
@@ -62,14 +62,13 @@ class UserService {
   }
 
   Future<User?> register(UserSignup userSignup) async {
-    Map<String, dynamic> data = userSignup.toJson();
     Response res = await _http.post(
-      ApiEndpoint.enquery,
-      data: jsonEncode(data),
+      ApiEndpoint.appRegisterUrl,
+      data: userSignup.toJson(),
     );
     if (res.statusCode == 200 || res.statusCode == 201) {
-      User user = User.fromJson(res.data);
-      return user;
+      ApiResponse apiResponse = ApiResponse.fromJson(res.data);
+      return User.fromJson(apiResponse.body);
     }
     return null;
   }
@@ -77,7 +76,7 @@ class UserService {
   Future<UserLoginResponse> login(UserLogin userLogin) async {
     Map<String, dynamic> data = userLogin.toJson();
     Response res = await _http.post(
-      '${ApiEndpoint.api}${ApiEndpoint.appLoginUrl}',
+      ApiEndpoint.appLoginUrl,
       data: jsonEncode(data),
     );
     if (res.statusCode == 200) {
