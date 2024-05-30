@@ -8,8 +8,8 @@ import (
 	"barassage/api/models/user"
 	"barassage/api/services/auth"
 
-	"github.com/form3tech-oss/jwt-go"
 	"github.com/gofiber/fiber/v2"
+	jwt "github.com/golang-jwt/jwt/v4"
 )
 
 // RefreshRequest represents the request structure for refreshing tokens
@@ -57,8 +57,8 @@ func RefreshAuth(c *fiber.Ctx) error {
 
 	// Fetch user details using ExternalID from refresh token claims
 	u := user.User{
-		ExternalID: refreshTokenClaims.ExternalID,
-		Role:       refreshTokenClaims.Role,
+		ID:   refreshTokenClaims.UserID,
+		Role: refreshTokenClaims.Role,
 	}
 
 	// Issue a new access token
@@ -76,7 +76,7 @@ func RefreshAuth(c *fiber.Ctx) error {
 			"error": "Could not issue new refresh token",
 		})
 	}
-	
+
 	// Return the new tokens
 	return c.Status(http.StatusOK).JSON(RefreshResponse{
 		AccessToken:  newAccessToken.Token,
