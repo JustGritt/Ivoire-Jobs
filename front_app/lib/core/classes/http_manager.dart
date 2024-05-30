@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:barassage_app/config/api_endpoints.dart';
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:flutter/foundation.dart';
@@ -50,7 +51,7 @@ class HttpManager {
     Response? response;
     try {
       response = await _dio.get(
-        url,
+        '${ApiEndpoint.api}$url',
         queryParameters: params,
         options: options,
         cancelToken: token,
@@ -72,20 +73,16 @@ class HttpManager {
     Function(int progress, int total)? receiveProgress,
   }) async {
     Response? response;
-    try {
-      response = await _dio.post(
-        url,
-        data: data,
-        queryParameters: params,
-        options: options,
-        cancelToken: token,
-        onReceiveProgress: receiveProgress,
-        onSendProgress: sendProgress,
-      );
-      return response;
-    } catch (e) {
-      rethrow;
-    }
+    response = await _dio.post(
+      '${ApiEndpoint.api}$url',
+      data: data,
+      queryParameters: params,
+      options: options,
+      cancelToken: token,
+      onReceiveProgress: receiveProgress,
+      onSendProgress: sendProgress,
+    );
+    return response;
   }
 
   Future<Response> put(
@@ -100,7 +97,7 @@ class HttpManager {
     Response? response;
     try {
       response = await _dio.put(
-        url,
+        '${ApiEndpoint.api}$url',
         data: data,
         queryParameters: params,
         options: options,
@@ -110,9 +107,8 @@ class HttpManager {
       );
       return response;
     } catch (e) {
-      log(e.toString());
+      rethrow;
     }
-    return response!;
   }
 
   Future<Response> patch(
@@ -127,7 +123,7 @@ class HttpManager {
     Response? response;
     try {
       response = await _dio.patch(
-        url,
+        '${ApiEndpoint.api}$url',
         data: data,
         queryParameters: params,
         options: options,
@@ -137,9 +133,8 @@ class HttpManager {
       );
       return response;
     } catch (e) {
-      log(e.toString());
+      rethrow;
     }
-    return response!;
   }
 
   Future<Response> delete(
@@ -179,7 +174,7 @@ class HttpManager {
     Response? response;
     try {
       response = await _dio.download(
-        url,
+        '${ApiEndpoint.api}$url',
         savePath,
         data: data,
         queryParameters: params,

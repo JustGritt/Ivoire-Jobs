@@ -12,7 +12,6 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/form3tech-oss/jwt-go"
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
@@ -81,7 +80,7 @@ func Register(c *fiber.Ctx) error {
 				Data:    nil,
 			},
 		)
-		return c.Status(http.StatusNotFound).JSON(HTTPErrorResponse(errorList))
+		return c.Status(http.StatusConflict).JSON(HTTPErrorResponse(errorList))
 	}
 
 	// Save User To DB
