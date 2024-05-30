@@ -55,10 +55,10 @@ func RefreshAuth(c *fiber.Ctx) error {
 		})
 	}
 
-	// Fetch user details using ExternalID from refresh token claims
+	// Fetch user details using Id from refresh token claims
 	u := user.User{
-		ID:   refreshTokenClaims.UserID,
 		Role: refreshTokenClaims.Role,
+		ID:   refreshTokenClaims.UserID,
 	}
 
 	// Issue a new access token
