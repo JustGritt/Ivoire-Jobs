@@ -1,7 +1,7 @@
 import 'package:barassage_app/config/config.dart';
 // import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter/widgets.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 // import 'package:flutter_animated_button/flutter_animated_button.dart';
 
 // ignore: must_be_immutable
@@ -12,6 +12,9 @@ class AppButton extends StatefulWidget {
   double? paddingValue;
   void Function() onPressed;
   bool? stretch;
+  double? width;
+  bool isLoading;
+  bool isDisabled;
 
   AppButton({
     super.key,
@@ -21,6 +24,9 @@ class AppButton extends StatefulWidget {
     this.paddingValue = 8.0,
     required this.onPressed,
     this.stretch = false,
+    this.width,
+    this.isLoading = false,
+    this.isDisabled = false,
   });
 
   static const double _shadowHeight = 4;
@@ -35,11 +41,17 @@ class _AppButtonState extends State<AppButton> {
   @override
   Widget build(BuildContext context) {
     double height = 64 - AppButton._shadowHeight;
-    double width = MediaQuery.of(context).size.width * .92;
+    double width = widget.width ?? MediaQuery.of(context).size.width * .92;
     ThemeData theme = Theme.of(context);
+    bool isCliCkable = !widget.isLoading && !widget.isDisabled;
+
     return Center(
       child: GestureDetector(
-        onTap: widget.onPressed,
+        onTap: () {
+          if (isCliCkable) {
+            widget.onPressed();
+          }
+        },
         onTapUp: (_) {
           setState(() {
             _position = 4;
@@ -81,19 +93,26 @@ class _AppButtonState extends State<AppButton> {
                   height: height,
                   width: width,
                   decoration: BoxDecoration(
-                    color: widget.backgroundColor ?? AppColors.teal,
+                    color: isCliCkable
+                        ? widget.backgroundColor ?? AppColors.teal
+                        : AppColors.grey,
                     borderRadius: const BorderRadius.all(
                       Radius.circular(16),
                     ),
                   ),
                   child: Center(
-                    child: Text(
-                      widget.label,
-                      style: theme.textTheme.displayLarge!.copyWith(
-                        fontSize: 16,
-                        color: widget.textColor ?? Colors.white,
-                      ),
-                    ),
+                    child: widget.isLoading
+                        ? LoadingAnimationWidget.prograssiveDots(
+                            color: Colors.white,
+                            size: 40,
+                          )
+                        : Text(
+                            widget.label,
+                            style: theme.textTheme.displayLarge!.copyWith(
+                              fontSize: 16,
+                              color: widget.textColor ?? Colors.white,
+                            ),
+                          ),
                   ),
                 ),
               ),

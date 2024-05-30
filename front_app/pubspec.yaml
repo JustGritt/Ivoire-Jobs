@@ -20,11 +20,12 @@ dependencies:
   flutter_svg: ^2.0.10+1
   get_it: ^7.7.0
   intl: any
+  loading_animation_widget: ^1.2.1
   local_auth: ^2.1.7
   logger: ^2.3.0
   provider: ^6.1.1
   shared_preferences: ^2.2.2
-  url_launcher: ^6.2.1
+  url_launcher: ^6.2.6
 fonts:
   - family: Okta
     fonts:
@@ -75,3 +76,4 @@ flutter:
     - .env
     - assets/images/ill_dx.svg
     - assets/images/ill_register.svg
+    - assets/svg/confirmed.svg

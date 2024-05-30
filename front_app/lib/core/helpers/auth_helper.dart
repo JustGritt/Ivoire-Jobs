@@ -24,15 +24,13 @@ doAuth(String email, String password) async {
     UserLoginResponse userLoginResponse =
         await us.login(UserLogin(email: email, password: password));
     ac.doLogin(userLoginResponse.user, userLoginResponse.accessToken);
-  } on DioException catch (e) {
-    logger.e(DioExceptionHandler(e).error.message);
-    showError(context, DioExceptionHandler(e).title);
-  }
-  if (await ac.isLogin()) {
     SchedulerBinding.instance.addPostFrameCallback((_) {
       Nav.to(context, '/');
       showMessage(context, 'Login Successful');
     });
+  } on DioException catch (e) {
+    logger.e(DioExceptionHandler(e).error.message);
+    showError(context, DioExceptionHandler(e).title);
   }
 }
 
@@ -43,7 +41,7 @@ doRegister(UserSignup userSignup) async {
     User? user = await us.register(userSignup);
     debugPrint('User: $user');
     SchedulerBinding.instance.addPostFrameCallback((_) {
-      Nav.to(context, AuthApp.login);
+      Nav.to(context, AuthApp.welcomeEmail);
       showMessage(context, 'Register Successful');
     });
   } on DioException catch (e) {
@@ -63,7 +61,6 @@ Future<User?> getMyProfile() async {
     showError(context, DioExceptionHandler(e).title);
     return null;
   } catch (e) {
-    print("here $e");
     logger.e(e);
     return null;
   }
