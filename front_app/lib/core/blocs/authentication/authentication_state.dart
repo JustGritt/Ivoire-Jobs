@@ -9,9 +9,7 @@ abstract class AuthenticationState {
 class AuthenticationInitialState extends AuthenticationState {}
 
 class AuthenticationLoadingState extends AuthenticationState {
-  final bool isLoading;
-
-  AuthenticationLoadingState({required this.isLoading});
+  AuthenticationLoadingState();
 }
 
 class AuthenticationSuccessState extends AuthenticationState {

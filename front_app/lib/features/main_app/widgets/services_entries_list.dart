@@ -10,30 +10,28 @@ class ServicesEntriesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 300, // Adjust the height as needed to avoid overflow
-      child: ListView.builder(
-        itemCount: serviceEntries.serviceEntries.length,
-        itemBuilder: (context, index) {
-          return Padding(
-            padding: const EdgeInsets.only(left: 8.0, bottom: 8.0, right: 8.0),
-            child: GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ServiceDetailPage(
-                      service: serviceEntries.serviceEntries[index],
-                    ),
+    return ListView.builder(
+      itemCount: serviceEntries.serviceEntries.length,
+      physics: const NeverScrollableScrollPhysics(),
+      itemBuilder: (context, index) {
+        return Padding(
+          padding: const EdgeInsets.only(left: 8.0, bottom: 8.0, right: 8.0),
+          child: GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ServiceDetailPage(
+                    service: serviceEntries.serviceEntries[index],
                   ),
-                );
-              },
-              child:
-                  ServiceEntry(service: serviceEntries.serviceEntries[index]),
-            ),
-          );
-        },
-      ),
+                ),
+              );
+            },
+            child:
+                ServiceEntry(service: serviceEntries.serviceEntries[index]),
+          ),
+        );
+      },
     );
   }
 }

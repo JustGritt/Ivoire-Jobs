@@ -17,5 +17,9 @@
     "btn_cancel"   : "Cancel",
     "btn_register" : "Register",
     "btn_login"    : "Login",
-    "btn_forgot_password": "Forgot password ?"
+    "btn_forgot_password": "Forgot password ?",
+    "welcome_title_message": "Welcome to you !",
+    "welcome_description_message": "Please go to your mailbox to confirm your account.",
+    "btn_go_to_mail": "Go to my mailbox",
+    "btn_login": "Login"
 }
