@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../utils/button_data.dart';
 import 'package:provider/provider.dart';
 
 import '../../config/app_theme.dart';
-import '../classes/route_manager.dart';
 import '../utils/bottom_util.dart';
 
 // ignore: must_be_immutable
@@ -16,10 +16,7 @@ class BottomBar extends StatelessWidget {
     buttonDatas = buttonDatas ??
         [
           ButtonData(icon: Icons.home, label: 'Home', link: '/'),
-          ButtonData(icon: Icons.people, label: 'About', link: '/about'),
-          ButtonData(
-              icon: Icons.contact_mail, label: 'Contact', link: '/contact'),
-          ButtonData(icon: Icons.newspaper, label: 'News', link: '/news'),
+
           ButtonData(icon: Icons.ac_unit, label: 'Features', link: '/feature'),
         ];
   }
@@ -30,25 +27,19 @@ class BottomBar extends StatelessWidget {
   Widget build(BuildContext context) {
     len = buttonDatas!.length;
     var tm = context.read<ThemeProvider>();
+    ThemeData theme = Theme.of(context);
     index = tm.index;
 
     if (len > 1) {
       return BottomNavigationBar(
+        backgroundColor: theme.primaryColorDark,
         type: BottomNavigationBarType.fixed,
         currentIndex: index,
         onTap: (val) {
           tm.setNavIndex(val);
           index = val;
-          navigator(context);
+          // navigator(context);
         },
-        // items: [
-        //   if (len > 1)
-        //     for (ButtonData bd in buttonDatas)
-        //       bottomNavigationBarItem(
-        //         icon: Icon(bd.icon),
-        //         label: bd.label,
-        //       ),
-        // ],
         items: buttonData
             .map(
               (e) => bottomNavigationBarItem(
@@ -64,6 +55,8 @@ class BottomBar extends StatelessWidget {
   }
 
   void navigator(BuildContext context) {
-    Nav.to(context, buttonData[index].link!);
+    if (buttonData[index].link != null) {
+      context.pushNamed(buttonData[index].link!);
+    }
   }
 }

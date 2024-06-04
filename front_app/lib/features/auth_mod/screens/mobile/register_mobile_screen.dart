@@ -152,6 +152,7 @@ class _RegisterMobileScreenState extends State<RegisterMobileScreen> {
                         height: 15,
                       ),
                       AppButton(
+                        isLoading: (state is AuthenticationLoadingState),
                         onPressed: () {
                           if (_globalKey.currentState!.validate()) {
                             context.read<AuthenticationBloc>().add(
@@ -161,7 +162,6 @@ class _RegisterMobileScreenState extends State<RegisterMobileScreen> {
                                       email: email!,
                                       password: password!)),
                                 );
-                            debugPrint('Login Validate');
                           }
                         },
                         backgroundColor: theme.primaryColorDark,

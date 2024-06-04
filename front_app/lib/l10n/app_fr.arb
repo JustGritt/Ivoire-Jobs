@@ -16,10 +16,13 @@
     "btn_create ": "Créer un",
     "btn_cancel"   : "Annuler",
     "btn_register" : "S'enregistrer",
-    "btn_login"    : "Se connecter",
     "btn_forgot_password": "Mot de passe oublié ?",
     "email_validation_success_title": "Votre email a été validé",
     "email_validation_failure_title": "Votre email n'a pas pu être validé",
     "email_validation_success_description": "Votre email a été validé avec succès. Vous pouvez maintenant vous connecter à votre compte.",
     "email_validation_failure_description": "Votre email n'a pas pu être validé. Veuillez réessayer plus tard."
+    "welcome_title_message": "Bienvenue à vous !",
+    "welcome_description_message": "Rendez-vous dans votre boîte mail pour activer votre compte.",
+    "btn_go_to_mail": "Aller à ma boîte mail",
+    "btn_login": "Se connecter"
 }

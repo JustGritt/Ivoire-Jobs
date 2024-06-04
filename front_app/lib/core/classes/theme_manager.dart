@@ -6,8 +6,7 @@ import '../../config/config.dart';
 ThemeData defaultTheme = ThemeData(
   fontFamily: 'Okta',
   brightness: Brightness.light,
-  primarySwatch: AppColors.teal,
-  scaffoldBackgroundColor: const Color.fromARGB(255, 222, 255, 252),
+  scaffoldBackgroundColor: Colors.white,
   appBarTheme: const AppBarTheme(
     titleTextStyle: TextStyle(
       color: Colors.white,
@@ -58,6 +57,7 @@ class AppTheme {
 
     dark = dark ??
         defaultTheme.copyWith(
+          scaffoldBackgroundColor: Colors.black,
           brightness: Brightness.dark,
           buttonTheme: const ButtonThemeData(
             textTheme: ButtonTextTheme.primary,
@@ -74,7 +74,7 @@ class AppTheme {
           ),
           bottomNavigationBarTheme: const BottomNavigationBarThemeData(
             backgroundColor: AppColors.space,
-            selectedItemColor: AppColors.teal,
+            selectedItemColor: AppColors.white,
             elevation: 10,
             showSelectedLabels: true,
           ),

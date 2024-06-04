@@ -37,10 +37,21 @@ func SetupRoutes(app *fiber.App) {
 	// Requires authentication
 	auth.Get("/me", middlewares.RequireLoggedIn(), ctl.GetMyProfile)
 
+<<<<<<< HEAD
 	// Contact Group
 	contact := v1.Group("/contact")
 	contact.Post("/create", ctl.AddContactInfo)
 
 	// Authenticated Routes
 	// books.Post("/", middlewares.RequireLoggedIn(), ctl.CreateBook)
+=======
+	// Service Group
+	service := v1.Group("/service")
+	service.Post("/", middlewares.RequireLoggedIn(), ctl.CreateService)
+	service.Get("/collection", ctl.GetAll)
+	service.Get("/collection/user", ctl.GetServiceByUserId)
+	service.Get("/:id", ctl.GetServiceById)
+	service.Put("/:id", middlewares.RequireLoggedIn(), ctl.UpdateService)
+	service.Delete("/:id", middlewares.RequireLoggedIn(), ctl.DeleteService)
+>>>>>>> main
 }

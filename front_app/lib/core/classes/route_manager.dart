@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class RouteManager {
-  final Map<String, WidgetBuilder> _routes = {};
-  void addRoute(String name, WidgetBuilder builder) {
-    _routes.addAll({name: builder});
+  final List<RouteBase> _routes = [];
+  void addRoute(RouteBase route) {
+    _routes.addAll([route]);
   }
 
-  void addAll(Map<String, WidgetBuilder> routes) {
+  void addAll(List<RouteBase> routes) {
     _routes.addAll(routes);
   }
 
-  Map<String, WidgetBuilder> get routes => _routes;
+  List<RouteBase> get routes => _routes;
 
-  Map<String, WidgetBuilder> get links => _routes;
+  List<RouteBase> get links => _routes;
 }
 
 class Nav {
@@ -21,10 +22,9 @@ class Nav {
     String url, {
     Object? arguments,
   }) =>
-      Navigator.pushNamed(
-        context,
+      context.goNamed(
         url,
-        arguments: arguments,
+        extra: arguments,
       );
 
   static void to(
@@ -33,15 +33,13 @@ class Nav {
     Object? arguments,
     Object? result,
   }) {
-    Navigator.pushReplacementNamed(
-      context,
+    context.go(
       url,
-      result: result,
-      arguments: arguments,
+      extra: arguments,
     );
   }
 
   static void close(BuildContext context, [Object? result]) {
-    Navigator.pop(context, result);
+    context.pop(result);
   }
 }

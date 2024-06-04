@@ -35,7 +35,6 @@ class Contact extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: BottomBar(),
     );
   }
 }

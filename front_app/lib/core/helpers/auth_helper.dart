@@ -1,6 +1,7 @@
 import 'package:barassage_app/core/classes/app_context.dart';
 import 'package:barassage_app/core/exceptions/dio_exceptions.dart';
 import 'package:barassage_app/core/init_dependencies.dart';
+import 'package:barassage_app/features/auth_mod/auth_app.dart';
 import 'package:barassage_app/features/auth_mod/models/user.dart';
 import 'package:barassage_app/features/auth_mod/models/user_login.dart';
 import 'package:barassage_app/features/auth_mod/models/user_signup.dart';
@@ -23,32 +24,30 @@ doAuth(String email, String password) async {
     UserLoginResponse userLoginResponse =
         await us.login(UserLogin(email: email, password: password));
     ac.doLogin(userLoginResponse.user, userLoginResponse.accessToken);
-  } on DioException catch (e) {
-    logger.e(DioExceptionHandler(e).error.message);
-    showError(context, DioExceptionHandler(e).title);
-  }
-  if (await ac.isLogin()) {
     SchedulerBinding.instance.addPostFrameCallback((_) {
       Nav.to(context, '/');
       showMessage(context, 'Login Successful');
     });
+  } on DioException catch (e) {
+    logger.e(DioExceptionHandler(e).error.message);
+    showError(context, DioExceptionHandler(e).title);
   }
 }
 
 doRegister(UserSignup userSignup) async {
   UserService us = serviceLocator<UserService>();
   try {
+    debugPrint('Hee');
     User? user = await us.register(userSignup);
     debugPrint('User: $user');
-  } on DioException catch (e) {
-    logger.e(DioExceptionHandler(e).error.message);
-    showError(context, DioExceptionHandler(e).title);
-  }
-  if (await AppCache().isLogin()) {
     SchedulerBinding.instance.addPostFrameCallback((_) {
-      Nav.to(context, '/');
+      Nav.to(context, AuthApp.welcomeEmail);
       showMessage(context, 'Register Successful');
     });
+  } on DioException catch (e) {
+    logger.e(e);
+    print(e.message);
+    showError(context, DioExceptionHandler(e).title);
   }
 }
 
@@ -62,7 +61,6 @@ Future<User?> getMyProfile() async {
     showError(context, DioExceptionHandler(e).title);
     return null;
   } catch (e) {
-    print("here $e");
     logger.e(e);
     return null;
   }
