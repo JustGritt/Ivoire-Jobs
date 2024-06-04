@@ -1,5 +1,5 @@
 import 'package:barassage_app/core/blocs/authentication/authentication_bloc.dart';
-import 'package:barassage_app/core/classes/app_context.dart';
+import 'package:barassage_app/core/classes/router/go_router.dart';
 import 'package:barassage_app/core/init_dependencies.dart';
 import 'package:barassage_app/l10n/l10n.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -36,9 +36,8 @@ class BarassageApp extends StatelessWidget {
   Widget build(BuildContext context) {
     var tm = context.watch<ThemeProvider>();
     // print("My App: " + tm.isDarkMode.toString());
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'Barassage App',
-      navigatorKey: serviceLocator<AppContext>().navigatorKey,
       supportedLocales: L10n.all,
       localizationsDelegates: const [
         AppLocalizations.delegate,
@@ -51,8 +50,7 @@ class BarassageApp extends StatelessWidget {
       theme: MyTheme().lightTheme,
       darkTheme: MyTheme().darkTheme,
       themeMode: tm.themeMode,
-      initialRoute: '/auth/splashScreen',
-      routes: Routes().routes,
+      routerConfig: router
     );
   }
 }

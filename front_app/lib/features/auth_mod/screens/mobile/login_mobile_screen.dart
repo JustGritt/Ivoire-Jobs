@@ -149,6 +149,7 @@ class _LoginMobileScreenState extends State<LoginMobileScreen> {
                         height: 15,
                       ),
                       AppButton(
+                        isLoading: state is AuthenticationLoadingState,
                         onPressed: () async {
                           if (_globalKey.currentState!.validate()) {
                             context.read<AuthenticationBloc>().add(

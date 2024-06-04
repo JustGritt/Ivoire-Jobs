@@ -17,5 +17,11 @@
     "btn_cancel"   : "Annuler",
     "btn_register" : "S'enregistrer",
     "btn_login"    : "Se connecter",
-    "btn_forgot_password": "Mot de passe oublié ?"
+    "btn_forgot_password": "Mot de passe oublié ?",
+    "welcome_title_message": "Bienvenue à vous !",
+    "welcome_description_message": "Rendez-vous dans votre boîte mail pour activer votre compte.",
+    "btn_go_to_mail": "Aller à ma boîte mail",
+    "btn_login": "Se connecter"
+
+
 }

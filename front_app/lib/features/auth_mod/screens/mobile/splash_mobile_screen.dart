@@ -1,8 +1,11 @@
 import 'package:barassage_app/core/blocs/authentication/authentication_bloc.dart';
 import 'package:barassage_app/features/auth_mod/auth_app.dart';
+import 'package:barassage_app/features/main_app/app.dart';
 // import 'package:barassage_app/features/main_app/app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:go_router/go_router.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import '../../../../core/init_dependencies.dart';
 // import '../../../main_app/app.dart';
@@ -24,16 +27,22 @@ class _SplashMobileScreenState extends State<SplashMobileScreen>
     _authenticationBloc = serviceLocator<AuthenticationBloc>();
     _authenticationBloc.add(InitiateAuth());
     _authenticationBloc.stream.listen((state) {
-      Navigator.of(context).pushReplacementNamed(AuthApp.login);
-      // if (state is AuthenticationSuccessState) {
-      // } else if (state is AuthenticationFailureState) {
-      //   Navigator.of(context).pushReplacementNamed(App.home);
-      // }
+      if (state is AuthenticationSuccessState) {
+        context.pushReplacement(App.home);
+      } else if (state is AuthenticationFailureState) {
+        Navigator.of(context).pushReplacementNamed(AuthApp.login);
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    ThemeData theme = Theme.of(context);
+    return Scaffold(
+        body: Center(
+            child: LoadingAnimationWidget.prograssiveDots(
+      color: theme.primaryColor,
+      size: 70,
+    )));
   }
 }

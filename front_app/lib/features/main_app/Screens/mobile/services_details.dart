@@ -1,10 +1,11 @@
+import 'package:barassage_app/features/main_app/models/main/services_entry_model.dart';
 import 'package:barassage_app/features/main_app/models/main/services_model.dart';
 import 'package:flutter/material.dart';
 
 class ServiceDetailPage extends StatelessWidget {
-  final Service service;
+  final Service service = ServiceEntries().serviceEntries[0];
 
-  const ServiceDetailPage({super.key, required this.service});
+  ServiceDetailPage({super.key});
 
   @override
   Widget build(BuildContext context) {
