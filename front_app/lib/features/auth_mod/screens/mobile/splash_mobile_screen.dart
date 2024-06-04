@@ -1,7 +1,6 @@
 import 'package:barassage_app/core/blocs/authentication/authentication_bloc.dart';
 import 'package:barassage_app/features/auth_mod/auth_app.dart';
 import 'package:barassage_app/features/main_app/app.dart';
-// import 'package:barassage_app/features/main_app/app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
@@ -30,7 +29,7 @@ class _SplashMobileScreenState extends State<SplashMobileScreen>
       if (state is AuthenticationSuccessState) {
         context.pushReplacement(App.home);
       } else if (state is AuthenticationFailureState) {
-        Navigator.of(context).pushReplacementNamed(AuthApp.login);
+        context.pushReplacement(AuthApp.login);
       }
     });
   }

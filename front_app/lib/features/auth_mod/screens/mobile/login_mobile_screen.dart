@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../widgets/widget_functions.dart';
 
@@ -187,8 +188,7 @@ class _LoginMobileScreenState extends State<LoginMobileScreen> {
                                           color: theme.primaryColorDark,
                                           fontWeight: FontWeight.bold),
                                   recognizer: TapGestureRecognizer()
-                                    ..onTap = () => Navigator.of(context)
-                                        .pushNamed(AuthApp.register),
+                                    ..onTap = () => context.push(AuthApp.register),
                                 )
                               ]),
                           style: theme.textTheme.displayMedium),
