@@ -20,7 +20,7 @@
     "email_validation_success_title" : "Your email has been verified !",
     "email_validation_failure_title" : "Your email could not be verified !",
     "email_validation_success_description": "You can now connect to your account.",
-    "email_validation_failure_description": "An error occurred during the verification of your email."
+    "email_validation_failure_description": "An error occurred during the verification of your email.",
     "welcome_title_message": "Welcome to you !",
     "welcome_description_message": "Please go to your mailbox to confirm your account.",
     "btn_go_to_mail": "Go to my mailbox",
