@@ -39,8 +39,10 @@ func SetupRoutes(app *fiber.App) {
 
 	// Service Group
 	service := v1.Group("/service")
-	service.Post("/create", middlewares.RequireLoggedIn(), ctl.CreateService)
+	service.Post("/", middlewares.RequireLoggedIn(), ctl.CreateService)
 	service.Get("/collection", ctl.GetAll)
 	service.Get("/collection/user", ctl.GetServiceByUserId)
 	service.Get("/:id", ctl.GetServiceById)
+	service.Put("/:id", middlewares.RequireLoggedIn(), ctl.UpdateService)
+	service.Delete("/:id", middlewares.RequireLoggedIn(), ctl.DeleteService)
 }

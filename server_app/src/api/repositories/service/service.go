@@ -15,7 +15,8 @@ func Create(service *service.Service) error {
 
 func GetByID(id string) (*service.Service, error) {
 	var service service.Service
-	if err := db.PgDB.Where("id = ?", id).First(&service).Error; err != nil {
+	//find the service by id, that is active and not banned
+	if err := db.PgDB.Where("id = ? AND status = ? AND is_banned = ?", id, true, false).First(&service).Error; err != nil {
 		return nil, err
 	}
 	return &service, nil
@@ -39,7 +40,8 @@ func GetServicesByUserID(userID string) ([]service.Service, error) {
 
 func GetAllServices() ([]service.Service, error) {
 	var services []service.Service
-	if err := db.PgDB.Find(&services).Error; err != nil {
+	///find all service that are not banned and are active
+	if err := db.PgDB.Where("status = ? AND is_banned = ?", true, false).Find(&services).Error; err != nil {
 		return nil, err
 	}
 	return services, nil
@@ -51,4 +53,8 @@ func GetErrors() error {
 
 func Update(service *service.Service) error {
 	return db.PgDB.Save(service).Error
+}
+
+func Delete(service *service.Service) error {
+	return db.PgDB.Delete(service).Error
 }
