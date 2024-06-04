@@ -148,3 +148,22 @@ func GetPresignedURL(fileName string) (string, error) {
 
 	return req.URL, nil
 }
+
+func DeleteFile(fileName string) error {
+	bucketName := os.Getenv("S3_BUCKET")
+
+	//from the fileName trim the url "https://go-flutter.s3.amazonaws.com/33915e28-3366-40b5-9930-5cd2a84aafed.jpg"
+	fileName = fileName[len("https://"+bucketName+".s3."+os.Getenv("AWS_REGION")+".amazonaws.com/"):]
+
+	input := &s3.DeleteObjectInput{
+		Bucket: aws.String(bucketName),
+		Key:    aws.String(fileName),
+	}
+
+	_, err := s3Client.DeleteObject(context.TODO(), input)
+	if err != nil {
+		return fmt.Errorf("failed to delete object from S3: %w", err)
+	}
+
+	return nil
+}

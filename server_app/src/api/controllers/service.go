@@ -452,7 +452,7 @@ func UpdateService(c *fiber.Ctx) error {
 // @Failure 403 {array} ErrorResponse
 // @Failure 404 {array} ErrorResponse
 // @Failure 500 {array} ErrorResponse
-// @Router /service/delete/{id} [delete]
+// @Router /service/{id} [delete]
 // @Security Bearer
 func DeleteService(c *fiber.Ctx) error {
 	var errorList []*fiber.Error
