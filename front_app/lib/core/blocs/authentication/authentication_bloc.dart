@@ -2,6 +2,7 @@ import 'package:barassage_app/features/auth_mod/models/user_signup.dart';
 import 'package:bloc/bloc.dart';
 import 'package:barassage_app/core/helpers/auth_helper.dart';
 import 'package:barassage_app/features/auth_mod/models/user.dart';
+import 'package:flutter/material.dart';
 
 part 'authentication_event.dart';
 part 'authentication_state.dart';
@@ -12,7 +13,7 @@ class AuthenticationBloc
     on<AuthenticationEvent>((event, emit) {});
 
     on<SignInUser>((event, emit) async {
-      emit(AuthenticationLoadingState(isLoading: true));
+      emit(AuthenticationLoadingState());
       try {
         User? user = await doAuth(event.email, event.password);
         if (user != null) {
@@ -21,13 +22,12 @@ class AuthenticationBloc
           emit(const AuthenticationFailureState('create user failed'));
         }
       } catch (e) {
-        print(e.toString());
+        debugPrint(e.toString());
       }
-      emit(AuthenticationLoadingState(isLoading: false));
     });
 
     on<SignUpUser>((event, emit) async {
-      emit(AuthenticationLoadingState(isLoading: true));
+      emit(AuthenticationLoadingState());
       try {
         User? user = await doRegister(event.user);
         if (user != null) {
@@ -38,11 +38,10 @@ class AuthenticationBloc
       } catch (e) {
         print(e.toString());
       }
-      emit(AuthenticationLoadingState(isLoading: false));
     });
 
     on<InitiateAuth>((event, emit) async {
-      emit(AuthenticationLoadingState(isLoading: true));
+      emit(AuthenticationLoadingState());
       try {
         User? user = await getMyProfile();
         if (user != null) {
@@ -53,18 +52,16 @@ class AuthenticationBloc
       } catch (e) {
         print(e);
       }
-      emit(AuthenticationLoadingState(isLoading: false));
     });
 
     on<SignOut>((event, emit) async {
-      emit(AuthenticationLoadingState(isLoading: true));
+      emit(AuthenticationLoadingState());
       try {
         doLogout();
       } catch (e) {
         print('error');
         print(e.toString());
       }
-      emit(AuthenticationLoadingState(isLoading: false));
     });
   }
 }
