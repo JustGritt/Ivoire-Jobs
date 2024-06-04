@@ -1,5 +1,7 @@
-import 'package:barassage_app/features/main_app/Screens/mobile/services_details.dart';
+
+import 'package:barassage_app/features/main_app/app.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../models/main/trending_services_model.dart';
 import 'trending_service.dart';
 
@@ -20,14 +22,7 @@ class TrendingServicesList extends StatelessWidget {
             padding: const EdgeInsets.only(left: 8.0),
             child: GestureDetector(
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ServiceDetailPage(
-                      service: trendingServices.trendingServices[index],
-                    ),
-                  ),
-                );
+                context.push('/home/${App.detailService}');
               },
               child: TrendingService(
                   service: trendingServices.trendingServices[index]),
