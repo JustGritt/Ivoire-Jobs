@@ -1,5 +1,7 @@
 import 'package:barassage_app/features/auth_mod/screens/mobile/splash_mobile_screen.dart';
 import 'package:barassage_app/features/auth_mod/screens/mobile/welcome_mail_screen.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../core/classes/route_manager.dart';
 import 'controllers/controllers.dart';
@@ -13,11 +15,39 @@ class AuthApp extends RouteManager {
   static const String register = '/auth/register';
 
   AuthApp() {
-    addRoute(AuthApp.login, (context) => const LoginController());
-    addRoute(AuthApp.welcomeEmail, (context) => const WelcomeMailScreen());
-    addRoute(AuthApp.splashScreen, (context) => const SplashMobileScreen());
-    addRoute(AuthApp.profile, (context) => const ProfileController());
-    addRoute(AuthApp.forget, (context) => const ForgetController());
-    addRoute(AuthApp.register, (context) => const RegisterController());
+    addRoute(GoRoute(
+        path: AuthApp.login,
+        pageBuilder: (context, state) {
+          return const CupertinoPage(child: LoginController());
+        }));
+    addRoute(GoRoute(
+        path: AuthApp.welcomeEmail,
+        pageBuilder: (context, state) {
+          return const CupertinoPage(child: WelcomeMailScreen());
+        }));
+
+    addRoute(GoRoute(
+        path: AuthApp.splashScreen,
+        pageBuilder: (context, state) {
+          return const CupertinoPage(child: SplashMobileScreen());
+        }));
+
+    addRoute(GoRoute(
+        path: AuthApp.profile,
+        pageBuilder: (context, state) {
+          return const CupertinoPage(child: ProfileController());
+        }));
+
+    addRoute(GoRoute(
+        path: AuthApp.forget,
+        pageBuilder: (context, state) {
+          return const CupertinoPage(child: ForgetController());
+        }));
+
+    addRoute(GoRoute(
+        path: AuthApp.register,
+        pageBuilder: (context, state) {
+          return const CupertinoPage(child: RegisterController());
+        }));
   }
 }

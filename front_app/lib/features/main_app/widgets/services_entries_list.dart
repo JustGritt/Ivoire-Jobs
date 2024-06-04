@@ -10,10 +10,8 @@ class ServicesEntriesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: serviceEntries.serviceEntries.length,
-      physics: const NeverScrollableScrollPhysics(),
-      itemBuilder: (context, index) {
+    return Column(
+      children: serviceEntries.serviceEntries.map((e) {
         return Padding(
           padding: const EdgeInsets.only(left: 8.0, bottom: 8.0, right: 8.0),
           child: GestureDetector(
@@ -22,16 +20,15 @@ class ServicesEntriesList extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (context) => ServiceDetailPage(
-                    service: serviceEntries.serviceEntries[index],
+                    // service: e,
                   ),
                 ),
               );
             },
-            child:
-                ServiceEntry(service: serviceEntries.serviceEntries[index]),
+            child: ServiceEntry(service: e),
           ),
         );
-      },
+      }).toList(),
     );
   }
 }

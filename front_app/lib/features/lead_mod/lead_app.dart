@@ -1,3 +1,6 @@
+import 'package:flutter/cupertino.dart';
+import 'package:go_router/go_router.dart';
+
 import '../../core/classes/route_manager.dart';
 import '../features.dart';
 import 'controllers/controllers.dart';
@@ -12,11 +15,72 @@ class LeadApp extends RouteManager {
   static const String followup = '$name/followup';
 
   LeadApp() {
-    addRoute(LeadApp.home, (context) => const DashboardController());
-    addRoute(LeadApp.search, (context) => const SearchController());
-    addRoute(LeadApp.addEnquery, (context) => const AddEnqueryController());
-    addRoute(LeadApp.editEnquery, (context) => const EditEnqueryController());
-    addRoute(LeadApp.viewEnquery, (context) => const ViewEnqueryController());
-    addRoute(LeadApp.followup, (context) => const FollowupController());
+    addRoute(GoRoute(
+        path: LeadApp.home,
+        pageBuilder: (context, state) {
+          return const CupertinoPage(child: DashboardController());
+        }));
+
+    addRoute(GoRoute(
+        path: LeadApp.search,
+        pageBuilder: (context, state) {
+          return const CupertinoPage(child: SearchController());
+        }));
+
+
+    addRoute(GoRoute(
+        path: LeadApp.addEnquery,
+        pageBuilder: (context, state) {
+          return const CupertinoPage(child: AddEnqueryController());
+        }));
+
+    addRoute(GoRoute(
+        path: LeadApp.editEnquery,
+        pageBuilder: (context, state) {
+          return const CupertinoPage(child: EditEnqueryController());
+        }));
+
+    addRoute(GoRoute(
+        path: LeadApp.viewEnquery,
+        pageBuilder: (context, state) {
+          return const CupertinoPage(child: ViewEnqueryController());
+        }));
+
+    addRoute(GoRoute(
+        path: LeadApp.followup,
+        pageBuilder: (context, state) {
+          return const CupertinoPage(child: FollowupController());
+        }));
+
+    addRoute(GoRoute(
+        path: LeadApp.home,
+        pageBuilder: (context, state) {
+          return const CupertinoPage(child: DashboardController());
+        }));
+      
+    addRoute(GoRoute(
+        path: LeadApp.search,
+        pageBuilder: (context, state) {
+          return const CupertinoPage(child: SearchController());
+        }));
+      
+    addRoute(GoRoute(
+        path: LeadApp.addEnquery,
+        pageBuilder: (context, state) {
+          return const CupertinoPage(child: AddEnqueryController());
+        }));
+
+    addRoute(GoRoute(
+        path: LeadApp.editEnquery,
+        pageBuilder: (context, state) {
+          return const CupertinoPage(child: EditEnqueryController());
+        }));
+        
+    // addRoute(LeadApp.home, (context) => const DashboardController());
+    // addRoute(LeadApp.search, (context) => const SearchController());
+    // addRoute(LeadApp.addEnquery, (context) => const AddEnqueryController());
+    // addRoute(LeadApp.editEnquery, (context) => const EditEnqueryController());
+    // addRoute(LeadApp.viewEnquery, (context) => const ViewEnqueryController());
+    // addRoute(LeadApp.followup, (context) => const FollowupController());
   }
 }
