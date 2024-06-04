@@ -1,3 +1,5 @@
+import 'package:barassage_app/features/admin_app/admin_app.dart';
+
 import '../features/features.dart';
 
 /// In this file we will be writing all API Endpoints using this application
@@ -22,4 +24,7 @@ class ApiEndpoint {
   static const appForgetUrl = AuthApp.forget;
   static const appProfileUrl = AuthApp.profile;
   static const appEmailValidationUrl = AuthApp.emailValidation;
+
+  // Admin App Links
+  static const adminUsers = AdminApp.users;
 }

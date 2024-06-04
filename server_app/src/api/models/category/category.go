@@ -9,4 +9,5 @@ type Category struct {
 	IsActive    bool      `gorm:"default:false"`
 	CreatedAt   time.Time `gorm:"default:CURRENT_TIMESTAMP()"`
 	UpdatedAt   time.Time `gorm:"default:CURRENT_TIMESTAMP()"`
+	duration    int       `gorm:"type:int"`
 }

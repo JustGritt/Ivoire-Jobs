@@ -44,7 +44,6 @@ class _SplashMobileScreenState extends State<SplashMobileScreen>
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Image.asset('assets/onboarding.png'),
             SizedBox(height: 20),
             Text(
               'Welcome to Ivory Jobs',
