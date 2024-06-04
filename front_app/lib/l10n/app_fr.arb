@@ -21,7 +21,9 @@
     "welcome_title_message": "Bienvenue à vous !",
     "welcome_description_message": "Rendez-vous dans votre boîte mail pour activer votre compte.",
     "btn_go_to_mail": "Aller à ma boîte mail",
-    "btn_login": "Se connecter"
-
+    "btn_login": "Se connecter",
+    "tab_1": "Home",
+    "tab_2": "Mes services",
+    "tab_3": "Paramètres"
 
 }

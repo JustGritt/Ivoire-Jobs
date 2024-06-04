@@ -21,5 +21,8 @@
     "welcome_title_message": "Welcome to you !",
     "welcome_description_message": "Please go to your mailbox to confirm your account.",
     "btn_go_to_mail": "Go to my mailbox",
-    "btn_login": "Login"
+    "btn_login": "Login",
+    "tab_1": "Home",
+    "tab_2": "My services",
+    "tab_3": "Settings"
 }
