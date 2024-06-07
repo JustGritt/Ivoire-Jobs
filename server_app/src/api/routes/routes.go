@@ -14,7 +14,6 @@ import (
 func SetupRoutes(app *fiber.App) {
 
 	api := app.Group("/api")
-
 	v1 := api.Group("/v1")
 
 	v1.Use("/docs/*", swagger.HandlerDefault)
@@ -45,4 +44,9 @@ func SetupRoutes(app *fiber.App) {
 	service.Get("/:id", ctl.GetServiceById)
 	service.Put("/:id", middlewares.RequireLoggedIn(), ctl.UpdateService)
 	service.Delete("/:id", middlewares.RequireLoggedIn(), ctl.DeleteService)
+
+	// Reports
+	report := v1.Group("/report")
+	report.Post("/:id", middlewares.RequireLoggedIn(), ctl.CreateReport)
+	report.Get("/collection", ctl.GetAllReports)
 }
