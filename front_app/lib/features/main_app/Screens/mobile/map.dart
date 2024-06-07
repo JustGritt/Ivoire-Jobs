@@ -3,7 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
-// import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:speech_to_text/speech_to_text.dart' as stt;
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
@@ -18,10 +18,24 @@ class _MapScreenState extends State<MapScreen> {
   List<Marker> markers = [];
   final mapController = MapController();
 
+  // Speech to text variables
+  late stt.SpeechToText _speech;
+  bool _isListening = false;
+  String _recognizedText = '';
+
   @override
   void initState() {
     super.initState();
     _getCurrentLocation();
+    _initializeSpeechRecognizer();
+  }
+
+  void _initializeSpeechRecognizer() async {
+    _speech = stt.SpeechToText();
+    bool available = await _speech.initialize();
+    if (!available) {
+      _showErrorDialog('Speech recognition not available');
+    }
   }
 
   void _setMarkerToCurrentPosition() async {
@@ -85,7 +99,7 @@ class _MapScreenState extends State<MapScreen> {
           desiredAccuracy: LocationAccuracy.high);
       setState(() {
         _currentPosition = LatLng(position.latitude, position.longitude);
-        _searchController.text = '${position.latitude}, ${position.longitude}';
+        _searchController.text = '';
       });
       _setMarkerToCurrentPosition();
     } catch (e) {
@@ -113,6 +127,29 @@ class _MapScreenState extends State<MapScreen> {
     );
   }
 
+  // Speech to text functions
+  void _listen() async {
+    if (!_isListening) {
+      bool available = await _speech.initialize(
+        onStatus: (val) => print('onStatus: $val'),
+        onError: (val) => print('onError: $val'),
+      );
+      if (available) {
+        setState(() => _isListening = true);
+        _speech.listen(
+          onResult: (val) => setState(() {
+            _recognizedText = val.recognizedWords;
+            _searchController.text = _recognizedText;
+            // Here you can handle the recognized text, e.g., search for the location
+          }),
+        );
+      }
+    } else {
+      setState(() => _isListening = false);
+      _speech.stop();
+    }
+  }
+
   TileLayer openStreetMapTileLayer = TileLayer(
     urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
     // userAgentPackageName: 'dev.fleaflet.flutter_map.example',
@@ -136,54 +173,47 @@ class _MapScreenState extends State<MapScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Positioned(
-              top: 0,
-              left: 0,
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey[300]!),
-                        borderRadius: BorderRadius.circular(8),
-                        color: Colors.white,
-                      ),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: TextField(
-                              controller: _searchController,
-                              decoration: const InputDecoration(
-                                contentPadding: EdgeInsets.only(left: 8),
-                                border: InputBorder.none,
-                                hintText: 'Your position',
-                              ),
-                            ),
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.location_on),
-                            onPressed: () {
-                              animatePosition();
-                            },
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.mic),
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const MapScreen()));
-                            },
-                          ),
-                        ],
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey[300]!),
+                  borderRadius: BorderRadius.circular(8),
+                  color: Colors.white,
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: _searchController,
+                        decoration: const InputDecoration(
+                          contentPadding: EdgeInsets.only(left: 8),
+                          border: InputBorder.none,
+                          hintText: 'Your position',
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                ],
+                    IconButton(
+                      icon: const Icon(Icons.location_on),
+                      onPressed: () {
+                        animatePosition();
+                      },
+                    ),
+                    // Handle the speech to text here
+                    IconButton(
+                      icon: Icon(
+                        Icons.mic,
+                        color: _isListening ? Colors.red : Colors.black,
+                      ),
+                      onPressed: () {
+                        _listen();
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
+            const SizedBox(height: 8),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: SingleChildScrollView(
@@ -261,7 +291,6 @@ class _MapScreenState extends State<MapScreen> {
                 mapController: mapController,
                 options: MapOptions(
                   initialCenter: _currentPosition,
-                  // initialZoom: 18,
                   initialZoom: 18,
                 ),
                 children: [
