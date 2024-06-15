@@ -1,5 +1,6 @@
 import 'package:barassage_app/features/auth_mod/screens/mobile/main_wrapper.dart';
 import 'package:barassage_app/features/auth_mod/screens/mobile/splash_mobile_screen.dart';
+import 'package:barassage_app/features/main_app/Screens/mobile/new_service.dart';
 import 'package:barassage_app/features/main_app/Screens/mobile/services_details.dart';
 import 'package:barassage_app/features/main_app/controllers/controller.dart';
 import 'package:barassage_app/features/main_app/controllers/main/home_controller.dart';
@@ -14,11 +15,12 @@ import '../../core/classes/route_manager.dart';
 // import 'controllers/controller.dart';
 
 class App extends RouteManager {
-  static const String name = '';
+  static const String name = '/app';
   static const String home = '${App.name}/home';
   static const String detailService = 'detailService';
+  static const String services = '${App.name}/services';
+  static const String serviceNew = 'newService';
   static const String splash = '${App.name}/splash';
-  static const String about = '${App.name}/about';
   static const String contact = '${App.name}/contact';
   static const String news = '${App.name}/news';
 
@@ -34,18 +36,30 @@ class App extends RouteManager {
         },
         branches: [
           StatefulShellBranch(
-            navigatorKey: _shellHomeKey,
             routes: [
               GoRoute(
                 path: App.home,
-                pageBuilder: (context, state) => const PlatformTransitionPage(
-                  child: HomeController(),
-                ).show(context),
+                builder: (context, state) => const HomeController(),
                 routes: [
                   GoRoute(
                     path: App.detailService,
-                    pageBuilder: (context, state) => PlatformTransitionPage(
-                      child: ServiceDetailPage(),
+                    builder: (context, state) => ServiceDetailPage(),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: App.services,
+                builder: (context, state) => const ServicesController(),
+                routes: [
+                  GoRoute(
+                    path: App.serviceNew,
+                    pageBuilder: (context, state) =>
+                        const PlatformTransitionPage(
+                      child: NewServicePage(),
                     ).show(context),
                   ),
                 ],
@@ -53,18 +67,6 @@ class App extends RouteManager {
             ],
           ),
           StatefulShellBranch(
-            navigatorKey: _shellMapsKey,
-            routes: [
-              GoRoute(
-                path: App.about,
-                pageBuilder: (context, state) => const NoTransitionPage(
-                  child: ServicesController(),
-                ),
-              ),
-            ],
-          ),
-          StatefulShellBranch(
-            navigatorKey: _shellSettingsKey,
             routes: [
               GoRoute(
                 path: App.contact,

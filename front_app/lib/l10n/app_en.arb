@@ -24,5 +24,37 @@
     "btn_login": "Login",
     "tab_1": "Home",
     "tab_2": "My services",
-    "tab_3": "Settings"
+    "tab_3": "Settings",
+    "permission_denied_camera": "The camera is not accessible. Please activate it in the camera settings.",
+    "permission_denied_gallery": "Gallery is not accessible. Please activate it in the gallery settings.",
+
+    "service_title": "Title of the service",
+    "service_description": "Description of the service",
+
+    "service_price": "Price of the service",
+
+    "service_duration": "Duration",
+
+    "service_status": "Status",
+
+    "service_status_active": "Active",
+
+    "service_status_inactive": "Inactive",
+
+    "service_status_deleted": "Deleted",
+
+    "service_status_suspended": "Suspended",
+
+    "service_location": "Location of the service",
+
+    "service_edit": "Edit",
+
+    "service_category": "Sevice category",
+
+    "service_illustration": "Illustration of your service",
+    "service_illustration_description": "Click on the button below to import an image.",
+
+    "delete": "Delete",
+    "save": "Save",
+    "next": "Next"
 }

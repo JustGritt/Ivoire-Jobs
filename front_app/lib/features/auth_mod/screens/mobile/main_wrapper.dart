@@ -19,7 +19,7 @@ class MainWrapper extends StatelessWidget {
         showElevation: true,
         onItemSelected: (value) {
           navigationShell.goBranch(value,
-              initialLocation: value != navigationShell.currentIndex);
+              initialLocation: value == navigationShell.currentIndex);
         },
         iconSize: 23.0,
         height: 55.0,
@@ -32,14 +32,17 @@ class MainWrapper extends StatelessWidget {
         items: [
           FlashyTabBarItem(
             icon: const Icon(Ionicons.home_outline),
+            activeColor: theme.primaryColor,
             title: Text(appLocalizations.tab_1),
           ),
           FlashyTabBarItem(
             icon: const Icon(Ionicons.star_outline),
+            activeColor: theme.primaryColor,
             title: Text(appLocalizations.tab_2),
           ),
           FlashyTabBarItem(
             icon: const Icon(Icons.settings_outlined),
+            activeColor: theme.primaryColor,
             title: Text(appLocalizations.tab_3),
           )
         ],

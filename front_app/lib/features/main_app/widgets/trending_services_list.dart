@@ -22,7 +22,7 @@ class TrendingServicesList extends StatelessWidget {
             padding: const EdgeInsets.only(left: 8.0),
             child: GestureDetector(
               onTap: () {
-                context.push('/home/${App.detailService}');
+                context.push('${App.home}/${App.detailService}');
               },
               child: TrendingService(
                   service: trendingServices.trendingServices[index]),
