@@ -5,6 +5,7 @@ import 'package:super_cupertino_navigation_bar/super_cupertino_navigation_bar.da
 import '../../../../config/config.dart';
 import '../../widgets/trending_services_list.dart';
 import '../../widgets/services_entries_list.dart';
+import './map.dart';
 
 class Home extends StatefulWidget {
   final String? title;
@@ -55,6 +56,18 @@ class _HomeState extends State<Home> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  IconButton(
+                    icon: const Icon(Icons.location_on),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MapScreen(),
+                        ),
+                      );
+                    },
+                  ),
+
                   // Trending section
                   const Padding(
                     padding: EdgeInsets.only(left: 16.0),

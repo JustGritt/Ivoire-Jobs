@@ -45,5 +45,18 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Your description for when in use location permission</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Your description for always location permission</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>We need your microphone permission to provide voice search</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>We need your speech recognition permission to provide voice search</string>
 </dict>
 </plist>
