@@ -14,7 +14,7 @@ class AuthApp extends RouteManager {
   static const String splashScreen = '/auth/splashScreen';
   static const String forget = '/forget';
   static const String register = '/auth/register';
-  static const String emailValidation = '/auth/email-validation';
+  static const String emailValidation = '/auth/verify-email';
   static const String splash = '/splash';
 
   AuthApp() {
@@ -52,5 +52,10 @@ class AuthApp extends RouteManager {
         pageBuilder: (context, state) {
           return const CupertinoPage(child: RegisterController());
         }));
+    addRoute(GoRoute(
+      path: AuthApp.emailValidation,
+      pageBuilder: (context, state) {
+        return const CupertinoPage(child: EmailValidationController());
+      }));
   }
 }

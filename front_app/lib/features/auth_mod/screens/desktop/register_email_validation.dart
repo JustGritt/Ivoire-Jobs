@@ -6,7 +6,7 @@ import 'dart:html' as html;
 import '../../services/user_service.dart';
 
 class RegisterEmailValidation extends StatefulWidget {
-  const RegisterEmailValidation({Key? key}) : super(key: key);
+  const RegisterEmailValidation({super.key});
 
   @override
   State<RegisterEmailValidation> createState() => _RegisterEmailValidationState();
@@ -15,13 +15,12 @@ class RegisterEmailValidation extends StatefulWidget {
 class _RegisterEmailValidationState extends State<RegisterEmailValidation> {
   bool isEmailValidated = false;
   bool isLoading = true;
-  var token = Uri.dataFromString(html.window.location.href).queryParameters['token'];
+  var token = Uri.dataFromString(html.window.location.href).queryParameters['token'] ?? '';
 
   @override
   void initState() {
     super.initState();
-    print(Uri.base);
-    print(token);
+    checkRegisterToken(context, token);
   }
 
   void checkRegisterToken(BuildContext context, String token) {

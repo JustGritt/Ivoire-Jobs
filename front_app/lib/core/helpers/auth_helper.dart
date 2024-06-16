@@ -6,6 +6,7 @@ import 'package:barassage_app/features/auth_mod/models/user.dart';
 import 'package:barassage_app/features/auth_mod/models/user_login.dart';
 import 'package:barassage_app/features/auth_mod/models/user_signup.dart';
 import 'package:barassage_app/features/auth_mod/services/user_service.dart';
+import 'package:barassage_app/features/main_app/app.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -25,7 +26,7 @@ doAuth(String email, String password) async {
         await us.login(UserLogin(email: email, password: password));
     ac.doLogin(userLoginResponse.user, userLoginResponse.accessToken);
     SchedulerBinding.instance.addPostFrameCallback((_) {
-      Nav.to(context, '/');
+      Nav.to(context, App.home);
       showMessage(context, 'Login Successful');
     });
   } on DioException catch (e) {
