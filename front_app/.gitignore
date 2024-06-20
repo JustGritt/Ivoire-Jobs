@@ -30,6 +30,7 @@ migrate_working_dir/
 .pub-cache/
 .pub/
 /build/
+ios/Runner/AppDelegate.swift
 
 # Remove App Auth
 .env
