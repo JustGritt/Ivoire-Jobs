@@ -30,7 +30,7 @@ migrate_working_dir/
 .pub-cache/
 .pub/
 /build/
-**/ios/Flutter/*
+**/ios/Runner/*
 
 # Remove App Auth
 .env
