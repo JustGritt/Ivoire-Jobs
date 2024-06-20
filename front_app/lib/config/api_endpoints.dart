@@ -5,7 +5,7 @@ import '../features/features.dart';
 class ApiEndpoint {
   // News Server
   static const rapidUrl = 'https://free-news.p.rapidapi.com';
-  static const apiUrl = 'http://192.168.1.54:8000';
+  static const apiUrl = 'http://10.237.232.0:8000';
   static const news = '$rapidUrl/v1/search';
 
   // Server Links

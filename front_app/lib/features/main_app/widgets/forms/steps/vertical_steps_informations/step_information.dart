@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:barassage_app/config/app_colors.dart';
+import 'package:ez_validator/ez_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -7,9 +9,9 @@ import 'package:insta_assets_picker/insta_assets_picker.dart';
 import 'package:pushable_button/pushable_button.dart';
 
 class StepInformation extends StatefulWidget {
-  final Function(int step) onStepChange;
+  final Function(StepInformationData data) onEnd;
 
-  const StepInformation({super.key, required this.onStepChange});
+  const StepInformation({super.key, required this.onEnd});
 
   @override
   State<StepInformation> createState() => _StepInformationState();
@@ -22,10 +24,49 @@ class _StepInformationState extends State<StepInformation> {
     null,
     null,
   ];
+  Map<dynamic, dynamic> errors = {};
+  Map<String, dynamic> form = {
+    "illustrations": [],
+    "title": "",
+    "description": "",
+    "price": 0.0,
+  };
+
   @override
   Widget build(BuildContext context) {
     AppLocalizations appLocalizations = AppLocalizations.of(context)!;
     ThemeData theme = Theme.of(context);
+
+    EzSchema formSchema = EzSchema.shape(
+      {
+        "title": EzValidator<String>(label: "Title").required(),
+        "description": EzValidator<String>(label: "Description").required(),
+        "price": EzValidator<double>(label: "Price").required().number().min(1),
+        "illustrations": EzValidator<List<File?>>(label: "Illustrations")
+            .required()
+            .arrayOf(EzValidator<File>(label: "Illustration").required())
+            .minLength(1),
+      },
+    );
+
+    void validate() {
+      try {
+        form['illustrations'] = illustrations.whereType<File>().toList();
+        final (data, errors_) = formSchema.validateSync(form);
+        setState(() {
+          errors = errors_;
+        });
+        if (errors_.entries.every((element) => element.value == null)) {
+          widget.onEnd(StepInformationData(
+              title: data['title'],
+              description: data['description'],
+              price: data['price'],
+              illustrations: data['illustrations'] as List<File>));
+        }
+      } catch (e) {
+        print(e);
+      }
+    }
 
     return SingleChildScrollView(
       physics: const NeverScrollableScrollPhysics(),
@@ -36,14 +77,51 @@ class _StepInformationState extends State<StepInformation> {
           children: [
             Text('Enter your information', style: theme.textTheme.labelLarge),
             const SizedBox(height: 20.0),
-            TextField(context, hint: appLocalizations.service_title),
-            const SizedBox(height: 20.0),
-            TextField(context, hint: appLocalizations.service_description),
-            const SizedBox(height: 20.0),
-            TextField(context,
-                hint: appLocalizations.service_price,
-                keyboardType: TextInputType.phone),
-            const SizedBox(height: 20.0),
+            TextField(context, hint: appLocalizations.service_title,
+                onChanged: (value) {
+              setState(() {
+                form['title'] = value;
+              });
+            }),
+            Text(errors['title'] ?? '',
+                style: theme.textTheme.labelMedium
+                    ?.copyWith(color: AppColors.red)),
+            const SizedBox(height: 3.0),
+            TextField(context, hint: appLocalizations.service_description,
+                onChanged: (value) {
+              setState(() {
+                form['description'] = value;
+              });
+            }),
+            Text(errors['description'] ?? '',
+                style: theme.textTheme.labelMedium
+                    ?.copyWith(color: AppColors.red)),
+            const SizedBox(height: 3.0),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Flexible(
+                    flex: 3,
+                    child:
+                        TextField(context, hint: appLocalizations.service_price,
+                            onChanged: (value) {
+                      if (value.isNotEmpty) {
+                        setState(() {
+                          form['price'] = double.parse(value);
+                        });
+                      }
+                    }, keyboardType: TextInputType.phone)),
+                const SizedBox(width: 12),
+                Text(
+                  "XOF",
+                  style: theme.textTheme.labelLarge!.copyWith(fontSize: 16.0),
+                ),
+              ],
+            ),
+            Text(errors['price'] ?? '',
+                style: theme.textTheme.labelMedium
+                    ?.copyWith(color: AppColors.red)),
+            const SizedBox(height: 4.0),
             Text(appLocalizations.service_illustration,
                 style: theme.textTheme.labelLarge!.copyWith(fontSize: 16.0)),
             Text(appLocalizations.service_illustration_description,
@@ -73,6 +151,9 @@ class _StepInformationState extends State<StepInformation> {
                 });
               }),
             ]),
+            Text(errors['illustrations'] ?? '',
+                style: theme.textTheme.labelMedium
+                    ?.copyWith(color: AppColors.red)),
             const SizedBox(height: 20.0),
             PushableButton(
               child: Text(appLocalizations.next,
@@ -87,9 +168,7 @@ class _StepInformationState extends State<StepInformation> {
                 blurRadius: 7,
                 offset: Offset(0, 2),
               ),
-              onPressed: () => {
-                widget.onStepChange(1),
-              },
+              onPressed: validate,
             ),
           ],
         ),
@@ -181,6 +260,7 @@ Widget TextField(
   BuildContext context, {
   required String hint,
   TextInputType keyboardType = TextInputType.text,
+  Function(String)? onChanged,
 }) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
@@ -189,7 +269,7 @@ Widget TextField(
       CupertinoTextField(
         placeholder: hint,
         keyboardType: keyboardType,
-        onChanged: (value) {},
+        onChanged: onChanged,
         padding: const EdgeInsets.all(13.0),
         cursorRadius: const Radius.circular(10.0),
         decoration: BoxDecoration(
@@ -199,4 +279,24 @@ Widget TextField(
       )
     ],
   );
+}
+
+class StepInformationData {
+  final String title;
+  final String description;
+  final double price;
+  final List<File> illustrations;
+
+  StepInformationData(
+      {required this.title,
+      required this.description,
+      required this.price,
+      required this.illustrations});
+
+  Map<String, dynamic> toJson() => {
+        'title': title,
+        'description': description,
+        'price': price,
+        'illustrations': illustrations,
+      };
 }

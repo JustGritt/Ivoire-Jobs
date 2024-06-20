@@ -27,6 +27,9 @@ ThemeData defaultTheme = ThemeData(
   navigationBarTheme: const NavigationBarThemeData(
     backgroundColor: AppColors.white,
   ),
+  inputDecorationTheme:  const InputDecorationTheme(
+    errorStyle: TextStyle(color: AppColors.red),
+  ),
   textTheme: const TextTheme(
     displayLarge: TextStyle(
         color: AppColors.black,
@@ -38,7 +41,7 @@ ThemeData defaultTheme = ThemeData(
     titleMedium: TextStyle(
         color: AppColors.black, fontSize: 18, fontWeight: FontWeight.w500),
     labelLarge: TextStyle(
-        color: AppColors.black, fontSize: 22, fontWeight: FontWeight.w700),
+        color: Colors.black, fontSize: 22, fontWeight: FontWeight.w700),
   ),
   popupMenuTheme: const PopupMenuThemeData(
     color: Color.fromARGB(255, 11, 238, 250),
@@ -94,7 +97,7 @@ class AppTheme {
                 fontSize: 16,
                 fontWeight: FontWeight.w500),
             labelLarge: TextStyle(
-                color: AppColors.black,
+                color: AppColors.white,
                 fontSize: 22,
                 fontWeight: FontWeight.w700),
           ),
