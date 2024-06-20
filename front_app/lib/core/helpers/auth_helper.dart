@@ -91,7 +91,7 @@ void checkLogin(
 
 void checkRegisterToken(BuildContext context, String token) {
   UserService us = UserService();
-  /*us.verifyEmailToken(token).then((value) {
+  us.verifyEmailToken(token).then((value) {
     if (value == false) {
       SchedulerBinding.instance.addPostFrameCallback((_) {
         // setState(() {
@@ -100,7 +100,7 @@ void checkRegisterToken(BuildContext context, String token) {
         // });
       });
     }
-  });*/
+  });
 }
 
 Future<List<User>?> getUsers() async {
