@@ -1,1 +1,2 @@
-front_app/ios/Runner/AppDelegate.swift
+front_app/ios/Runner/**.swift
+front_app/ios/Runner/Info.plist
