@@ -1,4 +1,4 @@
-import 'dart:io';
+// import 'dart:io';
 
 import 'package:barassage_app/features/auth_mod/screens/mobile/main_wrapper.dart';
 import 'package:barassage_app/features/auth_mod/screens/mobile/splash_mobile_screen.dart';
@@ -8,12 +8,12 @@ import 'package:barassage_app/features/main_app/controllers/controller.dart';
 import 'package:barassage_app/features/main_app/controllers/main/home_controller.dart';
 import 'package:barassage_app/features/main_app/controllers/main/services_controller.dart';
 import 'package:barassage_app/features/main_app/widgets/transition_page.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+// import 'package:google_maps_flutter/google_maps_flutter.dart';
 // import 'package:barassage_app/features/main_app/controllers/main/home_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_maps_place_picker_mb/google_maps_place_picker.dart';
+// import 'package:google_maps_place_picker_mb/google_maps_place_picker.dart';
 
 import '../../core/classes/route_manager.dart';
 // import 'controllers/controller.dart';
@@ -67,22 +67,22 @@ class App extends RouteManager {
                       child: NewServicePage(),
                     ).show(context),
                   ),
-                  GoRoute(
-                    path: App.placePicker,
-                    builder: (context, state) => PlacePicker(
-                      initialPosition: const LatLgn,
-                      apiKey: Platform.isAndroid
-                          ? "YOUR ANDROID API KEY"
-                          : "YOUR IOS API KEY",
-                      onPlacePicked: (result) {
-                        print(result);
-                        Navigator.of(context).pop();
-                      },
-                      useCurrentLocation: true,
-                      resizeToAvoidBottomInset:
-                          false, // only works in page mode, less flickery, remove if wrong offsets
-                    ),
-                  )
+                  // GoRoute(
+                  //   path: App.placePicker,
+                  //   builder: (context, state) => PlacePicker(
+                  //     initialPosition: const LatLgn,
+                  //     apiKey: Platform.isAndroid
+                  //         ? "YOUR ANDROID API KEY"
+                  //         : "YOUR IOS API KEY",
+                  //     onPlacePicked: (result) {
+                  //       print(result);
+                  //       Navigator.of(context).pop();
+                  //     },
+                  //     useCurrentLocation: true,
+                  //     resizeToAvoidBottomInset:
+                  //         false, // only works in page mode, less flickery, remove if wrong offsets
+                  //   ),
+                  // )
                 ],
               ),
             ],
