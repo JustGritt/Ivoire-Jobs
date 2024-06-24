@@ -28,6 +28,12 @@ type ServiceObject struct {
 	Duration    int                   `json:"duration" validate:"required,min=30,max=1440,step=30" message:"Duration must be a multiple of 30 and it should be beetween 30 and 1440"`
 	IsBanned    bool                  `json:"-"`
 	Thumbnail   *multipart.FileHeader `json:"thumbnail" form:"thumbnail" swaggertype:"string"`
+	Latitude    float64               `json:"latitude" validate:"required"`
+	Longitude   float64               `json:"longitude" validate:"required"`
+	Address     string                `json:"address" validate:"required"`
+	City        string                `json:"city" validate:"required"`
+	PostalCode  string                `json:"postalCode" validate:"required"`
+	Country     string                `json:"country" validate:"required"`
 }
 
 type ServiceUpdateObject struct {
@@ -38,6 +44,12 @@ type ServiceUpdateObject struct {
 	Duration    int     `json:"duration" validate:"required,min=30,max=1440,step=30" message:"Duration must be a multiple of 30 and it should be beetween 30 and 1440"`
 	IsBanned    bool    `json:"isBanned"`
 	Thumbnail   string  `json:"thumbnail"`
+	Latitude    float64 `json:"latitude"`
+	Longitude   float64 `json:"longitude"`
+	Address     string  `json:"address"`
+	City        string  `json:"city"`
+	PostalCode  string  `json:"postalCode"`
+	Country     string  `json:"country"`
 }
 
 type ServiceOutput struct {
@@ -50,6 +62,12 @@ type ServiceOutput struct {
 	Duration    int     `json:"duration"`
 	IsBanned    bool    `json:"isBanned"`
 	Thumbnail   string  `json:"thumbnail"`
+	Latitude    float64 `json:"latitude"`
+	Longitude   float64 `json:"longitude"`
+	Address     string  `json:"address"`
+	City        string  `json:"city"`
+	PostalCode  string  `json:"postalCode"`
+	Country     string  `json:"country"`
 }
 
 // CreateService Godoc
@@ -99,6 +117,7 @@ func CreateService(c *fiber.Ctx) error {
 
 		// Upload the file to S3
 		s3URL, err = bucket.UploadFile(file)
+		//fmt.Println("S3 URL: ", s3URL)
 		if err != nil {
 			errorList = append(
 				errorList,
@@ -133,6 +152,12 @@ func CreateService(c *fiber.Ctx) error {
 		Duration:    serviceInput.Duration,
 		IsBanned:    serviceInput.IsBanned,
 		Thumbnail:   s3URL,
+		Latitude:    serviceInput.Latitude,
+		Longitude:   serviceInput.Longitude,
+		Address:     serviceInput.Address,
+		City:        serviceInput.City,
+		PostalCode:  serviceInput.PostalCode,
+		Country:     serviceInput.Country,
 		ID:          uuid.New().String(),
 	}
 
@@ -419,6 +444,24 @@ func UpdateService(c *fiber.Ctx) error {
 	if s3URL != "" {
 		existingService.Thumbnail = s3URL
 	}
+	if updateInput.Latitude != 0 {
+		existingService.Latitude = updateInput.Latitude
+	}
+	if updateInput.Longitude != 0 {
+		existingService.Longitude = updateInput.Longitude
+	}
+	if updateInput.Address != "" {
+		existingService.Address = updateInput.Address
+	}
+	if updateInput.City != "" {
+		existingService.City = updateInput.City
+	}
+	if updateInput.PostalCode != "" {
+		existingService.PostalCode = updateInput.PostalCode
+	}
+	if updateInput.Country != "" {
+		existingService.Country = updateInput.Country
+	}
 
 	// Save the updated service to the DB
 	if err := serviceRepo.Update(existingService); err != nil {
@@ -645,5 +688,11 @@ func mapServiceToOutPut(u *service.Service) *ServiceOutput {
 		Duration:    u.Duration,
 		IsBanned:    u.IsBanned,
 		Thumbnail:   u.Thumbnail,
+		Latitude:    u.Latitude,
+		Longitude:   u.Longitude,
+		Address:     u.Address,
+		City:        u.City,
+		PostalCode:  u.PostalCode,
+		Country:     u.Country,
 	}
 }

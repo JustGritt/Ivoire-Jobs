@@ -6,7 +6,6 @@ import (
 	// Middlewares
 	"barassage/api/middlewares"
 
-	"github.com/gofiber/contrib/websocket"
 	"github.com/gofiber/fiber/v2"
 	swagger "github.com/gofiber/swagger"
 )
@@ -19,24 +18,26 @@ func SetupRoutes(app *fiber.App) {
 
 	v1.Use("/docs/*", swagger.HandlerDefault)
 
-	v1.Get("/", func(c *fiber.Ctx) error {
-		return c.JSON(fiber.Map{
-			"message": "Welcome to Barassage private API",
+	/*
+		v1.Get("/", func(c *fiber.Ctx) error {
+			return c.JSON(fiber.Map{
+				"message": "Welcome to Barassage private API",
+			})
 		})
-	})
 
-	// Websocket
-	ws := v1.Group("/ws")
+		// Websocket
+		ws := v1.Group("/ws")
 
-	ws.Use(func(c *fiber.Ctx) error {
-		if websocket.IsWebSocketUpgrade(c) {
-			c.Locals("allowed", true)
-			return c.Next()
-		}
-		return fiber.ErrUpgradeRequired
-	})
+		ws.Use(func(c *fiber.Ctx) error {
+			if websocket.IsWebSocketUpgrade(c) {
+				c.Locals("allowed", true)
+				return c.Next()
+			}
+			return fiber.ErrUpgradeRequired
+		})
 
-	ws.Get("/:id", websocket.New(ctl.ChatHandler))
+		ws.Get("/:id", websocket.New(ctl.ChatHandler))
+	*/
 
 	// Stripe Webhook
 	v1.Post("/stripe/webhook", ctl.HandleWebhook)
@@ -63,7 +64,7 @@ func SetupRoutes(app *fiber.App) {
 	service.Get("/:id", ctl.GetServiceById)
 	service.Put("/:id", middlewares.RequireLoggedIn(), ctl.UpdateService)
 	service.Delete("/:id", middlewares.RequireLoggedIn(), ctl.DeleteService)
-  
+
 	// Booking Group
 	booking := v1.Group("/booking")
 	booking.Post("/", middlewares.RequireLoggedIn(), ctl.CreateBooking)
