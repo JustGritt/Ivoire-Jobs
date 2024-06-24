@@ -1,10 +1,12 @@
 package controllers
 
 import (
-	"barassage/api/bucket"
 	validator "barassage/api/common/validator"
 	"barassage/api/models/service"
 	serviceRepo "barassage/api/repositories/service"
+	"barassage/api/services/bucket"
+	"strconv"
+
 	"fmt"
 	"mime/multipart"
 	"net/http"
@@ -85,17 +87,14 @@ func CreateService(c *fiber.Ctx) error {
 	}
 
 	// Handle file upload
-	// Handle file upload
 	file, err := c.FormFile("thumbnail")
 	var s3URL string
 	if err == nil {
-		allowedMimeTypes := []string{"jpeg", "webp", "png", "jpg"}
-		maxFileSize := "5MB"
+		allowedMimeTypes := []string{"jpeg", "png", "jpg"}
+		maxFileSize := "4MB"
 
 		if err := validator.ValidateFile(file, maxFileSize, allowedMimeTypes); err != nil {
-			return c.Status(http.StatusBadRequest).JSON(fiber.Map{
-				"msg": err.Error(),
-			})
+			return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(err))
 		}
 
 		// Upload the file to S3
@@ -156,15 +155,15 @@ func CreateService(c *fiber.Ctx) error {
 			fmt.Println("Database error:", err.Error())
 		}
 
-		errorList := []*Response{
-			{
-				Code:    http.StatusConflict,
-				Message: "Service Already Exist",
-				Data:    nil,
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusConflict,
+				Message: "this service already exist",
 			},
-		}
-		response := HTTPResponse(http.StatusInternalServerError, "Service Not Registered", errorList)
-		return c.Status(http.StatusInternalServerError).JSON(response)
+		)
+
+		return c.Status(http.StatusConflict).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
 	serviceOutput := mapServiceToOutPut(&s)
@@ -389,12 +388,10 @@ func UpdateService(c *fiber.Ctx) error {
 	var s3URL string
 	if err == nil {
 		allowedMimeTypes := []string{"jpeg", "webp", "png", "jpg"}
-		maxFileSize := "5MB"
+		maxFileSize := "4MB"
 
 		if err := validator.ValidateFile(file, maxFileSize, allowedMimeTypes); err != nil {
-			return c.Status(http.StatusBadRequest).JSON(fiber.Map{
-				"msg": err.Error(),
-			})
+			return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(err))
 		}
 
 		// Upload the file to S3
@@ -531,6 +528,92 @@ func DeleteService(c *fiber.Ctx) error {
 
 	response := HTTPResponse(http.StatusOK, "Service Deleted", nil)
 	return c.Status(http.StatusOK).JSON(response)
+}
+
+// SearchService Godoc
+// @Summary Search services
+// @Description Search services by name, price, or both
+// @Tags Service
+// @Produce json
+// @Param name query string false "Service Name"
+// @Param min_price query float false "Minimum Price"
+// @Param max_price query float false "Maximum Price"
+// @Success 200 {array} ServiceOutput
+// @Failure 400 {array} ErrorResponse
+// @Failure 401 {array} ErrorResponse
+// @Failure 500 {array} ErrorResponse
+// @Router /service/search [get]
+func SearchService(c *fiber.Ctx) error {
+	var errorList []*fiber.Error
+
+	// Get query parameters
+	serviceName := c.Query("name")
+	minPriceStr := c.Query("min_price")
+	maxPriceStr := c.Query("max_price")
+
+	var minPrice, maxPrice float64
+	var err error
+
+	if minPriceStr != "" {
+		minPrice, err = strconv.ParseFloat(minPriceStr, 64)
+		if err != nil {
+			errorList = append(
+				errorList,
+				&fiber.Error{
+					Code:    fiber.StatusBadRequest,
+					Message: "Invalid minimum price value",
+				},
+			)
+			return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
+		}
+	}
+
+	if maxPriceStr != "" {
+		maxPrice, err = strconv.ParseFloat(maxPriceStr, 64)
+		if err != nil {
+			errorList = append(
+				errorList,
+				&fiber.Error{
+					Code:    fiber.StatusBadRequest,
+					Message: "Invalid maximum price value",
+				},
+			)
+			return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
+		}
+	}
+
+	// Fetch services based on the query parameters
+	services, err := serviceRepo.SearchServices(serviceName, minPrice, maxPrice)
+	if err != nil {
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusInternalServerError,
+				Message: "Error searching services",
+			},
+		)
+		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
+	// Map services to ServiceOutput
+	var serviceOutputs []ServiceOutput
+	for _, s := range services {
+		serviceOutputs = append(serviceOutputs, *mapServiceToOutPut(&s))
+	}
+
+	//check if the serviceOuputs is empty
+	if len(serviceOutputs) == 0 {
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusNotFound,
+				Message: "No services found",
+			},
+		)
+		return c.Status(http.StatusNotFound).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
+	return c.Status(http.StatusOK).JSON(serviceOutputs)
 }
 
 // ============================================================

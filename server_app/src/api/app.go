@@ -4,8 +4,8 @@ import (
 	"fmt"
 
 	// Configs
-	"barassage/api/bucket"
 	cfg "barassage/api/configs"
+	"barassage/api/services/bucket"
 
 	// Swagger
 	docs "barassage/api/docs" // Swagger Docs
@@ -17,9 +17,10 @@ import (
 	db "barassage/api/database"
 
 	//mailer
-	mail "barassage/api/mailer"
+	mail "barassage/api/services/mailer"
 
 	// models
+	"barassage/api/models/booking"
 	"barassage/api/models/service"
 	"barassage/api/models/user"
 
@@ -43,7 +44,11 @@ import (
 // @name Authorization
 // @description Type "Bearer" followed by a space and JWT token.
 func Run() {
-	app := fiber.New()
+	app := fiber.New(fiber.Config{
+		Prefork:           true,
+		ServerHeader:      "Fiber",
+		StreamRequestBody: true,
+	})
 
 	/*
 		====== Setup Configs ============
@@ -60,10 +65,10 @@ func Run() {
 	db.ConnectPostgres()
 
 	// Drop on serve restarts in dev
-	db.PgDB.Migrator().DropTable(&user.User{}, &service.Service{})
+	//db.PgDB.Migrator().DropTable(&user.User{}, &service.Service{}, &booking.Booking{})
 
 	// Migration
-	db.PgDB.AutoMigrate(&user.User{}, &service.Service{})
+	db.PgDB.AutoMigrate(&user.User{}, &service.Service{}, &booking.Booking{})
 
 	/*
 		============ Set Up Utils ============
@@ -106,6 +111,11 @@ func Run() {
 	} else {
 		docs.SwaggerInfo.Host = config.Host
 	}
+
+	//render the demo html
+	app.Get("/test", func(c *fiber.Ctx) error {
+		return c.SendFile("./api/html/index.html")
+	})
 
 	// Run the app and listen on given port
 	port := fmt.Sprintf(":%s", config.Port)

@@ -18,14 +18,15 @@ type Config struct {
 	Postgres PostgresConfig `json:"postgres"`
 	Postmark PostmarkConfig `json:"postmark"`
 	// Mailgun   MailgunConfig  `json:"mailgun"`
-	JWTAccessSecret  string   `env:"JWT_ACCESS_SIGN_KEY"`
-	JWTRefreshSecret string   `env:"JWT_REFRESH_SIGN_KEY"`
-	JWTIssuer        string   `env:"JWT_ISSUER"`
-	Host             string   `env:"APP_HOST"`
-	Port             string   `env:"APP_PORT"`
-	FromEmail        string   `env:"EMAIL_FROM"`
-	FrontendURL      string   `env:"FRONTEND_URL"`
-	S3               S3Config `json:"s3"`
+	JWTAccessSecret  string       `env:"JWT_ACCESS_SIGN_KEY"`
+	JWTRefreshSecret string       `env:"JWT_REFRESH_SIGN_KEY"`
+	JWTIssuer        string       `env:"JWT_ISSUER"`
+	Host             string       `env:"APP_HOST"`
+	Port             string       `env:"APP_PORT"`
+	FromEmail        string       `env:"EMAIL_FROM"`
+	FrontendURL      string       `env:"FRONTEND_URL"`
+	S3               S3Config     `json:"s3"`
+	Stripe           StripeConfig `json:"stripe"`
 }
 
 // IsProd Checks if env is production
@@ -64,5 +65,7 @@ func GetConfig() Config {
 		Port:             os.Getenv("APP_PORT"),
 		FromEmail:        os.Getenv("EMAIL_FROM"),
 		FrontendURL:      os.Getenv("FRONTEND_URL"),
+		S3:               GetS3Config(),
+		Stripe:           GetStripeConfig(),
 	}
 }

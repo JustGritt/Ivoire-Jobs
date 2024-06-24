@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Payment</title>
+
+    <link rel="stylesheet" href="/css/base.css" />
+    <script src="https://js.stripe.com/v3/"></script>
+  </head>
+  <body>
+    <main>
+      <h1>Payment</h1>
+
+      <p>Enable more payment method types <a
+        href="https://dashboard.stripe.com/settings/payment_methods" target="_blank">in your
+        dashboard</a>.</p>
+
+      <form id="payment-form">
+        <div id="link-authentication-element">
+          <!-- Elements will create authentication element here -->
+        </div>
+        <div id="payment-element">
+          <!-- Elements will create form elements here -->
+        </div>
+        <button id="submit">Pay now</button>
+        <div id="error-message">
+          <!-- Display error message to your customers here -->
+        </div>
+      </form>
+
+      <div id="messages" role="alert" style="display: none;"></div>
+    </main>
+  </body>
+</html>
+<script>
+
+document.addEventListener('DOMContentLoaded', async () => {
+  // Load the publishable key from the server. The publishable key
+  // is set in your .env file.
+  const publishableKey = "pk_test_51PO2X2RtcC9h6tctZnY7LKvBdanWbMY9GKIUukZLXjTEXVIjhfRNgwYKbWyQkHshq8MZmEMm2SHn0fq75a0rZEcK008720VDGF"
+
+  const stripe = Stripe(publishableKey, {
+    apiVersion: '2020-08-27',
+  });
+
+  // On page load, we create a PaymentIntent on the server so that we have its clientSecret to
+  // initialize the instance of Elements below. The PaymentIntent settings configure which payment
+  // method types to display in the PaymentElement.
+  const res = await fetch('https://fantastic-space-doodle-w59vv7w5w7pfp9j-8000.app.github.dev/api/v1/stripe/create-payment-intent').then(r => r.json());
+  //get the client secret from the response
+  const clientSecret = res.client_secret;
+  addMessage(`Client secret returned.${clientSecret}`);
+
+  // Initialize Stripe Elements with the PaymentIntent's clientSecret,
+  // then mount the payment element.
+  const loader = 'auto'
+  const elements = stripe.elements({ clientSecret, loader });
+  const paymentElement = elements.create('payment');
+  paymentElement.mount('#payment-element');
+  // Create and mount the linkAuthentication Element to enable autofilling customer payment details
+  const linkAuthenticationElement = elements.create("linkAuthentication");
+  linkAuthenticationElement.mount("#link-authentication-element");
+  // If the customer's email is known when the page is loaded, you can
+  // pass the email to the linkAuthenticationElement on mount:
+  //
+  //   linkAuthenticationElement.mount("#link-authentication-element",  {
+  //     defaultValues: {
+  //       email: 'jenny.rosen@example.com',
+  //     }
+  //   })
+  // If you need access to the email address entered:
+  //
+  //  linkAuthenticationElement.on('change', (event) => {
+  //    const email = event.value.email;
+  //    console.log({ email });
+  //  })
+
+  // When the form is submitted...
+  const form = document.getElementById('payment-form');
+  let submitted = false;
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    // Disable double submission of the form
+    if(submitted) { return; }
+    submitted = true;
+    form.querySelector('button').disabled = true;
+
+    const nameInput = document.querySelector('#name');
+
+    // Confirm the payment given the clientSecret
+    // from the payment intent that was just created on
+    // the server.
+    const {error: stripeError} = await stripe.confirmPayment({
+      elements,
+      confirmParams: {
+        return_url: `${window.location.origin}/return.html`,
+      }
+    });
+
+    if (stripeError) {
+      addMessage(stripeError.message);
+
+      // reenable the form.
+      submitted = false;
+      form.querySelector('button').disabled = false;
+      return;
+    }
+  });
+});
+    // Helper for displaying status messages.
+const addMessage = (message) => {
+  const messagesDiv = document.querySelector('#messages');
+  messagesDiv.style.display = 'block';
+  const messageWithLinks = addDashboardLinks(message);
+  messagesDiv.innerHTML += `> ${messageWithLinks}<br>`;
+  console.log(`Debug: ${message}`);
+};
+
+// Adds links for known Stripe objects to the Stripe dashboard.
+const addDashboardLinks = (message) => {
+  const piDashboardBase = 'https://dashboard.stripe.com/test/payments';
+  return message.replace(
+    /(pi_(\S*)\b)/g,
+    `<a href="${piDashboardBase}/$1" target="_blank">$1</a>`
+  );
+};
+</script>
