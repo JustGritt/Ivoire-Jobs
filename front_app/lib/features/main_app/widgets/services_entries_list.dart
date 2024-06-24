@@ -20,8 +20,8 @@ class ServicesEntriesList extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (context) => ServiceDetailPage(
-                    // service: e,
-                  ),
+                      // service: e,
+                      ),
                 ),
               );
             },

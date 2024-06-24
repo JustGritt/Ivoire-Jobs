@@ -1,7 +1,5 @@
 import 'package:barassage_app/architect.dart';
-import 'package:barassage_app/config/app_colors.dart';
 import 'package:barassage_app/core/helpers/utils_helper.dart';
-import 'package:barassage_app/features/auth_mod/auth_mod.dart';
 import 'package:barassage_app/features/auth_mod/widgets/app_button.dart' as btn;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +19,6 @@ class WelcomeMailScreen extends StatelessWidget {
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
               Container(
@@ -41,7 +38,7 @@ class WelcomeMailScreen extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              Container(
+              SizedBox(
                 width: 250,
                 child: Text(
                   textAlign: TextAlign.center,

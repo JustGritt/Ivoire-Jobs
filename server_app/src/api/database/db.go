@@ -13,11 +13,11 @@ import (
 )
 
 var (
-	// PgDB is the postgress connection handle
+	// PgDB is the postgres connection handle
 	PgDB *gorm.DB
 )
 
-// ConnectPostgres Returns the Pg DB Instance
+// ConnectPostgres returns the Pg DB instance
 func ConnectPostgres() {
 	dsn := cfg.GetConfig().Postgres.GetPostgresConnectionInfo()
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})

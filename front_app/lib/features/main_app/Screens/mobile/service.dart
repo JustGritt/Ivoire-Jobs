@@ -34,7 +34,6 @@ class _ServiceState extends State<Service> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-          
             ElevatedButton(
               onPressed: () {
                 Nav.to(context, '/');

@@ -16,7 +16,6 @@ class MainWrapper extends StatelessWidget {
       bottomNavigationBar: FlashyTabBar(
         backgroundColor: theme.scaffoldBackgroundColor,
         selectedIndex: navigationShell.currentIndex,
-        showElevation: true,
         onItemSelected: (value) {
           navigationShell.goBranch(value,
               initialLocation: value != navigationShell.currentIndex);

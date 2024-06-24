@@ -20,6 +20,7 @@ import (
 	mail "barassage/api/mailer"
 
 	// models
+	"barassage/api/models/report"
 	"barassage/api/models/service"
 	"barassage/api/models/user"
 
@@ -60,10 +61,13 @@ func Run() {
 	db.ConnectPostgres()
 
 	// Drop on serve restarts in dev
-	db.PgDB.Migrator().DropTable(&user.User{}, &service.Service{})
+	db.PgDB.Migrator().DropTable(&user.User{}, &report.Report{}, &service.Service{})
 
 	// Migration
-	db.PgDB.AutoMigrate(&user.User{}, &service.Service{})
+	db.PgDB.AutoMigrate(&user.User{}, &report.Report{}, &service.Service{})
+
+	// Seeder
+	db.SeedDatabase(db.PgDB)
 
 	/*
 		============ Set Up Utils ============

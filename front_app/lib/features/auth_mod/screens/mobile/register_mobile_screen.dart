@@ -184,7 +184,7 @@ class _RegisterMobileScreenState extends State<RegisterMobileScreen> {
                                           color: theme.primaryColorDark,
                                           fontWeight: FontWeight.bold),
                                   recognizer: TapGestureRecognizer()
-                                    ..onTap = () =>  context.pop(),
+                                    ..onTap = () => context.pop(),
                                 )
                               ]),
                           style: theme.textTheme.displayMedium),

@@ -45,8 +45,8 @@ func SetupRoutes(app *fiber.App) {
 	service.Put("/:id", middlewares.RequireLoggedIn(), ctl.UpdateService)
 	service.Delete("/:id", middlewares.RequireLoggedIn(), ctl.DeleteService)
 
-	// Reports
+	// Reports Group
 	report := v1.Group("/report")
-	report.Post("/:id", middlewares.RequireLoggedIn(), ctl.CreateReport)
+	report.Post("/", middlewares.RequireLoggedIn(), ctl.CreateReport) // Ensure this route is correct
 	report.Get("/collection", ctl.GetAllReports)
 }
