@@ -21,6 +21,7 @@ import (
 
 	// models
 	"barassage/api/models/booking"
+	"barassage/api/models/image"
 	"barassage/api/models/service"
 	"barassage/api/models/user"
 
@@ -68,7 +69,7 @@ func Run() {
 	db.PgDB.Migrator().DropTable(&service.Service{}, &booking.Booking{})
 
 	// Migration
-	db.PgDB.AutoMigrate(&user.User{}, &service.Service{}, &booking.Booking{})
+	db.PgDB.AutoMigrate(&user.User{}, &service.Service{}, &booking.Booking{}, &image.Image{})
 
 	/*
 		============ Set Up Utils ============
