@@ -41,7 +41,7 @@ COPY --from=builder /app/api/templates/email /opt/gofiber-app/src/api/templates/
 
 
 # Expose port 80
-EXPOSE 80
+EXPOSE 8000
 
 # Command to run the executable
 CMD ["./main"]
