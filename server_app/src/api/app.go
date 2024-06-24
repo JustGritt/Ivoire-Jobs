@@ -113,11 +113,6 @@ func Run() {
 		docs.SwaggerInfo.Host = config.Host
 	}
 
-	//render the demo html
-	app.Get("/test", func(c *fiber.Ctx) error {
-		return c.SendFile("./api/html/index.html")
-	})
-
 	// Run the app and listen on given port
 	port := fmt.Sprintf(":%s", config.Port)
 	app.Listen(port)

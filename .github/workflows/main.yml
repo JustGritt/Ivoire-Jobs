@@ -48,7 +48,6 @@ jobs:
       - name: Generate .env File
         run: |
           echo "APP_HOST=${{ secrets.APP_HOST }}" >> ./server_app/src/.env
-          echo "APP_PORT=${{ secrets.APP_PORT }}" >> ./server_app/src/.env
           echo "JWT_ACCESS_SIGN_KEY=${{ secrets.JWT_ACCESS_SIGN_KEY }}" >> ./server_app/src/.env
           echo "JWT_REFRESH_SIGN_KEY=${{ secrets.JWT_REFRESH_SIGN_KEY }}" >> ./server_app/src/.env
           echo "JWT_ISSUER=${{ secrets.JWT_ISSUER }}" >> ./server_app/src/.env
