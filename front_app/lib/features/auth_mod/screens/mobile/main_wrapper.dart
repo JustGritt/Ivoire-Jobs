@@ -2,6 +2,7 @@ import 'package:flashy_tab_bar2/flashy_tab_bar2.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MainWrapper extends StatelessWidget {
   final StatefulNavigationShell navigationShell;
@@ -10,6 +11,7 @@ class MainWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
+    AppLocalizations appLocalizations = AppLocalizations.of(context)!;
     return Scaffold(
       bottomNavigationBar: FlashyTabBar(
         backgroundColor: theme.scaffoldBackgroundColor,
@@ -30,15 +32,15 @@ class MainWrapper extends StatelessWidget {
         items: [
           FlashyTabBarItem(
             icon: const Icon(Ionicons.home_outline),
-            title: Text('Acceuil'),
+            title: Text(appLocalizations.tab_1),
           ),
           FlashyTabBarItem(
-            icon: Icon(Ionicons.star_outline),
-            title: Text('Services'),
+            icon: const Icon(Ionicons.star_outline),
+            title: Text(appLocalizations.tab_2),
           ),
           FlashyTabBarItem(
-            icon: Icon(Icons.settings_outlined),
-            title: Text('Paramètres'),
+            icon: const Icon(Icons.settings_outlined),
+            title: Text(appLocalizations.tab_3),
           )
         ],
       ),

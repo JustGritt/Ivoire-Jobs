@@ -9,6 +9,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../widgets/widget_functions.dart';
 
@@ -183,7 +184,7 @@ class _RegisterMobileScreenState extends State<RegisterMobileScreen> {
                                           color: theme.primaryColorDark,
                                           fontWeight: FontWeight.bold),
                                   recognizer: TapGestureRecognizer()
-                                    ..onTap = () => Navigator.of(context).pop(),
+                                    ..onTap = () =>  context.pop(),
                                 )
                               ]),
                           style: theme.textTheme.displayMedium),

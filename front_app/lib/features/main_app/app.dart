@@ -2,8 +2,9 @@ import 'package:barassage_app/features/auth_mod/screens/mobile/main_wrapper.dart
 import 'package:barassage_app/features/auth_mod/screens/mobile/splash_mobile_screen.dart';
 import 'package:barassage_app/features/main_app/Screens/mobile/services_details.dart';
 import 'package:barassage_app/features/main_app/controllers/controller.dart';
-import 'package:barassage_app/features/main_app/controllers/main/about_controller.dart';
 import 'package:barassage_app/features/main_app/controllers/main/home_controller.dart';
+import 'package:barassage_app/features/main_app/controllers/main/services_controller.dart';
+import 'package:barassage_app/features/main_app/widgets/transition_page.dart';
 // import 'package:barassage_app/features/main_app/controllers/main/home_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -37,13 +38,15 @@ class App extends RouteManager {
             routes: [
               GoRoute(
                 path: App.home,
-                pageBuilder: (context, state) => const NoTransitionPage(
+                pageBuilder: (context, state) => const PlatformTransitionPage(
                   child: HomeController(),
-                ),
+                ).show(context),
                 routes: [
                   GoRoute(
                     path: App.detailService,
-                    builder: (context, state) => ServiceDetailPage(),
+                    pageBuilder: (context, state) => PlatformTransitionPage(
+                      child: ServiceDetailPage(),
+                    ).show(context),
                   ),
                 ],
               ),
@@ -55,7 +58,7 @@ class App extends RouteManager {
               GoRoute(
                 path: App.about,
                 pageBuilder: (context, state) => const NoTransitionPage(
-                  child: AboutController(),
+                  child: ServicesController(),
                 ),
               ),
             ],
