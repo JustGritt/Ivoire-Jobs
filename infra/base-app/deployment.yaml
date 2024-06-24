@@ -23,7 +23,7 @@ spec:
             - containerPort: 8000
           env:
             - name: APP_PORT
-              value: 8000
+              value: "8000"
 
 ---
 apiVersion: v1
