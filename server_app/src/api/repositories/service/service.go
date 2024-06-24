@@ -3,6 +3,7 @@ package service
 import (
 	// user model
 	"barassage/api/models/service"
+	"strings"
 
 	// db
 	db "barassage/api/database"
@@ -57,4 +58,30 @@ func Update(service *service.Service) error {
 
 func Delete(service *service.Service) error {
 	return db.PgDB.Delete(service).Error
+}
+
+// SearchServices searches for services by name, price, or both using dynamic query construction
+func SearchServices(name string, minPrice float64, maxPrice float64) ([]service.Service, error) {
+	var services []service.Service
+	query := db.PgDB.Model(&service.Service{})
+
+	// Construct the query based on the provided parameters
+	if name != "" {
+		query = query.Where("LOWER(name) LIKE ?", "%"+strings.ToLower(name)+"%")
+	}
+	if minPrice > 0 {
+		query = query.Where("price >= ?", minPrice)
+	}
+	if maxPrice > 0 {
+		query = query.Where("price <= ?", maxPrice)
+	}
+
+	//check if the service is active and not banned
+	query = query.Where("status = ? AND is_banned = ?", true, false)
+
+	// Execute the query
+	if err := query.Find(&services).Error; err != nil {
+		return nil, err
+	}
+	return services, nil
 }
