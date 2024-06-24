@@ -2,6 +2,7 @@ package controllers
 
 import (
 	validator "barassage/api/common/validator"
+	"barassage/api/models/image"
 	"barassage/api/models/service"
 	serviceRepo "barassage/api/repositories/service"
 	"barassage/api/services/bucket"
@@ -19,55 +20,57 @@ import (
 
 // ServiceObject represents the service data structure.
 type ServiceObject struct {
-	ServiceID   string                `json:"-"`
-	UserID      string                `json:"-"`
-	Name        string                `json:"name" validate:"required,min=2,max=30"`
-	Description string                `json:"description" validate:"required,min=2,max=30"`
-	Price       float64               `json:"price" validate:"required,min=5,max=1000000"`
-	Status      bool                  `json:"status" default:"false"`
-	Duration    int                   `json:"duration" validate:"required,min=30,max=1440,step=30" message:"Duration must be a multiple of 30 and it should be beetween 30 and 1440"`
-	IsBanned    bool                  `json:"-"`
-	Thumbnail   *multipart.FileHeader `json:"thumbnail" form:"thumbnail" swaggertype:"string"`
-	Latitude    float64               `json:"latitude" validate:"required"`
-	Longitude   float64               `json:"longitude" validate:"required"`
-	Address     string                `json:"address" validate:"required"`
-	City        string                `json:"city" validate:"required"`
-	PostalCode  string                `json:"postalCode" validate:"required"`
-	Country     string                `json:"country" validate:"required"`
+	ServiceID   string                  `json:"-"`
+	UserID      string                  `json:"-"`
+	Name        string                  `json:"name" validate:"required,min=2,max=30"`
+	Description string                  `json:"description" validate:"required,min=2,max=30"`
+	Price       float64                 `json:"price" validate:"required,min=5,max=1000000"`
+	Status      bool                    `json:"status" default:"false"`
+	Duration    int                     `json:"duration" validate:"required,min=30,max=1440,step=30" message:"Duration must be a multiple of 30 and it should be beetween 30 and 1440"`
+	IsBanned    bool                    `json:"-"`
+	Latitude    float64                 `json:"latitude" validate:"required"`
+	Longitude   float64                 `json:"longitude" validate:"required"`
+	Address     string                  `json:"address" validate:"required"`
+	City        string                  `json:"city" validate:"required"`
+	PostalCode  string                  `json:"postalCode" validate:"required"`
+	Country     string                  `json:"country" validate:"required"`
+	Images      []*multipart.FileHeader `json:"images" form:"images" swaggertype:"string"`
 }
 
 type ServiceUpdateObject struct {
-	Name        string  `json:"name" validate:"required,min=2,max=30"`
-	Description string  `json:"description" validate:"required,min=2,max=30"`
-	Price       float64 `json:"price" validate:"required,min=5,max=1000000"`
-	Status      bool    `json:"status" default:"false"`
-	Duration    int     `json:"duration" validate:"required,min=30,max=1440,step=30" message:"Duration must be a multiple of 30 and it should be beetween 30 and 1440"`
-	IsBanned    bool    `json:"isBanned"`
-	Thumbnail   string  `json:"thumbnail"`
-	Latitude    float64 `json:"latitude"`
-	Longitude   float64 `json:"longitude"`
-	Address     string  `json:"address"`
-	City        string  `json:"city"`
-	PostalCode  string  `json:"postalCode"`
-	Country     string  `json:"country"`
+	Name        string                  `json:"name" validate:"required,min=2,max=30"`
+	Description string                  `json:"description" validate:"required,min=2,max=30"`
+	Price       float64                 `json:"price" validate:"required,min=5,max=1000000"`
+	Status      bool                    `json:"status" default:"false"`
+	Duration    int                     `json:"duration" validate:"required,min=30,max=1440,step=30" message:"Duration must be a multiple of 30 and it should be beetween 30 and 1440"`
+	IsBanned    bool                    `json:"isBanned"`
+	Latitude    float64                 `json:"latitude"`
+	Longitude   float64                 `json:"longitude"`
+	Address     string                  `json:"address"`
+	City        string                  `json:"city"`
+	PostalCode  string                  `json:"postalCode"`
+	Country     string                  `json:"country"`
+	Images      []*multipart.FileHeader `json:"images"`
+	DeleteImage []string                `json:"deleteImage"`
 }
 
 type ServiceOutput struct {
-	ServiceID   string  `json:"id"`
-	UserID      string  `json:"userId"`
-	Name        string  `json:"name"`
-	Description string  `json:"description"`
-	Price       float64 `json:"price"`
-	Status      bool    `json:"status"`
-	Duration    int     `json:"duration"`
-	IsBanned    bool    `json:"isBanned"`
-	Thumbnail   string  `json:"thumbnail"`
-	Latitude    float64 `json:"latitude"`
-	Longitude   float64 `json:"longitude"`
-	Address     string  `json:"address"`
-	City        string  `json:"city"`
-	PostalCode  string  `json:"postalCode"`
-	Country     string  `json:"country"`
+	ServiceID   string   `json:"id"`
+	UserID      string   `json:"userId"`
+	Name        string   `json:"name"`
+	Description string   `json:"description"`
+	Price       float64  `json:"price"`
+	Status      bool     `json:"status"`
+	Duration    int      `json:"duration"`
+	IsBanned    bool     `json:"isBanned"`
+	Latitude    float64  `json:"latitude"`
+	Longitude   float64  `json:"longitude"`
+	Address     string   `json:"address"`
+	City        string   `json:"city"`
+	PostalCode  string   `json:"postalCode"`
+	Country     string   `json:"country"`
+	Images      []string `json:"images"`
+	CreatedAt   string   `json:"createdAt"`
 }
 
 // CreateService Godoc
@@ -104,54 +107,15 @@ func CreateService(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
-	// Handle file upload
-	file, err := c.FormFile("thumbnail")
-	var s3URL string
-	if err == nil {
-		allowedMimeTypes := []string{"jpeg", "png", "jpg"}
-		maxFileSize := "4MB"
-
-		if err := validator.ValidateFile(file, maxFileSize, allowedMimeTypes); err != nil {
-			return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(err))
-		}
-
-		// Upload the file to S3
-		s3URL, err = bucket.UploadFile(file)
-		//fmt.Println("S3 URL: ", s3URL)
-		if err != nil {
-			errorList = append(
-				errorList,
-				&fiber.Error{
-					Code:    fiber.StatusBadRequest,
-					Message: "unable to upload thumbnail to S3",
-				},
-			)
-			return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
-		}
-	}
-
-	/*
-		//get the presigned url
-		mytest, err := bucket.GetPresignedURL(s3URL)
-		if err != nil {
-			return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
-				"msg": "unable to get presigned url",
-			})
-		}
-
-		log.Println("Presigned URL: ", mytest)
-	*/
-
 	//map the input to service model
 	s := service.Service{
-		UserID:      serviceInput.UserID,
+		UserID:      userID.(string),
 		Name:        serviceInput.Name,
 		Description: serviceInput.Description,
 		Price:       serviceInput.Price,
 		Status:      serviceInput.Status,
 		Duration:    serviceInput.Duration,
 		IsBanned:    serviceInput.IsBanned,
-		Thumbnail:   s3URL,
 		Latitude:    serviceInput.Latitude,
 		Longitude:   serviceInput.Longitude,
 		Address:     serviceInput.Address,
@@ -161,13 +125,74 @@ func CreateService(c *fiber.Ctx) error {
 		ID:          uuid.New().String(),
 	}
 
-	s.UserID = userID.(string)
-
-	// Check if the service already exists for the given user
 	if _, err := serviceRepo.GetServiceByNameForUser(s.Name, s.UserID); err == nil {
 		response := HTTPResponse(http.StatusForbidden, "Service Already Exist", nil)
 		return c.Status(http.StatusForbidden).JSON(response)
 	}
+
+	// Handle images upload
+	form, err := c.MultipartForm()
+	var images []image.Image
+	if err == nil {
+		formImages := form.File["images"]
+		allowedMimeTypes := []string{"jpeg", "png", "jpg"}
+		maxFileSize := "4MB"
+		fileCount := len(formImages)
+		totalSize := 0
+		maxTotalSize := 15 * 1024 * 1024 // 15MB
+
+		for _, imageFile := range formImages {
+			totalSize += int(imageFile.Size)
+		}
+
+		if totalSize > maxTotalSize {
+			errorList = append(
+				errorList,
+				&fiber.Error{
+					Code:    fiber.StatusBadRequest,
+					Message: "total size of images should not exceed 15MB",
+				},
+			)
+			return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
+		}
+
+		if fileCount > 3 {
+			errorList = append(
+				errorList,
+				&fiber.Error{
+					Code:    fiber.StatusBadRequest,
+					Message: "maximum of 3 images allowed",
+				},
+			)
+			return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
+		}
+
+		for _, imageFile := range formImages {
+			if err := validator.ValidateFile(imageFile, maxFileSize, allowedMimeTypes); err != nil {
+				return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(err))
+			}
+
+			// Upload each image to S3
+			imageURL, err := bucket.UploadFile(imageFile)
+			if err != nil {
+				errorList = append(
+					errorList,
+					&fiber.Error{
+						Code:    fiber.StatusBadRequest,
+						Message: "unable to upload images to S3",
+					},
+				)
+				return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
+			}
+			images = append(images, image.Image{
+				URL:       imageURL,
+				ServiceID: s.ID,
+			})
+		}
+	}
+
+	s.UserID = userID.(string)
+	s.Images = images
 
 	// Save Service to DB
 	if err := serviceRepo.Create(&s); err != nil {
@@ -221,7 +246,13 @@ func GetAll(c *fiber.Ctx) error {
 		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
-	return c.Status(http.StatusOK).JSON(services)
+	// Map services to ServiceOutput
+	var ouput []ServiceOutput
+	for _, s := range services {
+		ouput = append(ouput, *mapServiceToOutPut(&s))
+	}
+
+	return c.Status(http.StatusOK).JSON(ouput)
 }
 
 // GetServiceByUserId Godoc
@@ -408,31 +439,87 @@ func UpdateService(c *fiber.Ctx) error {
 
 	}
 
-	// Handle file upload if a new thumbnail is provided
-	file, err := c.FormFile("thumbnail")
-	var s3URL string
-	if err == nil {
-		allowedMimeTypes := []string{"jpeg", "webp", "png", "jpg"}
-		maxFileSize := "4MB"
+	//remove the images from the service
+	fmt.Println(len(updateInput.DeleteImage))
+	if len(updateInput.DeleteImage) > 0 {
+		for _, img := range updateInput.DeleteImage {
+			if err := serviceRepo.DeleteImage(existingService, img); err != nil {
+				errorList = append(
+					errorList,
+					&fiber.Error{
+						Code:    fiber.StatusBadRequest,
+						Message: "unable to delete image from service",
+					},
+				)
+				return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
+			}
 
-		if err := validator.ValidateFile(file, maxFileSize, allowedMimeTypes); err != nil {
-			return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(err))
 		}
 
-		// Upload the file to S3
-		s3URL, err = bucket.UploadFile(file)
-		if err != nil {
-			errorList = append(
-				errorList,
-				&fiber.Error{
-					Code:    fiber.StatusInternalServerError,
-					Message: "unable to upload thumbnail to S3",
-				},
-			)
-
-			return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
-		}
 	}
+
+	/*
+		// Handle images upload
+		form, err := c.MultipartForm()
+		var images []image.Image
+		if err == nil {
+			formImages := form.File["images"]
+			allowedMimeTypes := []string{"jpeg", "png", "jpg"}
+			maxFileSize := "4MB"
+			fileCount := len(formImages)
+			totalSize := 0
+			maxTotalSize := 15 * 1024 * 1024 // 15MB
+
+			for _, imageFile := range formImages {
+				totalSize += int(imageFile.Size)
+			}
+
+			if totalSize > maxTotalSize {
+				errorList = append(
+					errorList,
+					&fiber.Error{
+						Code:    fiber.StatusBadRequest,
+						Message: "total size of images should not exceed 15MB",
+					},
+				)
+				return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
+			}
+
+			if fileCount > 3 || len(existingService.Images)+fileCount > 3 {
+				errorList = append(
+					errorList,
+					&fiber.Error{
+						Code:    fiber.StatusBadRequest,
+						Message: "maximum of 3 images allowed",
+					},
+				)
+				return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
+			}
+
+			for _, imageFile := range formImages {
+				if err := validator.ValidateFile(imageFile, maxFileSize, allowedMimeTypes); err != nil {
+					return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(err))
+				}
+
+				// Upload each image to S3
+				imageURL, err := bucket.UploadFile(imageFile)
+				if err != nil {
+					errorList = append(
+						errorList,
+						&fiber.Error{
+							Code:    fiber.StatusBadRequest,
+							Message: "unable to upload images to S3",
+						},
+					)
+					return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
+				}
+				images = append(images, image.Image{
+					URL:       imageURL,
+					ServiceID: existingService.ID,
+				})
+			}
+		}
+	*/
 
 	// Update the service model
 	existingService.Name = updateInput.Name
@@ -441,9 +528,6 @@ func UpdateService(c *fiber.Ctx) error {
 	existingService.Status = updateInput.Status
 	existingService.Duration = updateInput.Duration
 
-	if s3URL != "" {
-		existingService.Thumbnail = s3URL
-	}
 	if updateInput.Latitude != 0 {
 		existingService.Latitude = updateInput.Latitude
 	}
@@ -678,6 +762,10 @@ func mapInputToServiceObject(service ServiceObject) service.Service {
 */
 
 func mapServiceToOutPut(u *service.Service) *ServiceOutput {
+	imageUrls := make([]string, len(u.Images))
+	for i, img := range u.Images {
+		imageUrls[i] = img.URL
+	}
 	return &ServiceOutput{
 		ServiceID:   u.ID,
 		UserID:      u.UserID,
@@ -687,12 +775,13 @@ func mapServiceToOutPut(u *service.Service) *ServiceOutput {
 		Status:      u.Status,
 		Duration:    u.Duration,
 		IsBanned:    u.IsBanned,
-		Thumbnail:   u.Thumbnail,
 		Latitude:    u.Latitude,
 		Longitude:   u.Longitude,
 		Address:     u.Address,
 		City:        u.City,
 		PostalCode:  u.PostalCode,
 		Country:     u.Country,
+		Images:      imageUrls,
+		CreatedAt:   u.CreatedAt.Format("2006-01-02"),
 	}
 }
