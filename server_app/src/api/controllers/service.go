@@ -536,8 +536,8 @@ func DeleteService(c *fiber.Ctx) error {
 // @Tags Service
 // @Produce json
 // @Param name query string false "Service Name"
-// @Param min_price query float false "Minimum Price"
-// @Param max_price query float false "Maximum Price"
+// @Param min_price query number false "Minimum Price"
+// @Param max_price query number false "Maximum Price"
 // @Success 200 {array} ServiceOutput
 // @Failure 400 {array} ErrorResponse
 // @Failure 401 {array} ErrorResponse
