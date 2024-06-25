@@ -4,10 +4,10 @@ import (
 	passwordUtil "barassage/api/common/passwordutil"
 	validator "barassage/api/common/validator"
 	cfg "barassage/api/configs"
-	"barassage/api/mailer"
 	"barassage/api/models/user"
 	userRepo "barassage/api/repositories/user"
 	"barassage/api/services/auth"
+	"barassage/api/services/mailer"
 	"fmt"
 	"net/http"
 	"time"
@@ -148,7 +148,6 @@ func Register(c *fiber.Ctx) error {
 // @Router /auth/login [post]
 func Login(c *fiber.Ctx) error {
 	var userInput UserLogin
-	fmt.Println("Hello,", &userInput)
 	// Validate Input
 	if err := validator.ParseBodyAndValidate(c, &userInput); err != nil {
 		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(err))
@@ -234,7 +233,6 @@ func Login(c *fiber.Ctx) error {
 // @Router /auth/me [post]
 // @Security Bearer
 func GetMyProfile(c *fiber.Ctx) error {
-	fmt.Println("Hello,", c.Locals("user"))
 	user := c.Locals("user").(*jwt.Token)
 	claims := user.Claims.(jwt.MapClaims)
 	userID := claims["userID"]

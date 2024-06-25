@@ -58,6 +58,8 @@ func Validate(payload interface{}) []*fiber.Error {
 					message = fmt.Sprintf("%s must be a valid file with one of the extensions: %s", err.StructField(), err.Param())
 				case "step":
 					message = fmt.Sprintf("%s must be a multiple of %s min", err.StructField(), err.Param())
+				case "datetime":
+					message = fmt.Sprintf("%s must be a valid date and time", err.StructField())
 				default:
 					message = fmt.Sprintf("%s is not valid", err.StructField())
 				}
@@ -204,14 +206,29 @@ func init() {
 }
 
 // ValidateFile checks the file size and extension
-func ValidateFile(file *multipart.FileHeader, maxSize string, allowedExts []string) error {
+func ValidateFile(file *multipart.FileHeader, maxSize string, allowedExts []string) []*fiber.Error {
+	var errorList []*fiber.Error
 	sizeLimit, err := ParseSize(maxSize)
 	if err != nil {
-		return fmt.Errorf("invalid size format: %v", err)
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusBadRequest,
+				Message: fmt.Sprintf("invalid size format: %v", err),
+			},
+		)
+		return errorList
 	}
 
 	if file.Size > sizeLimit {
-		return fmt.Errorf("file size must be less than %s", maxSize)
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusBadRequest,
+				Message: fmt.Sprintf("file size must be less than %s", maxSize),
+			},
+		)
+		return errorList
 	}
 
 	fileExt := strings.ToLower(strings.TrimPrefix(filepath.Ext(file.Filename), "."))
@@ -222,7 +239,15 @@ func ValidateFile(file *multipart.FileHeader, maxSize string, allowedExts []stri
 		}
 	}
 
-	return fmt.Errorf("file must be one of the following types: %s", strings.Join(allowedExts, ", "))
+	errorList = append(
+		errorList,
+		&fiber.Error{
+			Code:    fiber.StatusBadRequest,
+			Message: fmt.Sprintf("file extension must be one of: %s", strings.Join(allowedExts, ", ")),
+		},
+	)
+
+	return errorList
 }
 
 var _ = validate.RegisterValidation("password", func(fl validator.FieldLevel) bool {
