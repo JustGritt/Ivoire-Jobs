@@ -1,5 +1,6 @@
 import 'package:barassage_app/config/app_colors.dart';
 import 'package:barassage_app/features/main_app/widgets/forms/step_progress.dart';
+import 'package:barassage_app/features/main_app/widgets/forms/steps/step_form_category.dart';
 import 'package:barassage_app/features/main_app/widgets/forms/steps/vertical_steps_informations/vertical_steps.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +26,14 @@ class _NewServicePageState extends State<NewServicePage> {
   @override
   void initState() {
     super.initState();
+  }
+
+  void nextPage(int page, Map<String, dynamic> data) {
+    form.addAll(data);
+    _scrollController.animateTo(0.0,
+        duration: const Duration(milliseconds: 10), curve: Curves.slowMiddle);
+    _pageController.animateToPage(page,
+        duration: const Duration(milliseconds: 500), curve: Curves.easeOutQuad);
   }
 
   @override
@@ -94,19 +103,20 @@ class _NewServicePageState extends State<NewServicePage> {
                       duration: const Duration(milliseconds: 10),
                       curve: Curves.slowMiddle);
                 },
-                nextPage: (timeService) {
-                  _pageController.animateToPage(1,
-                      duration: const Duration(milliseconds: 500),
-                      curve: Curves.easeOutQuad);
+                nextPage: (data) {
+                  nextPage(1, data);
                 },
               ),
-              StepChooseLocation(),
-              Container(
-                color: Colors.blue,
+              StepChooseLocation(
+                onEnd: (data) => {
+                  nextPage(2, {'location': data.toJson()}),
+                },
               ),
-              Container(
-                color: Colors.green,
-              ),
+              StepFormCategory(
+                onEnd: (selectedCategory) {
+                  print(selectedCategory);
+                },
+              )
             ],
           ),
         ),

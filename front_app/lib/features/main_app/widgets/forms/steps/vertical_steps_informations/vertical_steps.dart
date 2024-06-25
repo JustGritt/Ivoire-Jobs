@@ -24,11 +24,8 @@ class _VerticalStepsState extends State<VerticalSteps> {
       children: [
         StepInformation(
           onEnd: (data) => {
-            form = data.toJson(),
-            _pageController.animateToPage(1,
-                duration: const Duration(milliseconds: 500),
-                curve: Curves.easeOutQuad),
-            widget.scrollToTop(),
+            form.addAll(data.toJson()),
+            widget.nextPage(data.toJson()),
           }
         ),
         StepTimeService(

@@ -1,3 +1,4 @@
+import 'package:barassage_app/config/app_colors.dart';
 import 'package:barassage_app/core/classes/app_context.dart';
 import 'package:barassage_app/core/init_dependencies.dart';
 import 'package:ez_validator/ez_validator.dart';
@@ -61,7 +62,7 @@ class _StepTimeServiceState extends State<StepTimeService> {
             children: timeServices
                 .map((e) => squareTimeService(context,
                         selected: timeService == e, onPress: () {
-                           form['timeService'] = e;
+                      form['timeService'] = e;
                       setState(() {
                         timeService = e;
                       });
@@ -71,9 +72,8 @@ class _StepTimeServiceState extends State<StepTimeService> {
           Text(
             errors['timeService'] ?? '',
             style: theme.textTheme.labelLarge!
-                .copyWith(color: theme.errorColor, fontSize: 12),
+                .copyWith(color: AppColors.red, fontSize: 12),
           ),
-          
           const Spacer(),
           PushableButton(
             height: 40,
@@ -124,7 +124,8 @@ Widget squareTimeService(BuildContext context,
       ),
       child: Center(
           child: Text(text,
-              style: theme.textTheme.bodyText1!.copyWith(fontSize: 16))),
+              style: theme.textTheme.displayMedium!.copyWith(
+                  fontSize: 16, color: theme.scaffoldBackgroundColor))),
     ),
   );
 }

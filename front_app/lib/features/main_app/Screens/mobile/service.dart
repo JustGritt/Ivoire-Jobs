@@ -43,7 +43,7 @@ class _ServiceState extends State<Service> {
               child: Row(
                 children: [
                   Text('Add',
-                      style: theme.textTheme.bodyText1!.copyWith(
+                      style: theme.textTheme.displayMedium!.copyWith(
                         color: theme.primaryColor,
                         fontWeight: FontWeight.bold,
                         fontSize: 18.0,
