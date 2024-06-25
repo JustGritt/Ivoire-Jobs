@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
@@ -75,7 +76,7 @@ class HttpManager {
     Response? response;
     response = await _dio.post(
       '${ApiEndpoint.api}$url',
-      data: data,
+      data: jsonEncode(data),
       queryParameters: params,
       options: options,
       cancelToken: token,

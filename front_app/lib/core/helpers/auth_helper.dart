@@ -47,7 +47,6 @@ doRegister(UserSignup userSignup) async {
     });
   } on DioException catch (e) {
     logger.e(e);
-    print(e.message);
     showError(context, DioExceptionHandler(e).title);
   }
 }

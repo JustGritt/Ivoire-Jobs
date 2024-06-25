@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:barassage_app/config/app_cache.dart';
 import 'package:barassage_app/core/init_dependencies.dart';
 import 'package:barassage_app/features/auth_mod/models/api_response.dart';
@@ -66,6 +64,7 @@ class UserService {
       ApiEndpoint.appRegisterUrl,
       data: userSignup.toJson(),
     );
+    print(res.data);
     if (res.statusCode == 200 || res.statusCode == 201) {
       ApiResponse apiResponse = ApiResponse.fromJson(res.data);
       return User.fromJson(apiResponse.body);
@@ -77,7 +76,7 @@ class UserService {
     Map<String, dynamic> data = userLogin.toJson();
     Response res = await _http.post(
       ApiEndpoint.appLoginUrl,
-      data: jsonEncode(data),
+      data: data,
     );
     if (res.statusCode == 200) {
       ApiResponse apiResponse = ApiResponse.fromJson(res.data);
