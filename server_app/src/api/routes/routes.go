@@ -49,4 +49,6 @@ func SetupRoutes(app *fiber.App) {
 	report := v1.Group("/report")
 	report.Post("/", middlewares.RequireLoggedIn(), ctl.CreateReport) // Ensure this route is correct
 	report.Get("/collection", ctl.GetAllReports)
+	report.Put("/:id", ctl.ValidateReport)
+
 }

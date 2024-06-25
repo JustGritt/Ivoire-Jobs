@@ -4,6 +4,7 @@ import (
 	validator "barassage/api/common/validator"
 	"barassage/api/models/report"
 	reportRepo "barassage/api/repositories/report"
+	serviceRepo "barassage/api/repositories/service"
 
 	"fmt"
 	"net/http"
@@ -62,6 +63,16 @@ func CreateReport(c *fiber.Ctx) error {
 		CreatedAt: time.Now(),
 	}
 
+	// Get the ser vice
+	service, err := serviceRepo.GetByID(reportInput.ServiceID)
+	if err != nil {
+		return c.Status(http.StatusBadRequest).JSON(HTTPResponse(http.StatusBadRequest, "Cannot find the service", nil))
+	}
+
+	if service.UserID == userID {
+		return c.Status(http.StatusBadRequest).JSON(HTTPResponse(http.StatusBadRequest, "Cannot report your service", nil))
+	}
+
 	// Check if the report already exists for the given user and service
 	existingReports, err := reportRepo.GetReportsByUserForService(userID, reportInput.ServiceID)
 	if err == nil && len(existingReports) > 0 {
@@ -100,6 +111,39 @@ func GetAllReports(c *fiber.Ctx) error {
 	}
 
 	return c.Status(http.StatusOK).JSON(reportOutputs)
+}
+
+// Valide the report
+// @Summary Validate the report
+// @Description Validate the report
+// @Tags Report
+// @Produce json
+// @Param reportId path string true "Report ID"
+// @Success 200 {object} Response
+// @Failure 400 {array} ErrorResponse
+// @Failure 401 {array} ErrorResponse
+// @Failure 500 {array} ErrorResponse
+// @Router /report/{reportId}/validate [put]
+// @Security Bearer
+func ValidateReport(c *fiber.Ctx) error {
+
+	reportID := c.Params("id")
+	fmt.Println(reportID)
+	if reportID == "" {
+		return c.Status(http.StatusBadRequest).JSON(HTTPResponse(http.StatusBadRequest, "Report ID is required", nil))
+	}
+
+	report, err := reportRepo.GetByID(reportID)
+	if err != nil {
+		return c.Status(http.StatusBadRequest).JSON(HTTPResponse(http.StatusBadRequest, "Report not found", nil))
+	}
+
+	report.Status = true
+	if err := reportRepo.Update(report); err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(HTTPResponse(http.StatusInternalServerError, "Error updating report", nil))
+	}
+
+	return c.Status(http.StatusOK).JSON(HTTPResponse(http.StatusOK, "Report validated", nil))
 }
 
 // ============================================================

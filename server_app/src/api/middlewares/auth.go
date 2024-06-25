@@ -1,6 +1,7 @@
 package middlewares
 
 import (
+	"fmt"
 	"net/http"
 
 	cfg "barassage/api/configs"
@@ -45,24 +46,45 @@ func jwtError(c *fiber.Ctx, err error) error {
 	return c.Status(http.StatusUnauthorized).JSON(fiber.Map{"errors": errorList})
 }
 
-// RequireAdmin Ensures A route Can Only Be Accessed by an Admin user
-// This function can be extended to handle different roles
-func RequireAdmin(c *fiber.Ctx) error {
-	user := c.Locals("user").(*jwt.Token)
-	claims := user.Claims.(jwt.MapClaims)
-	role := claims["role"].(string)
+// RequireAdmin ensures a route can only be accessed by an admin user
+func RequireAdmin() fiber.Handler {
+	return func(c *fiber.Ctx) error {
+		// Retrieve the user token from the context
+		userToken := c.Locals("user")
+		fmt.Println(userToken)
 
-	var errorList []*fiber.Error
+		// Check if the user token is not nil
+		if userToken == nil {
+			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+				"errors": []string{"Missing or invalid token"},
+			})
+		}
 
-	if role != "admin" {
-		errorList = append(
-			errorList,
-			&fiber.Error{
-				Code:    fiber.StatusUnauthorized,
-				Message: "You're Not Authorized",
-			},
-		)
-		return c.Status(http.StatusUnauthorized).JSON(fiber.Map{"errors": errorList})
+		// Assert the user token type
+		user, ok := userToken.(*jwt.Token)
+		if !ok {
+			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+				"errors": []string{"Invalid token format"},
+			})
+		}
+
+		// Extract claims from the token
+		claims, ok := user.Claims.(jwt.MapClaims)
+		if !ok {
+			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+				"errors": []string{"Invalid token claims"},
+			})
+		}
+
+		// Retrieve the user role from the claims
+		role, ok := claims["role"].(string)
+		if !ok || role != "admin" {
+			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+				"errors": []string{"You're not authorized"},
+			})
+		}
+
+		// Proceed to the next middleware/handler
+		return c.Next()
 	}
-	return c.Next()
 }
