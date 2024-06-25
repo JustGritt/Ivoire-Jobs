@@ -4,9 +4,13 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"image"
+	"image/jpeg"
+	"image/png"
 	"io"
 	"log"
 	"mime/multipart"
+	"net/url"
 	"os"
 	"path/filepath"
 	"strings"
@@ -17,6 +21,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/credentials"
 	"github.com/aws/aws-sdk-go-v2/feature/s3/manager"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
+	"github.com/disintegration/imaging"
 	"github.com/gabriel-vasile/mimetype"
 	"github.com/google/uuid"
 )
@@ -71,16 +76,54 @@ func UploadFile(file *multipart.FileHeader) (string, error) {
 	contentType := mime.String()
 
 	// Generate a unique file name
-	fileName := uuid.New().String() + filepath.Ext(file.Filename)
+	//fileName := uuid.New().String() + filepath.Ext(file.Filename)
 
 	// Prepare the file for upload
-	uploadBody := bytes.NewReader(buffer)
+	//uploadBody := bytes.NewReader(buffer)
+
+	//rezise image to 500x500
+	// Decode the image based on its MIME type
+	var img image.Image
+	switch contentType {
+	case "image/jpeg", "image/jpg":
+		img, err = jpeg.Decode(bytes.NewReader(buffer))
+		if err != nil {
+			return "", fmt.Errorf("failed to decode jpeg image: %w", err)
+		}
+	case "image/png":
+		img, err = png.Decode(bytes.NewReader(buffer))
+		if err != nil {
+			return "", fmt.Errorf("failed to decode png image: %w", err)
+		}
+	default:
+		return "", fmt.Errorf("unsupported image format: %s", contentType)
+	}
+
+	// Generate a 500x500 thumbnail
+	thumbnail := imaging.Resize(img, 500, 500, imaging.Lanczos)
+	thumbnailBuffer := new(bytes.Buffer)
+	switch contentType {
+	case "image/jpeg", "image/jpg":
+		err = jpeg.Encode(thumbnailBuffer, thumbnail, nil)
+		if err != nil {
+			return "", fmt.Errorf("failed to encode thumbnail: %w", err)
+		}
+	case "image/png":
+		err = png.Encode(thumbnailBuffer, thumbnail)
+		if err != nil {
+			return "", fmt.Errorf("failed to encode thumbnail: %w", err)
+		}
+	default:
+		return "", fmt.Errorf("unsupported image format: %s", contentType)
+	}
+
+	thumbnailFileName := fmt.Sprintf("%s_500x500%s", uuid.New().String(), filepath.Ext(file.Filename))
 
 	// Upload the file
 	result, err := uploader.Upload(context.TODO(), &s3.PutObjectInput{
 		Bucket:      aws.String(bucketName),
-		Key:         aws.String(fileName),
-		Body:        uploadBody,
+		Key:         aws.String(thumbnailFileName),
+		Body:        bytes.NewReader(thumbnailBuffer.Bytes()),
 		ContentType: aws.String(contentType),
 	})
 	if err != nil {
@@ -88,7 +131,8 @@ func UploadFile(file *multipart.FileHeader) (string, error) {
 	}
 	log.Println("File uploaded to", result.Location)
 	// Construct the file URL using couldfront distribution url
-	fileURL := "https://d34lpad8kmnoic.cloudfront.net/" + fileName
+	//fileURL := "https://d34lpad8kmnoic.cloudfront.net/" + fileName
+	fileURL := "https://d34lpad8kmnoic.cloudfront.net/" + thumbnailFileName
 	return fileURL, nil
 }
 
@@ -147,4 +191,34 @@ func GetPresignedURL(fileName string) (string, error) {
 	}
 
 	return req.URL, nil
+}
+
+func DeleteFile(fileURL string) error {
+
+	bucketName := os.Getenv("S3_BUCKET")
+
+	// Parse the URL to get the file name
+	parsedURL, err := url.Parse(fileURL)
+	if err != nil {
+		return fmt.Errorf("invalid URL: %w", err)
+	}
+
+	// Get the file name from the URL path
+	fileName := strings.TrimPrefix(parsedURL.Path, "/")
+
+	fmt.Println("fileName:", fileName, "bucketName:", bucketName)
+
+	input := &s3.DeleteObjectInput{
+		Bucket: aws.String(bucketName),
+		Key:    aws.String(fileName),
+	}
+
+	_, err = s3Client.DeleteObject(context.TODO(), input)
+	if err != nil {
+		return fmt.Errorf("failed to delete object from S3: %w", err)
+	}
+
+	fmt.Println("Successfully deleted", fileName, "from bucket", bucketName)
+
+	return nil
 }

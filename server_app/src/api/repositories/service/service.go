@@ -2,7 +2,9 @@ package service
 
 import (
 	// user model
+
 	"barassage/api/models/service"
+	"strings"
 
 	// db
 	db "barassage/api/database"
@@ -15,7 +17,8 @@ func Create(service *service.Service) error {
 
 func GetByID(id string) (*service.Service, error) {
 	var service service.Service
-	if err := db.PgDB.Where("id = ?", id).First(&service).Error; err != nil {
+	//find the service by id, that is active and not banned
+	if err := db.PgDB.Preload("Images").Preload("Categories").Where("id = ? AND status = ? AND is_banned = ?", id, true, false).First(&service).Error; err != nil {
 		return nil, err
 	}
 	return &service, nil
@@ -23,7 +26,7 @@ func GetByID(id string) (*service.Service, error) {
 
 func GetServiceByNameForUser(name string, userID string) (*service.Service, error) {
 	var service service.Service
-	if err := db.PgDB.Where("name = ? AND user_id = ?", name, userID).First(&service).Error; err != nil {
+	if err := db.PgDB.Preload("Images").Preload("Categories").Where("name = ? AND user_id = ?", name, userID).First(&service).Error; err != nil {
 		return nil, err
 	}
 	return &service, nil
@@ -31,7 +34,7 @@ func GetServiceByNameForUser(name string, userID string) (*service.Service, erro
 
 func GetServicesByUserID(userID string) ([]service.Service, error) {
 	var services []service.Service
-	if err := db.PgDB.Where("user_id = ?", userID).Find(&services).Error; err != nil {
+	if err := db.PgDB.Preload("Images").Preload("Categories").Where("user_id = ?", userID).Find(&services).Error; err != nil {
 		return nil, err
 	}
 	return services, nil
@@ -39,7 +42,8 @@ func GetServicesByUserID(userID string) ([]service.Service, error) {
 
 func GetAllServices() ([]service.Service, error) {
 	var services []service.Service
-	if err := db.PgDB.Find(&services).Error; err != nil {
+	///find all service that are not banned and are active
+	if err := db.PgDB.Preload("Images").Preload("Categories").Where("status = ? AND is_banned = ?", true, false).Find(&services).Error; err != nil {
 		return nil, err
 	}
 	return services, nil
@@ -51,4 +55,51 @@ func GetErrors() error {
 
 func Update(service *service.Service) error {
 	return db.PgDB.Save(service).Error
+}
+
+func Delete(service *service.Service) error {
+	return db.PgDB.Select("Images").Preload("Categories").Delete(service).Error
+}
+
+// SearchServices searches for services by name, price, or both using dynamic query construction
+func SearchServices(name string, minPrice float64, maxPrice float64) ([]service.Service, error) {
+	var services []service.Service
+	query := db.PgDB.Model(&service.Service{})
+
+	// Construct the query based on the provided parameters
+	if name != "" {
+		query = query.Where("LOWER(name) LIKE ?", "%"+strings.ToLower(name)+"%")
+	}
+	if minPrice > 0 {
+		query = query.Where("price >= ?", minPrice)
+	}
+	if maxPrice > 0 {
+		query = query.Where("price <= ?", maxPrice)
+	}
+
+	//check if the service is active and not banned
+	query = query.Where("status = ? AND is_banned = ?", true, false)
+
+	// Execute the query and preload the images
+	if err := query.Preload("Images").Preload("Categories").Find(&services).Error; err != nil {
+		return nil, err
+	}
+	return services, nil
+}
+
+// delete the image from the service
+func DeleteImage(service *service.Service, imageURL string) error {
+	// Find the image
+	for i, image := range service.Images {
+		if image.URL == imageURL {
+			// Delete the image from the database
+			if err := db.PgDB.Delete(&image).Error; err != nil {
+				return err
+			}
+			// Remove the image from the service
+			service.Images = append(service.Images[:i], service.Images[i+1:]...)
+			return nil
+		}
+	}
+	return nil
 }

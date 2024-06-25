@@ -1,10 +1,15 @@
 package controllers
 
 import (
-	"barassage/api/bucket"
 	validator "barassage/api/common/validator"
+	"barassage/api/models/category"
+	"barassage/api/models/image"
 	"barassage/api/models/service"
+	categoryRepo "barassage/api/repositories/category"
 	serviceRepo "barassage/api/repositories/service"
+	"barassage/api/services/bucket"
+	"strconv"
+
 	"fmt"
 	"mime/multipart"
 	"net/http"
@@ -17,27 +22,59 @@ import (
 
 // ServiceObject represents the service data structure.
 type ServiceObject struct {
-	ServiceID   string                `json:"-"`
-	UserID      string                `json:"-"`
-	Name        string                `json:"name" validate:"required,min=2,max=30"`
-	Description string                `json:"description" validate:"required,min=2,max=30"`
-	Price       float64               `json:"price" validate:"required,min=5,max=1000000"`
-	Status      bool                  `json:"status" default:"false"`
-	Duration    int                   `json:"duration" validate:"required,min=30,max=1440" message:"Duration must be between 30 and 1440 minutes"`
-	IsBanned    bool                  `json:"-"`
-	Thumbnail   *multipart.FileHeader `json:"thumbnail" form:"thumbnail" swaggertype:"string"`
+	ServiceID   string                  `json:"-"`
+	UserID      string                  `json:"-"`
+	Name        string                  `json:"name" validate:"required,min=2,max=30"`
+	Description string                  `json:"description" validate:"required,min=2,max=30"`
+	Price       float64                 `json:"price" validate:"required,min=5,max=1000000"`
+	Status      bool                    `json:"status" default:"false"`
+	Duration    int                     `json:"duration" validate:"required,min=30,max=1440,step=30" message:"Duration must be a multiple of 30 and it should be beetween 30 and 1440"`
+	IsBanned    bool                    `json:"-"`
+	Latitude    float64                 `json:"latitude" validate:"required"`
+	Longitude   float64                 `json:"longitude" validate:"required"`
+	Address     string                  `json:"address" validate:"required"`
+	City        string                  `json:"city" validate:"required"`
+	PostalCode  string                  `json:"postalCode" validate:"required"`
+	Country     string                  `json:"country" validate:"required"`
+	Images      []*multipart.FileHeader `json:"images" form:"images" swaggertype:"string"`
+	CategoryIDs []string                `json:"categoryIds" validate:"required"`
+}
+
+type ServiceUpdateObject struct {
+	Name        string                  `json:"name" validate:"required,min=2,max=30"`
+	Description string                  `json:"description" validate:"required,min=2,max=30"`
+	Price       float64                 `json:"price" validate:"required,min=5,max=1000000"`
+	Status      bool                    `json:"status" default:"false"`
+	Duration    int                     `json:"duration" validate:"required,min=30,max=1440,step=30" message:"Duration must be a multiple of 30 and it should be beetween 30 and 1440"`
+	IsBanned    bool                    `json:"isBanned"`
+	Latitude    float64                 `json:"latitude"`
+	Longitude   float64                 `json:"longitude"`
+	Address     string                  `json:"address"`
+	City        string                  `json:"city"`
+	PostalCode  string                  `json:"postalCode"`
+	Country     string                  `json:"country"`
+	Images      []*multipart.FileHeader `json:"images"`
+	DeleteImage []string                `json:"deleteImage"`
 }
 
 type ServiceOutput struct {
-	ServiceID   string  `json:"id"`
-	UserID      string  `json:"userId"`
-	Name        string  `json:"name"`
-	Description string  `json:"description"`
-	Price       float64 `json:"price"`
-	Status      bool    `json:"status"`
-	Duration    int     `json:"duration"`
-	IsBanned    bool    `json:"isBanned"`
-	Thumbnail   string  `json:"thumbnail"`
+	ServiceID   string   `json:"id"`
+	UserID      string   `json:"userId"`
+	Name        string   `json:"name"`
+	Description string   `json:"description"`
+	Price       float64  `json:"price"`
+	Status      bool     `json:"status"`
+	Duration    int      `json:"duration"`
+	IsBanned    bool     `json:"isBanned"`
+	Latitude    float64  `json:"latitude"`
+	Longitude   float64  `json:"longitude"`
+	Address     string   `json:"address"`
+	City        string   `json:"city"`
+	PostalCode  string   `json:"postalCode"`
+	Country     string   `json:"country"`
+	Images      []string `json:"images"`
+	CreatedAt   string   `json:"createdAt"`
+	Category    []string `json:"category"`
 }
 
 // CreateService Godoc
@@ -50,9 +87,10 @@ type ServiceOutput struct {
 // @Failure 400 {array} ErrorResponse
 // @Failure 401 {array} ErrorResponse
 // @Failure 500 {array} ErrorResponse
-// @Router /service/create [post]
+// @Router /service [post]
 // @Security Bearer
 func CreateService(c *fiber.Ctx) error {
+	var errorList []*fiber.Error
 	var serviceInput ServiceObject
 	if err := validator.ParseBodyAndValidate(c, &serviceInput); err != nil {
 		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(err))
@@ -63,69 +101,120 @@ func CreateService(c *fiber.Ctx) error {
 	userID := claims["userID"]
 	// Validate Input
 	if userID == nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"msg": "can't extract user info from request",
-		})
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusBadRequest,
+				Message: "can't extract user info from request",
+			},
+		)
+		return c.Status(fiber.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
 	}
-
-	// Handle file upload
-	file, err := c.FormFile("thumbnail")
-	if err != nil {
-		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
-			"msg": "thumbnail file is required",
-		})
-	}
-
-	allowedMimeTypes := []string{"jpeg", "webp", "png", "jpg"}
-	maxFileSize := "5MB"
-
-	if err := validator.ValidateFile(file, maxFileSize, allowedMimeTypes); err != nil {
-		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
-			"msg": err.Error(),
-		})
-	}
-
-	//store in s3 Bucket
-	// Upload the file to S3
-	s3URL, err := bucket.UploadFile(file)
-	if err != nil {
-		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
-			"msg": "unable to upload thumbnail to S3",
-		})
-	}
-
-	/*
-		//get the presigned url
-		mytest, err := bucket.GetPresignedURL(s3URL)
-		if err != nil {
-			return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
-				"msg": "unable to get presigned url",
-			})
-		}
-
-		log.Println("Presigned URL: ", mytest)
-	*/
 
 	//map the input to service model
 	s := service.Service{
-		UserID:      serviceInput.UserID,
+		UserID:      userID.(string),
 		Name:        serviceInput.Name,
 		Description: serviceInput.Description,
 		Price:       serviceInput.Price,
 		Status:      serviceInput.Status,
 		Duration:    serviceInput.Duration,
 		IsBanned:    serviceInput.IsBanned,
-		Thumbnail:   s3URL,
+		Latitude:    serviceInput.Latitude,
+		Longitude:   serviceInput.Longitude,
+		Address:     serviceInput.Address,
+		City:        serviceInput.City,
+		PostalCode:  serviceInput.PostalCode,
+		Country:     serviceInput.Country,
 		ID:          uuid.New().String(),
 	}
 
-	s.UserID = userID.(string)
-
-	// Check if the service already exists for the given user
 	if _, err := serviceRepo.GetServiceByNameForUser(s.Name, s.UserID); err == nil {
 		response := HTTPResponse(http.StatusForbidden, "Service Already Exist", nil)
 		return c.Status(http.StatusForbidden).JSON(response)
 	}
+
+	// Handle images upload
+	form, err := c.MultipartForm()
+	var images []image.Image
+	if err == nil {
+		formImages := form.File["images"]
+		allowedMimeTypes := []string{"jpeg", "png", "jpg"}
+		maxFileSize := "4MB"
+		fileCount := len(formImages)
+		totalSize := 0
+		maxTotalSize := 15 * 1024 * 1024 // 15MB
+
+		for _, imageFile := range formImages {
+			totalSize += int(imageFile.Size)
+		}
+
+		if totalSize > maxTotalSize {
+			errorList = append(
+				errorList,
+				&fiber.Error{
+					Code:    fiber.StatusBadRequest,
+					Message: "total size of images should not exceed 15MB",
+				},
+			)
+			return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
+		}
+
+		if fileCount > 3 {
+			errorList = append(
+				errorList,
+				&fiber.Error{
+					Code:    fiber.StatusBadRequest,
+					Message: "maximum of 3 images allowed",
+				},
+			)
+			return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
+		}
+
+		for _, imageFile := range formImages {
+			if err := validator.ValidateFile(imageFile, maxFileSize, allowedMimeTypes); err != nil {
+				return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(err))
+			}
+
+			// Upload each image to S3
+			imageURL, err := bucket.UploadFile(imageFile)
+			if err != nil {
+				errorList = append(
+					errorList,
+					&fiber.Error{
+						Code:    fiber.StatusBadRequest,
+						Message: "unable to upload images to S3",
+					},
+				)
+				return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
+			}
+			images = append(images, image.Image{
+				URL:       imageURL,
+				ServiceID: s.ID,
+			})
+		}
+	}
+
+	// Check if the category ids are valid
+	var categories []category.Category
+	for _, catID := range serviceInput.CategoryIDs {
+		cat, err := categoryRepo.GetByID(catID)
+		if err != nil {
+			errorList = append(
+				errorList,
+				&fiber.Error{
+					Code:    fiber.StatusBadRequest,
+					Message: "invalid category id",
+				},
+			)
+			return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
+		}
+		categories = append(categories, *cat)
+	}
+
+	s.UserID = userID.(string)
+	s.Images = images
+	s.Categories = categories
 
 	// Save Service to DB
 	if err := serviceRepo.Create(&s); err != nil {
@@ -138,15 +227,15 @@ func CreateService(c *fiber.Ctx) error {
 			fmt.Println("Database error:", err.Error())
 		}
 
-		errorList := []*Response{
-			{
-				Code:    http.StatusConflict,
-				Message: "Service Already Exist",
-				Data:    nil,
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusConflict,
+				Message: "this service already exist",
 			},
-		}
-		response := HTTPResponse(http.StatusInternalServerError, "Service Not Registered", errorList)
-		return c.Status(http.StatusInternalServerError).JSON(response)
+		)
+
+		return c.Status(http.StatusConflict).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
 	serviceOutput := mapServiceToOutPut(&s)
@@ -166,14 +255,26 @@ func CreateService(c *fiber.Ctx) error {
 // @Router /service/collection [get]
 func GetAll(c *fiber.Ctx) error {
 	var services []service.Service
+	var errorList []*fiber.Error
 	services, err := serviceRepo.GetAllServices()
 	if err != nil {
-		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
-			"msg": "error getting services",
-		})
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusInternalServerError,
+				Message: "error getting services",
+			},
+		)
+		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
-	return c.Status(http.StatusOK).JSON(services)
+	// Map services to ServiceOutput
+	var ouput []ServiceOutput
+	for _, s := range services {
+		ouput = append(ouput, *mapServiceToOutPut(&s))
+	}
+
+	return c.Status(http.StatusOK).JSON(ouput)
 }
 
 // GetServiceByUserId Godoc
@@ -191,17 +292,28 @@ func GetServiceByUserId(c *fiber.Ctx) error {
 	claims := user.Claims.(jwt.MapClaims)
 	userID := claims["userID"]
 	// Validate Input
+	var errorList []*fiber.Error
 	if userID == nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"msg": "can't extract user info from request",
-		})
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusBadRequest,
+				Message: "An error occurred while extracting user info from request",
+			},
+		)
+		return c.Status(fiber.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
 	services, err := serviceRepo.GetServicesByUserID(userID.(string))
 	if err != nil {
-		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
-			"msg": "error getting services",
-		})
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusInternalServerError,
+				Message: "error getting services",
+			},
+		)
+		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
 	return c.Status(http.StatusOK).JSON(services)
@@ -221,41 +333,452 @@ func GetServiceByUserId(c *fiber.Ctx) error {
 // @Router /service/{id} [get]
 func GetServiceById(c *fiber.Ctx) error {
 	serviceID := c.Params("id")
+	var errorList []*fiber.Error
 	if serviceID == "" {
-		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
-			"msg": "service id is required",
-		})
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusBadRequest,
+				Message: "service id is required",
+			},
+		)
+		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
 	service, err := serviceRepo.GetByID(serviceID)
 	if err != nil {
-		return c.Status(http.StatusNotFound).JSON(fiber.Map{
-			"msg": "service not found",
-		})
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusBadRequest,
+				Message: "error getting service",
+			},
+		)
+		return c.Status(http.StatusNotFound).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
 	return c.Status(http.StatusOK).JSON(service)
+}
+
+// UpdateService Godoc
+// @Summary Update Service
+// @Description Update a service
+// @Tags Service
+// @Produce json
+// @Param id path string true "Service ID"
+// @Param payload body ServiceObject true "Service Body"
+// @Success 200 {object} Response
+// @Failure 400 {array} ErrorResponse
+// @Failure 401 {array} ErrorResponse
+// @Failure 403 {array} ErrorResponse
+// @Failure 404 {array} ErrorResponse
+// @Failure 500 {array} ErrorResponse
+// @Router /service/{id} [put]
+// @Security Bearer
+func UpdateService(c *fiber.Ctx) error {
+	var errorList []*fiber.Error
+	serviceID := c.Params("id")
+	if serviceID == "" {
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusBadRequest,
+				Message: "service id is required",
+			},
+		)
+		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
+	var updateInput ServiceUpdateObject
+	//check from the body if the admin only field is set  isBanned
+	if err := validator.ParseBodyAndValidate(c, &updateInput); err != nil {
+		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(err))
+	}
+
+	user := c.Locals("user").(*jwt.Token)
+	claims := user.Claims.(jwt.MapClaims)
+	userID := claims["userID"]
+	// Validate Input
+	if userID == nil {
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusInternalServerError,
+				Message: "An error occurred while extracting user info from request",
+			},
+		)
+		return c.Status(fiber.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
+	// Check if the service exists and the user is the owner
+	existingService, err := serviceRepo.GetByID(serviceID)
+	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			errorList = append(
+				errorList,
+				&fiber.Error{
+					Code:    fiber.StatusNotFound,
+					Message: "Unable to find service with the given ID",
+				},
+			)
+			return c.Status(http.StatusNotFound).JSON(HTTPFiberErrorResponse(errorList))
+		}
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusForbidden,
+				Message: "An error occurred while updating service",
+			},
+		)
+		return c.Status(http.StatusForbidden).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
+	if existingService.UserID != userID {
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusForbidden,
+				Message: "you are not authorized to update this service",
+			},
+		)
+		return c.Status(fiber.StatusForbidden).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
+	if updateInput.IsBanned && existingService.IsBanned != updateInput.IsBanned {
+		role := claims["role"].(string)
+		if role != "admin" {
+			errorList = append(
+				errorList,
+				&fiber.Error{
+					Code:    fiber.StatusForbidden,
+					Message: "You must be an admin to edit isBanned",
+				},
+			)
+			return c.Status(http.StatusForbidden).JSON(HTTPFiberErrorResponse(errorList))
+		}
+
+		existingService.IsBanned = updateInput.IsBanned
+
+	}
+
+	//remove the images from the service
+	fmt.Println(len(updateInput.DeleteImage))
+	if len(updateInput.DeleteImage) > 0 {
+		for _, img := range updateInput.DeleteImage {
+			if err := serviceRepo.DeleteImage(existingService, img); err != nil {
+				errorList = append(
+					errorList,
+					&fiber.Error{
+						Code:    fiber.StatusBadRequest,
+						Message: "unable to delete image from service",
+					},
+				)
+				return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
+			}
+
+		}
+
+	}
+
+	/*
+		// Handle images upload
+		form, err := c.MultipartForm()
+		var images []image.Image
+		if err == nil {
+			formImages := form.File["images"]
+			allowedMimeTypes := []string{"jpeg", "png", "jpg"}
+			maxFileSize := "4MB"
+			fileCount := len(formImages)
+			totalSize := 0
+			maxTotalSize := 15 * 1024 * 1024 // 15MB
+
+			for _, imageFile := range formImages {
+				totalSize += int(imageFile.Size)
+			}
+
+			if totalSize > maxTotalSize {
+				errorList = append(
+					errorList,
+					&fiber.Error{
+						Code:    fiber.StatusBadRequest,
+						Message: "total size of images should not exceed 15MB",
+					},
+				)
+				return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
+			}
+
+			if fileCount > 3 || len(existingService.Images)+fileCount > 3 {
+				errorList = append(
+					errorList,
+					&fiber.Error{
+						Code:    fiber.StatusBadRequest,
+						Message: "maximum of 3 images allowed",
+					},
+				)
+				return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
+			}
+
+			for _, imageFile := range formImages {
+				if err := validator.ValidateFile(imageFile, maxFileSize, allowedMimeTypes); err != nil {
+					return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(err))
+				}
+
+				// Upload each image to S3
+				imageURL, err := bucket.UploadFile(imageFile)
+				if err != nil {
+					errorList = append(
+						errorList,
+						&fiber.Error{
+							Code:    fiber.StatusBadRequest,
+							Message: "unable to upload images to S3",
+						},
+					)
+					return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
+				}
+				images = append(images, image.Image{
+					URL:       imageURL,
+					ServiceID: existingService.ID,
+				})
+			}
+		}
+	*/
+
+	// Update the service model
+	existingService.Name = updateInput.Name
+	existingService.Description = updateInput.Description
+	existingService.Price = updateInput.Price
+	existingService.Status = updateInput.Status
+	existingService.Duration = updateInput.Duration
+
+	if updateInput.Latitude != 0 {
+		existingService.Latitude = updateInput.Latitude
+	}
+	if updateInput.Longitude != 0 {
+		existingService.Longitude = updateInput.Longitude
+	}
+	if updateInput.Address != "" {
+		existingService.Address = updateInput.Address
+	}
+	if updateInput.City != "" {
+		existingService.City = updateInput.City
+	}
+	if updateInput.PostalCode != "" {
+		existingService.PostalCode = updateInput.PostalCode
+	}
+	if updateInput.Country != "" {
+		existingService.Country = updateInput.Country
+	}
+
+	// Save the updated service to the DB
+	if err := serviceRepo.Update(existingService); err != nil {
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusInternalServerError,
+				Message: "unable to update service",
+			},
+		)
+		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
+	serviceOutput := mapServiceToOutPut(existingService)
+	response := HTTPResponse(http.StatusOK, "Service Updated", serviceOutput)
+	return c.Status(http.StatusOK).JSON(response)
+}
+
+// DeleteService Godoc
+// @Summary Delete Service
+// @Description Delete a service
+// @Tags Service
+// @Produce json
+// @Param id path string true "Service ID"
+// @Success 200 {object} Response
+// @Failure 400 {array} ErrorResponse
+// @Failure 401 {array} ErrorResponse
+// @Failure 403 {array} ErrorResponse
+// @Failure 404 {array} ErrorResponse
+// @Failure 500 {array} ErrorResponse
+// @Router /service/{id} [delete]
+// @Security Bearer
+func DeleteService(c *fiber.Ctx) error {
+	var errorList []*fiber.Error
+	serviceID := c.Params("id")
+	if serviceID == "" {
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusBadRequest,
+				Message: "service id is required",
+			},
+		)
+		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
+	user := c.Locals("user").(*jwt.Token)
+	claims := user.Claims.(jwt.MapClaims)
+	userID := claims["userID"]
+	// Validate Input
+	if userID == nil {
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusInternalServerError,
+				Message: "An error occurred while extracting user info from request",
+			},
+		)
+		return c.Status(fiber.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
+	// Check if the service exists and the user is the owner
+	existingService, err := serviceRepo.GetByID(serviceID)
+	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			errorList = append(
+				errorList,
+				&fiber.Error{
+					Code:    fiber.StatusNotFound,
+					Message: "Unable to find service with the given ID",
+				},
+			)
+			return c.Status(http.StatusNotFound).JSON(HTTPFiberErrorResponse(errorList))
+		}
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusForbidden,
+				Message: "An error occurred while updating service",
+			},
+		)
+		return c.Status(http.StatusForbidden).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
+	if existingService.UserID != userID {
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusForbidden,
+				Message: "you are not authorized to update this service",
+			},
+		)
+		return c.Status(fiber.StatusForbidden).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
+	// Save the updated service to the DB
+	if err := serviceRepo.Delete(existingService); err != nil {
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusInternalServerError,
+				Message: "unable to delete service",
+			},
+		)
+		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
+	response := HTTPResponse(http.StatusOK, "Service Deleted", nil)
+	return c.Status(http.StatusOK).JSON(response)
+}
+
+// SearchService Godoc
+// @Summary Search services
+// @Description Search services by name, price, or both
+// @Tags Service
+// @Produce json
+// @Param name query string false "Service Name"
+// @Param min_price query number false "Minimum Price"
+// @Param max_price query number false "Maximum Price"
+// @Success 200 {array} ServiceOutput
+// @Failure 400 {array} ErrorResponse
+// @Failure 401 {array} ErrorResponse
+// @Failure 500 {array} ErrorResponse
+// @Router /service/search [get]
+func SearchService(c *fiber.Ctx) error {
+	var errorList []*fiber.Error
+
+	// Get query parameters
+	serviceName := c.Query("name")
+	minPriceStr := c.Query("min_price")
+	maxPriceStr := c.Query("max_price")
+
+	var minPrice, maxPrice float64
+	var err error
+
+	if minPriceStr != "" {
+		minPrice, err = strconv.ParseFloat(minPriceStr, 64)
+		if err != nil {
+			errorList = append(
+				errorList,
+				&fiber.Error{
+					Code:    fiber.StatusBadRequest,
+					Message: "Invalid minimum price value",
+				},
+			)
+			return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
+		}
+	}
+
+	if maxPriceStr != "" {
+		maxPrice, err = strconv.ParseFloat(maxPriceStr, 64)
+		if err != nil {
+			errorList = append(
+				errorList,
+				&fiber.Error{
+					Code:    fiber.StatusBadRequest,
+					Message: "Invalid maximum price value",
+				},
+			)
+			return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
+		}
+	}
+
+	// Fetch services based on the query parameters
+	services, err := serviceRepo.SearchServices(serviceName, minPrice, maxPrice)
+	if err != nil {
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusInternalServerError,
+				Message: "Error searching services",
+			},
+		)
+		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
+	// Map services to ServiceOutput
+	var serviceOutputs []ServiceOutput
+	for _, s := range services {
+		serviceOutputs = append(serviceOutputs, *mapServiceToOutPut(&s))
+	}
+
+	//check if the serviceOuputs is empty
+	if len(serviceOutputs) == 0 {
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusNotFound,
+				Message: "No services found",
+			},
+		)
+		return c.Status(http.StatusNotFound).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
+	return c.Status(http.StatusOK).JSON(serviceOutputs)
 }
 
 // ============================================================
 // =================== Private Methods ========================
 // ============================================================
 
-/*
-func mapInputToServiceObject(service ServiceObject) service.Service {
-	return service.Service{
-		UserID:    service.UserID,
-		Name:      service.Name,
-		ServiceID: uuid.New().String(),
-		Price:     service.Price,
-		Status:    service.Status,
-		Duration:  service.Duration,
-		Thumbnail: service.Thumbnail,
-	}
-}
-*/
-
 func mapServiceToOutPut(u *service.Service) *ServiceOutput {
+	fmt.Println(u.Categories)
+	imageUrls := make([]string, len(u.Images))
+	for i, img := range u.Images {
+		imageUrls[i] = img.URL
+	}
+	categoriesNames := make([]string, len(u.Categories))
+	for i, cat := range u.Categories {
+		categoriesNames[i] = cat.Name
+	}
 	return &ServiceOutput{
 		ServiceID:   u.ID,
 		UserID:      u.UserID,
@@ -265,6 +788,14 @@ func mapServiceToOutPut(u *service.Service) *ServiceOutput {
 		Status:      u.Status,
 		Duration:    u.Duration,
 		IsBanned:    u.IsBanned,
-		Thumbnail:   u.Thumbnail,
+		Latitude:    u.Latitude,
+		Longitude:   u.Longitude,
+		Address:     u.Address,
+		City:        u.City,
+		PostalCode:  u.PostalCode,
+		Country:     u.Country,
+		Images:      imageUrls,
+		Category:    categoriesNames,
+		CreatedAt:   u.CreatedAt.Format("2006-01-02"),
 	}
 }

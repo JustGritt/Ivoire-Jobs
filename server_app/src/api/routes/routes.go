@@ -14,16 +14,13 @@ import (
 func SetupRoutes(app *fiber.App) {
 
 	api := app.Group("/api")
-
 	v1 := api.Group("/v1")
 
 	v1.Use("/docs/*", swagger.HandlerDefault)
 
-	v1.Get("/", func(c *fiber.Ctx) error {
-		return c.JSON(fiber.Map{
-			"message": "Welcome to Barassage private API",
-		})
-	})
+	// Stripe Webhook
+	v1.Post("/stripe/webhook", ctl.HandleWebhook)
+	v1.Get("/stripe/create-payment-intent", ctl.HandleCreatePaymentIntent)
 
 	v1.Get("/home", ctl.HomeController)
 
@@ -39,8 +36,27 @@ func SetupRoutes(app *fiber.App) {
 
 	// Service Group
 	service := v1.Group("/service")
-	service.Post("/create", middlewares.RequireLoggedIn(), ctl.CreateService)
+	service.Post("/", middlewares.RequireLoggedIn(), ctl.CreateService)
+	service.Get("/search", ctl.SearchService)
 	service.Get("/collection", ctl.GetAll)
 	service.Get("/collection/user", ctl.GetServiceByUserId)
 	service.Get("/:id", ctl.GetServiceById)
+	service.Put("/:id", middlewares.RequireLoggedIn(), ctl.UpdateService)
+	service.Delete("/:id", middlewares.RequireLoggedIn(), ctl.DeleteService)
+
+	// Booking Group
+	booking := v1.Group("/booking")
+	booking.Post("/", middlewares.RequireLoggedIn(), ctl.CreateBooking)
+	booking.Get("/collection", ctl.GetBookings)
+	booking.Put("/:id", middlewares.RequireLoggedIn(), ctl.UpdateBooking)
+
+	// Reports
+	report := v1.Group("/report")
+	report.Post("/:id", middlewares.RequireLoggedIn(), ctl.CreateReport)
+	report.Get("/collection", ctl.GetAllReports)
+
+	// Category Group
+	category := v1.Group("/category")
+	category.Get("/collection", ctl.GetAllCategories)
+	category.Post("/", middlewares.RequireLoggedIn(), ctl.CreateCategory)
 }

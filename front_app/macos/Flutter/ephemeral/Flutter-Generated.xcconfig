@@ -1,6 +1,6 @@
 // This is a generated file; do not edit or check into version control.
-FLUTTER_ROOT=/opt/homebrew/Caskroom/flutter/3.3.2/flutter
-FLUTTER_APPLICATION_PATH=/Users/alexdieudonne/Documents/School/New School/ESGI/2023/Stack5eme/Ivoire-Jobs/front_app
+FLUTTER_ROOT=/Users/alexistan/Downloads/flutter
+FLUTTER_APPLICATION_PATH=/Users/alexistan/Desktop/plkoijroeijrgh/Ivoire-Jobs/front_app
 COCOAPODS_PARALLEL_CODE_SIGN=true
 FLUTTER_BUILD_DIR=build
 FLUTTER_BUILD_NAME=0.1.0

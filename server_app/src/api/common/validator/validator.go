@@ -6,10 +6,12 @@ import (
 	"mime/multipart"
 	"path/filepath"
 	"reflect"
+	"strconv"
 	"strings"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
+	"github.com/golang-jwt/jwt/v4"
 )
 
 var validate = validator.New()
@@ -47,13 +49,17 @@ func Validate(payload interface{}) []*fiber.Error {
 				case "email":
 					message = fmt.Sprintf("%s must be a valid email address", err.StructField())
 				case "min":
-					message = fmt.Sprintf("%s must be at least %s", err.StructField(), err.Param())
+					message = fmt.Sprintf("%s must be at least %s min", err.StructField(), err.Param())
 				case "max":
-					message = fmt.Sprintf("%s must be at most %s", err.StructField(), err.Param())
+					message = fmt.Sprintf("%s must be at most %s min", err.StructField(), err.Param())
 				case "size":
 					message = fmt.Sprintf("%s must be less than %s", err.StructField(), err.Param())
 				case "ext":
 					message = fmt.Sprintf("%s must be a valid file with one of the extensions: %s", err.StructField(), err.Param())
+				case "step":
+					message = fmt.Sprintf("%s must be a multiple of %s min", err.StructField(), err.Param())
+				case "datetime":
+					message = fmt.Sprintf("%s must be a valid date and time", err.StructField())
 				default:
 					message = fmt.Sprintf("%s is not valid", err.StructField())
 				}
@@ -99,6 +105,30 @@ func ParseBodyAndValidate(c *fiber.Ctx, body interface{}) []*fiber.Error {
 	if err := ParseBody(c, body); err != nil {
 		return err
 	}
+
+	/*
+		// Check for the admin field and validate if present
+		v := reflect.ValueOf(body).Elem()
+		t := v.Type()
+
+		for i := 0; i < v.NumField(); i++ {
+			field := t.Field(i)
+			if field.Tag.Get("validate") == "admin" {
+				if !ValidateAdmin(c) {
+					var errorList []*fiber.Error
+					errorList = append(
+						errorList,
+						&fiber.Error{
+							Code:    fiber.StatusForbidden,
+							Message: fmt.Sprintf("You must be an admin to edit : %s", field.Name),
+						},
+					)
+					return errorList
+				}
+
+			}
+		}
+	*/
 
 	// Then We Validate
 	return Validate(body)
@@ -172,17 +202,33 @@ func init() {
 	// Register custom validation functions
 	validate.RegisterValidation("size", fileSizeValidator)
 	validate.RegisterValidation("ext", fileExtensionValidator)
+	validate.RegisterValidation("admin", adminValidator)
 }
 
 // ValidateFile checks the file size and extension
-func ValidateFile(file *multipart.FileHeader, maxSize string, allowedExts []string) error {
+func ValidateFile(file *multipart.FileHeader, maxSize string, allowedExts []string) []*fiber.Error {
+	var errorList []*fiber.Error
 	sizeLimit, err := ParseSize(maxSize)
 	if err != nil {
-		return fmt.Errorf("invalid size format: %v", err)
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusBadRequest,
+				Message: fmt.Sprintf("invalid size format: %v", err),
+			},
+		)
+		return errorList
 	}
 
 	if file.Size > sizeLimit {
-		return fmt.Errorf("file size must be less than %s", maxSize)
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusBadRequest,
+				Message: fmt.Sprintf("file size must be less than %s", maxSize),
+			},
+		)
+		return errorList
 	}
 
 	fileExt := strings.ToLower(strings.TrimPrefix(filepath.Ext(file.Filename), "."))
@@ -193,7 +239,15 @@ func ValidateFile(file *multipart.FileHeader, maxSize string, allowedExts []stri
 		}
 	}
 
-	return fmt.Errorf("file must be one of the following types: %s", strings.Join(allowedExts, ", "))
+	errorList = append(
+		errorList,
+		&fiber.Error{
+			Code:    fiber.StatusBadRequest,
+			Message: fmt.Sprintf("file extension must be one of: %s", strings.Join(allowedExts, ", ")),
+		},
+	)
+
+	return errorList
 }
 
 var _ = validate.RegisterValidation("password", func(fl validator.FieldLevel) bool {
@@ -201,3 +255,35 @@ var _ = validate.RegisterValidation("password", func(fl validator.FieldLevel) bo
 
 	return l >= 6 && l < 100
 })
+
+// take a int and check if it is a multiple of the argument
+var _ = validate.RegisterValidation("step", func(fl validator.FieldLevel) bool {
+	param := fl.Param()
+	intParam, err := strconv.ParseInt(param, 10, 64)
+	if err != nil {
+		return false
+	}
+	field := fl.Field()
+	if field.Kind() == reflect.Int {
+		value := field.Int()
+		return value%intParam == 0
+	}
+	return false
+})
+
+// ValidateAdmin checks if the current user is an admin based on the JWT token in the context
+func ValidateAdmin(c *fiber.Ctx) bool {
+	user := c.Locals("user").(*jwt.Token)
+	claims := user.Claims.(jwt.MapClaims)
+	role, ok := claims["role"].(string)
+	if !ok {
+		return false
+	}
+	return role == "admin"
+}
+
+// Custom validation rule for admin
+func adminValidator(fl validator.FieldLevel) bool {
+	ctx := fl.Parent().Interface().(*fiber.Ctx)
+	return ValidateAdmin(ctx)
+}
