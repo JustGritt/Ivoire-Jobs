@@ -55,4 +55,8 @@ func SetupRoutes(app *fiber.App) {
 	report.Post("/:id", middlewares.RequireLoggedIn(), ctl.CreateReport)
 	report.Get("/collection", ctl.GetAllReports)
 
+	// Category Group
+	category := v1.Group("/category")
+	category.Get("/collection", ctl.GetAllCategories)
+	category.Post("/", middlewares.RequireLoggedIn(), ctl.CreateCategory)
 }

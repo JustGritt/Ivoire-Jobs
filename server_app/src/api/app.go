@@ -66,7 +66,7 @@ func Run() {
 	db.ConnectPostgres()
 
 	// Drop on serve restarts in dev
-	//db.PgDB.Migrator().DropTable(&service.Service{}, &booking.Booking{})
+	db.PgDB.Migrator().DropTable(&service.Service{}, &booking.Booking{})
 
 	// Migration
 	db.PgDB.AutoMigrate(&user.User{}, &service.Service{}, &booking.Booking{}, &image.Image{})

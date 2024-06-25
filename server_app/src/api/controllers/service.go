@@ -2,8 +2,10 @@ package controllers
 
 import (
 	validator "barassage/api/common/validator"
+	"barassage/api/models/category"
 	"barassage/api/models/image"
 	"barassage/api/models/service"
+	categoryRepo "barassage/api/repositories/category"
 	serviceRepo "barassage/api/repositories/service"
 	"barassage/api/services/bucket"
 	"strconv"
@@ -35,6 +37,7 @@ type ServiceObject struct {
 	PostalCode  string                  `json:"postalCode" validate:"required"`
 	Country     string                  `json:"country" validate:"required"`
 	Images      []*multipart.FileHeader `json:"images" form:"images" swaggertype:"string"`
+	CategoryIDs []string                `json:"categoryIds" validate:"required"`
 }
 
 type ServiceUpdateObject struct {
@@ -71,6 +74,7 @@ type ServiceOutput struct {
 	Country     string   `json:"country"`
 	Images      []string `json:"images"`
 	CreatedAt   string   `json:"createdAt"`
+	Category    []string `json:"category"`
 }
 
 // CreateService Godoc
@@ -191,8 +195,26 @@ func CreateService(c *fiber.Ctx) error {
 		}
 	}
 
+	// Check if the category ids are valid
+	var categories []category.Category
+	for _, catID := range serviceInput.CategoryIDs {
+		cat, err := categoryRepo.GetByID(catID)
+		if err != nil {
+			errorList = append(
+				errorList,
+				&fiber.Error{
+					Code:    fiber.StatusBadRequest,
+					Message: "invalid category id",
+				},
+			)
+			return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
+		}
+		categories = append(categories, *cat)
+	}
+
 	s.UserID = userID.(string)
 	s.Images = images
+	s.Categories = categories
 
 	// Save Service to DB
 	if err := serviceRepo.Create(&s); err != nil {
@@ -747,24 +769,15 @@ func SearchService(c *fiber.Ctx) error {
 // =================== Private Methods ========================
 // ============================================================
 
-/*
-func mapInputToServiceObject(service ServiceObject) service.Service {
-	return service.Service{
-		UserID:    service.UserID,
-		Name:      service.Name,
-		ServiceID: uuid.New().String(),
-		Price:     service.Price,
-		Status:    service.Status,
-		Duration:  service.Duration,
-		Thumbnail: service.Thumbnail,
-	}
-}
-*/
-
 func mapServiceToOutPut(u *service.Service) *ServiceOutput {
+	fmt.Println(u.Categories)
 	imageUrls := make([]string, len(u.Images))
 	for i, img := range u.Images {
 		imageUrls[i] = img.URL
+	}
+	categoriesNames := make([]string, len(u.Categories))
+	for i, cat := range u.Categories {
+		categoriesNames[i] = cat.Name
 	}
 	return &ServiceOutput{
 		ServiceID:   u.ID,
@@ -782,6 +795,7 @@ func mapServiceToOutPut(u *service.Service) *ServiceOutput {
 		PostalCode:  u.PostalCode,
 		Country:     u.Country,
 		Images:      imageUrls,
+		Category:    categoriesNames,
 		CreatedAt:   u.CreatedAt.Format("2006-01-02"),
 	}
 }
