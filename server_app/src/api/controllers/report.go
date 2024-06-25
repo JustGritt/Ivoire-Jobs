@@ -140,6 +140,10 @@ func GetAllReports(c *fiber.Ctx) error {
 		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
+	if len(reports) == 0 {
+		return c.Status(http.StatusOK).JSON([]ReportOutput{})
+	}
+
 	return c.Status(http.StatusOK).JSON(reports)
 }
 

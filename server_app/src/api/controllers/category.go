@@ -29,7 +29,7 @@ type CategoryOutput struct {
 // @Produce json
 // @Success 200 {array} CategoryOutput
 // @Failure 500 {array} ErrorResponse
-// @Router /categories/collection [get]
+// @Router /category/collection [get]
 func GetAllCategories(c *fiber.Ctx) error {
 	categories, err := categorieRepo.GetAllCategories()
 	if err != nil {
@@ -39,6 +39,11 @@ func GetAllCategories(c *fiber.Ctx) error {
 	var output []*CategoryOutput
 	for _, category := range categories {
 		output = append(output, mapCategoryToOutput(&category))
+	}
+
+	//if the categories are empty send and empty array
+	if len(output) == 0 {
+		output = []*CategoryOutput{}
 	}
 
 	return c.JSON(output)
