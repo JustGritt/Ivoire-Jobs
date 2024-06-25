@@ -25,5 +25,5 @@ class ApiEndpoint {
   // Services Endpoints
   static const services = '${api}services?populate=*&sort[0]=id%3Adesc';
   // Services Categories Endpoints
-  static const serviceCategories = '${api}service/categories';
+  static const serviceCategories = '/category/collection';
 }

@@ -1,7 +1,9 @@
 import 'package:barassage_app/config/app_colors.dart';
 import 'package:barassage_app/core/helpers/extentions/truncate_string_extension.dart';
 import 'package:barassage_app/core/helpers/utils_helper.dart';
+import 'package:barassage_app/core/init_dependencies.dart';
 import 'package:barassage_app/features/main_app/models/service_category_model.dart';
+import 'package:barassage_app/features/main_app/services/service_category_services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -19,6 +21,8 @@ class StepFormCategory extends StatefulWidget {
 class _StepFormCategoryState extends State<StepFormCategory> {
   ServiceCategory? selectedCategory;
 
+  Future<List<ServiceCategory>> serviceCategories = Future.value([]);
+
   void validate() {
     if (selectedCategory != null) {
       widget.onEnd(selectedCategory!);
@@ -30,18 +34,17 @@ class _StepFormCategoryState extends State<StepFormCategory> {
   }
 
   @override
+  initState() {
+    ServiceCategoryService serviceCategoryService =
+        serviceLocator<ServiceCategoryService>();
+    serviceCategories = serviceCategoryService.getAll();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     AppLocalizations appLocalizations = AppLocalizations.of(context)!;
     ThemeData theme = Theme.of(context);
-
-    List<ServiceCategory> serviceCategories = [
-      ServiceCategory(
-          name: 'Barber', id: '4787de3d', status: ServiceCategoryStatus.active),
-      ServiceCategory(
-          name: 'Test',
-          id: '47347de3d',
-          status: ServiceCategoryStatus.inactive),
-    ];
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(14),
@@ -52,44 +55,59 @@ class _StepFormCategoryState extends State<StepFormCategory> {
           height: 12,
         ),
         AnimationLimiter(
-          child: ListView.separated(
-            separatorBuilder: (context, index) => const SizedBox(
-              height: 12,
-            ),
-            padding: const EdgeInsets.only(top: 10),
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: serviceCategories.length,
-            itemBuilder: (BuildContext context, int index) {
-              ServiceCategory categoryService = serviceCategories[index];
-              return AnimationConfiguration.staggeredList(
-                  position: index,
-                  duration: const Duration(milliseconds: 375),
-                  child: SlideAnimation(
-                    verticalOffset: 20.0,
-                    child: FadeInAnimation(
-                      child: buildCategoryService(context,
-                          currentCategoryService: categoryService,
-                          onSelectedCategory: (category) {
-                        setState(() {
-                          if (selectedCategory?.id == category.id) {
-                            selectedCategory = null;
-                          } else {
-                            selectedCategory = category;
-                          }
-                        });
-                      },
-                          selectedCategory:
-                              selectedCategory?.id == categoryService.id),
-                    ),
-                  ));
+          child: FutureBuilder(
+            future: serviceCategories,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              if (snapshot.hasError) {
+                return Center(
+                  child: Text('Error: ${snapshot.error}'),
+                );
+              }
+
+              List<ServiceCategory> serviceCategory = snapshot.data!;
+              return ListView.separated(
+                separatorBuilder: (context, index) => const SizedBox(
+                  height: 12,
+                ),
+                padding: const EdgeInsets.only(top: 10),
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: serviceCategory.length,
+                itemBuilder: (BuildContext context, int index) {
+                  ServiceCategory categoryService = serviceCategory[index];
+                  return AnimationConfiguration.staggeredList(
+                      position: index,
+                      duration: const Duration(milliseconds: 375),
+                      child: SlideAnimation(
+                        verticalOffset: 20.0,
+                        child: FadeInAnimation(
+                          child: buildCategoryService(context,
+                              currentCategoryService: categoryService,
+                              onSelectedCategory: (category) {
+                            setState(() {
+                              if (selectedCategory?.id == category.id) {
+                                selectedCategory = null;
+                              } else {
+                                selectedCategory = category;
+                              }
+                            });
+                          },
+                              selectedCategory:
+                                  selectedCategory?.id == categoryService.id),
+                        ),
+                      ));
+                },
+              );
             },
           ),
         ),
         const SizedBox(
           height: 32,
         ),
-        
+
         // Next button
         PushableButton(
           height: 40,

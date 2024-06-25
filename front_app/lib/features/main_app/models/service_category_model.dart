@@ -1,4 +1,10 @@
+import 'dart:convert';
+
 enum ServiceCategoryStatus { active, inactive }
+
+
+List<ServiceCategory> serviceCategoryFromJson(String str) =>
+    List<ServiceCategory>.from(json.decode(str).map((x) => ServiceCategory.fromJson(x)));
 
 class ServiceCategory {
   String id;
