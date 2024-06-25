@@ -24,6 +24,38 @@
     "btn_login": "Se connecter",
     "tab_1": "Home",
     "tab_2": "Mes services",
-    "tab_3": "Paramètres"
+    "tab_3": "Paramètres",
+    "permission_denied_camera": "La camera n'est pas accessible. Veuillez l'activer dans les paramètres de l'appareil.",
+    "permission_denied_gallery": "La galerie n'est pas accessible. Veuillez l'activer dans les paramètres de l'appareil.",
+
+    "service_title": "Titre du service",
+    "service_description": "Description du service",
+
+    "service_price": "Prix du service",
+
+    "service_duration": "Durée du service",
+
+    "service_status": "Statut du service",
+
+    "service_status_active": "Actif",
+
+    "service_status_inactive": "Inactif",
+
+    "service_status_deleted": "Supprimé",
+
+    "service_status_suspended": "Suspendu",
+
+    "service_location": "Emplacement du service",
+
+    "service_edit": "Modifier le service",
+
+    "service_category": "Categorie du service",
+
+    "service_illustration": "Illustration de votre service",
+    "service_illustration_description": "Cliquez sur le bouton ci-dessous pour importer une image.",
+
+    "delete": "Supprimer",
+    "save": "Enregistrer",
+    "next": "Suivant"
 
 }
