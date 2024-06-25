@@ -18,27 +18,6 @@ func SetupRoutes(app *fiber.App) {
 
 	v1.Use("/docs/*", swagger.HandlerDefault)
 
-	/*
-		v1.Get("/", func(c *fiber.Ctx) error {
-			return c.JSON(fiber.Map{
-				"message": "Welcome to Barassage private API",
-			})
-		})
-
-		// Websocket
-		ws := v1.Group("/ws")
-
-		ws.Use(func(c *fiber.Ctx) error {
-			if websocket.IsWebSocketUpgrade(c) {
-				c.Locals("allowed", true)
-				return c.Next()
-			}
-			return fiber.ErrUpgradeRequired
-		})
-
-		ws.Get("/:id", websocket.New(ctl.ChatHandler))
-	*/
-
 	// Stripe Webhook
 	v1.Post("/stripe/webhook", ctl.HandleWebhook)
 	v1.Get("/stripe/create-payment-intent", ctl.HandleCreatePaymentIntent)

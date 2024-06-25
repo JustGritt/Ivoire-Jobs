@@ -2,6 +2,7 @@ package app
 
 import (
 	"fmt"
+	"log"
 
 	// Configs
 	cfg "barassage/api/configs"
@@ -46,7 +47,6 @@ import (
 // @description Type "Bearer" followed by a space and JWT token.
 func Run() {
 	app := fiber.New(fiber.Config{
-		Prefork:           true,
 		ServerHeader:      "Fiber",
 		StreamRequestBody: true,
 	})
@@ -66,7 +66,7 @@ func Run() {
 	db.ConnectPostgres()
 
 	// Drop on serve restarts in dev
-	db.PgDB.Migrator().DropTable(&service.Service{}, &booking.Booking{})
+	//db.PgDB.Migrator().DropTable(&service.Service{}, &booking.Booking{})
 
 	// Migration
 	db.PgDB.AutoMigrate(&user.User{}, &service.Service{}, &booking.Booking{}, &image.Image{})
@@ -115,5 +115,8 @@ func Run() {
 
 	// Run the app and listen on given port
 	port := fmt.Sprintf(":%s", config.Port)
-	app.Listen(port)
+	//app.Listen(port)
+	if err := app.Listen(port); err != nil {
+		log.Fatalf("Failed to start server: %v", err)
+	}
 }

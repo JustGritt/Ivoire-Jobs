@@ -1,6 +1,6 @@
 module barassage
 
-go 1.17
+go 1.21
 
 require (
 	github.com/aws/aws-sdk-go-v2 v1.30.0
@@ -11,7 +11,6 @@ require (
 	github.com/disintegration/imaging v1.6.2
 	github.com/gabriel-vasile/mimetype v1.4.4
 	github.com/go-playground/validator/v10 v10.22.0
-	github.com/gofiber/contrib/websocket v1.3.1
 	github.com/gofiber/fiber/v2 v2.52.4
 	github.com/gofiber/jwt/v2 v2.2.7
 	github.com/gofiber/swagger v1.0.0
