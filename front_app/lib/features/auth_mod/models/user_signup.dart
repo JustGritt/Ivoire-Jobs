@@ -6,7 +6,7 @@ class UserSignup {
   String password;
 
   UserSignup({
-    this.id,
+    // this.id,
     required this.firstName,
     required this.lastName,
     required this.email,
@@ -14,7 +14,6 @@ class UserSignup {
   });
 
   factory UserSignup.fromJson(Map<String, dynamic> json) => UserSignup(
-        id: json["id"],
         firstName: json["firstName"],
         lastName: json["lastName"],
         email: json["email"],
@@ -22,7 +21,6 @@ class UserSignup {
       );
 
   Map<String, dynamic> toJson() => {
-        "id": id,
         "firstname": firstName,
         "lastname": lastName,
         "email": email,
