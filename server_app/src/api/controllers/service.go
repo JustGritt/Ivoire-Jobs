@@ -274,6 +274,11 @@ func GetAll(c *fiber.Ctx) error {
 		ouput = append(ouput, *mapServiceToOutPut(&s))
 	}
 
+	//if the services are empty send and empty array
+	if len(ouput) == 0 {
+		return c.Status(http.StatusOK).JSON([]ServiceOutput{})
+	}
+
 	return c.Status(http.StatusOK).JSON(ouput)
 }
 
