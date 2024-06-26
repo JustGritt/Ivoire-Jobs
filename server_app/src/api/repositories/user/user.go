@@ -32,6 +32,14 @@ func GetById(id string) (*user.User, error) {
 	return &user, nil
 }
 
+func PendingActivateUser(id string) (*user.User, error) {
+	var user user.User
+	if err := database.PgDB.Where("id = ?", id).First(&user).Error; err != nil {
+		return nil, err
+	}
+	return &user, nil
+}
+
 func GetErrors() error {
 	return database.PgDB.Error
 }

@@ -8,7 +8,6 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	jwt "github.com/golang-jwt/jwt/v4"
-
 )
 
 // VerifyEmail Godoc
@@ -46,9 +45,13 @@ func VerifyEmail(c *fiber.Ctx) error {
 
 	userID := claims["user_id"].(string)
 	// Fetch the user by ID and verify their email address
-	u, err := userRepo.GetById(userID)
+	u, err := userRepo.PendingActivateUser(userID)
 	if err != nil || u == nil {
 		return c.Status(http.StatusNotFound).JSON(fiber.Map{"error": "User not found"})
+	}
+
+	if u.Active {
+		return c.Status(http.StatusBadRequest).JSON(fiber.Map{"error": "Email already verified"})
 	}
 
 	u.Active = true
