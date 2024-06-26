@@ -88,9 +88,8 @@ class UserService {
   }
 
   Future<bool> verifyEmailToken(String token) async {
-    Response res = await _http.post(
-      '${ApiEndpoint.api}${ApiEndpoint.appEmailValidationUrl}',
-      data: {'token': token},
+    Response res = await _http.get(
+      '${ApiEndpoint.appEmailValidationUrl}?token=$token',
     );
     if (res.statusCode == 200) {
       return true;

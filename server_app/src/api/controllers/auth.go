@@ -8,7 +8,6 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	jwt "github.com/golang-jwt/jwt/v4"
-
 )
 
 // VerifyEmail Godoc

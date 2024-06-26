@@ -59,8 +59,10 @@ type UserOutput struct {
 // @Router /auth/register [post]
 func Register(c *fiber.Ctx) error {
 	var userInput UserObject
+
 	// Validate Input
 	if err := validator.ParseBodyAndValidate(c, &userInput); err != nil {
+		fmt.Println("Database error:", &userInput)
 		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(err))
 	}
 
