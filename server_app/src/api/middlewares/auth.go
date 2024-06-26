@@ -49,6 +49,9 @@ func jwtError(c *fiber.Ctx, err error) error {
 func RequireAdmin() fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		token := c.Get("Authorization")
+		if token == "" {
+			return c.Status(http.StatusUnauthorized).JSON(fiber.Map{"error": "Missing Authorization Token"})
+		}
 		token = token[7:]
 		if token == "" {
 			return c.Status(http.StatusUnauthorized).JSON(fiber.Map{"error": "Missing Authorization Token"})

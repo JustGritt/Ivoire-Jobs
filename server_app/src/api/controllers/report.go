@@ -126,7 +126,6 @@ func GetAllReports(c *fiber.Ctx) error {
 // @Router /report/{reportId}/validate [put]
 // @Security Bearer
 func ValidateReport(c *fiber.Ctx) error {
-
 	reportID := c.Params("id")
 	fmt.Println(reportID)
 	if reportID == "" {
@@ -136,6 +135,32 @@ func ValidateReport(c *fiber.Ctx) error {
 	report, err := reportRepo.GetByID(reportID)
 	if err != nil {
 		return c.Status(http.StatusBadRequest).JSON(HTTPResponse(http.StatusBadRequest, "Report not found", nil))
+	}
+
+	reportCount, err := reportRepo.GetReportCount(report.ServiceID)
+	fmt.Println(err)
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(HTTPResponse(http.StatusInternalServerError, "Error getting report count", nil))
+	}
+
+	if reportCount >= 5 {
+		isBanned, err := serviceRepo.IsBannedService(report.ServiceID)
+		if err != nil {
+			return c.Status(http.StatusInternalServerError).JSON(HTTPResponse(http.StatusInternalServerError, "Error getting service", nil))
+		}
+		if isBanned {
+			return c.Status(http.StatusBadRequest).JSON(HTTPResponse(http.StatusBadRequest, "Service already banned", nil))
+		}
+
+		service, err := serviceRepo.GetByID(report.ServiceID)
+		if err != nil {
+			return c.Status(http.StatusInternalServerError).JSON(HTTPResponse(http.StatusInternalServerError, "Error getting service", nil))
+		}
+
+		service.IsBanned = true
+		if err := serviceRepo.Update(service); err != nil {
+			return c.Status(http.StatusInternalServerError).JSON(HTTPResponse(http.StatusInternalServerError, "Error updating service", nil))
+		}
 	}
 
 	report.Status = true

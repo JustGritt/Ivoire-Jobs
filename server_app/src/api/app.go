@@ -21,6 +21,7 @@ import (
 	mail "barassage/api/services/mailer"
 
 	// models
+	"barassage/api/models/ban"
 	"barassage/api/models/booking"
 	"barassage/api/models/category"
 	"barassage/api/models/image"
@@ -68,7 +69,7 @@ func Run() {
 	db.ConnectPostgres()
 
 	// Migration
-	db.PgDB.AutoMigrate(&user.User{}, &service.Service{}, &booking.Booking{}, &image.Image{}, &report.Report{}, &category.Category{})
+	db.PgDB.AutoMigrate(&user.User{}, &service.Service{}, &booking.Booking{}, &image.Image{}, &report.Report{}, &category.Category{}, &ban.Ban{})
 
 	/*
 		============ Set Up Utils ============

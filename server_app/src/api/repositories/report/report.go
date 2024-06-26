@@ -16,7 +16,7 @@ func Create(report *report.Report) error {
 func GetByID(id string) (*report.Report, error) {
 	var report report.Report
 	//find the report by id, that is active and not banned
-	if err := db.PgDB.Where("id = ? AND status = ?", id, true).First(&report).Error; err != nil {
+	if err := db.PgDB.Where("id = ?", id).First(&report).Error; err != nil {
 		return nil, err
 	}
 	return &report, nil
@@ -40,11 +40,19 @@ func GetReportsByUserID(userID string) ([]report.Report, error) {
 
 func GetAllReports() ([]report.Report, error) {
 	var reports []report.Report
-	///find all report that are not banned and are active
-	if err := db.PgDB.Where("status = ? AND is_banned = ?", true, false).Find(&reports).Error; err != nil {
+	///find all report
+	if err := db.PgDB.Find(&reports).Error; err != nil {
 		return nil, err
 	}
 	return reports, nil
+}
+
+func GetReportCount(serviceId string) (int64, error) {
+	var count int64
+	if err := db.PgDB.Model(&report.Report{}).Where("service_id = ?", serviceId).Count(&count).Error; err != nil {
+		return 0, err
+	}
+	return count, nil
 }
 
 func GetErrors() error {
