@@ -160,6 +160,12 @@ func GetBookings(c *fiber.Ctx) error {
 		)
 		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
 	}
+
+	//if bookings is empty return empty array
+	if len(bookings) == 0 {
+		return c.Status(http.StatusOK).JSON([]BookingOutput{})
+	}
+	
 	// Return the bookings
 	return c.Status(http.StatusOK).JSON(bookings)
 }

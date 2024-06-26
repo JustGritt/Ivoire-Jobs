@@ -1,4 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+    <uses-feature android:name="android.hardware.location.network" android:required="false"/>
+    <uses-feature android:name="android.hardware.location.gps" android:required="false"/>
     <application
         android:label="Barassage"
         android:name="${applicationName}"
@@ -20,6 +24,8 @@
               android:resource="@style/NormalTheme"
               />
             <meta-data android:name="flutterEmbedding" android:value="2"/>
+            <meta-data android:name="com.google.android.geo.API_KEY"
+               android:value="AIzaSyCjxv1yp4NEU4gMTu6_pbEr6MMVovcI2Lk"/>
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>

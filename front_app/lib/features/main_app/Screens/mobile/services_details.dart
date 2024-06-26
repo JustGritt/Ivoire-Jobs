@@ -152,6 +152,11 @@ class ServiceDetailPage extends StatelessWidget {
             onPressed: () {},
             child: const Text('Book Now'),
           ),
+
+          ElevatedButton(
+            onPressed: () {},
+            child: const Text('Let\'s Chat'),
+          ),
         ],
       ),
     );

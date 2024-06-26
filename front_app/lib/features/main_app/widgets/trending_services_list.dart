@@ -1,4 +1,3 @@
-
 import 'package:barassage_app/features/main_app/app.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -22,7 +21,7 @@ class TrendingServicesList extends StatelessWidget {
             padding: const EdgeInsets.only(left: 8.0),
             child: GestureDetector(
               onTap: () {
-                context.push('/home/${App.detailService}');
+                context.push('${App.home}/${App.detailService}');
               },
               child: TrendingService(
                   service: trendingServices.trendingServices[index]),

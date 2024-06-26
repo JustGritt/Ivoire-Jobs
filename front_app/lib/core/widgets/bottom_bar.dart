@@ -16,7 +16,6 @@ class BottomBar extends StatelessWidget {
     buttonDatas = buttonDatas ??
         [
           ButtonData(icon: Icons.home, label: 'Home', link: '/'),
-
           ButtonData(icon: Icons.ac_unit, label: 'Features', link: '/feature'),
         ];
   }

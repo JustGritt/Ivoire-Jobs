@@ -2,7 +2,6 @@ import 'package:barassage_app/core/blocs/authentication/authentication_bloc.dart
 import 'package:barassage_app/features/auth_mod/auth_app.dart';
 import 'package:barassage_app/features/main_app/app.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
@@ -27,9 +26,9 @@ class _SplashMobileScreenState extends State<SplashMobileScreen>
     _authenticationBloc.add(InitiateAuth());
     _authenticationBloc.stream.listen((state) {
       if (state is AuthenticationSuccessState) {
-        context.pushReplacement(App.home);
+        context.go(App.home);
       } else if (state is AuthenticationFailureState) {
-        context.pushReplacement(AuthApp.login);
+        context.go(AuthApp.login);
       }
     });
   }

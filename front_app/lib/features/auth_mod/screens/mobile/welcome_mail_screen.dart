@@ -1,12 +1,11 @@
 import 'package:barassage_app/architect.dart';
-import 'package:barassage_app/config/app_colors.dart';
 import 'package:barassage_app/core/helpers/utils_helper.dart';
-import 'package:barassage_app/features/auth_mod/auth_mod.dart';
 import 'package:barassage_app/features/auth_mod/widgets/app_button.dart' as btn;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 
 class WelcomeMailScreen extends StatelessWidget {
   const WelcomeMailScreen({super.key});
@@ -21,7 +20,6 @@ class WelcomeMailScreen extends StatelessWidget {
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
               Container(
@@ -41,7 +39,7 @@ class WelcomeMailScreen extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              Container(
+              SizedBox(
                 width: 250,
                 child: Text(
                   textAlign: TextAlign.center,
@@ -63,8 +61,7 @@ class WelcomeMailScreen extends StatelessWidget {
                   }),
               btn.AppButton(
                 onPressed: () {
-                  Navigator.popUntil(
-                      context, ModalRoute.withName(AuthApp.login));
+                  GoRouter.of(context).go(AuthApp.login);
                 },
                 width: 250,
                 backgroundColor: theme.primaryColorDark,

@@ -4,6 +4,7 @@ import (
 	validator "barassage/api/common/validator"
 	"barassage/api/models/report"
 	reportRepo "barassage/api/repositories/report"
+	serviceRepo "barassage/api/repositories/service"
 
 	"fmt"
 	"net/http"
@@ -12,23 +13,15 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/google/uuid"
-	"gorm.io/gorm"
 )
 
 // ReportObject represents the report data structure.
 type ReportObject struct {
-	ReportID  string    `json:"-"`
-	UserID    string    `json:"-"`
-	ServiceID string    `json:"serviceId" validate:"required"`
-	Reason    string    `json:"reason" validate:"required,min=2,max=255"`
-	Status    bool      `json:"-" default:"false"`
-	CreatedAt time.Time `json:"-"`
+	ServiceID string `json:"serviceId" validate:"required"`
+	Reason    string `json:"reason" validate:"required,min=2,max=255"`
 }
 
-type ReportUpdateObject struct {
-	Reason string `json:"reason" validate:"required,min=2,max=255"`
-}
-
+// ReportOutput represents the output data structure for a report.
 type ReportOutput struct {
 	ReportID  string    `json:"id"`
 	UserID    string    `json:"userId"`
@@ -38,9 +31,9 @@ type ReportOutput struct {
 	CreatedAt time.Time `json:"createdAt"`
 }
 
-// CreateReport Godoc
+// CreateReport handles the creation of a new report.
 // @Summary Create Report
-// @Reason Create a report
+// @Description Create a report
 // @Tags Report
 // @Produce json
 // @Param payload body ReportObject true "Report Body"
@@ -51,7 +44,6 @@ type ReportOutput struct {
 // @Router /report [post]
 // @Security Bearer
 func CreateReport(c *fiber.Ctx) error {
-	var errorList []*fiber.Error
 	var reportInput ReportObject
 	if err := validator.ParseBodyAndValidate(c, &reportInput); err != nil {
 		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(err))
@@ -59,65 +51,47 @@ func CreateReport(c *fiber.Ctx) error {
 
 	user := c.Locals("user").(*jwt.Token)
 	claims := user.Claims.(jwt.MapClaims)
-	userID := claims["userID"]
-	// Validate Input
-	if userID == nil {
-		errorList = append(
-			errorList,
-			&fiber.Error{
-				Code:    fiber.StatusBadRequest,
-				Message: "can't extract user info from request",
-			},
-		)
-		return c.Status(fiber.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
+	userID := claims["userID"].(string)
+
+	// Map the input to report model
+	newReport := report.Report{
+		UserID:    userID,
+		ServiceID: reportInput.ServiceID,
+		Reason:    reportInput.Reason,
+		Status:    false,
+		ID:        uuid.New().String(),
+		CreatedAt: time.Now(),
 	}
 
-	//map the input to report model
-	s := report.Report{
-		UserID: reportInput.UserID,
-		Reason: reportInput.Reason,
-		Status: reportInput.Status,
-		ID:     uuid.New().String(),
+	// Get the ser vice
+	service, err := serviceRepo.GetByID(reportInput.ServiceID)
+	if err != nil {
+		return c.Status(http.StatusBadRequest).JSON(HTTPResponse(http.StatusBadRequest, "Cannot find the service", nil))
 	}
 
-	s.UserID = userID.(string)
-
-	// Check if the report already exists for the given user
-	if _, err := reportRepo.GetReportsByUserForService(s.UserID, s.ServiceID); err == nil {
-		response := HTTPResponse(http.StatusForbidden, "Report Already Exist", nil)
-		return c.Status(http.StatusForbidden).JSON(response)
+	if service.UserID == userID {
+		return c.Status(http.StatusBadRequest).JSON(HTTPResponse(http.StatusBadRequest, "Cannot report your service", nil))
 	}
 
-	// Save Report to DB
-	if err := reportRepo.Create(&s); err != nil {
-		// Check if the error is a validation error
-		if err == gorm.ErrInvalidField {
-			// Print a custom error message for the validation error
-			fmt.Println("Validation error:", err.Error())
-		} else {
-			// Print other types of errors
-			fmt.Println("Database error:", err.Error())
-		}
-
-		errorList := []*Response{
-			{
-				Code:    http.StatusConflict,
-				Message: "Report Already Exist",
-				Data:    nil,
-			},
-		}
-		response := HTTPResponse(http.StatusInternalServerError, "Report Not Registered", errorList)
-		return c.Status(http.StatusInternalServerError).JSON(response)
+	// Check if the report already exists for the given user and service
+	existingReports, err := reportRepo.GetReportsByUserForService(userID, reportInput.ServiceID)
+	if err == nil && len(existingReports) > 0 {
+		return c.Status(http.StatusForbidden).JSON(HTTPResponse(http.StatusForbidden, "Report Already Exists", nil))
 	}
 
-	reportOutput := mapReportToOutPut(&s)
-	response := HTTPResponse(http.StatusCreated, "Report Created", reportOutput)
-	return c.Status(http.StatusCreated).JSON(response)
+	// Save the report to the database
+	if err := reportRepo.Create(&newReport); err != nil {
+		fmt.Printf("Database error: %v\n", err) // Add detailed logging
+		return c.Status(http.StatusInternalServerError).JSON(HTTPResponse(http.StatusInternalServerError, "Report Not Registered", err.Error()))
+	}
+
+	reportOutput := mapReportToOutput(&newReport)
+	return c.Status(http.StatusCreated).JSON(HTTPResponse(http.StatusCreated, "Report Created", reportOutput))
 }
 
-// GetAll Godoc
+// GetAllReports retrieves all reports from the database.
 // @Summary Get all reports
-// @Reason Get all reports
+// @Description Get all reports
 // @Tags Report
 // @Produce json
 // @Success 200 {array} ReportOutput
@@ -126,33 +100,64 @@ func CreateReport(c *fiber.Ctx) error {
 // @Failure 500 {array} ErrorResponse
 // @Router /report/collection [get]
 func GetAllReports(c *fiber.Ctx) error {
-	var reports []report.Report
-	var errorList []*fiber.Error
 	reports, err := reportRepo.GetAllReports()
 	if err != nil {
-		errorList = append(
-			errorList,
-			&fiber.Error{
-				Code:    fiber.StatusInternalServerError,
-				Message: "error getting reports",
-			},
-		)
-		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
+		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse([]*fiber.Error{{Code: fiber.StatusInternalServerError, Message: "error getting reports"}}))
 	}
 
-	return c.Status(http.StatusOK).JSON(reports)
+	var reportOutputs []ReportOutput
+	for _, r := range reports {
+		reportOutputs = append(reportOutputs, *mapReportToOutput(&r))
+	}
+
+	return c.Status(http.StatusOK).JSON(reportOutputs)
+}
+
+// Valide the report
+// @Summary Validate the report
+// @Description Validate the report
+// @Tags Report
+// @Produce json
+// @Param reportId path string true "Report ID"
+// @Success 200 {object} Response
+// @Failure 400 {array} ErrorResponse
+// @Failure 401 {array} ErrorResponse
+// @Failure 500 {array} ErrorResponse
+// @Router /report/{reportId}/validate [put]
+// @Security Bearer
+func ValidateReport(c *fiber.Ctx) error {
+
+	reportID := c.Params("id")
+	fmt.Println(reportID)
+	if reportID == "" {
+		return c.Status(http.StatusBadRequest).JSON(HTTPResponse(http.StatusBadRequest, "Report ID is required", nil))
+	}
+
+	report, err := reportRepo.GetByID(reportID)
+	if err != nil {
+		return c.Status(http.StatusBadRequest).JSON(HTTPResponse(http.StatusBadRequest, "Report not found", nil))
+	}
+
+	report.Status = true
+	if err := reportRepo.Update(report); err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(HTTPResponse(http.StatusInternalServerError, "Error updating report", nil))
+	}
+
+	return c.Status(http.StatusOK).JSON(report)
+
 }
 
 // ============================================================
 // =================== Private Methods ========================
 // ============================================================
 
-func mapReportToOutPut(u *report.Report) *ReportOutput {
+func mapReportToOutput(r *report.Report) *ReportOutput {
 	return &ReportOutput{
-		UserID:    u.UserID,
-		ServiceID: u.ID,
-		Reason:    u.Reason,
-		Status:    u.Status,
-		CreatedAt: u.CreatedAt,
+		ReportID:  r.ID,
+		UserID:    r.UserID,
+		ServiceID: r.ServiceID,
+		Reason:    r.Reason,
+		Status:    r.Status,
+		CreatedAt: r.CreatedAt,
 	}
 }

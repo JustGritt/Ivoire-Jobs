@@ -30,7 +30,7 @@ func SetupRoutes(app *fiber.App) {
 	auth.Post("/login", ctl.Login)
 	auth.Post("/logout", ctl.Logout)
 	auth.Post("/refresh", ctl.RefreshAuth)
-	auth.Get("/auth/verify-email", ctl.VerifyEmail)
+	auth.Get("/verify-email", ctl.VerifyEmail)
 	// Requires authentication
 	auth.Get("/me", middlewares.RequireLoggedIn(), ctl.GetMyProfile)
 
@@ -59,13 +59,15 @@ func SetupRoutes(app *fiber.App) {
 	tag.Get("/", ctl.GetAll)
 	tag.Post("/", ctl.AddTagInfo)
 
-	// Reports
+	// Report Group
 	report := v1.Group("/report")
-	report.Post("/:id", middlewares.RequireLoggedIn(), ctl.CreateReport)
+	report.Post("/", middlewares.RequireLoggedIn(), ctl.CreateReport) // Ensure this route is correct
 	report.Get("/collection", ctl.GetAllReports)
+	report.Put("/:id", ctl.ValidateReport)
 
 	// Category Group
 	category := v1.Group("/category")
 	category.Get("/collection", ctl.GetAllCategories)
 	category.Post("/", middlewares.RequireLoggedIn(), ctl.CreateCategory)
+
 }

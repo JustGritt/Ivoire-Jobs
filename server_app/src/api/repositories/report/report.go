@@ -16,7 +16,7 @@ func Create(report *report.Report) error {
 func GetByID(id string) (*report.Report, error) {
 	var report report.Report
 	//find the report by id, that is active and not banned
-	if err := db.PgDB.Where("id = ? AND status = ? AND is_banned = ?", id, true, false).First(&report).Error; err != nil {
+	if err := db.PgDB.Where("id = ? AND status = ?", id, true).First(&report).Error; err != nil {
 		return nil, err
 	}
 	return &report, nil

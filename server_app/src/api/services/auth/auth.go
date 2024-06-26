@@ -38,6 +38,9 @@ type AccessClaims struct {
 func IssueAccessToken(u user.User) (*TokenDetails, error) {
 	expireTime := time.Now().Add(time.Hour) // 1 hour
 	tokenUUID := uuid.New().String()
+	if u.Role == "" {
+		u.Role = "user"
+	}
 	// Generate encoded token
 	claims := AccessClaims{
 		tokenUUID,
