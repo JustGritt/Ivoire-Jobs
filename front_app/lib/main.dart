@@ -37,20 +37,19 @@ class BarassageApp extends StatelessWidget {
     var tm = context.watch<ThemeProvider>();
     // print("My App: " + tm.isDarkMode.toString());
     return MaterialApp.router(
-      title: 'Barassage App',
-      supportedLocales: L10n.all,
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      locale: const Locale('en', 'US'),
-      debugShowCheckedModeBanner: false,
-      theme: MyTheme().lightTheme,
-      darkTheme: MyTheme().darkTheme,
-      themeMode: tm.themeMode,
-      routerConfig: router
-    );
+        title: 'Barassage App',
+        supportedLocales: L10n.all,
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        locale: const Locale('en', 'US'),
+        debugShowCheckedModeBanner: false,
+        theme: MyTheme().lightTheme,
+        darkTheme: MyTheme().darkTheme,
+        themeMode: tm.themeMode,
+        routerConfig: router);
   }
 }

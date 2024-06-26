@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 class HomeController extends StatelessWidget {
   const HomeController({super.key});
 

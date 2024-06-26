@@ -70,6 +70,5 @@ func RequireAdmin() fiber.Handler {
 		}
 
 		return c.Next()
-
 	}
 }

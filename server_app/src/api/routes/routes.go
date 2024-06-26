@@ -50,13 +50,15 @@ func SetupRoutes(app *fiber.App) {
 	booking.Get("/collection", ctl.GetBookings)
 	booking.Put("/:id", middlewares.RequireLoggedIn(), ctl.UpdateBooking)
 
-	// Reports
+  // Report Group
 	report := v1.Group("/report")
-	report.Post("/:id", middlewares.RequireLoggedIn(), ctl.CreateReport)
+	report.Post("/", middlewares.RequireLoggedIn(), ctl.CreateReport) // Ensure this route is correct
 	report.Get("/collection", ctl.GetAllReports)
+	report.Put("/:id", ctl.ValidateReport)
 
 	// Category Group
 	category := v1.Group("/category")
 	category.Get("/collection", ctl.GetAllCategories)
 	category.Post("/", middlewares.RequireLoggedIn(), ctl.CreateCategory)
+  
 }

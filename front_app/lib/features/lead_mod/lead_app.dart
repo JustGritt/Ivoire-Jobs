@@ -27,7 +27,6 @@ class LeadApp extends RouteManager {
           return const CupertinoPage(child: SearchController());
         }));
 
-
     addRoute(GoRoute(
         path: LeadApp.addEnquery,
         pageBuilder: (context, state) {
@@ -57,13 +56,13 @@ class LeadApp extends RouteManager {
         pageBuilder: (context, state) {
           return const CupertinoPage(child: DashboardController());
         }));
-      
+
     addRoute(GoRoute(
         path: LeadApp.search,
         pageBuilder: (context, state) {
           return const CupertinoPage(child: SearchController());
         }));
-      
+
     addRoute(GoRoute(
         path: LeadApp.addEnquery,
         pageBuilder: (context, state) {
@@ -75,7 +74,7 @@ class LeadApp extends RouteManager {
         pageBuilder: (context, state) {
           return const CupertinoPage(child: EditEnqueryController());
         }));
-        
+
     // addRoute(LeadApp.home, (context) => const DashboardController());
     // addRoute(LeadApp.search, (context) => const SearchController());
     // addRoute(LeadApp.addEnquery, (context) => const AddEnqueryController());
