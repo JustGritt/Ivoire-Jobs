@@ -50,7 +50,7 @@ func SetupRoutes(app *fiber.App) {
 	booking.Get("/collection", ctl.GetBookings)
 	booking.Put("/:id", middlewares.RequireLoggedIn(), ctl.UpdateBooking)
 
-  // Report Group
+	// Report Group
 	report := v1.Group("/report")
 	report.Post("/", middlewares.RequireLoggedIn(), ctl.CreateReport) // Ensure this route is correct
 	report.Get("/collection", ctl.GetAllReports)
@@ -60,5 +60,11 @@ func SetupRoutes(app *fiber.App) {
 	category := v1.Group("/category")
 	category.Get("/collection", ctl.GetAllCategories)
 	category.Post("/", middlewares.RequireLoggedIn(), ctl.CreateCategory)
-  
+
+	// Ban Group
+	ban := v1.Group("/ban", middlewares.RequireAdmin())
+	ban.Post("/", ctl.CreateBan)
+	ban.Get("/collection", ctl.GetAllBans)
+	ban.Delete("/:id", ctl.DeleteBan)
+
 }

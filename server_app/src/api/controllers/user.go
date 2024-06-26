@@ -5,6 +5,7 @@ import (
 	validator "barassage/api/common/validator"
 	cfg "barassage/api/configs"
 	"barassage/api/models/user"
+	banRepo "barassage/api/repositories/ban"
 	userRepo "barassage/api/repositories/user"
 	"barassage/api/services/auth"
 	"barassage/api/services/mailer"
@@ -193,6 +194,21 @@ func Login(c *fiber.Ctx) error {
 			&Response{
 				Code:    http.StatusUnauthorized,
 				Message: "Please Activate Your Account first",
+				Data:    err,
+			},
+		)
+		return c.Status(http.StatusUnauthorized).JSON(HTTPErrorResponse(errorList))
+	}
+
+	// Check if User is Banned
+	ban, err := banRepo.GetByUserID(user.ID)
+	if err == nil && ban.UserID == user.ID {
+		errorList = nil
+		errorList = append(
+			errorList,
+			&Response{
+				Code:    http.StatusUnauthorized,
+				Message: "Can't login to your account, you are banned",
 				Data:    err,
 			},
 		)
