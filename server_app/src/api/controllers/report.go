@@ -143,11 +143,7 @@ func ValidateReport(c *fiber.Ctx) error {
 		return c.Status(http.StatusInternalServerError).JSON(HTTPResponse(http.StatusInternalServerError, "Error updating report", nil))
 	}
 
-	if len(reports) == 0 {
-		return c.Status(http.StatusOK).JSON([]ReportOutput{})
-	}
-
-	return c.Status(http.StatusOK).JSON(reports)
+	return c.Status(http.StatusOK).JSON(report)
 
 }
 

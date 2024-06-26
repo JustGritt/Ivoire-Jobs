@@ -96,7 +96,6 @@ func seedUser(db *gorm.DB, firstName, lastName, email, password, role string) er
 			Status:      true,
 			Duration:    30,
 			IsBanned:    false,
-			Thumbnail:   "string",
 		},
 		{
 			ID:          uuid.New().String(),
@@ -107,7 +106,6 @@ func seedUser(db *gorm.DB, firstName, lastName, email, password, role string) er
 			Status:      true,
 			Duration:    60,
 			IsBanned:    false,
-			Thumbnail:   "string",
 		},
 	}
 
