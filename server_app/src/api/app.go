@@ -22,6 +22,7 @@ import (
 
 	// models
 	"barassage/api/models/booking"
+	"barassage/api/models/category"
 	"barassage/api/models/image"
 	"barassage/api/models/report"
 	"barassage/api/models/service"
@@ -66,11 +67,8 @@ func Run() {
 	// Connect to Postgres
 	db.ConnectPostgres()
 
-	// Drop on serve restarts in dev
-	//db.PgDB.Migrator().DropTable(&user.User{}, &report.Report{}, &service.Service{})
-
 	// Migration
-	db.PgDB.AutoMigrate(&user.User{}, &service.Service{}, &booking.Booking{}, &image.Image{}, &report.Report{})
+	db.PgDB.AutoMigrate(&user.User{}, &service.Service{}, &booking.Booking{}, &image.Image{}, &report.Report{}, &category.Category{})
 
 	/*
 		============ Set Up Utils ============
