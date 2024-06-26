@@ -6,7 +6,7 @@ import '../../Screens/mobile/service.dart' as mobile;
 import '../../Screens/tablet/about.dart' as tablet;
 
 class ServicesController extends StatefulController {
-  final String _title = 'Services';
+  final String _title = 'My services';
   const ServicesController({super.key});
 
   @override

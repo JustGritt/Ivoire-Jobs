@@ -2,10 +2,11 @@ package app
 
 import (
 	"fmt"
+	"log"
 
 	// Configs
-	"barassage/api/bucket"
 	cfg "barassage/api/configs"
+	"barassage/api/services/bucket"
 
 	// Swagger
 	docs "barassage/api/docs" // Swagger Docs
@@ -17,10 +18,12 @@ import (
 	db "barassage/api/database"
 
 	//mailer
-	mail "barassage/api/mailer"
+	mail "barassage/api/services/mailer"
 
 	// models
 	"barassage/api/models/report"
+	"barassage/api/models/booking"
+	"barassage/api/models/image"
 	"barassage/api/models/service"
 	"barassage/api/models/user"
 
@@ -44,7 +47,10 @@ import (
 // @name Authorization
 // @description Type "Bearer" followed by a space and JWT token.
 func Run() {
-	app := fiber.New()
+	app := fiber.New(fiber.Config{
+		ServerHeader:      "Fiber",
+		StreamRequestBody: true,
+	})
 
 	/*
 		====== Setup Configs ============
@@ -63,11 +69,11 @@ func Run() {
 	// Drop on serve restarts in dev
 	//db.PgDB.Migrator().DropTable(&user.User{}, &report.Report{}, &service.Service{})
 
-	// Migration
-	db.PgDB.AutoMigrate(&user.User{}, &report.Report{}, &service.Service{})
-
 	// Seeder
 	db.SeedDatabase(db.PgDB)
+
+	// Migration
+	db.PgDB.AutoMigrate(&user.User{}, &service.Service{}, &booking.Booking{}, &image.Image{}, &report.Report{})
 
 	/*
 		============ Set Up Utils ============
@@ -113,5 +119,8 @@ func Run() {
 
 	// Run the app and listen on given port
 	port := fmt.Sprintf(":%s", config.Port)
-	app.Listen(port)
+	//app.Listen(port)
+	if err := app.Listen(port); err != nil {
+		log.Fatalf("Failed to start server: %v", err)
+	}
 }

@@ -30,12 +30,12 @@ migrate_working_dir/
 .pub-cache/
 .pub/
 /build/
+**/ios/Runner/*
 
 # Remove App Auth
 .env
 
 # Web related
-lib/generated_plugin_registrant.dart
 
 # Symbolication related
 app.*.symbols

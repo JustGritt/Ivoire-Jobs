@@ -48,7 +48,6 @@ jobs:
       - name: Generate .env File
         run: |
           echo "APP_HOST=${{ secrets.APP_HOST }}" >> ./server_app/src/.env
-          echo "APP_PORT=${{ secrets.APP_PORT }}" >> ./server_app/src/.env
           echo "JWT_ACCESS_SIGN_KEY=${{ secrets.JWT_ACCESS_SIGN_KEY }}" >> ./server_app/src/.env
           echo "JWT_REFRESH_SIGN_KEY=${{ secrets.JWT_REFRESH_SIGN_KEY }}" >> ./server_app/src/.env
           echo "JWT_ISSUER=${{ secrets.JWT_ISSUER }}" >> ./server_app/src/.env
@@ -57,6 +56,13 @@ jobs:
           echo "EMAIL_FROM=${{ secrets.EMAIL_FROM }}" >> ./server_app/src/.env
           echo "FRONTEND_URL=${{ secrets.FRONTEND_URL }}" >> ./server_app/src/.env
           echo "DB_URL=${{ secrets.DB_URL }}" >> ./server_app/src/.env
+          echo "S3_REGION=${{ secrets.S3_REGION }}" >> ./server_app/src/.env
+          echo "S3_BUCKET=${{ secrets.S3_BUCKET }}" >> ./server_app/src/.env
+          echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> ./server_app/src/.env
+          echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> ./server_app/src/.env
+          echo "STRIPE_PUBLISHABLE_KEY=${{ secrets.STRIPE_PUBLISHABLE_KEY }}" >> ./server_app/src/.env
+          echo "STRIPE_PRIVATE_KEY=${{ secrets.STRIPE_PRIVATE_KEY }}" >> ./server_app/src/.env
+          echo "STRIPE_WEBHOOK_SECRET=${{ secrets.STRIPE_WEBHOOK_SECRET }}" >> ./server_app/src/.env
 
       - name: Build and push Docker image for ivoirejobs-api
         uses: docker/build-push-action@v2

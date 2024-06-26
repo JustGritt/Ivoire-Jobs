@@ -6,6 +6,14 @@ import '../../config/config.dart';
 ThemeData defaultTheme = ThemeData(
   fontFamily: 'Okta',
   brightness: Brightness.light,
+  primaryColor: AppColors.primaryBlue,
+  colorScheme: const ColorScheme.light(
+    primary: AppColors.primaryBlue,
+    secondary: AppColors.secondaryBlue,
+    primaryContainer: AppColors.beigeColor,
+    secondaryContainer: AppColors.peachColor,
+    surface: AppColors.greyFair,
+  ),
   scaffoldBackgroundColor: Colors.white,
   appBarTheme: const AppBarTheme(
     titleTextStyle: TextStyle(
@@ -19,11 +27,21 @@ ThemeData defaultTheme = ThemeData(
   navigationBarTheme: const NavigationBarThemeData(
     backgroundColor: AppColors.white,
   ),
+  inputDecorationTheme:  const InputDecorationTheme(
+    errorStyle: TextStyle(color: AppColors.red),
+  ),
   textTheme: const TextTheme(
     displayLarge: TextStyle(
-        color: AppColors.black, fontSize: 25, fontWeight: FontWeight.w600),
+        color: AppColors.black,
+        fontSize: 25,
+        fontWeight: FontWeight.w600,
+        fontFamily: 'Okta'),
     displayMedium: TextStyle(
         color: AppColors.grey, fontSize: 16, fontWeight: FontWeight.w500),
+    titleMedium: TextStyle(
+        color: AppColors.black, fontSize: 18, fontWeight: FontWeight.w500),
+    labelLarge: TextStyle(
+        color: Colors.black, fontSize: 22, fontWeight: FontWeight.w700),
   ),
   popupMenuTheme: const PopupMenuThemeData(
     color: Color.fromARGB(255, 11, 238, 250),
@@ -63,6 +81,13 @@ class AppTheme {
             textTheme: ButtonTextTheme.primary,
             buttonColor: Colors.white,
           ),
+          colorScheme: const ColorScheme.dark(
+            primary: AppColors.primaryBlue,
+            secondary: AppColors.secondaryBlue,
+            primaryContainer: AppColors.beigeColor,
+            secondaryContainer: AppColors.peachColor,
+            surface: AppColors.black,
+          ),
           primaryColorDark: AppColors.white,
           textTheme: const TextTheme(
             displayLarge:
@@ -71,6 +96,10 @@ class AppTheme {
                 color: AppColors.grey,
                 fontSize: 16,
                 fontWeight: FontWeight.w500),
+            labelLarge: TextStyle(
+                color: AppColors.white,
+                fontSize: 22,
+                fontWeight: FontWeight.w700),
           ),
           bottomNavigationBarTheme: const BottomNavigationBarThemeData(
             backgroundColor: AppColors.space,

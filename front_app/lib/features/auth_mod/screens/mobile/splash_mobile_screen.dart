@@ -26,9 +26,9 @@ class _SplashMobileScreenState extends State<SplashMobileScreen>
     _authenticationBloc.add(InitiateAuth());
     _authenticationBloc.stream.listen((state) {
       if (state is AuthenticationSuccessState) {
-        context.pushReplacement(App.home);
+        context.go(App.home);
       } else if (state is AuthenticationFailureState) {
-        context.pushReplacement(AuthApp.login);
+        context.go(AuthApp.login);
       }
     });
   }

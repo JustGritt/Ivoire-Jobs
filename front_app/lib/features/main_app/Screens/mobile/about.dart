@@ -43,10 +43,10 @@ class _AboutState extends State<About> {
                 controller: _name,
                 focusNode: FocusNode(),
                 style: TextStyle(
-                  color: theme.textTheme.bodyText1!.color,
+                  color: theme.textTheme.displayMedium!.color,
                   fontSize: 20,
                 ),
-                cursorColor: theme.textTheme.bodyText1!.color!,
+                cursorColor: theme.textTheme.displayMedium!.color!,
                 backgroundCursorColor: Colors.yellowAccent,
               ),
             ),
