@@ -1,7 +1,6 @@
 package middlewares
 
 import (
-	"fmt"
 	"net/http"
 
 	cfg "barassage/api/configs"
@@ -60,7 +59,6 @@ func RequireAdmin() fiber.Handler {
 			return []byte(cfg.GetConfig().JWTAccessSecret), nil
 		})
 
-		fmt.Println(claims)
 		if err != nil {
 			return c.Status(http.StatusUnauthorized).JSON(fiber.Map{"error": "Invalid or Expired Token"})
 		}
