@@ -80,4 +80,9 @@ func SetupRoutes(app *fiber.App) {
 	// User Group
 	user := v1.Group("/user")
 	user.Get("/:id/service", middlewares.RequireLoggedIn(), ctl.GetServiceByUserId)
+
+	// Member Group
+	member := v1.Group("/member", middlewares.RequireLoggedIn())
+	member.Post("/", ctl.CreateMember)
+
 }
