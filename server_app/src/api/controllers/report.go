@@ -6,7 +6,6 @@ import (
 	reportRepo "barassage/api/repositories/report"
 	serviceRepo "barassage/api/repositories/service"
 
-	"fmt"
 	"net/http"
 	"time"
 

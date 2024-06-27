@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"barassage/api/models/rating"
-	"fmt"
 
 	bookingRepo "barassage/api/repositories/booking"
 	ratingRepo "barassage/api/repositories/rating"
