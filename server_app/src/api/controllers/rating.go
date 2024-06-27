@@ -10,7 +10,6 @@ import (
 	validator "barassage/api/common/validator"
 
 	"net/http"
-	"time"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -27,14 +26,14 @@ type RatingPendingObject struct {
 }
 
 type RatingOutput struct {
-	ID        string    `json:"id"`
-	ServiceID string    `json:"serviceId"`
-	Rating    int       `json:"rating"`
-	Comment   string    `json:"comment"`
-	UserID    string    `json:"userId"`
-	CreatedAt time.Time `json:"createdAt"`
-	Status    bool      `json:"status"`
-	Score     float64   `json:"score"`
+	ID        string  `json:"id"`
+	ServiceID string  `json:"serviceId"`
+	Rating    int     `json:"rating"`
+	Comment   string  `json:"comment"`
+	UserID    string  `json:"userId"`
+	CreatedAt string  `json:"createdAt"`
+	Status    bool    `json:"status"`
+	Score     float64 `json:"score"`
 }
 
 // CreateRating handles the creation of a new rating.
@@ -294,7 +293,6 @@ func GetAllRatingsFromService(c *fiber.Ctx) error {
 	var errorList []*fiber.Error
 	serviceID := c.Params("id")
 	ratings, err := ratingRepo.GetByServiceID(serviceID)
-	fmt.Println(ratings)
 	if err != nil {
 		errorList = append(errorList, &fiber.Error{
 			Code:    http.StatusInternalServerError,
@@ -339,7 +337,7 @@ func mapRatingToOutput(r *rating.Rating) *RatingOutput {
 		Rating:    r.Rating,
 		Comment:   r.Comment,
 		UserID:    r.UserID,
-		CreatedAt: r.CreatedAt,
+		CreatedAt: r.CreatedAt.Format("2006-01-02"),
 		Status:    r.Status,
 	}
 }

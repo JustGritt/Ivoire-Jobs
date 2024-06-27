@@ -9,7 +9,6 @@ import (
 	validator "barassage/api/common/validator"
 
 	"net/http"
-	"time"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -20,10 +19,10 @@ type BanObject struct {
 }
 
 type BanOutput struct {
-	BanID     string    `json:"id"`
-	UserID    string    `json:"userId"`
-	Reason    string    `json:"reason"`
-	CreatedAt time.Time `json:"createdAt"`
+	BanID     string `json:"id"`
+	UserID    string `json:"userId"`
+	Reason    string `json:"reason"`
+	CreatedAt string `json:"createdAt"`
 }
 
 // CreateBan handles the creation of a new ban.
@@ -169,6 +168,6 @@ func mapBanToOutput(b *ban.Ban) *BanOutput {
 		BanID:     b.ID,
 		UserID:    b.UserID,
 		Reason:    b.Reason,
-		CreatedAt: b.CreatedAt,
+		CreatedAt: b.CreatedAt.Format("2006-01-02"),
 	}
 }

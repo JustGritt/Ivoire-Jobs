@@ -22,7 +22,6 @@ func HandleWebhook(c *fiber.Ctx) error {
 	// with the webhook signing key.
 	event, err := webhook.ConstructEvent(payload, c.Get("Stripe-Signature"), endpointSecret)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error verifying webhook signature: %v\n", err)
 		return c.Status(fiber.StatusBadRequest).SendString("Error verifying webhook signature")
 	}
 

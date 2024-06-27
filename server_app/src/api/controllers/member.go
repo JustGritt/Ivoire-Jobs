@@ -9,7 +9,6 @@ import (
 	validator "barassage/api/common/validator"
 
 	"net/http"
-	"time"
 
 	"github.com/gofiber/fiber/v2"
 	jwt "github.com/golang-jwt/jwt/v4"
@@ -20,9 +19,9 @@ type MemberObject struct {
 }
 
 type MemberOutput struct {
-	UserID    string    `json:"userId"`
-	Reason    string    `json:"reason"`
-	CreatedAt time.Time `json:"createdAt"`
+	UserID    string `json:"userId"`
+	Reason    string `json:"reason"`
+	CreatedAt string `json:"createdAt"`
 }
 
 // CreateMember handles the creation of a new member.
@@ -139,6 +138,6 @@ func mapMemberToOutput(b *member.Member) *MemberOutput {
 	return &MemberOutput{
 		UserID:    b.UserID,
 		Reason:    b.Reason,
-		CreatedAt: b.CreatedAt,
+		CreatedAt: b.CreatedAt.Format("2006-01-02"),
 	}
 }

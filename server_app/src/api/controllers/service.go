@@ -461,7 +461,6 @@ func UpdateService(c *fiber.Ctx) error {
 	}
 
 	//remove the images from the service
-	fmt.Println(len(updateInput.DeleteImage))
 	if len(updateInput.DeleteImage) > 0 {
 		for _, img := range updateInput.DeleteImage {
 			if err := serviceRepo.DeleteImage(existingService, img); err != nil {
@@ -769,7 +768,6 @@ func SearchService(c *fiber.Ctx) error {
 // ============================================================
 
 func mapServiceToOutPut(u *service.Service) *ServiceOutput {
-	fmt.Println(u.Categories)
 	imageUrls := make([]string, len(u.Images))
 	for i, img := range u.Images {
 		imageUrls[i] = img.URL

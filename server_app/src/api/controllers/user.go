@@ -63,6 +63,8 @@ type UserOutput struct {
 	ProfilePicture string `json:"profilePicture"`
 	Bio            string `json:"bio"`
 	ID             string `json:"id"`
+	CreatedAt      string `json:"createdAt"`
+	UpdatedAt      string `json:"updatedAt"`
 }
 
 // Register Godoc
@@ -187,8 +189,6 @@ func Login(c *fiber.Ctx) error {
 		)
 		return c.Status(http.StatusNotFound).JSON(HTTPErrorResponse(errorList))
 	}
-	fmt.Println("Validation error:", err)
-
 	// Check if Password is Correct (Hash and Compare DB Hash)
 	passwordIsCorrect := passwordUtil.CheckPasswordHash(userInput.Password, user.Password)
 	if !passwordIsCorrect {
@@ -276,7 +276,6 @@ func GetMyProfile(c *fiber.Ctx) error {
 			"msg": "can't extract user info from request",
 		})
 	}
-	fmt.Println("Hello,", userID)
 	// Check If User Exists
 	dbUser, err := userRepo.GetById(userID.(string))
 	if err != nil {
@@ -500,5 +499,7 @@ func mapUserToOutPut(u *user.User) *UserOutput {
 		Email:          u.Email,
 		ProfilePicture: u.ProfilePicture,
 		Bio:            u.Bio,
+		CreatedAt:      u.CreatedAt.Format("2006-01-02"),
+		UpdatedAt:      u.UpdatedAt.Format("2006-01-02"),
 	}
 }
