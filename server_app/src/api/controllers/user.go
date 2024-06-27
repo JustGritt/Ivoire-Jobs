@@ -470,11 +470,7 @@ func PatchToken(c *fiber.Ctx) error {
 		return c.Status(http.StatusBadRequest).JSON(HTTPErrorResponse(errorList))
 	}
 
-	//just send a status ok
-
-	response := HTTPResponse(http.StatusOK, "User Updated", nil)
-	return c.Status(http.StatusOK).JSON(response)
-
+	return c.SendStatus(http.StatusOK)
 }
 
 // ============================================================

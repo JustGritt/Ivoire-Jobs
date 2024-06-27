@@ -579,9 +579,7 @@ func UpdateService(c *fiber.Ctx) error {
 		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
-	serviceOutput := mapServiceToOutPut(existingService)
-	response := HTTPResponse(http.StatusOK, "Service Updated", serviceOutput)
-	return c.Status(http.StatusOK).JSON(response)
+	return c.SendStatus(http.StatusOK)
 }
 
 // DeleteService Godoc

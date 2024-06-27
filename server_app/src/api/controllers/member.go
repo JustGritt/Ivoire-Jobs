@@ -124,10 +124,7 @@ func ValidateMember(c *fiber.Ctx) error {
 		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
-	return c.Status(http.StatusOK).JSON(Response{
-		Message: "Member validated",
-		Code:    http.StatusOK,
-	})
+	return c.SendStatus(http.StatusOK)
 }
 
 // ============================================================

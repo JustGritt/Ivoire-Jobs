@@ -179,18 +179,7 @@ func ValidateRating(c *fiber.Ctx) error {
 		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
-	//send back the rating
-	rating, err := ratingRepo.GetByID(id)
-	if err != nil {
-		errorList = append(errorList, &fiber.Error{
-			Code:    http.StatusInternalServerError,
-			Message: "Failed to get rating",
-		})
-		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
-	}
-
-	ratingOutput := mapRatingToOutput(rating)
-	return c.Status(http.StatusOK).JSON(ratingOutput)
+	return c.SendStatus(http.StatusOK)
 }
 
 // GetRatingByID handles the retrieval of a rating by id.
