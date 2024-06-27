@@ -75,6 +75,7 @@ func SetupRoutes(app *fiber.App) {
 	rating.Get("/pending", middlewares.RequireAdmin(), ctl.GetPendingRatings)
 	rating.Get("/:id", middlewares.RequireAdmin(), ctl.GetRatingByID)
 	rating.Put("/:id", middlewares.RequireAdmin(), ctl.ValidateRating)
+	rating.Delete("/:id", middlewares.RequireAdmin(), ctl.DeleteRating)
 
 	// User Group
 	user := v1.Group("/user")

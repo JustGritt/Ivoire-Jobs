@@ -231,6 +231,51 @@ func GetRatingByID(c *fiber.Ctx) error {
 	return c.Status(http.StatusOK).JSON(ratingOutput)
 }
 
+// DeleteRating handles the deletion of a rating by id.
+// @Summary Delete Rating
+// @Description Delete a rating by id
+// @Tags Rating
+// @Produce json
+// @Param id path string true "Rating ID"
+// @Success 200 {object} Response
+// @Failure 400 {array} ErrorResponse
+// @Failure 401 {array} ErrorResponse
+// @Failure 500 {array} ErrorResponse
+// @Router /rating/{id} [delete]
+// @Security Bearer
+func DeleteRating(c *fiber.Ctx) error {
+	var errorList []*fiber.Error
+	id := c.Params("id")
+
+	// check if service exists
+	_, err := ratingRepo.GetByID(id)
+	if err != nil {
+		errorList = append(errorList, &fiber.Error{
+			Code:    http.StatusBadRequest,
+			Message: "Already deleted",
+		})
+		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
+	//delete the rating
+	if err := ratingRepo.DeleteRating(id); err != nil {
+		errorList = append(errorList, &fiber.Error{
+			Code:    http.StatusInternalServerError,
+			Message: "Failed to delete rating",
+		})
+		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
+	// Prevent the deletion if the rating has been deleted
+
+	//send an empty response
+	return c.Status(http.StatusOK).JSON(Response{
+		Code:    http.StatusOK,
+		Message: "Rating deleted",
+		Data:    nil,
+	})
+}
+
 // GetAllRatingsFromService Return all the ratings from a service
 // @Summary Get All Ratings From Service
 // @Description Get all ratings from a service
