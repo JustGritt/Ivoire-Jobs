@@ -291,25 +291,13 @@ func GetAll(c *fiber.Ctx) error {
 // @Failure 400 {array} ErrorResponse
 // @Failure 401 {array} ErrorResponse
 // @Failure 500 {array} ErrorResponse
-// @Router /service/collection/user [get]
+// @Router /user/{id}/service [get]
 func GetServiceByUserId(c *fiber.Ctx) error {
-	user := c.Locals("user").(*jwt.Token)
-	claims := user.Claims.(jwt.MapClaims)
-	userID := claims["userID"]
-	// Validate Input
+	//get the user id from the request
+	userID := c.Params("id")
 	var errorList []*fiber.Error
-	if userID == nil {
-		errorList = append(
-			errorList,
-			&fiber.Error{
-				Code:    fiber.StatusBadRequest,
-				Message: "An error occurred while extracting user info from request",
-			},
-		)
-		return c.Status(fiber.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
-	}
 
-	services, err := serviceRepo.GetServicesByUserID(userID.(string))
+	services, err := serviceRepo.GetServicesByUserID(userID)
 	if err != nil {
 		errorList = append(
 			errorList,

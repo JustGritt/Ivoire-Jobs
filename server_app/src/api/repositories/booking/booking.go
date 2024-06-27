@@ -31,6 +31,14 @@ func GetByID(id string) (*booking.Booking, error) {
 	return &booking, nil
 }
 
+func GetByServiceIDForUser(serviceID string, userID string) ([]booking.Booking, error) {
+	var bookings []booking.Booking
+	if err := db.PgDB.Where("service_id = ? AND user_id = ? AND status = 'completed'", serviceID, userID).Find(&bookings).Error; err != nil {
+		return nil, err
+	}
+	return bookings, nil
+}
+
 func GetBookingsByUserID(userID string) ([]booking.Booking, error) {
 	var bookings []booking.Booking
 	if err := db.PgDB.Where("user_id = ?", userID).Find(&bookings).Error; err != nil {

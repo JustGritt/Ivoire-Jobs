@@ -39,7 +39,8 @@ func SetupRoutes(app *fiber.App) {
 	service.Post("/", middlewares.RequireLoggedIn(), ctl.CreateService)
 	service.Get("/search", ctl.SearchService)
 	service.Get("/collection", ctl.GetAll)
-	service.Get("/collection/user", ctl.GetServiceByUserId)
+	service.Get("/:id/rating/", ctl.GetAllRatingsFromService)
+	//service.Get("/collection/user", ctl.GetServiceByUserId)
 	service.Get("/:id", ctl.GetServiceById)
 	service.Put("/:id", middlewares.RequireLoggedIn(), ctl.UpdateService)
 	service.Delete("/:id", middlewares.RequireLoggedIn(), ctl.DeleteService)
@@ -70,7 +71,12 @@ func SetupRoutes(app *fiber.App) {
 	// Rating Group
 	rating := v1.Group("/rating")
 	rating.Post("/", middlewares.RequireLoggedIn(), ctl.CreateRating)
-	rating.Get("/collection", middlewares.RequireAdmin(), ctl.GetAllRatings)
+	rating.Get("/collection", middlewares.RequireLoggedIn(), ctl.GetAllRatings)
 	rating.Get("/pending", middlewares.RequireAdmin(), ctl.GetPendingRatings)
 	rating.Get("/:id", middlewares.RequireAdmin(), ctl.GetRatingByID)
+
+	// User Group
+	user := v1.Group("/user")
+	user.Get("/:id/service", middlewares.RequireLoggedIn(), ctl.GetServiceByUserId)
+
 }

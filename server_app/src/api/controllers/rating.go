@@ -3,8 +3,8 @@ package controllers
 import (
 	"barassage/api/models/rating"
 
+	bookingRepo "barassage/api/repositories/booking"
 	ratingRepo "barassage/api/repositories/rating"
-	serviceRepo "barassage/api/repositories/service"
 
 	validator "barassage/api/common/validator"
 
@@ -49,21 +49,14 @@ func CreateRating(c *fiber.Ctx) error {
 		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(err))
 	}
 
-	//get the service by id
-	service, err := serviceRepo.GetByID(ratingInput.ServiceId)
+	// Check if the user has a booking or return an error if the user has no booking
+	_, err := bookingRepo.GetByServiceIDForUser(ratingInput.ServiceId, ratingInput.UserID)
 	if err != nil {
 		errorList = append(errorList, &fiber.Error{
 			Code:    http.StatusInternalServerError,
-			Message: "Failed to create ban",
+			Message: "User has no booking",
 		})
 		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
-	}
-	if service == nil {
-		errorList = append(errorList, &fiber.Error{
-			Code:    http.StatusNotFound,
-			Message: "Service not found",
-		})
-		return c.Status(http.StatusNotFound).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
 	newRating := rating.Rating{
@@ -186,6 +179,42 @@ func GetRatingByID(c *fiber.Ctx) error {
 
 	ratingOutput := mapRatingToOutput(rating)
 	return c.Status(http.StatusOK).JSON(ratingOutput)
+}
+
+// GetAllRatingsFromService Return all the ratings from a service
+// @Summary Get All Ratings From Service
+// @Description Get all ratings from a service
+// @Tags Rating
+// @Produce json
+// @Param id path string true "Service ID"
+// @Success 200 {array} RatingOutput
+// @Failure 400 {array} ErrorResponse
+// @Failure 401 {array} ErrorResponse
+// @Failure 404 {array} ErrorResponse
+// @Failure 500 {array} ErrorResponse
+// @Router /service/{id}/rating [get]
+// @Security Bearer
+func GetAllRatingsFromService(c *fiber.Ctx) error {
+	var errorList []*fiber.Error
+	serviceID := c.Params("id")
+	ratings, err := ratingRepo.GetByServiceID(serviceID)
+	if err != nil {
+		errorList = append(errorList, &fiber.Error{
+			Code:    http.StatusInternalServerError,
+			Message: "Failed to get ratings",
+		})
+		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
+	var ratingsOutput []*RatingOutput
+	for _, r := range ratings {
+		ratingsOutput = append(ratingsOutput, mapRatingToOutput(&r))
+	}
+	if len(ratingsOutput) == 0 {
+		ratingsOutput = []*RatingOutput{}
+	}
+
+	return c.Status(http.StatusOK).JSON(ratingsOutput)
 }
 
 // ============================================================
