@@ -67,4 +67,10 @@ func SetupRoutes(app *fiber.App) {
 	ban.Get("/collection", ctl.GetAllBans)
 	ban.Delete("/:id", ctl.DeleteBan)
 
+	// Rating Group
+	rating := v1.Group("/rating")
+	rating.Post("/", middlewares.RequireLoggedIn(), ctl.CreateRating)
+	rating.Get("/collection", middlewares.RequireAdmin(), ctl.GetAllRatings)
+	rating.Get("/pending", middlewares.RequireAdmin(), ctl.GetPendingRatings)
+	rating.Get("/:id", middlewares.RequireAdmin(), ctl.GetRatingByID)
 }
