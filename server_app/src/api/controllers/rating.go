@@ -246,14 +246,14 @@ func DeleteRating(c *fiber.Ctx) error {
 	var errorList []*fiber.Error
 	id := c.Params("id")
 
-	// check if service exists
-	_, err := ratingRepo.GetByID(id)
-	if err != nil {
+	// Check if the rating exists
+	rating := ratingRepo.IsAlreadyDeleted(id)
+	if rating {
 		errorList = append(errorList, &fiber.Error{
 			Code:    http.StatusBadRequest,
 			Message: "Already deleted",
 		})
-		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
+		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
 	//delete the rating
@@ -265,14 +265,8 @@ func DeleteRating(c *fiber.Ctx) error {
 		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
-	// Prevent the deletion if the rating has been deleted
-
 	//send an empty response
-	return c.Status(http.StatusOK).JSON(Response{
-		Code:    http.StatusOK,
-		Message: "Rating deleted",
-		Data:    nil,
-	})
+	return c.SendStatus(http.StatusOK)
 }
 
 // GetAllRatingsFromService Return all the ratings from a service

@@ -139,16 +139,17 @@ func DeleteBan(c *fiber.Ctx) error {
 	var errorList []*fiber.Error
 	banID := c.Params("id")
 
-	ban, err := banRepo.GetByID(banID)
-	if err != nil {
+	//chek if the ban exists
+	isBanned := banRepo.IsAlreadyDeleted(banID)
+	if isBanned {
 		errorList = append(errorList, &fiber.Error{
-			Code:    http.StatusNotFound,
-			Message: "Ban not found",
+			Code:    http.StatusBadRequest,
+			Message: "Already deleted",
 		})
-		return c.Status(http.StatusNotFound).JSON(HTTPFiberErrorResponse(errorList))
+		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
-	if err := banRepo.Unban(ban.ID); err != nil {
+	if err := banRepo.Delete(banID); err != nil {
 		errorList = append(errorList, &fiber.Error{
 			Code:    http.StatusInternalServerError,
 			Message: "Failed to delete ban",

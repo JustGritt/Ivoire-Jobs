@@ -83,6 +83,11 @@ func DeleteRating(id string) error {
 	return db.PgDB.Where("id = ?", id).Delete(&rating.Rating{}).Error
 }
 
+func IsAlreadyDeleted(userID string) bool {
+	var rating rating.Rating
+	return db.PgDB.Unscoped().Where("user_id = ?", userID).First(&rating).Error == nil
+}
+
 // GetErrors gets the errors
 func GetErrors() error {
 	return db.PgDB.Error

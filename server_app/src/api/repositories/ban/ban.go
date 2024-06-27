@@ -33,6 +33,11 @@ func GetByUserID(userID string) (*ban.Ban, error) {
 	return &ban, nil
 }
 
+func IsAlreadyDeleted(userID string) bool {
+	var ban ban.Ban
+	return db.PgDB.Unscoped().Where("user_id = ?", userID).First(&ban).Error == nil
+}
+
 // GetAllBans gets all bans
 func GetAllBans() ([]ban.Ban, error) {
 	var bans []ban.Ban
@@ -45,6 +50,14 @@ func GetAllBans() ([]ban.Ban, error) {
 
 func Unban(id string) error {
 	return db.PgDB.Model(&ban.Ban{}).Where("id = ?", id).Update("is_banned", false).Error
+}
+
+func Ban(id string) error {
+	return db.PgDB.Model(&ban.Ban{}).Where("id = ?", id).Update("is_banned", true).Error
+}
+
+func Delete(id string) error {
+	return db.PgDB.Unscoped().Where("id = ?", id).Delete(&ban.Ban{}).Error
 }
 
 // GetErrors gets the errors
