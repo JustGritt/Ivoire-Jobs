@@ -37,7 +37,7 @@ func GetByUserID(userID string) (*rating.Rating, error) {
 func GetAllRatings() ([]rating.Rating, error) {
 	var ratings []rating.Rating
 	//find all ratings
-	if err := db.PgDB.Find(&ratings).Where("status = ?", true).Error; err != nil {
+	if err := db.PgDB.Where("status = ?", true).Find(&ratings).Error; err != nil {
 		return nil, err
 	}
 	return ratings, nil
@@ -46,7 +46,7 @@ func GetAllRatings() ([]rating.Rating, error) {
 func PendingRatings() ([]rating.Rating, error) {
 	var ratings []rating.Rating
 	//find all ratings
-	if err := db.PgDB.Find(&ratings).Where("status = ?", false).Error; err != nil {
+	if err := db.PgDB.Where("status = ?", false).Find(&ratings).Error; err != nil {
 		return nil, err
 	}
 	return ratings, nil
@@ -55,7 +55,7 @@ func PendingRatings() ([]rating.Rating, error) {
 func GetByServiceID(serviceID string) ([]rating.Rating, error) {
 	var ratings []rating.Rating
 	//find all ratings
-	if err := db.PgDB.Find(&ratings).Where("service_id = ?", serviceID).Error; err != nil {
+	if err := db.PgDB.Where("service_id = ? AND status = ?", serviceID, true).Find(&ratings).Error; err != nil {
 		return nil, err
 	}
 	return ratings, nil
