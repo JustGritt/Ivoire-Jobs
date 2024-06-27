@@ -110,22 +110,25 @@ func CreateMember(c *fiber.Ctx) error {
 // @Failure 400 {array} ErrorResponse
 // @Failure 401 {array} ErrorResponse
 // @Failure 500 {array} ErrorResponse
-// @Router /member/{memberID}/validate [put]
+// @Router /member/{id}/validate [put]
 // @Security Bearer
 func ValidateMember(c *fiber.Ctx) error {
 	var errorList []*fiber.Error
-	memberID := c.Params("memberID")
+	memberID := c.Params("id")
 
 	// Validate the member
 	if err := memberRepo.ValidateMember(memberID); err != nil {
 		errorList = append(errorList, &fiber.Error{
 			Code:    http.StatusInternalServerError,
-			Message: "Failed to validate member",
+			Message: err.Error(),
 		})
 		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
-	return c.Status(http.StatusOK).JSON(HTTPFiberResponse("Member validated successfully"))
+	return c.Status(http.StatusOK).JSON(Response{
+		Message: "Member validated",
+		Code:    http.StatusOK,
+	})
 }
 
 // ============================================================

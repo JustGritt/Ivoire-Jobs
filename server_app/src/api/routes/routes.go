@@ -84,5 +84,6 @@ func SetupRoutes(app *fiber.App) {
 	// Member Group
 	member := v1.Group("/member", middlewares.RequireLoggedIn())
 	member.Post("/", ctl.CreateMember)
+	member.Put("/:id/validate", middlewares.RequireAdmin(), ctl.ValidateMember)
 
 }
