@@ -26,6 +26,7 @@ import (
 	"barassage/api/models/category"
 	"barassage/api/models/image"
 	"barassage/api/models/member"
+	"barassage/api/models/pushToken"
 	"barassage/api/models/rating"
 	"barassage/api/models/report"
 	"barassage/api/models/service"
@@ -71,7 +72,18 @@ func Run() {
 	db.ConnectPostgres()
 
 	// Migration
-	db.PgDB.AutoMigrate(&user.User{}, &service.Service{}, &booking.Booking{}, &image.Image{}, &report.Report{}, &category.Category{}, &ban.Ban{}, &rating.Rating{}, &member.Member{})
+	db.PgDB.AutoMigrate(
+		&user.User{},
+		&service.Service{},
+		&booking.Booking{},
+		&image.Image{},
+		&report.Report{},
+		&category.Category{},
+		&ban.Ban{},
+		&rating.Rating{},
+		&member.Member{},
+		&pushToken.PushToken{},
+	)
 
 	/*
 		============ Set Up Utils ============
