@@ -61,6 +61,19 @@ func GetByServiceID(serviceID string) ([]rating.Rating, error) {
 	return ratings, nil
 }
 
+func GetRatingScore(serviceID string) (int, error) {
+	var ratings []rating.Rating
+	//find all ratings
+	if err := db.PgDB.Where("service_id = ? AND status = ? AND is_banned = ?", serviceID, true, false).Find(&ratings).Error; err != nil {
+		return 0, err
+	}
+	var score float32
+	for _, r := range ratings {
+		score += float32(r.Rating)
+	}
+	return int(score / float32(len(ratings))), nil
+}
+
 // Validate a rating by id
 func ValidateRating(id string) error {
 	return db.PgDB.Model(&rating.Rating{}).Where("id = ?", id).Update("status", true).Error

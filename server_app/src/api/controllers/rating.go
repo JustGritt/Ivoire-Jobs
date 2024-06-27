@@ -34,6 +34,7 @@ type RatingOutput struct {
 	UserID    string    `json:"userId"`
 	CreatedAt time.Time `json:"createdAt"`
 	Status    bool      `json:"status"`
+	Score     float64   `json:"score"`
 }
 
 // CreateRating handles the creation of a new rating.
@@ -306,9 +307,23 @@ func GetAllRatingsFromService(c *fiber.Ctx) error {
 	for _, r := range ratings {
 		ratingsOutput = append(ratingsOutput, mapRatingToOutput(&r))
 	}
+
+	// get the score
+	ratingScore, err := ratingRepo.GetRatingScore(serviceID)
+	if err != nil {
+		errorList = append(errorList, &fiber.Error{
+			Code:    http.StatusInternalServerError,
+			Message: "Failed to get rating score",
+		})
+		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
 	if len(ratingsOutput) == 0 {
 		ratingsOutput = []*RatingOutput{}
 	}
+
+	// add the score to the output at the top level
+	ratingsOutput[0].Score = float64(ratingScore)
 
 	return c.Status(http.StatusOK).JSON(ratingsOutput)
 }
