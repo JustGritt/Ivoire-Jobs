@@ -1,3 +1,3 @@
 kustomize:
   images:
-  - popokola/ivoirejobs-api:v0.1.53
+  - popokola/ivoirejobs-api:v0.1.54
