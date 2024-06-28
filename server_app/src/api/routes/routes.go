@@ -22,7 +22,7 @@ func SetupRoutes(app *fiber.App) {
 	v1.Post("/stripe/webhook", ctl.HandleWebhook)
 	v1.Get("/stripe/create-payment-intent", ctl.HandleCreatePaymentIntent)
 
-	v1.Get("/home", ctl.HomeController, middlewares.CheckAppStatus())
+	v1.Get("/home", middlewares.CheckAppStatus(), ctl.HomeController)
 
 	// Auth Group
 	auth := v1.Group("/auth")
