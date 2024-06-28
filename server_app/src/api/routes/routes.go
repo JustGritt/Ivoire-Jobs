@@ -13,7 +13,7 @@ import (
 // SetupRoutes setups router
 func SetupRoutes(app *fiber.App) {
 
-	api := app.Group("/api", middlewares.CheckAppStatus())
+	api := app.Group("/api")
 	v1 := api.Group("/v1")
 
 	v1.Use("/docs/*", swagger.HandlerDefault)
@@ -22,7 +22,7 @@ func SetupRoutes(app *fiber.App) {
 	v1.Post("/stripe/webhook", ctl.HandleWebhook)
 	v1.Get("/stripe/create-payment-intent", ctl.HandleCreatePaymentIntent)
 
-	v1.Get("/home", ctl.HomeController)
+	v1.Get("/home", ctl.HomeController, middlewares.CheckAppStatus())
 
 	// Auth Group
 	auth := v1.Group("/auth")

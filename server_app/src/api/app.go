@@ -56,6 +56,7 @@ func Run() {
 	app := fiber.New(fiber.Config{
 		ServerHeader:      "Fiber",
 		StreamRequestBody: true,
+		TrustedProxies:    []string{"*"},
 	})
 
 	/*
