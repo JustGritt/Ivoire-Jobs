@@ -1,9 +1,14 @@
+import 'package:barassage_app/config/app_colors.dart';
 import 'package:barassage_app/core/blocs/authentication/authentication_bloc.dart';
-import 'package:barassage_app/features/profile_mod/widgets/profile_avatar.dart';
+import 'package:barassage_app/core/classes/language_provider.dart';
+import 'package:barassage_app/features/profile_mod/widgets/avatar_profile.dart';
+import 'package:barassage_app/features/profile_mod/widgets/section_information_profile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:provider/provider.dart';
 
 class ProfilePageScreen extends StatefulWidget {
   const ProfilePageScreen({super.key});
@@ -13,6 +18,8 @@ class ProfilePageScreen extends StatefulWidget {
 }
 
 class _ProfilePageScreenState extends State<ProfilePageScreen> {
+  final format = DateFormat('d/MM/yyy');
+
   @override
   void initState() {
     super.initState();
@@ -21,6 +28,7 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
 
   @override
   Widget build(BuildContext context) {
+    LanguageProvider languageProvider = Provider.of<LanguageProvider>(context);
     ThemeData theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
@@ -37,36 +45,43 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
           ),
         ],
       ),
-      body: BlocConsumer<AuthenticationBloc, AuthenticationState>(
-        listener: (context, state) {},
-        builder: (context, state) {
-          if (state is AuthenticationSuccessState) {
-            print('User: ${state.user.createdAt}');
-            
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Center(
-                  child: ProfileAvatar(user: state.user),
-                ),
-                const SizedBox(height: 20),
-                Text(
-                  '${state.user.firstName} ${state.user.lastName}',
-                  style: theme.textTheme.displayLarge,
-                ),
-                const SizedBox(height: 10),
-                Text(
-                  state.user.createdAt?.toString() ?? '',
-                  style: theme.textTheme.displaySmall,
-                ),
-              ],
-            );
-          } else {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        },
+      body: SingleChildScrollView(
+        child: BlocConsumer<AuthenticationBloc, AuthenticationState>(
+          listener: (context, state) {},
+          builder: (context, state) {
+            if (state is AuthenticationSuccessState) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Center(
+                    child: ProfileAvatar(user: state.user),
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    '${state.user.firstName} ${state.user.lastName}',
+                    style: theme.textTheme.displayLarge,
+                  ),
+                  Text(
+                      DateFormat.yMMMMd(languageProvider.locale.toString())
+                          .format(state.user.createdAt),
+                      style: theme.textTheme.bodyLarge?.copyWith(
+                        color: AppColors.grey,
+                        fontWeight: FontWeight.w500,
+                      )),
+                  const SizedBox(height: 20),
+                   SectionInformationProfile(user: state.user),
+                  CupertinoButton(child: Text('Logout'), onPressed: () {
+                    context.read<AuthenticationBloc>().add(SignOut());
+                  }),
+                ],
+              );
+            } else {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+          },
+        ),
       ),
     );
   }

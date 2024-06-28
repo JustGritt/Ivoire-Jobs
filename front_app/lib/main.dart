@@ -1,5 +1,6 @@
 import 'package:barassage_app/core/blocs/authentication/authentication_bloc.dart';
 import 'package:barassage_app/core/blocs/service/service_bloc.dart';
+import 'package:barassage_app/core/classes/language_provider.dart';
 import 'package:barassage_app/core/classes/router/go_router.dart';
 import 'package:barassage_app/core/init_dependencies.dart';
 import 'package:barassage_app/l10n/l10n.dart';
@@ -8,6 +9,7 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -18,6 +20,7 @@ void main() async {
   FlutterImageCompress.showNativeLog = true;
   Provider.debugCheckInvalidValueType = null;
   await initDependencies();
+  await initializeDateFormatting('fr_FR', null);
   await dotenv.load();
   runApp(MultiBlocProvider(
       providers: [
@@ -41,6 +44,7 @@ class BarassageApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var tm = context.watch<ThemeProvider>();
+    var lp = context.watch<LanguageProvider>();
     // print("My App: " + tm.isDarkMode.toString());
     return MaterialApp.router(
         title: 'Barassage App',
@@ -51,7 +55,7 @@ class BarassageApp extends StatelessWidget {
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
         ],
-        locale: const Locale('en', 'US'),
+        locale: lp.locale,
         debugShowCheckedModeBanner: false,
         theme: MyTheme().lightTheme,
         darkTheme: MyTheme().darkTheme,
