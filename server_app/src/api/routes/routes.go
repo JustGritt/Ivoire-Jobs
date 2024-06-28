@@ -96,5 +96,8 @@ func SetupRoutes(app *fiber.App) {
 
 	// Serve static files using go embed
 	app.Static("/admin", "/opt/gofiber-app/src/build")
+	app.Get("/admin/*", func(c *fiber.Ctx) error {
+		return c.SendFile("/opt/gofiber-app/src/build/index.html")
+	})
 
 }
