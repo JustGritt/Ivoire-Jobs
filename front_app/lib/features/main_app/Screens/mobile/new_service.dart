@@ -1,10 +1,13 @@
 import 'package:barassage_app/config/app_colors.dart';
+import 'package:barassage_app/core/blocs/service/service_bloc.dart';
+import 'package:barassage_app/features/main_app/models/service_models/service_create_model.dart';
 import 'package:barassage_app/features/main_app/widgets/forms/step_progress.dart';
 import 'package:barassage_app/features/main_app/widgets/forms/steps/step_form_category.dart';
 import 'package:barassage_app/features/main_app/widgets/forms/steps/vertical_steps_informations/vertical_steps.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_cupertino_navigation_bar/super_cupertino_navigation_bar.dart';
 
 import '../../widgets/forms/steps/vertical_step_location/step_choose_location.dart';
@@ -114,7 +117,23 @@ class _NewServicePageState extends State<NewServicePage> {
               ),
               StepFormCategory(
                 onEnd: (selectedCategory) {
-                  print(selectedCategory);
+                  ServiceCreateModel serviceCreateModel = ServiceCreateModel(
+                      address: form['location']['address'],
+                      categories: selectedCategory,
+                      city: form['location']['city'],
+                      country: form['location']['country'],
+                      postCode: form['location']['postCode'],
+                      description: form['description'],
+                      illustrations: form['illustrations'],
+                      latitude: form['location']['latitude'],
+                      longitude: form['location']['longitude'],
+                      price: form['price'],
+                      title: form['title'],
+                      duration: form['duration']);
+
+                  context
+                      .read<ServiceBloc>()
+                      .add(CreateServiceEvent(serviceCreateModel));
                 },
               )
             ],

@@ -3,6 +3,12 @@ import 'package:barassage_app/features/auth_mod/models/models.dart';
 
 import '../core/classes/cache_manager.dart';
 
+
+class AppCacheToken{
+  String? token;
+  AppCacheToken({this.token});
+}
+
 class AppCache {
   Map<String, String>? udata;
 
@@ -20,6 +26,16 @@ class AppCache {
     String? token = await Cache.readData('token');
     return token;
   }
+
+  Future<User?> getUser() async {
+    var data = await Cache.readData('user');
+    if (data != null) {
+      return User.fromJson(jsonDecode(data));
+    }
+    return null;
+  }
+
+  
 
   Future<String> setToken() async {
     String token = await Cache.readData('token');

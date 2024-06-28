@@ -1,6 +1,9 @@
 import 'dart:io';
 
 import 'package:barassage_app/config/app_colors.dart';
+import 'package:barassage_app/core/exceptions/file_exception.dart';
+import 'package:barassage_app/core/helpers/files_helper.dart';
+import 'package:barassage_app/core/helpers/utils_helper.dart';
 import 'package:ez_validator/ez_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -175,85 +178,94 @@ class _StepInformationState extends State<StepInformation> {
       ),
     );
   }
-}
 
-Widget Illustrations(BuildContext context,
-    {required Function(File) setIllustration, File? illustration}) {
-  ThemeData theme = Theme.of(context);
-  return CupertinoButton(
-    minSize: 0,
-    color: Colors.black,
-    padding: EdgeInsets.zero,
-    onPressed: () {
-      InstaAssetPicker.pickAssets(
-        context,
-        maxAssets: 1,
-        closeOnComplete: true,
-        cropDelegate: InstaAssetCropDelegate(
-          preferredSize: 1080,
-        ),
-        onCompleted: (Stream<InstaAssetsExportDetails> stream) async {
-          InstaAssetsExportDetails photo = await stream.first;
-          File? selectedFile = await photo.selectedAssets.first.file;
-          if (selectedFile != null) {
-            setIllustration(selectedFile);
-          }
-        },
-      );
-    },
-    child: Row(
-      children: [
-        Stack(
-          children: [
-            Container(
-              width: 100,
-              height: 100,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(5.0),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey[300]!,
-                    blurRadius: 5,
-                    spreadRadius: 1,
-                  ),
-                ],
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    CupertinoIcons.camera,
-                    color: theme.primaryColorDark,
-                    size: 20.0,
-                  ),
-                  SizedBox(height: 5.0),
-                  Text('Photo',
-                      style:
-                          theme.textTheme.labelLarge!.copyWith(fontSize: 16.0)),
-                ],
-              ),
-            ),
-            illustration != null
-                ? Positioned(
-                    bottom: 0,
-                    right: 0,
-                    child: Container(
-                      width: 100,
-                      height: 100,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10.0),
-                        image: DecorationImage(
-                            fit: BoxFit.cover, image: FileImage(illustration)),
-                      ),
+  Widget Illustrations(BuildContext context,
+      {required Function(File) setIllustration, File? illustration}) {
+    ThemeData theme = Theme.of(context);
+    return CupertinoButton(
+      minSize: 0,
+      color: Colors.black,
+      padding: EdgeInsets.zero,
+      onPressed: () {
+        InstaAssetPicker.pickAssets(
+          context,
+          maxAssets: 3,
+          closeOnComplete: true,
+          selectedAssets: illustrations?.whereType<AssetEntity>().toList(),
+          onCompleted: (Stream<InstaAssetsExportDetails> stream) async {
+            InstaAssetsExportDetails photo = await stream.first;
+            List<AssetEntity>? selectedFiles = photo.selectedAssets;
+            for (AssetEntity asset in selectedFiles) {
+              File? originalFile = await asset.originFile;
+              if (originalFile == null) break;
+              try {
+                File compressedFile = await compressAndGetFile(originalFile);
+                print(compressedFile.path);
+                int size = compressedFile.lengthSync();
+                if(size > 5000000) throw FileException('File too large');
+                setIllustration(compressedFile);
+              } catch (e) {
+                showMyDialog(context, title: 'Error', content: e.toString());
+              }
+            }
+          },
+        );
+      },
+      child: Row(
+        children: [
+          Stack(
+            children: [
+              Container(
+                width: 100,
+                height: 100,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(5.0),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey[300]!,
+                      blurRadius: 5,
+                      spreadRadius: 1,
                     ),
-                  )
-                : Container(),
-          ],
-        ),
-      ],
-    ),
-  );
+                  ],
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      CupertinoIcons.camera,
+                      color: theme.primaryColorDark,
+                      size: 20.0,
+                    ),
+                    SizedBox(height: 5.0),
+                    Text('Photo',
+                        style: theme.textTheme.labelLarge!
+                            .copyWith(fontSize: 16.0)),
+                  ],
+                ),
+              ),
+              illustration != null
+                  ? Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: Container(
+                        width: 100,
+                        height: 100,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.0),
+                          image: DecorationImage(
+                              fit: BoxFit.cover,
+                              image: FileImage(illustration)),
+                        ),
+                      ),
+                    )
+                  : Container(),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 Widget TextField(

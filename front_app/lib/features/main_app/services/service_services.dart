@@ -1,22 +1,28 @@
-import 'package:barassage_app/features/auth_mod/models/user.dart';
+import 'package:barassage_app/features/main_app/models/api_base_model.dart';
+import 'package:barassage_app/features/main_app/models/service_models/service_create_model.dart';
+import 'package:barassage_app/features/main_app/models/service_models/service_created_model.dart';
 import 'package:dio/dio.dart';
 
 import '../../../config/api_endpoints.dart';
 import '../../../config/app_http.dart';
 
-class ServiceService {
-  String? token;
-  ServiceService({this.token});
-  final AppHttp _http = AppHttp(
-    baseUrl: ApiEndpoint.baseUrl,
-  );
 
-  Future<User?> getAll() async {
-    Response res = await _http.get(ApiEndpoint.enqueries);
-    if (res.statusCode == 200) {
-      User user = User.fromJson(res.data);
-      return user;
+
+class ServiceServices {
+  Future<ServiceCreatedModel> create(ServiceCreateModel service) async {
+    AppHttp http = AppHttp(
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      }
+    );
+    Response res = await http.post(
+      ApiEndpoint.services,
+      data: await service.toFormData(),
+    );
+    if (res.statusCode == 201) {
+      ApiBaseModel apiResponse = ApiBaseModel.fromJson(res.data);
+      return ServiceCreatedModel.fromJson(apiResponse.body);
     }
-    return null;
+    throw res.data['message'];
   }
 }

@@ -1,8 +1,10 @@
 import 'package:barassage_app/core/blocs/authentication/authentication_bloc.dart';
+import 'package:barassage_app/core/blocs/service/service_bloc.dart';
 import 'package:barassage_app/core/classes/router/go_router.dart';
 import 'package:barassage_app/core/init_dependencies.dart';
 import 'package:barassage_app/l10n/l10n.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -13,6 +15,7 @@ import 'config/config.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  FlutterImageCompress.showNativeLog = true;
   Provider.debugCheckInvalidValueType = null;
   await initDependencies();
   await dotenv.load();
@@ -20,6 +23,9 @@ void main() async {
       providers: [
         BlocProvider(
           create: (_) => serviceLocator<AuthenticationBloc>(),
+        ),
+        BlocProvider(
+          create: (_) => serviceLocator<ServiceBloc>(),
         )
       ],
       child: MultiProvider(
@@ -37,20 +43,19 @@ class BarassageApp extends StatelessWidget {
     var tm = context.watch<ThemeProvider>();
     // print("My App: " + tm.isDarkMode.toString());
     return MaterialApp.router(
-      title: 'Barassage App',
-      supportedLocales: L10n.all,
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      locale: const Locale('en', 'US'),
-      debugShowCheckedModeBanner: false,
-      theme: MyTheme().lightTheme,
-      darkTheme: MyTheme().darkTheme,
-      themeMode: tm.themeMode,
-      routerConfig: router
-    );
+        title: 'Barassage App',
+        supportedLocales: L10n.all,
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        locale: const Locale('en', 'US'),
+        debugShowCheckedModeBanner: false,
+        theme: MyTheme().lightTheme,
+        darkTheme: MyTheme().darkTheme,
+        themeMode: tm.themeMode,
+        routerConfig: router);
   }
 }

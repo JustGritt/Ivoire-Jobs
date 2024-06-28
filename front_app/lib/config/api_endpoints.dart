@@ -4,12 +4,9 @@ import '../features/features.dart';
 
 class ApiEndpoint {
   // News Server
-  static const rapidUrl = 'https://free-news.p.rapidapi.com';
-  static const apiUrl = 'http://10.237.232.0:8000';
-  static const news = '$rapidUrl/v1/search';
 
   // Server Links
-  static const baseUrl = 'http://localhost:8000';
+  static const baseUrl = 'https://api.barassage.com';
   static const api = '${baseUrl}/api/v1';
 
   // Enqueries Endpoints
@@ -22,8 +19,10 @@ class ApiEndpoint {
   static const appForgetUrl = AuthApp.forget;
   static const appProfileUrl = AuthApp.profile;
 
+  // My Services Endpoints
+  static const myServices = '${api}/user/:id/service';
   // Services Endpoints
-  static const services = '${api}services?populate=*&sort[0]=id%3Adesc';
+  static const services = '${api}/service';
   // Services Categories Endpoints
   static const serviceCategories = '/category/collection';
 }

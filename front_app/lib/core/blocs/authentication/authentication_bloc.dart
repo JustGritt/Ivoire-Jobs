@@ -27,6 +27,9 @@ class AuthenticationBloc
     });
 
     on<SignUpUser>((event, emit) async {
+      if (state is AuthenticationLoadingState && state is AuthenticationSuccessState) {
+        return;
+      }
       emit(AuthenticationLoadingState());
       try {
         User? user = await doRegister(event.user);
