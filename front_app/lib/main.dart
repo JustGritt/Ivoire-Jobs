@@ -61,6 +61,5 @@ class BarassageApp extends StatelessWidget {
         darkTheme: MyTheme().darkTheme,
         themeMode: tm.themeMode,
         routerConfig: router);
-        
   }
 }
