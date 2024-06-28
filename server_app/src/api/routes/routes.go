@@ -95,6 +95,6 @@ func SetupRoutes(app *fiber.App) {
 	configuration.Put("/:key", ctl.UpdateConfiguration)
 
 	// Serve static files using go embed
-	app.Static("/admin", "./opt/gofiber-app/src/build/index.html")
+	app.Static("/admin", "./opt/gofiber-app/src/build")
 
 }
