@@ -95,18 +95,8 @@ func SetupRoutes(app *fiber.App) {
 	configuration.Put("/:key", ctl.UpdateConfiguration)
 
 	// Serve static files using go embed
-	app.Static("/admin", "/opt/gofiber-app/src/build")
-	app.Get("/admin/*", func(c *fiber.Ctx) error {
-		return c.SendFile("/opt/gofiber-app/src/build/index.html")
-	})
-
-	// Catch-all route to handle all other requests
-	app.Use(func(c *fiber.Ctx) error {
-		// If the request path starts with /api, continue to the next handler
-		if c.Path() == "/api" || len(c.Path()) > 4 && c.Path()[:4] == "/api" {
-			return c.Next()
-		}
-		// Otherwise, serve the Flutter web app
+	app.Static("/", "/opt/gofiber-app/src/build")
+	app.Get("/*", func(c *fiber.Ctx) error {
 		return c.SendFile("/opt/gofiber-app/src/build/index.html")
 	})
 }
