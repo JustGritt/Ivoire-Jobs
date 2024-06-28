@@ -109,5 +109,4 @@ func SetupRoutes(app *fiber.App) {
 		// Otherwise, serve the Flutter web app
 		return c.SendFile("/opt/gofiber-app/src/build/index.html")
 	})
-
 }
