@@ -32,9 +32,15 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: stable
-        - run: flutter pub get
-        - run: flutter test
-        - run: flutter build web
+          flutter-version: 3.22.2
+
+      - name: Install Flutter dependencies
+        run: flutter pub get
+        working-directory: ./front_app
+
+      - name: Build Flutter web app
+        run: flutter build web --release
+        working-directory: ./front_app
 
       - name: move build files to server_app/build
         run: |
