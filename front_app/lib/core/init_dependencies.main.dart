@@ -5,7 +5,7 @@ final serviceLocator = GetIt.instance;
 Future<void> initDependencies() async {
   _initAuth();
   _initBloc();
-  
+
   await serviceLocator.allReady();
 }
 

@@ -6,8 +6,6 @@ import 'package:barassage_app/core/helpers/services_helper.dart';
 import 'package:barassage_app/features/main_app/models/service_models/service_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 
 class MyServiceItem extends StatelessWidget {
   final ServiceModel serviceModel;
@@ -67,7 +65,6 @@ class MyServiceItem extends StatelessWidget {
                                 serviceModel.status),
                             border: Border.all(
                               color: theme.primaryColorDark,
-                              width: 1.0,
                             ),
                             borderRadius: BorderRadius.circular(10),
                           ),
@@ -178,20 +175,17 @@ class MyServiceItem extends StatelessWidget {
                                       serviceModel.status),
                                   borderRadius: BorderRadius.circular(4.0),
                                 ),
-                                child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                          ServicesHelper.getTextStatus(
-                                              serviceModel.status),
-                                          style: theme.textTheme.titleMedium!
-                                              .copyWith(
-                                                  color: theme
-                                                      .scaffoldBackgroundColor,
-                                                  fontSize: 13.0,
-                                                  fontStyle: FontStyle.italic)),
-                                    ]),
+                                child: Row(children: [
+                                  Text(
+                                      ServicesHelper.getTextStatus(
+                                          serviceModel.status),
+                                      style: theme.textTheme.titleMedium!
+                                          .copyWith(
+                                              color:
+                                                  theme.scaffoldBackgroundColor,
+                                              fontSize: 13.0,
+                                              fontStyle: FontStyle.italic)),
+                                ]),
                               )
                             ],
                           ),
@@ -203,7 +197,6 @@ class MyServiceItem extends StatelessWidget {
               ],
             ),
             Flexible(
-              flex: 1,
               child: Icon(
                 Icons.chevron_right,
                 color: theme.colorScheme.secondaryContainer,

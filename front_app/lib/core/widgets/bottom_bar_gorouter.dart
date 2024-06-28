@@ -20,7 +20,7 @@ class BottomBarGoRouter extends StatelessWidget {
     ];
 
     final currentPath = GoRouter.of(context).routeInformationProvider.value.uri;
-    
+
     if (hideBottomBarPaths
         .where((element) => currentPath.path.contains(element))
         .isNotEmpty) {
@@ -30,7 +30,6 @@ class BottomBarGoRouter extends StatelessWidget {
     return FlashyTabBar(
       backgroundColor: theme.scaffoldBackgroundColor,
       selectedIndex: navigationShell.currentIndex,
-      showElevation: true,
       onItemSelected: (value) {
         navigationShell.goBranch(value,
             initialLocation: value == navigationShell.currentIndex);

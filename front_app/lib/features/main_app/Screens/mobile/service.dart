@@ -39,7 +39,6 @@ class _ServiceState extends State<Service> {
         backgroundColor: theme.scaffoldBackgroundColor,
         title: Text(widget.title!),
         largeTitle: SuperLargeTitle(
-          enabled: true,
           largeTitle: widget.title!,
           actions: [
             CupertinoButton(
@@ -94,8 +93,9 @@ class _ServiceState extends State<Service> {
               itemCount: np.services.length,
               itemBuilder: (_, index) {
                 return MyServiceSlidable(
-                    onDelete:  (handler) async {
-                      bool success = await np.deleteService(np.services[index].id);
+                    onDelete: (handler) async {
+                      bool success =
+                          await np.deleteService(np.services[index].id);
                       await handler(success);
                     },
                     child: MyServiceItem(

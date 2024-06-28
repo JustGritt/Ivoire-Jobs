@@ -6,15 +6,11 @@ import 'package:dio/dio.dart';
 import '../../../config/api_endpoints.dart';
 import '../../../config/app_http.dart';
 
-
-
 class ServiceServices {
   Future<ServiceCreatedModel> create(ServiceCreateModel service) async {
-    AppHttp http = AppHttp(
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      }
-    );
+    AppHttp http = AppHttp(headers: {
+      'Content-Type': 'multipart/form-data',
+    });
     Response res = await http.post(
       ApiEndpoint.services,
       data: await service.toFormData(),
