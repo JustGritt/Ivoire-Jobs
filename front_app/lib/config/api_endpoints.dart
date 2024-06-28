@@ -11,6 +11,7 @@ class ApiEndpoint {
   static const news = '$rapidUrl/v1/search';
 
   // Server Links
+  // static const baseUrl = 'https://api.barassage.com';
   static const baseUrl = 'http://localhost:8000';
   static const api = '$baseUrl/api/v1';
 
@@ -26,7 +27,10 @@ class ApiEndpoint {
   static const appEmailValidationUrl = AuthApp.emailValidation;
 
   // Admin App Links
-  static const adminUsers = AdminApp.users;
+  static const adminUsers = '/auth/users';
+  static const serviceCollection = '/service/collection';
+  static const adminLogin = AuthApp.login;
+  static const abuseClaims = AdminApp.abuseClaims;
 
   // Services Endpoints
   static const services = '${api}services?populate=*&sort[0]=id%3Adesc';

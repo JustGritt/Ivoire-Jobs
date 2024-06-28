@@ -33,6 +33,7 @@ func SetupRoutes(app *fiber.App) {
 	auth.Get("/verify-email", ctl.VerifyEmail)
 	// Requires authentication
 	auth.Get("/me", middlewares.RequireLoggedIn(), ctl.GetMyProfile)
+	auth.Get("/users", middlewares.RequireAdmin(), ctl.GetAllUsers)
 
 	// Contact Group
 	contact := v1.Group("/contact")
@@ -56,7 +57,7 @@ func SetupRoutes(app *fiber.App) {
 
 	// Tag Group
 	tag := v1.Group("/tag")
-	tag.Get("/", ctl.GetAll)
+	// tag.Get("/", ctl.GetAllTags)
 	tag.Post("/", ctl.AddTagInfo)
 
 	// Report Group

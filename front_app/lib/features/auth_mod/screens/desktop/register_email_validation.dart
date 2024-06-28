@@ -1,21 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'dart:html' as html;
 
+import '../../../../core/helpers/auth_helper.dart';
 import '../../services/user_service.dart';
 
 class RegisterEmailValidation extends StatefulWidget {
   const RegisterEmailValidation({super.key});
 
   @override
-  State<RegisterEmailValidation> createState() => _RegisterEmailValidationState();
+  State<RegisterEmailValidation> createState() =>
+      _RegisterEmailValidationState();
 }
 
 class _RegisterEmailValidationState extends State<RegisterEmailValidation> {
   bool isEmailValidated = false;
   bool isLoading = true;
-  var token = Uri.dataFromString(html.window.location.href).queryParameters['token'] ?? '';
+  var token =
+      Uri.dataFromString(html.window.location.href).queryParameters['token'] ??
+          '';
 
   @override
   void initState() {
@@ -23,25 +26,22 @@ class _RegisterEmailValidationState extends State<RegisterEmailValidation> {
     checkRegisterToken(context, token);
   }
 
-  void checkRegisterToken(BuildContext context, String token) {
+  void checkRegisterToken(BuildContext context, String token) async {
     UserService us = UserService();
-    us.verifyEmailToken(token).then((value) {
-      if (value == false) {
-        SchedulerBinding.instance.addPostFrameCallback((_) {
-          setState(() {
-            isEmailValidated = false;
-            isLoading = false;
-          });
-        });
-      } else {
-        setState(() {
-          isEmailValidated = true;
-          isLoading = false;
-        });
-      }
-    });
+    try {
+      var value = await us.verifyEmailToken(token);
+      setState(() {
+        isEmailValidated = value;
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        isEmailValidated = false;
+        isLoading = false;
+      });
+    }
+    debugPrint('isEmailValidated: $isEmailValidated');
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +51,21 @@ class _RegisterEmailValidationState extends State<RegisterEmailValidation> {
         alignment: Alignment.center,
         padding: const EdgeInsets.all(10.0),
         child: isLoading
-            ? const CircularProgressIndicator()
+            ? const Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircularProgressIndicator(),
+            SizedBox(height: 10),
+            Text(
+              'Verifying...',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+              textAlign: TextAlign.center,
+            )
+          ],
+        )
             : Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,

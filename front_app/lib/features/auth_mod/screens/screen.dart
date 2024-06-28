@@ -1,4 +1,4 @@
-export './desktop/login_desktop_screen.dart';
+export '../../admin_app/screens/desktop/login_desktop_screen.dart';
 export './desktop/register_email_validation.dart';
 export './mobile/forget_mobile_screen.dart';
 export './mobile/login_mobile_screen.dart';

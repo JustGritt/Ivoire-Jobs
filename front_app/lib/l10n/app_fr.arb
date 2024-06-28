@@ -4,7 +4,9 @@
         "description": "Français"
     },
     "welcome_back": "Bienvenue à vous !",
+    "welcome_back_admin": "Bienvenue à vous, administrateur !",
     "welcome_back_description": "Connectez-vous à votre compte pour continuer.",
+    "welcome_back_description_admin": "Connectez-vous à votre compte administrateur pour continuer.",
     "welcome_register": "Commencez par vous enregistrer !",
     "no_account_text": "Vous n'avez pas de compte ?",
     "firstname": "Prénom",

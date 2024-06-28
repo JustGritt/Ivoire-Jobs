@@ -4,7 +4,9 @@
         "description": "English"
     },
     "welcome_back": "Welcome to you !",
+    "welcome_back_admin": "Welcome back admin !",
     "welcome_back_description": "Connect to your account to continue.",
+    "welcome_back_admin_description": "Connect to your admin account to continue.",
     "welcome_register": "Start by registering !",
     "no_account_text": "Don't have an account yet ?",
     "firstname": "Firstname",
