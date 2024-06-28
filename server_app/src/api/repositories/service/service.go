@@ -24,6 +24,14 @@ func GetByID(id string) (*service.Service, error) {
 	return &service, nil
 }
 
+func IsBannedService(id string) (bool, error) {
+	var service service.Service
+	if err := db.PgDB.Where("id = ?", id).First(&service).Error; err != nil {
+		return false, err
+	}
+	return service.IsBanned, nil
+}
+
 func GetServiceByNameForUser(name string, userID string) (*service.Service, error) {
 	var service service.Service
 	if err := db.PgDB.Preload("Images").Preload("Categories").Where("name = ? AND user_id = ?", name, userID).First(&service).Error; err != nil {

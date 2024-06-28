@@ -6,7 +6,6 @@ import (
 	reportRepo "barassage/api/repositories/report"
 	serviceRepo "barassage/api/repositories/service"
 
-	"fmt"
 	"net/http"
 	"time"
 
@@ -23,12 +22,12 @@ type ReportObject struct {
 
 // ReportOutput represents the output data structure for a report.
 type ReportOutput struct {
-	ReportID  string    `json:"id"`
-	UserID    string    `json:"userId"`
-	ServiceID string    `json:"serviceId"`
-	Reason    string    `json:"reason"`
-	Status    bool      `json:"status"`
-	CreatedAt time.Time `json:"createdAt"`
+	ReportID  string `json:"id"`
+	UserID    string `json:"userId"`
+	ServiceID string `json:"serviceId"`
+	Reason    string `json:"reason"`
+	Status    bool   `json:"status"`
+	CreatedAt string `json:"createdAt"`
 }
 
 // CreateReport handles the creation of a new report.
@@ -81,7 +80,6 @@ func CreateReport(c *fiber.Ctx) error {
 
 	// Save the report to the database
 	if err := reportRepo.Create(&newReport); err != nil {
-		fmt.Printf("Database error: %v\n", err) // Add detailed logging
 		return c.Status(http.StatusInternalServerError).JSON(HTTPResponse(http.StatusInternalServerError, "Report Not Registered", err.Error()))
 	}
 
@@ -126,9 +124,7 @@ func GetAllReports(c *fiber.Ctx) error {
 // @Router /report/{reportId}/validate [put]
 // @Security Bearer
 func ValidateReport(c *fiber.Ctx) error {
-
 	reportID := c.Params("id")
-	fmt.Println(reportID)
 	if reportID == "" {
 		return c.Status(http.StatusBadRequest).JSON(HTTPResponse(http.StatusBadRequest, "Report ID is required", nil))
 	}
@@ -138,13 +134,37 @@ func ValidateReport(c *fiber.Ctx) error {
 		return c.Status(http.StatusBadRequest).JSON(HTTPResponse(http.StatusBadRequest, "Report not found", nil))
 	}
 
+	reportCount, err := reportRepo.GetReportCount(report.ServiceID)
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(HTTPResponse(http.StatusInternalServerError, "Error getting report count", nil))
+	}
+
+	if reportCount >= 5 {
+		isBanned, err := serviceRepo.IsBannedService(report.ServiceID)
+		if err != nil {
+			return c.Status(http.StatusInternalServerError).JSON(HTTPResponse(http.StatusInternalServerError, "Error getting service", nil))
+		}
+		if isBanned {
+			return c.Status(http.StatusBadRequest).JSON(HTTPResponse(http.StatusBadRequest, "Service already banned", nil))
+		}
+
+		service, err := serviceRepo.GetByID(report.ServiceID)
+		if err != nil {
+			return c.Status(http.StatusInternalServerError).JSON(HTTPResponse(http.StatusInternalServerError, "Error getting service", nil))
+		}
+
+		service.IsBanned = true
+		if err := serviceRepo.Update(service); err != nil {
+			return c.Status(http.StatusInternalServerError).JSON(HTTPResponse(http.StatusInternalServerError, "Error updating service", nil))
+		}
+	}
+
 	report.Status = true
 	if err := reportRepo.Update(report); err != nil {
 		return c.Status(http.StatusInternalServerError).JSON(HTTPResponse(http.StatusInternalServerError, "Error updating report", nil))
 	}
 
-	return c.Status(http.StatusOK).JSON(report)
-
+	return c.SendStatus(http.StatusOK)
 }
 
 // ============================================================
@@ -158,6 +178,6 @@ func mapReportToOutput(r *report.Report) *ReportOutput {
 		ServiceID: r.ServiceID,
 		Reason:    r.Reason,
 		Status:    r.Status,
-		CreatedAt: r.CreatedAt,
+		CreatedAt: r.CreatedAt.Format("2006-01-02"),
 	}
 }

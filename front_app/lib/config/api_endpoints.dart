@@ -27,13 +27,15 @@ class ApiEndpoint {
   static const appEmailValidationUrl = AuthApp.emailValidation;
 
   // Admin App Links
-  static const adminUsers = '/auth/users';
-  static const serviceCollection = '/service/collection';
+  static const adminUsers = '${api}/auth/users';
+  static const serviceCollection = '${api}/service/collection';
   static const adminLogin = AuthApp.login;
   static const abuseClaims = AdminApp.abuseClaims;
 
+  // My Services Endpoints
+  static const myServices = '${api}/user/:id/service';
   // Services Endpoints
-  static const services = '${api}services?populate=*&sort[0]=id%3Adesc';
+  static const services = '${api}/service';
   // Services Categories Endpoints
-  static const serviceCategories = '${api}service/categories';
+  static const serviceCategories = '/category/collection';
 }

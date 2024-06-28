@@ -1,8 +1,10 @@
+import 'package:barassage_app/features/auth_mod/auth_app.dart';
 import 'package:barassage_app/features/auth_mod/models/user_signup.dart';
 import 'package:bloc/bloc.dart';
 import 'package:barassage_app/core/helpers/auth_helper.dart';
 import 'package:barassage_app/features/auth_mod/models/user.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 part 'authentication_event.dart';
 part 'authentication_state.dart';
@@ -22,11 +24,16 @@ class AuthenticationBloc
           emit(const AuthenticationFailureState('create user failed'));
         }
       } catch (e) {
+        emit(const AuthenticationFailureState('create user failed'));
         debugPrint(e.toString());
       }
     });
 
     on<SignUpUser>((event, emit) async {
+      if (state is AuthenticationLoadingState &&
+          state is AuthenticationSuccessState) {
+        return;
+      }
       emit(AuthenticationLoadingState());
       try {
         User? user = await doRegister(event.user);
@@ -50,13 +57,13 @@ class AuthenticationBloc
           emit(const AuthenticationFailureState('get user failed'));
         }
       } catch (e) {
-        print(e);
+        emit(const AuthenticationFailureState('get user failed'));
       }
     });
 
     on<SignOut>((event, emit) async {
-      emit(AuthenticationLoadingState());
       try {
+        GoRouter.of(context).go(AuthApp.login);
         doLogout();
       } catch (e) {
         print('error');

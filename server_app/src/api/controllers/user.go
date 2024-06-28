@@ -4,7 +4,9 @@ import (
 	passwordUtil "barassage/api/common/passwordutil"
 	validator "barassage/api/common/validator"
 	cfg "barassage/api/configs"
+	"barassage/api/models/pushToken"
 	"barassage/api/models/user"
+	banRepo "barassage/api/repositories/ban"
 	userRepo "barassage/api/repositories/user"
 	"barassage/api/services/auth"
 	"barassage/api/services/mailer"
@@ -30,6 +32,23 @@ type UserObject struct {
 	Role           string `json:"role"`
 }
 
+type PushTokenObject struct {
+	UserID string `json:"-"`
+	Token  string `json:"token"`
+	Device string `json:"device"`
+}
+
+type UpdateUserObject struct {
+	UserID    string `json:"-"`
+	FirstName string `json:"firstname" validate:"min=2,max=30"`
+	LastName  string `json:"lastname" validate:"min=2,max=30"`
+	Bio       string `json:"bio"`
+}
+
+type PatchUserObject struct {
+	PushToken PushTokenObject `json:"pushToken" validate:"required"`
+}
+
 // UserLogin is the login format expected
 type UserLogin struct {
 	Email    string `json:"email" validate:"required,min=5,max=100,email"`
@@ -44,6 +63,8 @@ type UserOutput struct {
 	ProfilePicture string `json:"profilePicture"`
 	Bio            string `json:"bio"`
 	ID             string `json:"id"`
+	CreatedAt      string `json:"createdAt"`
+	UpdatedAt      string `json:"updatedAt"`
 }
 
 // Register Godoc
@@ -170,8 +191,6 @@ func Login(c *fiber.Ctx) error {
 		)
 		return c.Status(http.StatusNotFound).JSON(HTTPErrorResponse(errorList))
 	}
-	fmt.Println("Validation error:", err)
-
 	// Check if Password is Correct (Hash and Compare DB Hash)
 	passwordIsCorrect := passwordUtil.CheckPasswordHash(userInput.Password, user.Password)
 	if !passwordIsCorrect {
@@ -195,6 +214,21 @@ func Login(c *fiber.Ctx) error {
 			&Response{
 				Code:    http.StatusUnauthorized,
 				Message: "Please Activate Your Account first",
+				Data:    err,
+			},
+		)
+		return c.Status(http.StatusUnauthorized).JSON(HTTPErrorResponse(errorList))
+	}
+
+	// Check if User is Banned
+	ban, err := banRepo.GetByUserID(user.ID)
+	if err == nil && ban.UserID == user.ID {
+		errorList = nil
+		errorList = append(
+			errorList,
+			&Response{
+				Code:    http.StatusUnauthorized,
+				Message: "Can't login to your account, you are banned",
 				Data:    err,
 			},
 		)
@@ -286,7 +320,6 @@ func GetMyProfile(c *fiber.Ctx) error {
 			"msg": "can't extract user info from request",
 		})
 	}
-	fmt.Println("Hello,", userID)
 	// Check If User Exists
 	dbUser, err := userRepo.GetById(userID.(string))
 	if err != nil {
@@ -301,7 +334,6 @@ func GetMyProfile(c *fiber.Ctx) error {
 		)
 		return c.Status(http.StatusNotFound).JSON(HTTPErrorResponse(errorList))
 	}
-	fmt.Println("Validation error:", err)
 
 	// Issue Token
 	accessToken, _ := auth.IssueAccessToken(*dbUser)
@@ -338,6 +370,153 @@ func Logout(c *fiber.Ctx) error {
 	return c.SendString("Logout Endpoint")
 }
 
+// UpdateProfile Godoc
+// @Summary Update Profile
+// @Description Update the profile of the logged-in user
+// @Tags Auth
+// @Produce json
+// @Param payload body UpdateUserObject true "Update Profile Body"
+// @Success 200 {object} Response "Updated user profile data"
+// @Failure 400 {array} ErrorResponse "Validation error or user not found"
+// @Failure 401 {array} ErrorResponse "Incorrect email or password"
+// @Failure 500 {array} ErrorResponse "Token issuing error"
+// @Router /auth/update-profile [put]
+// @Security Bearer
+func UpdateProfile(c *fiber.Ctx) error {
+	var userInput UpdateUserObject
+	// Validate Input
+	if err := validator.ParseBodyAndValidate(c, &userInput); err != nil {
+		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(err))
+	}
+
+	user := c.Locals("user").(*jwt.Token)
+	claims := user.Claims.(jwt.MapClaims)
+	userID := claims["userID"]
+	// Validate Input
+	if userID == nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"msg": "can't extract user info from request",
+		})
+	}
+
+	dbUser, err := userRepo.GetById(userID.(string))
+	if err != nil {
+		errorList = nil
+		errorList = append(
+			errorList,
+			&Response{
+				Code:    http.StatusNotFound,
+				Message: "User Doesn't Exist",
+				Data:    err.Error(),
+			},
+		)
+		return c.Status(http.StatusNotFound).JSON(HTTPErrorResponse(errorList))
+	}
+	//updateONly the fields that are not empty
+	if userInput.FirstName != "" {
+		dbUser.Firstname = userInput.FirstName
+	}
+	if userInput.LastName != "" {
+		dbUser.Lastname = userInput.LastName
+	}
+	if userInput.Bio != "" {
+		dbUser.Bio = userInput.Bio
+	}
+
+	// Save User To DB
+	if err := userRepo.Update(dbUser); err != nil {
+		errorList = nil
+		// Check if the error is a validation error
+		if err == gorm.ErrInvalidField {
+			// Print a custom error message for the validation error
+			fmt.Println("Validation error:", err.Error())
+		} else {
+			// Print other types of errors
+			fmt.Println("Database error:", err.Error())
+		}
+
+		errorList = append(
+			errorList,
+			&Response{
+				Code:    http.StatusConflict,
+				Message: "User Already Exist",
+				Data:    nil,
+			},
+		)
+		response := HTTPResponse(http.StatusInternalServerError, "User Not Registered", err.Error())
+		return c.Status(http.StatusInternalServerError).JSON(response)
+	}
+
+	userOutput := mapUserToOutPut(dbUser)
+	response := HTTPResponse(http.StatusOK, "User Updated", userOutput)
+	return c.Status(http.StatusOK).JSON(response)
+}
+
+// PatchToken Godoc
+// @Summary Patch Token
+// @Description Patch the token of the logged-in user
+// @Tags Auth
+// @Produce json
+// @Param payload body PatchUserObject true "Patch Token Body"
+// @Success 200 {object} Response "Updated user token data"
+// @Failure 400 {array} ErrorResponse "Validation error or user not found"
+// @Failure 401 {array} ErrorResponse "Incorrect email or password"
+// @Failure 500 {array} ErrorResponse "Token issuing error"
+// @Router /auth/update-token [patch]
+// @Security Bearer
+func PatchToken(c *fiber.Ctx) error {
+	var userInput PatchUserObject
+	// Validate Input
+	if err := validator.ParseBodyAndValidate(c, &userInput); err != nil {
+		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(err))
+	}
+
+	user := c.Locals("user").(*jwt.Token)
+	claims := user.Claims.(jwt.MapClaims)
+	userID := claims["userID"]
+	// Validate Input
+	if userID == nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"msg": "can't extract user info from request",
+		})
+	}
+
+	dbUser, err := userRepo.GetById(userID.(string))
+	if err != nil {
+		errorList = nil
+		errorList = append(
+			errorList,
+			&Response{
+				Code:    http.StatusNotFound,
+				Message: "User Doesn't Exist",
+				Data:    err.Error(),
+			},
+		)
+		return c.Status(http.StatusNotFound).JSON(HTTPErrorResponse(errorList))
+	}
+
+	dbUser.PushToken = append(dbUser.PushToken, pushToken.PushToken{
+		UserID: dbUser.ID,
+		Token:  userInput.PushToken.Token,
+		Device: userInput.PushToken.Device,
+	})
+
+	// Save User To DB
+	if err := userRepo.Update(dbUser); err != nil {
+		errorList = append(
+			[]*Response{},
+			&Response{
+				Code:    http.StatusBadRequest,
+				Message: "The token is already registered",
+				Data:    nil,
+			},
+		)
+		return c.Status(http.StatusBadRequest).JSON(HTTPErrorResponse(errorList))
+	}
+
+	return c.SendStatus(http.StatusOK)
+}
+
 // ============================================================
 // =================== Private Methods ========================
 // ============================================================
@@ -360,5 +539,7 @@ func mapUserToOutPut(u *user.User) *UserOutput {
 		Email:          u.Email,
 		ProfilePicture: u.ProfilePicture,
 		Bio:            u.Bio,
+		CreatedAt:      u.CreatedAt.Format("2006-01-02"),
+		UpdatedAt:      u.UpdatedAt.Format("2006-01-02"),
 	}
 }

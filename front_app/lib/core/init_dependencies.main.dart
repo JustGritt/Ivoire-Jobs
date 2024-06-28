@@ -4,25 +4,34 @@ final serviceLocator = GetIt.instance;
 
 Future<void> initDependencies() async {
   _initAuth();
-  _initInventory();
+  _initBloc();
+  
+  await serviceLocator.allReady();
 }
 
-void _initAuth() {
+Future<void> _initAuth() async {
   // Datasource
   serviceLocator
-    ..registerFactory<AuthenticationBloc>(
-      () => AuthenticationBloc(),
-    )
     ..registerFactory(
       () => AppCache(),
     )
+    ..registerLazySingletonAsync<AppCacheToken>(() async {
+      AppCache appCache = serviceLocator<AppCache>();
+      final token = await appCache.getToken();
+      return AppCacheToken(token: token);
+    })
     ..registerLazySingleton(
       () => AppContext(),
     )
     ..registerLazySingleton(
       () => UserService(),
+    )
+    ..registerLazySingleton(
+      () => ServiceCategoryService(),
+    )
+    ..registerLazySingleton(
+      () => ServiceServices(),
     );
-
   // // Bloc
   // ..registerLazySingleton(
   //   () => AuthBloc(
@@ -34,4 +43,12 @@ void _initAuth() {
   // );
 }
 
-void _initInventory() {}
+void _initBloc() {
+  serviceLocator
+    ..registerFactory(
+      () => AuthenticationBloc(),
+    )
+    ..registerFactory(
+      () => ServiceBloc(),
+    );
+}

@@ -1,14 +1,18 @@
 import 'package:barassage_app/config/app_config.dart';
+import 'package:barassage_app/core/blocs/service/service_bloc.dart';
 import 'package:barassage_app/core/classes/app_context.dart';
 import 'package:barassage_app/core/init_dependencies.dart';
 import 'package:barassage_app/features/auth_mod/screens/mobile/main_wrapper.dart';
 import 'package:barassage_app/features/auth_mod/screens/mobile/splash_mobile_screen.dart';
 import 'package:barassage_app/features/main_app/Screens/mobile/new_service.dart';
+import 'package:barassage_app/features/main_app/Screens/mobile/new_service_success.dart';
 import 'package:barassage_app/features/main_app/Screens/mobile/services_details.dart';
 import 'package:barassage_app/features/main_app/controllers/controller.dart';
 import 'package:barassage_app/features/main_app/controllers/main/services_controller.dart';
 import 'package:barassage_app/features/main_app/widgets/transition_page.dart';
+import 'package:barassage_app/features/profile_mod/controllers/main/profile_controller.dart';
 // import 'package:barassage_app/features/main_app/controllers/main/home_controller.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:place_picker/entities/localization_item.dart';
@@ -23,14 +27,18 @@ class App extends RouteManager {
   static const String services = '${App.name}/services';
   static const String placePicker = 'placesPicker';
   static const String serviceNew = 'newService';
+  static const String serviceNewSuccess = 'newServiceSuccess';
   static const String splash = '${App.name}/splash';
   static const String contact = '${App.name}/contact';
   static const String news = '${App.name}/news';
+  static const String profile = '${App.name}/profile';
+
+  
 
   final _rootKey = serviceLocator<AppContext>().navigatorKey;
   final _shellHomeKey = GlobalKey<NavigatorState>(debugLabel: 'shellHome');
   final _shellMapsKey = GlobalKey<NavigatorState>(debugLabel: 'Maps');
-  final _shellSettingsKey = GlobalKey<NavigatorState>(debugLabel: 'Settings');
+  final _shellProfileKey = GlobalKey<NavigatorState>(debugLabel: 'Profile');
 
   App() {
     addRoute(StatefulShellRoute.indexedStack(
@@ -43,6 +51,7 @@ class App extends RouteManager {
             routes: [
               GoRoute(
                 path: App.home,
+                name: App.home,
                 builder: (context, state) => const HomeController(),
                 routes: [
                   GoRoute(
@@ -59,6 +68,7 @@ class App extends RouteManager {
             routes: [
               GoRoute(
                 path: App.services,
+                name: App.services,
                 parentNavigatorKey: _shellMapsKey,
                 builder: (context, state) => const ServicesController(),
                 routes: [
@@ -79,17 +89,27 @@ class App extends RouteManager {
                         languageCode: 'en',
                       ),
                     ),
-                  )
+                  ),
+                  GoRoute(
+                      name: App.serviceNewSuccess,
+                      path: App.serviceNewSuccess,
+                      parentNavigatorKey: _shellMapsKey,
+                      builder: (context, state) {
+                        CreateServiceSuccess serviceCreatedModel =
+                            state.extra as CreateServiceSuccess;
+                        return NewServiceSuccess(service: serviceCreatedModel);
+                      })
                 ],
               ),
             ],
           ),
           StatefulShellBranch(
+            navigatorKey: _shellProfileKey,
             routes: [
               GoRoute(
-                path: App.contact,
+                path: App.profile,
                 pageBuilder: (context, state) => const NoTransitionPage(
-                  child: ContactController(),
+                  child: ProfileController(),
                 ),
               ),
             ],

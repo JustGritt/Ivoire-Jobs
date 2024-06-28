@@ -32,6 +32,7 @@ doAuth(String email, String password) async {
   } on DioException catch (e) {
     logger.e(DioExceptionHandler(e).error.message);
     showError(context, DioExceptionHandler(e).title);
+    rethrow;
   }
 }
 

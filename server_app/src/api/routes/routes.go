@@ -13,7 +13,7 @@ import (
 // SetupRoutes setups router
 func SetupRoutes(app *fiber.App) {
 
-	api := app.Group("/api")
+	api := app.Group("/api", middlewares.CheckAppStatus())
 	v1 := api.Group("/v1")
 
 	v1.Use("/docs/*", swagger.HandlerDefault)
@@ -31,6 +31,8 @@ func SetupRoutes(app *fiber.App) {
 	auth.Post("/logout", ctl.Logout)
 	auth.Post("/refresh", ctl.RefreshAuth)
 	auth.Get("/verify-email", ctl.VerifyEmail)
+	auth.Put("/update-profile", ctl.UpdateProfile)
+	auth.Patch("/update-token", middlewares.RequireLoggedIn(), ctl.PatchToken)
 	// Requires authentication
 	auth.Get("/me", middlewares.RequireLoggedIn(), ctl.GetMyProfile)
 	auth.Get("/users", middlewares.RequireAdmin(), ctl.GetAllUsers)
@@ -44,7 +46,8 @@ func SetupRoutes(app *fiber.App) {
 	service.Post("/", middlewares.RequireLoggedIn(), ctl.CreateService)
 	service.Get("/search", ctl.SearchService)
 	service.Get("/collection", ctl.GetAll)
-	service.Get("/collection/user", ctl.GetServiceByUserId)
+	service.Get("/:id/rating", ctl.GetAllRatingsFromService)
+	//service.Get("/collection/user", ctl.GetServiceByUserId)
 	service.Get("/:id", ctl.GetServiceById)
 	service.Put("/:id", middlewares.RequireLoggedIn(), ctl.UpdateService)
 	service.Delete("/:id", middlewares.RequireLoggedIn(), ctl.DeleteService)
@@ -61,6 +64,7 @@ func SetupRoutes(app *fiber.App) {
 	tag.Post("/", ctl.AddTagInfo)
 
 	// Report Group
+	// Report Group
 	report := v1.Group("/report")
 	report.Post("/", middlewares.RequireLoggedIn(), ctl.CreateReport) // Ensure this route is correct
 	report.Get("/collection", ctl.GetAllReports)
@@ -70,5 +74,35 @@ func SetupRoutes(app *fiber.App) {
 	category := v1.Group("/category")
 	category.Get("/collection", ctl.GetAllCategories)
 	category.Post("/", middlewares.RequireLoggedIn(), ctl.CreateCategory)
+
+	// Ban Group
+	ban := v1.Group("/ban", middlewares.RequireAdmin())
+	ban.Post("/", ctl.CreateBan)
+	ban.Get("/collection", ctl.GetAllBans)
+	ban.Delete("/:id", ctl.DeleteBan)
+
+	// Rating Group
+	rating := v1.Group("/rating")
+	rating.Post("/", middlewares.RequireLoggedIn(), ctl.CreateRating)
+	rating.Get("/collection", middlewares.RequireLoggedIn(), ctl.GetAllRatings)
+	rating.Get("/pending", middlewares.RequireAdmin(), ctl.GetPendingRatings)
+	rating.Get("/:id", middlewares.RequireAdmin(), ctl.GetRatingByID)
+	rating.Put("/:id", middlewares.RequireAdmin(), ctl.ValidateRating)
+	rating.Delete("/:id", middlewares.RequireAdmin(), ctl.DeleteRating)
+
+	// User Group
+	user := v1.Group("/user")
+	user.Get("/:id/service", middlewares.RequireLoggedIn(), ctl.GetServiceByUserId)
+
+	// Member Group
+	member := v1.Group("/member", middlewares.RequireLoggedIn())
+	member.Post("/", ctl.CreateMember)
+	member.Put("/:id/validate", middlewares.RequireAdmin(), ctl.ValidateMember)
+
+	// Configuration Group
+	configuration := v1.Group("/configuration")
+	configuration.Post("/", ctl.CreateConfiguration)
+	configuration.Get("/:key", ctl.GetConfigurationByKey)
+	configuration.Put("/:key", ctl.UpdateConfiguration)
 
 }

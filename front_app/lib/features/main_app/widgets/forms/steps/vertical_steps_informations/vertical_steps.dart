@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 class VerticalSteps extends StatefulWidget {
   final Function scrollToTop;
   final Function(Map<String, dynamic>) nextPage;
-  const VerticalSteps({super.key, required this.scrollToTop, required this.nextPage});
+  const VerticalSteps(
+      {super.key, required this.scrollToTop, required this.nextPage});
 
   @override
   State<VerticalSteps> createState() => _VerticalStepsState();
@@ -23,15 +24,17 @@ class _VerticalStepsState extends State<VerticalSteps> {
       physics: const NeverScrollableScrollPhysics(),
       children: [
         StepInformation(
-          onEnd: (data) => {
-            form.addAll(data.toJson()),
-            widget.nextPage(data.toJson()),
-          }
-        ),
+            onEnd: (data) => {
+                  form.addAll(data.toJson()),
+                  widget.scrollToTop(),
+                  _pageController.animateToPage(1,
+                      duration: const Duration(milliseconds: 500),
+                      curve: Curves.easeOutQuad),
+                }),
         StepTimeService(
           onEnd: (timeService) => {
-            form['timeService'] = timeService,
-            widget.nextPage({'timeService': timeService}),
+            form['duration'] = timeService,
+            widget.nextPage(form),
           },
         ),
       ],

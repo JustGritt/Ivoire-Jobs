@@ -5,6 +5,7 @@ import (
 	"math/rand"
 	"time"
 
+	"barassage/api/models/category"
 	"barassage/api/models/service"
 	"barassage/api/models/user"
 
@@ -15,6 +16,11 @@ import (
 
 func SeedDatabase(db *gorm.DB) {
 	log.Println("Starting database seeding...")
+
+	// Categories
+	if err := seedCategory(db); err != nil {
+		log.Printf("Failed to seed categories: %v", err)
+	}
 
 	// Standard
 	if err := seedUser(db, "John", "Doe", "john@doe.com", "password", "standard"); err != nil {
@@ -85,6 +91,14 @@ func seedUser(db *gorm.DB, firstName, lastName, email, password, role string) er
 		serviceNames[i], serviceNames[j] = serviceNames[j], serviceNames[i]
 	})
 
+	// get all categories
+	var categories []category.Category
+	err = db.Find(&categories).Error
+	if err != nil {
+		log.Printf("Failed to get categories: %v", err)
+		return err
+	}
+
 	// Create sample services for the user
 	services := []service.Service{
 		{
@@ -96,6 +110,11 @@ func seedUser(db *gorm.DB, firstName, lastName, email, password, role string) er
 			Status:      true,
 			Duration:    30,
 			IsBanned:    false,
+			Categories:  []category.Category{categories[rand.Intn(len(categories))], categories[rand.Intn(len(categories))]},
+			City:        "Paris",
+			Country:     "France",
+			Address:     "1 rue de la paix",
+			PostalCode:  "75000",
 		},
 		{
 			ID:          uuid.New().String(),
@@ -106,6 +125,11 @@ func seedUser(db *gorm.DB, firstName, lastName, email, password, role string) er
 			Status:      true,
 			Duration:    60,
 			IsBanned:    false,
+			Categories:  []category.Category{categories[rand.Intn(len(categories))], categories[rand.Intn(len(categories))]},
+			City:        "Paris",
+			Country:     "France",
+			Address:     "1 rue de la paix",
+			PostalCode:  "75000",
 		},
 	}
 
@@ -116,6 +140,38 @@ func seedUser(db *gorm.DB, firstName, lastName, email, password, role string) er
 			return err
 		} else {
 			log.Printf("Service created successfully: %s", s.Name)
+		}
+	}
+
+	return nil
+}
+
+// seedCategory seeds a category
+func seedCategory(db *gorm.DB) error {
+
+	// Create sample categories, the name should be on service that could be performed in house outside the house, something like that jardinage, ménage, etc
+	categories := []category.Category{
+		{
+			ID:   uuid.New().String(),
+			Name: "Jardinage",
+		},
+		{
+			ID:   uuid.New().String(),
+			Name: "Ménage",
+		},
+		{
+			ID:   uuid.New().String(),
+			Name: "Cuisine",
+		},
+	}
+
+	for _, c := range categories {
+		err := db.Create(&c).Error
+		if err != nil {
+			log.Printf("Failed to create category %s: %v", c.Name, err)
+			return err
+		} else {
+			log.Printf("Category created successfully: %s", c.Name)
 		}
 	}
 

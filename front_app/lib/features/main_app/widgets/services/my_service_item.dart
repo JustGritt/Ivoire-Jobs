@@ -1,12 +1,17 @@
 // import 'package:barassage_app/config/app_colors.dart';
 
+import 'package:barassage_app/core/helpers/constants_helper.dart';
+import 'package:barassage_app/core/helpers/extentions/string_extension.dart';
+import 'package:barassage_app/core/helpers/services_helper.dart';
+import 'package:barassage_app/features/main_app/models/service_models/service_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 
 class MyServiceItem extends StatelessWidget {
-  const MyServiceItem({super.key});
+  final ServiceModel serviceModel;
+  const MyServiceItem({super.key, required this.serviceModel});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +19,7 @@ class MyServiceItem extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
 
     return CupertinoButton(
-      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+      padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 10),
       onPressed: () {},
       child: SizedBox(
         height: 140,
@@ -32,16 +37,43 @@ class MyServiceItem extends StatelessWidget {
                         color: theme.colorScheme.surface.withOpacity(0.6),
                         spreadRadius: 2,
                         blurRadius: 6,
-                        offset: Offset(0, 3), // changes position of shadow
+                        offset:
+                            const Offset(0, 3), // changes position of shadow
                       ),
                     ],
                   ),
                   clipBehavior: Clip.hardEdge,
                   width: 100,
                   height: 140,
-                  child: Image.network(
-                    'https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80',
-                    fit: BoxFit.cover,
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      Image.network(
+                        serviceModel.images.isNotEmpty
+                            ? serviceModel.images.first
+                            : defaultUrlImage,
+                        fit: BoxFit.cover,
+                      ),
+                      Positioned(
+                        top: 6,
+                        left: 6,
+                        child: Container(
+                          constraints: const BoxConstraints(
+                            maxWidth: 15,
+                            maxHeight: 15,
+                          ),
+                          decoration: BoxDecoration(
+                            color: ServicesHelper.getColorStatus(
+                                serviceModel.status),
+                            border: Border.all(
+                              color: theme.primaryColorDark,
+                              width: 1.0,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 Padding(
@@ -57,7 +89,7 @@ class MyServiceItem extends StatelessWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text('Nettoyage de maison',
+                                Text(serviceModel.name.truncateTo(20),
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 1,
                                     style:
@@ -73,12 +105,12 @@ class MyServiceItem extends StatelessWidget {
                                           theme.colorScheme.secondaryContainer,
                                       size: 20.0,
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       width: 5.0,
                                     ),
                                     Expanded(
                                       child: Text(
-                                          '19 rue des fleurs, 75000 Parihhjhjsdsd sdfsdsdsd h s',
+                                          serviceModel.address.truncateTo(30),
                                           overflow: TextOverflow.ellipsis,
                                           maxLines: 1,
                                           style: theme.textTheme.titleSmall!
@@ -98,7 +130,7 @@ class MyServiceItem extends StatelessWidget {
                                           theme.colorScheme.secondaryContainer,
                                       size: 20.0,
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       width: 5.0,
                                     ),
                                     RichText(
@@ -110,7 +142,8 @@ class MyServiceItem extends StatelessWidget {
                                       text: TextSpan(
                                         children: [
                                           TextSpan(
-                                              text: '2 Heures / ',
+                                              text:
+                                                  '${(serviceModel.duration).toString().durationToTime} / ',
                                               style: theme
                                                   .textTheme.titleMedium!
                                                   .copyWith(
@@ -118,7 +151,8 @@ class MyServiceItem extends StatelessWidget {
                                                 fontWeight: FontWeight.w500,
                                               )),
                                           TextSpan(
-                                            text: '20.000 F ',
+                                            text:
+                                                '${serviceModel.price.toInt()} F ',
                                             style: theme.textTheme.titleMedium!
                                                 .copyWith(
                                               fontSize: 18.0,
@@ -136,30 +170,21 @@ class MyServiceItem extends StatelessWidget {
                           ),
                           Row(
                             children: [
-                              Text('Chez ',
-                                  style: theme.textTheme.titleMedium!.copyWith(
-                                    color: theme.primaryColorDark,
-                                    fontSize: 17.0,
-                                    fontWeight: FontWeight.w500,
-                                  )),
                               Container(
                                 padding: const EdgeInsets.symmetric(
                                     vertical: 2.7, horizontal: 7.0),
                                 decoration: BoxDecoration(
-                                  color: theme.colorScheme.secondaryContainer,
+                                  color: ServicesHelper.getColorStatus(
+                                      serviceModel.status),
                                   borderRadius: BorderRadius.circular(4.0),
                                 ),
                                 child: Row(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     children: [
-                                      const CircleAvatar(
-                                        maxRadius: 12.0,
-                                        backgroundImage: NetworkImage(
-                                            'https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80'),
-                                      ),
-                                      const SizedBox(width: 8.0),
-                                      Text('Alex dieudonne',
+                                      Text(
+                                          ServicesHelper.getTextStatus(
+                                              serviceModel.status),
                                           style: theme.textTheme.titleMedium!
                                               .copyWith(
                                                   color: theme

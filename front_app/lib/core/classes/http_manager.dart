@@ -1,11 +1,13 @@
-import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
 import 'package:barassage_app/config/api_endpoints.dart';
+import 'package:barassage_app/config/app_cache.dart';
+import 'package:barassage_app/core/init_dependencies.dart';
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:flutter/foundation.dart';
+// import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 class Http extends HttpManager {
   Http({String? baseUrl, Map<String, dynamic>? headers})
@@ -15,14 +17,23 @@ class Http extends HttpManager {
 class HttpManager {
   final Dio _dio = Dio();
 
-  HttpManager([String baseUrl = '', Map<String, dynamic>? headers]) {
-    _dio.options.baseUrl = baseUrl;
+  HttpManager(
+      [String? baseUrl = ApiEndpoint.api, Map<String, dynamic>? headers]) {
+    _dio.options.baseUrl = baseUrl ?? ApiEndpoint.api;
     _dio.options.headers = headers;
 
+    // _dio.interceptors.add(PrettyDioLogger(
+    //   requestHeader: true,
+    //   requestBody: true,
+    //   responseBody: true,
+    //   responseHeader: false,
+    //   compact: false,
+    // ));
 
     // how to solve flutter CERTIFICATE_VERIFY_FAILED error
     // while performing a POST request?
     if (kIsWeb) {
+      _dio.options.headers['content-Type'] = '*';
       _dio.options.headers['Access-Control-Allow-Origin'] = '*';
       _dio.options.headers['Access-Control-Allow-Methods'] = '*';
     }
@@ -38,8 +49,11 @@ class HttpManager {
     }
   }
 
-  void setToken(String token) {
-    _dio.options.headers['Authorization'] = 'Bearer $token';
+  Future<void> setToken() async {
+    String? userToken = await serviceLocator<AppCache>().getToken();
+    if (userToken != null) {
+      _dio.options.headers['Authorization'] = 'Bearer $userToken';
+    }
   }
 
   Future<Response> get(
@@ -49,10 +63,11 @@ class HttpManager {
     CancelToken? token,
     Function(int progress, int total)? progress,
   }) async {
+    await setToken();
     Response? response;
     try {
       response = await _dio.get(
-        '${ApiEndpoint.api}$url',
+        url,
         queryParameters: params,
         options: options,
         cancelToken: token,
@@ -73,32 +88,11 @@ class HttpManager {
     Function(int progress, int total)? sendProgress,
     Function(int progress, int total)? receiveProgress,
   }) async {
-    Response? response;
-    response = await _dio.post(
-      '${ApiEndpoint.api}$url',
-      data: jsonEncode(data),
-      queryParameters: params,
-      options: options,
-      cancelToken: token,
-      onReceiveProgress: receiveProgress,
-      onSendProgress: sendProgress,
-    );
-    return response;
-  }
-
-  Future<Response> put(
-    String url, {
-    dynamic data,
-    Map<String, dynamic>? params,
-    Options? options,
-    CancelToken? token,
-    Function(int progress, int total)? sendProgress,
-    Function(int progress, int total)? receiveProgress,
-  }) async {
+    await setToken();
     Response? response;
     try {
-      response = await _dio.put(
-        '${ApiEndpoint.api}$url',
+      response = await _dio.post(
+        url,
         data: data,
         queryParameters: params,
         options: options,
@@ -112,6 +106,29 @@ class HttpManager {
     }
   }
 
+  Future<Response> put(
+    String url, {
+    dynamic data,
+    Map<String, dynamic>? params,
+    Options? options,
+    CancelToken? token,
+    Function(int progress, int total)? sendProgress,
+    Function(int progress, int total)? receiveProgress,
+  }) async {
+    await setToken();
+    Response? response;
+    response = await _dio.put(
+      url,
+      data: data,
+      queryParameters: params,
+      options: options,
+      cancelToken: token,
+      onReceiveProgress: receiveProgress,
+      onSendProgress: sendProgress,
+    );
+    return response;
+  }
+
   Future<Response> patch(
     String url, {
     dynamic data,
@@ -121,10 +138,11 @@ class HttpManager {
     Function(int progress, int total)? sendProgress,
     Function(int progress, int total)? receiveProgress,
   }) async {
+    await setToken();
     Response? response;
     try {
       response = await _dio.patch(
-        '${ApiEndpoint.api}$url',
+        url,
         data: data,
         queryParameters: params,
         options: options,
@@ -145,8 +163,10 @@ class HttpManager {
     Options? options,
     CancelToken? token,
   }) async {
+    await setToken();
     Response? response;
     try {
+      await setToken();
       response = await _dio.delete(
         url,
         data: data,
@@ -172,10 +192,11 @@ class HttpManager {
     bool deleteOnError = true,
     String lengthHeader = Headers.contentLengthHeader,
   }) async {
+    await setToken();
     Response? response;
     try {
       response = await _dio.download(
-        '${ApiEndpoint.api}$url',
+        url,
         savePath,
         data: data,
         queryParameters: params,
@@ -199,6 +220,7 @@ class HttpManager {
     Options? options,
     CancelToken? token,
   }) async {
+    await setToken();
     Response? response;
     try {
       response = await _dio.head(

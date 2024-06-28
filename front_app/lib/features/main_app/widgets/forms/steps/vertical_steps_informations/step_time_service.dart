@@ -1,5 +1,6 @@
 import 'package:barassage_app/config/app_colors.dart';
 import 'package:barassage_app/core/classes/app_context.dart';
+import 'package:barassage_app/core/helpers/extentions/string_extension.dart';
 import 'package:barassage_app/core/init_dependencies.dart';
 import 'package:ez_validator/ez_validator.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,7 +9,7 @@ import 'package:pushable_button/pushable_button.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class StepTimeService extends StatefulWidget {
-  final Function(String timeService) onEnd;
+  final Function(int timeService) onEnd;
   const StepTimeService({super.key, required this.onEnd});
 
   @override
@@ -16,18 +17,20 @@ class StepTimeService extends StatefulWidget {
 }
 
 class _StepTimeServiceState extends State<StepTimeService> {
-  String? timeService;
-  List<String> timeServices = ['2h 30m', '3h', '4h'];
+  int? duration;
+  List<int> timeServices = [30, 60, 90, 120];
   ThemeData theme = Theme.of(serviceLocator<AppContext>().navigatorContext);
   AppLocalizations appLocalizations =
       AppLocalizations.of(serviceLocator<AppContext>().navigatorContext)!;
 
-  Map<String, String> form = {};
+  Map<String, int> form = {
+    "duration": 0,
+  };
   Map<dynamic, dynamic> errors = {};
 
   EzSchema formSchema = EzSchema.shape(
     {
-      "timeService": EzValidator<String>(label: "Time of service").required(),
+      "duration": EzValidator<int>(label: "Time of service").required(),
     },
   );
 
@@ -38,7 +41,7 @@ class _StepTimeServiceState extends State<StepTimeService> {
         errors = errors_;
       });
       if (errors_.entries.every((element) => element.value == null)) {
-        widget.onEnd(timeService!);
+        widget.onEnd(duration!);
       }
     } catch (e) {
       print(e);
@@ -59,18 +62,23 @@ class _StepTimeServiceState extends State<StepTimeService> {
           ),
           Wrap(
             spacing: 12,
+            runSpacing: 12,
             children: timeServices
-                .map((e) => squareTimeService(context,
-                        selected: timeService == e, onPress: () {
-                      form['timeService'] = e;
+                .map((e) => squareTimeService(
+                  context,
+                  selected: duration == e, 
+                  onPress: () {
+                    form['duration'] = e;
                       setState(() {
-                        timeService = e;
+                        duration = e;
                       });
-                    }, text: e))
+                  }, 
+                  text: e.toString().durationToTime
+                  ))
                 .toList(),
           ),
           Text(
-            errors['timeService'] ?? '',
+            errors['duration'] ?? '',
             style: theme.textTheme.labelLarge!
                 .copyWith(color: AppColors.red, fontSize: 12),
           ),

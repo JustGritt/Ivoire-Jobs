@@ -30,3 +30,9 @@ func GetAllCategories() ([]category.Category, error) {
 	}
 	return categories, nil
 }
+
+// GetErrors gets the errors
+func GetErrors() error {
+	return db.PgDB.Error
+}
+

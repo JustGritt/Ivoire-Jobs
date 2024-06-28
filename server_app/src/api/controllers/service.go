@@ -291,25 +291,13 @@ func GetAll(c *fiber.Ctx) error {
 // @Failure 400 {array} ErrorResponse
 // @Failure 401 {array} ErrorResponse
 // @Failure 500 {array} ErrorResponse
-// @Router /service/collection/user [get]
+// @Router /user/{id}/service [get]
 func GetServiceByUserId(c *fiber.Ctx) error {
-	user := c.Locals("user").(*jwt.Token)
-	claims := user.Claims.(jwt.MapClaims)
-	userID := claims["userID"]
-	// Validate Input
+	//get the user id from the request
+	userID := c.Params("id")
 	var errorList []*fiber.Error
-	if userID == nil {
-		errorList = append(
-			errorList,
-			&fiber.Error{
-				Code:    fiber.StatusBadRequest,
-				Message: "An error occurred while extracting user info from request",
-			},
-		)
-		return c.Status(fiber.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
-	}
 
-	services, err := serviceRepo.GetServicesByUserID(userID.(string))
+	services, err := serviceRepo.GetServicesByUserID(userID)
 	if err != nil {
 		errorList = append(
 			errorList,
@@ -321,7 +309,13 @@ func GetServiceByUserId(c *fiber.Ctx) error {
 		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
-	return c.Status(http.StatusOK).JSON(services)
+	// Map services to ServiceOutput
+	var ouput []ServiceOutput
+	for _, s := range services {
+		ouput = append(ouput, *mapServiceToOutPut(&s))
+	}
+
+	return c.Status(http.StatusOK).JSON(ouput)
 }
 
 // GetServiceById Godoc
@@ -467,7 +461,6 @@ func UpdateService(c *fiber.Ctx) error {
 	}
 
 	//remove the images from the service
-	fmt.Println(len(updateInput.DeleteImage))
 	if len(updateInput.DeleteImage) > 0 {
 		for _, img := range updateInput.DeleteImage {
 			if err := serviceRepo.DeleteImage(existingService, img); err != nil {
@@ -586,9 +579,7 @@ func UpdateService(c *fiber.Ctx) error {
 		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
-	serviceOutput := mapServiceToOutPut(existingService)
-	response := HTTPResponse(http.StatusOK, "Service Updated", serviceOutput)
-	return c.Status(http.StatusOK).JSON(response)
+	return c.SendStatus(http.StatusOK)
 }
 
 // DeleteService Godoc
@@ -775,7 +766,6 @@ func SearchService(c *fiber.Ctx) error {
 // ============================================================
 
 func mapServiceToOutPut(u *service.Service) *ServiceOutput {
-	fmt.Println(u.Categories)
 	imageUrls := make([]string, len(u.Images))
 	for i, img := range u.Images {
 		imageUrls[i] = img.URL
