@@ -69,3 +69,8 @@ func CheckBookingOverlap(userID string, startTime time.Time, endTime time.Time) 
 	}
 	return count > 0, nil
 }
+
+// GetErrors gets the errors
+func GetErrors() error {
+	return db.PgDB.Error
+}

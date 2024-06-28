@@ -24,6 +24,7 @@ import (
 	"barassage/api/models/ban"
 	"barassage/api/models/booking"
 	"barassage/api/models/category"
+	"barassage/api/models/configuration"
 	"barassage/api/models/image"
 	"barassage/api/models/member"
 	"barassage/api/models/pushToken"
@@ -55,6 +56,7 @@ func Run() {
 	app := fiber.New(fiber.Config{
 		ServerHeader:      "Fiber",
 		StreamRequestBody: true,
+		TrustedProxies:    []string{"*"},
 	})
 
 	/*
@@ -83,6 +85,7 @@ func Run() {
 		&rating.Rating{},
 		&member.Member{},
 		&pushToken.PushToken{},
+		&configuration.Configuration{},
 	)
 
 	/*
