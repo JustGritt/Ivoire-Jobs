@@ -13,7 +13,7 @@ import (
 // SetupRoutes setups router
 func SetupRoutes(app *fiber.App) {
 
-	api := app.Group("/api")
+	api := app.Group("/api", middlewares.CheckAppStatus())
 	v1 := api.Group("/v1")
 
 	v1.Use("/docs/*", swagger.HandlerDefault)
@@ -87,5 +87,11 @@ func SetupRoutes(app *fiber.App) {
 	member := v1.Group("/member", middlewares.RequireLoggedIn())
 	member.Post("/", ctl.CreateMember)
 	member.Put("/:id/validate", middlewares.RequireAdmin(), ctl.ValidateMember)
+
+	// Configuration Group
+	configuration := v1.Group("/configuration")
+	configuration.Post("/", ctl.CreateConfiguration)
+	configuration.Get("/:key", ctl.GetConfigurationByKey)
+	configuration.Put("/:key", ctl.UpdateConfiguration)
 
 }
