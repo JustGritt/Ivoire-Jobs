@@ -13,7 +13,7 @@ class AppCache {
   Map<String, String>? udata;
 
   void doLogin(User user, String token) {
-    Cache.saveData('user', jsonEncode(user));
+    Cache.saveData('user', user.toJson());
     Cache.saveData('token', token);
   }
 
@@ -52,6 +52,7 @@ class AppCache {
 
   void doLogout() {
     Cache.deleteData('auth_data');
+    Cache.deleteData('token');
   }
 
   Future<bool> isLogout() async {

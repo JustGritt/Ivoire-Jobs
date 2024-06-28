@@ -1,3 +1,4 @@
+import 'package:barassage_app/core/classes/language_provider.dart';
 import 'package:barassage_app/features/main_app/providers/my_services_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
@@ -10,6 +11,9 @@ import 'app_theme.dart';
 List<SingleChildWidget> appProviders = [
   ChangeNotifierProvider<ThemeProvider>(
     create: (context) => ThemeProvider(),
+  ),
+  ChangeNotifierProvider<LanguageProvider>(
+    create: (context) => LanguageProvider(),
   ),
   ChangeNotifierProvider<GlobalStateManager>(
     create: (context) => GlobalStateManager(),
