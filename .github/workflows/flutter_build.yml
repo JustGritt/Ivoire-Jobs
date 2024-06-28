@@ -1,0 +1,49 @@
+name: Build Flutter Web App
+
+on:
+  push:
+    paths:
+      - 'front_app/**'  # Trigger this workflow only on changes to the front_app directory
+
+jobs:
+  build_flutter_web:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Generate .env File for Flutter
+        run: |
+          echo "MAPBOX_API_URL=${{ secrets.MAPBOX_API_URL }}" >> ./front_app/.env
+          echo "MAPBOX_SEARCH_URL=${{ secrets.MAPBOX_SEARCH_URL }}" >> ./front_app/.env
+          echo "MAPBOX_ACCESS_TOKEN=${{ secrets.MAPBOX_ACCESS_TOKEN }}" >> ./front_app/.env
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: 3.22.2
+
+      - name: Install Flutter dependencies
+        run: flutter pub get
+        working-directory: ./front_app
+
+      - name: Build Flutter web app
+        run: flutter build web --release
+        working-directory: ./front_app
+
+      - name: Move build files to server_app/src/build
+        run: |
+          mkdir -p ./server_app/src/build
+          cp -r ./front_app/build/web/* ./server_app/src/build
+
+      - name: Commit and push build files
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add ./server_app/src/build
+          git commit -m "Update build files from front_app"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

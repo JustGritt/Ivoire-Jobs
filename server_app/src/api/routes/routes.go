@@ -100,4 +100,14 @@ func SetupRoutes(app *fiber.App) {
 		return c.SendFile("/opt/gofiber-app/src/build/index.html")
 	})
 
+	// Catch-all route to handle all other requests
+	app.Use(func(c *fiber.Ctx) error {
+		// If the request path starts with /api, continue to the next handler
+		if c.Path() == "/api" || len(c.Path()) > 4 && c.Path()[:4] == "/api" {
+			return c.Next()
+		}
+		// Otherwise, serve the Flutter web app
+		return c.SendFile("/opt/gofiber-app/src/build/index.html")
+	})
+
 }
