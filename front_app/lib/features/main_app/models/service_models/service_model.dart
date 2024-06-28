@@ -5,7 +5,6 @@ List<ServiceModel> serviceFromJson(List<dynamic> data) {
   return List<ServiceModel>.from(data.map((x) => ServiceModel.fromJson(x)));
 }
 
-
 class ServiceModel {
   String address;
   List<String> category;
@@ -24,7 +23,7 @@ class ServiceModel {
   double price;
   bool status;
   String userId;
-  
+
   ServiceModel({
     required this.address,
     required this.category,
@@ -44,7 +43,6 @@ class ServiceModel {
     required this.status,
     required this.userId,
   });
-
 
   ServiceModel.fromJson(Map<String, dynamic> json)
       : address = json['address'],
@@ -84,11 +82,9 @@ class ServiceModel {
     data['price'] = price;
     data['status'] = status;
     data['userId'] = userId;
-    
+
     return data;
   }
-
-
 
   @override
   bool operator ==(Object other) {

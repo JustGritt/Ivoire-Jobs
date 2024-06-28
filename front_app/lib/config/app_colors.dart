@@ -12,9 +12,9 @@ class AppColors {
   static const Color peachColor = Color(0xFFF7C59F);
   static const Color primaryOrange = Color(0xFFF7C59F);
   static const Color red = Color(0xFFD32F2F);
-  
+
   static const Color primaryGreen = Color(0xFF00BFA6);
-  
+
   static const MaterialColor black = MaterialColor(_black, {
     500: Color(_black),
   });

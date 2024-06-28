@@ -62,7 +62,7 @@ class _StepChooseLocationState extends State<StepChooseLocation> {
             });
           }, (form['location'] as LocationService?)),
           Text(errors['location'] ?? "",
-              style: TextStyle(
+              style: const TextStyle(
                 color: AppColors.red,
                 fontSize: 12,
               )),
@@ -75,7 +75,7 @@ class _StepChooseLocationState extends State<StepChooseLocation> {
               color: Colors.grey.withOpacity(0.5),
               spreadRadius: 2,
               blurRadius: 7,
-              offset: Offset(0, 2),
+              offset: const Offset(0, 2),
             ),
             onPressed: validate,
             child: Text(appLocalizations.next,
@@ -118,7 +118,6 @@ Widget buttonSearchInput(
             BoxShadow(
               color: Colors.grey[300]!,
               blurRadius: 10,
-              spreadRadius: 0,
             ),
           ],
         ),

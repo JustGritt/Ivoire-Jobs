@@ -10,7 +10,7 @@ class SectionInformationProfile extends StatelessWidget {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     ThemeData theme = Theme.of(context);
-    
+
     return Container(
       width: width * 0.9,
       padding: const EdgeInsets.all(16),
@@ -21,16 +21,18 @@ class SectionInformationProfile extends StatelessWidget {
           color: theme.colorScheme.surface.withOpacity(0.3),
         ),
       ),
-      child: Column(children: [
-        Text('General', style: theme.textTheme.labelMedium),
-        const SizedBox(height: 8),
-        Row(
-          children: [
-            Icon(Ionicons.person),
-            Text(user.firstName),
-          ],
-        ),
-      ],),
+      child: Column(
+        children: [
+          Text('General', style: theme.textTheme.labelMedium),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              const Icon(Ionicons.person),
+              Text(user.firstName),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

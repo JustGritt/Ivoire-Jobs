@@ -21,11 +21,12 @@ Future<void> showMyDialog(
     barrierDismissible: false, // user must tap button!
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text(title, style: theme.textTheme.displayMedium?.copyWith(
-          color: theme.primaryColorDark,
-          fontWeight: FontWeight.w700,
-          fontSize: 20.0,
-        )),
+        title: Text(title,
+            style: theme.textTheme.displayMedium?.copyWith(
+              color: theme.primaryColorDark,
+              fontWeight: FontWeight.w700,
+              fontSize: 20.0,
+            )),
         content: SingleChildScrollView(
           child: ListBody(
             children: <Widget>[

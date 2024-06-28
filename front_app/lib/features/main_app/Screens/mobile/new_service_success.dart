@@ -45,11 +45,10 @@ class _NewServiceSuccessState extends State<NewServiceSuccess> {
                       style: theme.textTheme.titleMedium,
                     ),
                     TextSpan(
-                      text: " ${widget.service.serviceCreateModel.name} ",
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      )
-                    ),
+                        text: " ${widget.service.serviceCreateModel.name} ",
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        )),
                     TextSpan(
                       text: 'a été créé avec succès.',
                       style: theme.textTheme.titleMedium,
