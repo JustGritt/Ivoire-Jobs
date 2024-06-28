@@ -7,7 +7,6 @@ on:
     paths-ignore:
       - 'infra/environments/prod/ivoirejobs-api/.argocd-source-ivoirejobs-api.yaml'
       - 'front_app/**'
-      - 'server_app/src/api/build/**'
 
 jobs:
   build_and_publish_docker_image:
