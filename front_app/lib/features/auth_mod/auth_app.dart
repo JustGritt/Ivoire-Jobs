@@ -33,12 +33,6 @@ class AuthApp extends RouteManager {
         }));
 
     addRoute(GoRoute(
-        path: AuthApp.profile,
-        pageBuilder: (context, state) {
-          return const CupertinoPage(child: ProfileController());
-        }));
-
-    addRoute(GoRoute(
         path: AuthApp.forget,
         pageBuilder: (context, state) {
           return const CupertinoPage(child: ForgetController());

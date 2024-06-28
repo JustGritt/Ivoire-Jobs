@@ -1,5 +1,5 @@
 import 'package:barassage_app/config/app_colors.dart';
-import 'package:barassage_app/core/helpers/extentions/truncate_string_extension.dart';
+import 'package:barassage_app/core/helpers/extentions/string_extension.dart';
 import 'package:barassage_app/features/main_app/models/location_service.dart';
 import 'package:barassage_app/features/main_app/app.dart';
 import 'package:ez_validator/ez_validator.dart';
@@ -102,6 +102,7 @@ Widget buttonSearchInput(
         longitude: result.latLng!.longitude,
         postCode: result.postalCode,
         city: result.city?.name ?? "",
+        country: result.country?.name ?? "",
         address: result.formattedAddress!,
       );
       onSelect(locationService);

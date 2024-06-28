@@ -1,3 +1,4 @@
+import 'package:barassage_app/features/main_app/providers/my_services_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
@@ -15,6 +16,9 @@ List<SingleChildWidget> appProviders = [
   ),
   ChangeNotifierProvider<NewsProvider>(
     create: (context) => NewsProvider(),
+  ),
+  ChangeNotifierProvider<MyServicesProvider>(
+    create: (context) => MyServicesProvider(),
   ),
   ChangeNotifierProvider<EnqueryProvider>(
     create: (context) => EnqueryProvider(),

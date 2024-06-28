@@ -1,9 +1,11 @@
-enum ServiceCategoryStatus { active, inactive }
+List<ServiceCategory> serviceCategoryFromJson(List<dynamic> data) {
+  return List<ServiceCategory>.from(data.map((x) => ServiceCategory.fromJson(x)));
+}
 
 class ServiceCategory {
   String id;
   String name;
-  ServiceCategoryStatus status;
+  bool status;
 
   ServiceCategory({
     required this.id,
@@ -15,9 +17,7 @@ class ServiceCategory {
       ServiceCategory(
         id: json["id"],
         name: json["name"],
-        status: json["status"] == "active"
-            ? ServiceCategoryStatus.active
-            : ServiceCategoryStatus.inactive,
+        status: json["status"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -29,7 +29,7 @@ class ServiceCategory {
   ServiceCategory copyWith({
     String? id,
     String? name,
-    ServiceCategoryStatus? status,
+    bool? status,
   }) {
     return ServiceCategory(
       id: id ?? this.id,

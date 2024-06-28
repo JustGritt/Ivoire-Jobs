@@ -1,15 +1,24 @@
 import 'package:barassage_app/config/app_colors.dart';
-import 'package:barassage_app/core/helpers/extentions/truncate_string_extension.dart';
+import 'package:barassage_app/core/blocs/service/service_bloc.dart';
+import 'package:barassage_app/core/helpers/extentions/string_extension.dart';
 import 'package:barassage_app/core/helpers/utils_helper.dart';
-import 'package:barassage_app/features/main_app/models/service_category_model.dart';
+import 'package:barassage_app/core/init_dependencies.dart';
+import 'package:barassage_app/features/auth_mod/widgets/app_button.dart';
+import 'package:barassage_app/features/main_app/app.dart';
+import 'package:barassage_app/features/main_app/models/service_models/service_category_model.dart';
+import 'package:barassage_app/features/main_app/services/service_category_services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:pushable_button/pushable_button.dart';
+import 'package:go_router/go_router.dart';
+
+ServiceCategoryService serviceCategoryService =
+    serviceLocator<ServiceCategoryService>();
 
 class StepFormCategory extends StatefulWidget {
-  final Function(ServiceCategory selectedCategory) onEnd;
+  final Function(List<ServiceCategory> selectedCategory) onEnd;
   const StepFormCategory({super.key, required this.onEnd});
 
   @override
@@ -17,11 +26,13 @@ class StepFormCategory extends StatefulWidget {
 }
 
 class _StepFormCategoryState extends State<StepFormCategory> {
-  ServiceCategory? selectedCategory;
+  List<ServiceCategory> selectedCategory = [];
+
+  Future<List<ServiceCategory>> serviceCategories = Future.value([]);
 
   void validate() {
-    if (selectedCategory != null) {
-      widget.onEnd(selectedCategory!);
+    if (selectedCategory.isNotEmpty) {
+      widget.onEnd(selectedCategory);
     } else {
       showMyDialog(context,
           title: 'Service category',
@@ -30,18 +41,15 @@ class _StepFormCategoryState extends State<StepFormCategory> {
   }
 
   @override
+  initState() {
+    serviceCategories = serviceCategoryService.getAll();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     AppLocalizations appLocalizations = AppLocalizations.of(context)!;
     ThemeData theme = Theme.of(context);
-
-    List<ServiceCategory> serviceCategories = [
-      ServiceCategory(
-          name: 'Barber', id: '4787de3d', status: ServiceCategoryStatus.active),
-      ServiceCategory(
-          name: 'Test',
-          id: '47347de3d',
-          status: ServiceCategoryStatus.inactive),
-    ];
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(14),
@@ -52,60 +60,76 @@ class _StepFormCategoryState extends State<StepFormCategory> {
           height: 12,
         ),
         AnimationLimiter(
-          child: ListView.separated(
-            separatorBuilder: (context, index) => const SizedBox(
-              height: 12,
-            ),
-            padding: const EdgeInsets.only(top: 10),
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: serviceCategories.length,
-            itemBuilder: (BuildContext context, int index) {
-              ServiceCategory categoryService = serviceCategories[index];
-              return AnimationConfiguration.staggeredList(
-                  position: index,
-                  duration: const Duration(milliseconds: 375),
-                  child: SlideAnimation(
-                    verticalOffset: 20.0,
-                    child: FadeInAnimation(
-                      child: buildCategoryService(context,
-                          currentCategoryService: categoryService,
-                          onSelectedCategory: (category) {
-                        setState(() {
-                          if (selectedCategory?.id == category.id) {
-                            selectedCategory = null;
-                          } else {
-                            selectedCategory = category;
-                          }
-                        });
-                      },
-                          selectedCategory:
-                              selectedCategory?.id == categoryService.id),
-                    ),
-                  ));
+          child: FutureBuilder(
+            future: serviceCategories,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              if (snapshot.hasError) {
+                return Center(
+                  child: Text('Error: ${snapshot.error}'),
+                );
+              }
+
+              List<ServiceCategory> serviceCategory = snapshot.data!;
+              return ListView.separated(
+                separatorBuilder: (context, index) => const SizedBox(
+                  height: 12,
+                ),
+                padding: const EdgeInsets.only(top: 10),
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: serviceCategory.length,
+                itemBuilder: (BuildContext context, int index) {
+                  ServiceCategory categoryService = serviceCategory[index];
+                  return AnimationConfiguration.staggeredList(
+                      position: index,
+                      duration: const Duration(milliseconds: 375),
+                      child: SlideAnimation(
+                        verticalOffset: 20.0,
+                        child: FadeInAnimation(
+                          child: buildCategoryService(context,
+                              currentCategoryService: categoryService,
+                              onSelectedCategory: (category) {
+                            setState(() {
+                              if (selectedCategory.contains(category)) {
+                                selectedCategory.remove(category);
+                              } else {
+                                selectedCategory.add(category);
+                              }
+                            });
+                          },
+                              selectedCategory:
+                                  selectedCategory.contains(categoryService)),
+                        ),
+                      ));
+                },
+              );
             },
           ),
         ),
         const SizedBox(
           height: 32,
         ),
-        
+
         // Next button
-        PushableButton(
-          height: 40,
-          elevation: 3,
-          hslColor: HSLColor.fromColor(theme.primaryColor),
-          shadow: BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 2,
-            blurRadius: 7,
-            offset: Offset(0, 2),
-          ),
-          onPressed: validate,
-          child: Text(appLocalizations.btn_create,
-              style: theme.textTheme.titleMedium!
-                  .copyWith(color: theme.scaffoldBackgroundColor)),
-        ),
+        BlocConsumer<ServiceBloc, ServiceCreateState>(listener: (_, state) {
+          if (state is CreateServiceFailure) {
+            showMyDialog(context,
+                title: 'Service', content: state.errorMessage);
+          } else if (state is CreateServiceSuccess) {
+            context.pushNamed(App.serviceNewSuccess, extra: state);
+          }
+        }, builder: (context, state) {
+          return AppButton(
+          //  isLoading: state is CreateServiceLoading,
+            onPressed: validate,
+            backgroundColor: theme.primaryColorDark,
+            label: appLocalizations.btn_create,
+            stretch: true,
+          );
+        })
       ]),
     );
   }
@@ -116,12 +140,11 @@ Widget buildCategoryService(BuildContext context,
     required Function(ServiceCategory) onSelectedCategory,
     required bool selectedCategory}) {
   ThemeData theme = Theme.of(context);
-  bool isInactive =
-      currentCategoryService.status == ServiceCategoryStatus.inactive;
+  bool isInactive = !currentCategoryService.status;
 
   return GestureDetector(
     onTap: () => {
-      if (currentCategoryService.status == ServiceCategoryStatus.inactive)
+      if (!currentCategoryService.status)
         {
           showMyDialog(context,
               title: 'Service category',

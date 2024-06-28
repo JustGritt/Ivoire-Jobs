@@ -1,9 +1,13 @@
 // ignore_for_file: deprecated_member_use
+
 import 'package:barassage_app/features/main_app/app.dart';
+import 'package:barassage_app/features/main_app/providers/my_services_provider.dart';
 import 'package:barassage_app/features/main_app/widgets/services/my_service_item.dart';
+import 'package:barassage_app/features/main_app/widgets/services/my_service_slidable_item.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:super_cupertino_navigation_bar/super_cupertino_navigation_bar.dart';
 
 class Service extends StatefulWidget {
@@ -16,7 +20,6 @@ class Service extends StatefulWidget {
 
 class _ServiceState extends State<Service> {
   late TextEditingController _name;
-
   @override
   void initState() {
     super.initState();
@@ -25,6 +28,10 @@ class _ServiceState extends State<Service> {
 
   @override
   Widget build(BuildContext context) {
+    final myServicesProvider =
+        Provider.of<MyServicesProvider>(context, listen: false);
+    myServicesProvider.getAll();
+
     var theme = Theme.of(context);
     return SuperScaffold(
       appBar: SuperAppBar(
@@ -71,13 +78,37 @@ class _ServiceState extends State<Service> {
           // Add other search bar properties as needed
         ),
       ),
-      body: SizedBox(
-        width: double.infinity,
-        child: Column(
-          children: [
-            MyServiceItem(),
-          ],
-        ),
+      body: Consumer<MyServicesProvider>(
+        builder: (_, np, __) {
+          if (np.isLoading == false) {
+            if (np.services.isEmpty) {
+              return const Center(
+                child: Text(
+                  'No services found',
+                ),
+              );
+            }
+            return ListView.separated(
+              padding: const EdgeInsets.only(top: 2, bottom: 10),
+              separatorBuilder: (_, index) => const SizedBox(height: 14),
+              itemCount: np.services.length,
+              itemBuilder: (_, index) {
+                return MyServiceSlidable(
+                    onDelete:  (handler) async {
+                      bool success = await np.deleteService(np.services[index].id);
+                      await handler(success);
+                    },
+                    child: MyServiceItem(
+                      serviceModel: np.services[index],
+                    ));
+              },
+            );
+          } else {
+            return const Center(
+              child: Text('Services data loading....'),
+            );
+          }
+        },
       ),
     );
   }

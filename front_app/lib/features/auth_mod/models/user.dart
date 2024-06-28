@@ -10,6 +10,8 @@ class User {
   String profilePicture;
   String bio;
   String id;
+  DateTime? createdAt;
+
 
   User({
     required this.firstName,
@@ -18,6 +20,7 @@ class User {
     required this.profilePicture,
     required this.bio,
     required this.id,
+    this.createdAt,
   });
 
   factory User.fromJson(Map<String, dynamic> json) => User(
@@ -27,6 +30,7 @@ class User {
         email: json["email"],
         bio: '',
         profilePicture: '',
+        createdAt: DateTime.parse(json["createdAt"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -36,6 +40,7 @@ class User {
         "email": email,
         "profilePicture": profilePicture,
         "bio": bio,
+        "createdAt": createdAt,
       };
 
   User copyWith({

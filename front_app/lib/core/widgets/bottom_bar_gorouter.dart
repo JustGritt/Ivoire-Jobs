@@ -20,8 +20,6 @@ class BottomBarGoRouter extends StatelessWidget {
     ];
 
     final currentPath = GoRouter.of(context).routeInformationProvider.value.uri;
-    // print(currentPath.path);
-
     
     if (hideBottomBarPaths
         .where((element) => currentPath.path.contains(element))
@@ -57,7 +55,7 @@ class BottomBarGoRouter extends StatelessWidget {
           title: Text(appLocalizations.tab_2),
         ),
         FlashyTabBarItem(
-          icon: const Icon(Icons.settings_outlined),
+          icon: const Icon(Ionicons.person_outline),
           activeColor: theme.primaryColor,
           title: Text(appLocalizations.tab_3),
         )
