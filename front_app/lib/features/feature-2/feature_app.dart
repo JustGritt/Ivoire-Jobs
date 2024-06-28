@@ -11,8 +11,7 @@ class FeatureApp extends RouteManager {
   static const String contact = '${FeatureApp.name}/contact';
 
   FeatureApp() {
-
-     addRoute(GoRoute(
+    addRoute(GoRoute(
         path: FeatureApp.home,
         pageBuilder: (context, state) {
           return const CupertinoPage(child: HomeController());
@@ -23,7 +22,6 @@ class FeatureApp extends RouteManager {
         pageBuilder: (context, state) {
           return const CupertinoPage(child: AboutController());
         }));
-
 
     addRoute(GoRoute(
         path: FeatureApp.contact,

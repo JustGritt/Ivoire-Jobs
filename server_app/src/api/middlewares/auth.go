@@ -1,7 +1,6 @@
 package middlewares
 
 import (
-	"fmt"
 	"net/http"
 
 	cfg "barassage/api/configs"
@@ -50,6 +49,9 @@ func jwtError(c *fiber.Ctx, err error) error {
 func RequireAdmin() fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		token := c.Get("Authorization")
+		if token == "" {
+			return c.Status(http.StatusUnauthorized).JSON(fiber.Map{"error": "Missing Authorization Token"})
+		}
 		token = token[7:]
 		if token == "" {
 			return c.Status(http.StatusUnauthorized).JSON(fiber.Map{"error": "Missing Authorization Token"})
@@ -60,7 +62,6 @@ func RequireAdmin() fiber.Handler {
 			return []byte(cfg.GetConfig().JWTAccessSecret), nil
 		})
 
-		fmt.Println(claims)
 		if err != nil {
 			return c.Status(http.StatusUnauthorized).JSON(fiber.Map{"error": "Invalid or Expired Token"})
 		}
@@ -70,6 +71,5 @@ func RequireAdmin() fiber.Handler {
 		}
 
 		return c.Next()
-
 	}
 }

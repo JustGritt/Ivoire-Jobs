@@ -28,21 +28,19 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     ThemeProvider themeProvider = Provider.of<ThemeProvider>(context);
-    
+
     return Scaffold(
         backgroundColor: Colors.grey[100],
         body: SafeArea(
           top: false,
           child: SuperScaffold(
             appBar: SuperAppBar(
-              title: Text(""),
+              title: const Text(""),
               largeTitle: SuperLargeTitle(
-                enabled: true,
                 largeTitle: "Welcome",
               ),
               previousPageTitle: "",
               searchBar: SuperSearchBar(
-                enabled: true,
                 onChanged: (query) {
                   // Search Bar Changes
                 },
@@ -62,7 +60,7 @@ class _HomeState extends State<Home> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => MapScreen(),
+                          builder: (context) => const MapScreen(),
                         ),
                       );
                     },

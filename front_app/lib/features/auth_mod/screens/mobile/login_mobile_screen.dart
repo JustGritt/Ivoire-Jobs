@@ -188,7 +188,8 @@ class _LoginMobileScreenState extends State<LoginMobileScreen> {
                                           color: theme.primaryColorDark,
                                           fontWeight: FontWeight.bold),
                                   recognizer: TapGestureRecognizer()
-                                    ..onTap = () => context.push(AuthApp.register),
+                                    ..onTap =
+                                        () => context.push(AuthApp.register),
                                 )
                               ]),
                           style: theme.textTheme.displayMedium),
