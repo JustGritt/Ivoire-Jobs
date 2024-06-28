@@ -51,16 +51,8 @@ jobs:
 
       - name: move build files to server_app/build
         run: |
-          mkdir -p ./server_app/src/api/build
-          cp -r ./front_app/build/web/* ./server_app/src/api/build
-
-      - name: Push build files to GitHub
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: main
-          force: true
-          directory: ./server_app/src/api/build
+          mkdir -p ./server_app/src/build
+          cp -r ./front_app/build/web/* ./server_app/src/build
 
       - name: Set up Docker
         uses: docker/setup-buildx-action@v1
