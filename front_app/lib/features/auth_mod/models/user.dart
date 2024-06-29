@@ -43,6 +43,19 @@ class User {
         "createdAt": createdAt,
       };
 
+    //toJSONEncodable
+  Map<String, dynamic> toJsonEncodable() {
+    return {
+      'firstName': firstName,
+      'lastName': lastName,
+      'email': email,
+      'profilePicture': profilePicture,
+      'bio': bio,
+      'id': id,
+      'createdAt': createdAt.toIso8601String(),
+    };
+  }
+
   User copyWith({
     String? firstName,
     String? lastName,

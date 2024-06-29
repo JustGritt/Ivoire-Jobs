@@ -12,7 +12,7 @@ class AppCache {
   Map<String, String>? udata;
 
   void doLogin(User user, String token) {
-    Cache.saveData('user', user.toJson());
+    Cache.saveData('user', user.toJsonEncodable());
     Cache.saveData('token', token);
   }
 
