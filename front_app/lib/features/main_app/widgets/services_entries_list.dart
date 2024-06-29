@@ -17,7 +17,7 @@ class ServicesEntriesList extends StatelessWidget {
           padding: const EdgeInsets.only(left: 8.0, bottom: 8.0, right: 8.0),
           child: GestureDetector(
             onTap: () {
-              context.push('${App.detailService}');
+              context.push(App.detailService);
             },
             child: ServiceEntry(service: e),
           ),

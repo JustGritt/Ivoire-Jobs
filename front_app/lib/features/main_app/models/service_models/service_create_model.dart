@@ -3,9 +3,10 @@ import 'dart:io';
 import 'package:barassage_app/features/main_app/models/location_service.dart';
 import 'package:barassage_app/features/main_app/models/service_models/service_category_model.dart';
 import 'package:dio/dio.dart';
+
 // ['','']
 List<String> serviceCategoryToJson(List<ServiceCategory> data) {
-  return  data.map((e) => e.id).toList();
+  return data.map((e) => e.id).toList();
 }
 
 class ServiceCreateModel extends LocationService {
@@ -16,20 +17,19 @@ class ServiceCreateModel extends LocationService {
   final int duration;
   final List<File> illustrations;
 
-  ServiceCreateModel({
-    required super.latitude,
-    required super.longitude,
-    required super.city,
-    required super.address,
-    required this.categories,
-    required this.title,
-    required this.description,
-    required this.price,
-    required this.illustrations,
-    required this.duration,
-    super.postCode,
-    super.country
-  });
+  ServiceCreateModel(
+      {required super.latitude,
+      required super.longitude,
+      required super.city,
+      required super.address,
+      required this.categories,
+      required this.title,
+      required this.description,
+      required this.price,
+      required this.illustrations,
+      required this.duration,
+      super.postCode,
+      super.country});
 
   Future<FormData> toFormData() async {
     return FormData.fromMap({
@@ -44,10 +44,8 @@ class ServiceCreateModel extends LocationService {
       "description": description,
       "duration": duration,
       "price": price,
-      "images": illustrations
-          .map((e) => MultipartFile.fromFileSync(e.path))
-          .toList(),
+      "images":
+          illustrations.map((e) => MultipartFile.fromFileSync(e.path)).toList(),
     });
   }
-
 }

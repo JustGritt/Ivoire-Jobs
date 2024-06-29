@@ -22,7 +22,7 @@ void main() async {
   FlutterImageCompress.showNativeLog = true;
   Provider.debugCheckInvalidValueType = null;
   await initDependencies();
-  await initializeDateFormatting('fr_FR', null);
+  await initializeDateFormatting('fr_FR');
   await Firebase.initializeApp(
      options: DefaultFirebaseOptions.currentPlatform
   );

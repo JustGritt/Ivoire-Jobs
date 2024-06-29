@@ -44,6 +44,7 @@ metadata:
   name: ivoirejobs-api-ingress
   annotations:
     nginx.ingress.kubernetes.io/proxy-body-size: "100m"
+    nginx.ingress.kubernetes.io/use-forwarded-headers: "true" 
 spec:
   ingressClassName: nginx
   rules:

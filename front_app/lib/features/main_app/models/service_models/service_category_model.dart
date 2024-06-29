@@ -1,5 +1,6 @@
 List<ServiceCategory> serviceCategoryFromJson(List<dynamic> data) {
-  return List<ServiceCategory>.from(data.map((x) => ServiceCategory.fromJson(x)));
+  return List<ServiceCategory>.from(
+      data.map((x) => ServiceCategory.fromJson(x)));
 }
 
 class ServiceCategory {

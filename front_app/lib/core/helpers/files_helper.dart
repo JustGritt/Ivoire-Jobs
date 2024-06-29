@@ -4,7 +4,8 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 
 Future<File> compressAndGetFile(File file) async {
   final filePath = file.absolute.path;
-  final outPath = '${filePath.substring(0, filePath.lastIndexOf('/'))}/${DateTime.now().millisecondsSinceEpoch}_out.jpeg';
+  final outPath =
+      '${filePath.substring(0, filePath.lastIndexOf('/'))}/${DateTime.now().millisecondsSinceEpoch}_out.jpeg';
 
   XFile? result = await FlutterImageCompress.compressAndGetFile(
     file.absolute.path,

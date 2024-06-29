@@ -38,6 +38,7 @@ WORKDIR /opt/gofiber-app
 COPY --from=builder /app/main .
 COPY --from=builder /app/.env .
 COPY --from=builder /app/api/templates/email /opt/gofiber-app/src/api/templates/email
+COPY --from=builder /app/build /opt/gofiber-app/src/build
 
 
 # Expose port 8000

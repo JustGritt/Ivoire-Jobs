@@ -53,9 +53,11 @@ class ServiceCreatedModel {
       city: json['city'],
       postalCode: json['postalCode'],
       country: json['country'],
-      images: (json['images'] as List<dynamic>).map((e) => e.toString()).toList(),
+      images:
+          (json['images'] as List<dynamic>).map((e) => e.toString()).toList(),
       createdAt: json['createdAt'],
-      category: (json['category'] as List<dynamic>).map((e) => e.toString()).toList(),
+      category:
+          (json['category'] as List<dynamic>).map((e) => e.toString()).toList(),
     );
   }
 }

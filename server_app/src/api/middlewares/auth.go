@@ -1,7 +1,6 @@
 package middlewares
 
 import (
-	"fmt"
 	"net/http"
 
 	cfg "barassage/api/configs"
@@ -52,14 +51,13 @@ func CheckAppStatus() fiber.Handler {
 			//check if the current request IP is in the whitelist
 			for _, ip := range whiteList.Value {
 				//get form request header the IP address
-				requestIP := c.Get("X-Real-IP")
+				requestIP := c.Get("X-Original-Forwarded-For")
+				cloudFlareRealIP := c.Get("CF-Connecting-IP")
 				//get the all request hed
-				headers := c.Request().Header.String()
 				if requestIP == "" {
 					requestIP = c.IP()
 				}
-				fmt.Println("Request IP: ", requestIP, c.IPs(), "Headers: ", headers)
-				if c.IP() == ip {
+				if requestIP == ip || cloudFlareRealIP == ip {
 					return c.Next()
 				}
 			}

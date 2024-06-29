@@ -6,7 +6,7 @@ import 'package:ionicons/ionicons.dart';
 
 class ProfileAvatar extends StatefulWidget {
   final User user;
-  const ProfileAvatar({super.key,  required this.user});
+  const ProfileAvatar({super.key, required this.user});
 
   @override
   State<ProfileAvatar> createState() => _ProfileAvatarState();
@@ -16,7 +16,7 @@ class _ProfileAvatarState extends State<ProfileAvatar> {
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    
+
     return AdvancedAvatar(
       name: widget.user.firstName,
       style: theme.textTheme.displayLarge?.copyWith(

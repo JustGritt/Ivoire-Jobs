@@ -159,9 +159,6 @@ class _StepInformationState extends State<StepInformation> {
                     ?.copyWith(color: AppColors.red)),
             const SizedBox(height: 20.0),
             PushableButton(
-              child: Text(appLocalizations.next,
-                  style: theme.textTheme.titleMedium!
-                      .copyWith(color: theme.scaffoldBackgroundColor)),
               height: 40,
               elevation: 3,
               hslColor: HSLColor.fromColor(theme.primaryColor),
@@ -169,9 +166,12 @@ class _StepInformationState extends State<StepInformation> {
                 color: Colors.grey.withOpacity(0.5),
                 spreadRadius: 2,
                 blurRadius: 7,
-                offset: Offset(0, 2),
+                offset: const Offset(0, 2),
               ),
               onPressed: validate,
+              child: Text(appLocalizations.next,
+                  style: theme.textTheme.titleMedium!
+                      .copyWith(color: theme.scaffoldBackgroundColor)),
             ),
           ],
         ),
@@ -191,7 +191,7 @@ class _StepInformationState extends State<StepInformation> {
           context,
           maxAssets: 3,
           closeOnComplete: true,
-          selectedAssets: illustrations?.whereType<AssetEntity>().toList(),
+          selectedAssets: illustrations.whereType<AssetEntity>().toList(),
           onCompleted: (Stream<InstaAssetsExportDetails> stream) async {
             InstaAssetsExportDetails photo = await stream.first;
             List<AssetEntity>? selectedFiles = photo.selectedAssets;
@@ -202,7 +202,7 @@ class _StepInformationState extends State<StepInformation> {
                 File compressedFile = await compressAndGetFile(originalFile);
                 print(compressedFile.path);
                 int size = compressedFile.lengthSync();
-                if(size > 5000000) throw FileException('File too large');
+                if (size > 5000000) throw FileException('File too large');
                 setIllustration(compressedFile);
               } catch (e) {
                 showMyDialog(context, title: 'Error', content: e.toString());
@@ -237,7 +237,7 @@ class _StepInformationState extends State<StepInformation> {
                       color: theme.primaryColorDark,
                       size: 20.0,
                     ),
-                    SizedBox(height: 5.0),
+                    const SizedBox(height: 5.0),
                     Text('Photo',
                         style: theme.textTheme.labelLarge!
                             .copyWith(fontSize: 16.0)),

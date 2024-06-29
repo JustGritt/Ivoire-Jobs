@@ -11,6 +11,7 @@ class SectionInformationProfile extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     ThemeData theme = Theme.of(context);
 
+
     return Container(
       width: width * 0.9,
       padding: const EdgeInsets.all(16),

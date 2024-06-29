@@ -51,7 +51,6 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
           builder: (context, state) {
             if (state is AuthenticationSuccessState) {
               return Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Center(
                     child: ProfileAvatar(user: state.user),
@@ -71,7 +70,7 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
                   const SizedBox(height: 20),
                   SectionInformationProfile(user: state.user),
                   CupertinoButton(
-                      child: Text('Logout'),
+                      child: const Text('Logout'),
                       onPressed: () {
                         context.read<AuthenticationBloc>().add(SignOut());
                       }),
