@@ -1,6 +1,6 @@
 import 'package:barassage_app/features/auth_mod/models/user.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:ionicons/ionicons.dart';
 
 class SectionInformationProfile extends StatelessWidget {
   final User user;
@@ -10,6 +10,7 @@ class SectionInformationProfile extends StatelessWidget {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     ThemeData theme = Theme.of(context);
+
 
     return Container(
       width: width * 0.9,
@@ -26,9 +27,12 @@ class SectionInformationProfile extends StatelessWidget {
           Text('General', style: theme.textTheme.labelMedium),
           const SizedBox(height: 8),
           Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              const Icon(Ionicons.person),
-              Text(user.firstName),
+              const Icon(CupertinoIcons.person),
+              const SizedBox(width: 8),
+              Text(user.firstName, style: theme.textTheme.labelMedium),
             ],
           ),
         ],

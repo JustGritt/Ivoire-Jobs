@@ -1,3 +1,4 @@
+import 'package:barassage_app/core/services/firebase_api/firebaseAPI.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:super_cupertino_navigation_bar/super_cupertino_navigation_bar.dart';
@@ -20,6 +21,7 @@ class _HomeState extends State<Home> {
 
   @override
   void initState() {
+    Firebaseapi().initNotifications();
     super.initState();
     // var tm = context.read<ThemeProvider>();
     // dayAndNight = tm.isDarkMode;

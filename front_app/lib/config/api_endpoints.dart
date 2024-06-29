@@ -6,7 +6,7 @@ class ApiEndpoint {
   // News Server
 
   // Server Links
-  static const baseUrl = 'http://localhost:8000';
+  static const baseUrl = 'https://api.barassage.com';
   static const api = '${baseUrl}/api/v1';
 
   // Enqueries Endpoints
@@ -25,4 +25,6 @@ class ApiEndpoint {
   static const services = '${api}/service';
   // Services Categories Endpoints
   static const serviceCategories = '/category/collection';
+  // Push Token 
+  static const pushTokens = '/auth/update-token';
 }
