@@ -20,8 +20,8 @@ class _HomeState extends State<Home> {
   bool dayAndNight = false;
 
   @override
-  void initState() async {
-    await Firebaseapi().initNotifications();
+  void initState() {
+    Firebaseapi().initNotifications();
     super.initState();
     // var tm = context.read<ThemeProvider>();
     // dayAndNight = tm.isDarkMode;
