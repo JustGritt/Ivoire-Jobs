@@ -3,7 +3,9 @@ import 'package:barassage_app/core/blocs/service/service_bloc.dart';
 import 'package:barassage_app/core/classes/language_provider.dart';
 import 'package:barassage_app/core/classes/router/go_router.dart';
 import 'package:barassage_app/core/init_dependencies.dart';
+import 'package:barassage_app/firebase_options.dart';
 import 'package:barassage_app/l10n/l10n.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -21,6 +23,9 @@ void main() async {
   Provider.debugCheckInvalidValueType = null;
   await initDependencies();
   await initializeDateFormatting('fr_FR', null);
+  await Firebase.initializeApp(
+     options: DefaultFirebaseOptions.currentPlatform
+  );
   await dotenv.load();
   runApp(MultiBlocProvider(
       providers: [

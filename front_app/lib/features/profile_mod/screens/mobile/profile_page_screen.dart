@@ -69,10 +69,12 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
                         fontWeight: FontWeight.w500,
                       )),
                   const SizedBox(height: 20),
-                   SectionInformationProfile(user: state.user),
-                  CupertinoButton(child: Text('Logout'), onPressed: () {
-                    context.read<AuthenticationBloc>().add(SignOut());
-                  }),
+                  SectionInformationProfile(user: state.user),
+                  CupertinoButton(
+                      child: Text('Logout'),
+                      onPressed: () {
+                        context.read<AuthenticationBloc>().add(SignOut());
+                      }),
                 ],
               );
             } else {
