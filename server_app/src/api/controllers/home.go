@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"context"
 	"log"
 	"net/http"
 
@@ -19,20 +20,24 @@ import (
 func HomeController(c *fiber.Ctx) error {
 
 	// Send to a single device
-	token := "test"
+	token := "dZGeqepVHk0pr25DTN6EY4:APA91bHLgtqodZI_8jQ5tuE6SY5rQGeGFMORpVW6I1nre2e5K9kImjyHn4FOrbJ3RWPxDThwwOR7Tgku-1QMAZ-VsnNPy45I7y2WuV_o1fK__DGCxm8PBxs6RWJwsG6AvH64Urdot1ME"
 	resp, err := notification.Send(
-		c.Context(),
+		context.TODO(),
 		&messaging.Message{
 			Token: token,
 			Data: map[string]string{
-				"foo": "bar",
+				"Indexeur": "Le poulet c'est delicieux",
 			},
 		},
 	)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("error sending message: %v", err)
 	}
-	log.Printf("Successfully sent message: %v", resp)
+	log.Println("success count:", resp.SuccessCount)
+	log.Println("failure count:", resp.FailureCount)
+	log.Println("message id:", resp.Responses[0].MessageID)
+	log.Println("error msg:", resp.Responses[0].Error)
+
 	response := HTTPResponse(http.StatusOK, "Success", "Welcome Home")
 	return c.JSON(response)
 }

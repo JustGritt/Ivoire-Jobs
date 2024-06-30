@@ -1,4 +1,4 @@
-name: Build Flutter Web App
+name: Build Flutter Android App
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - 'front_app/**'  # Trigger this workflow only on changes to the front_app directory
 
 jobs:
-  build_flutter_web:
+  build_flutter_android:
     runs-on: ubuntu-latest
 
     steps:
@@ -29,21 +29,37 @@ jobs:
         run: flutter pub get
         working-directory: ./front_app
 
-      - name: Build Flutter web app
-        run: flutter build web --release
+      - name: Build Flutter Android APK
+        run: flutter build apk --release
         working-directory: ./front_app
 
-      - name: Move build files to server_app/src/build
+      - name: Zip the APK
         run: |
-          mkdir -p ./server_app/src/build
-          cp -r ./front_app/build/web/* ./server_app/src/build
+          cd ./front_app/build/app/outputs/flutter-apk
+          zip -r release-apk.zip app-release.apk
 
-      - name: Commit and push build files
+      - name: Install GitHub CLI
+        run: sudo apt-get install gh -y
+
+      - name: Get the latest release tag
+        id: get_latest_release
         run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git add -f ./server_app/src/build
-          git commit -m "Update build files from front_app"
-          git push
+          LATEST_RELEASE=$(gh release list --limit 1 | awk '{print $1}')
+          echo "LATEST_RELEASE=$LATEST_RELEASE" >> $GITHUB_ENV
+
+      - name: Increment version
+        id: increment_version
+        run: |
+          if [ -z "$LATEST_RELEASE" ]; then
+            NEW_VERSION="v0.0.1"
+          else
+            NEW_VERSION=$(echo $LATEST_RELEASE | awk -F. -v OFS=. '{if($3+1 == 100){$2+=1;$3=0}else{$3+=1}}1')
+          fi
+          echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
+
+      - name: Create GitHub Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NEW_VERSION: ${{ env.NEW_VERSION }}
+        run: |
+          gh release create "$NEW_VERSION" ./front_app/build/app/outputs/flutter-apk/release-apk.zip --title "Release $NEW_VERSION" --notes "Release version $NEW_VERSION"
