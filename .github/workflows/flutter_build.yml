@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - 'front_app/**'  # Trigger this workflow only on changes to the front_app directory
+  workflow_dispatch:  # Allow manual triggering of the workflow
 
 jobs:
   build_flutter_android:
@@ -22,7 +23,8 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: 3.3.0
+          channel: stable
+          flutter-version: 3.22.2
 
       - name: Generate .env File for Flutter
         run: |
