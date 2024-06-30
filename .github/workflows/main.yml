@@ -64,6 +64,19 @@ jobs:
           echo "STRIPE_PUBLISHABLE_KEY=${{ secrets.STRIPE_PUBLISHABLE_KEY }}" >> ./server_app/src/.env
           echo "STRIPE_PRIVATE_KEY=${{ secrets.STRIPE_PRIVATE_KEY }}" >> ./server_app/src/.env
           echo "STRIPE_WEBHOOK_SECRET=${{ secrets.STRIPE_WEBHOOK_SECRET }}" >> ./server_app/src/.env
+          echo "FCM_TYPE=${{ secrets.FCM_TYPE }}" >> ./server_app/src/.env
+          echo "FCM_PROJECT_ID=${{ secrets.FCM_PROJECT_ID }}" >> ./server_app/src/.env
+          echo "FCM_PRIVATE_KEY_ID=${{ secrets.FCM_PRIVATE_KEY_ID }}" >> ./server_app/src/.env
+          echo "FCM_CLIENT_EMAIL=${{ secrets.FCM_CLIENT_EMAIL }}" >> ./server_app/src/.env
+          echo "FCM_CLIENT_ID=${{ secrets.FCM_CLIENT_ID }}" >> ./server_app/src/.env
+          echo "FCM_AUTH_URI=${{ secrets.FCM_AUTH_URI }}" >> ./server_app/src/.env
+          echo "FCM_TOKEN_URI=${{ secrets.FCM_TOKEN_URI }}" >> ./server_app/src/.env
+          echo "FCM_AUTH_PROVIDER_X509_CERT_URL=${{ secrets.FCM_AUTH_PROVIDER_X509_CERT_URL }}" >> ./server_app/src/.env
+          echo "FCM_CLIENT_X509_CERT_URL=${{ secrets.FCM_CLIENT_X509_CERT_URL }}" >> ./server_app/src/.env
+          echo "FCM_PRIVATE_KEY=${{ secrets.FCM_PRIVATE_KEY }}" >> ./server_app/src/.env
+          echo "FCM_UNIVERSE_DOMAIN=${{ secrets.FCM_UNIVERSE_DOMAIN }}" >> ./server_app/src/.env
+
+
 
       - name: Build and push Docker image for ivoirejobs-api
         uses: docker/build-push-action@v2
