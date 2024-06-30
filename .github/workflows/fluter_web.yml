@@ -26,9 +26,11 @@ jobs:
         
       - name: Install dependencies
         run: flutter pub get
+        working-directory: ./front_app
 
       - name: Build Flutter web
         run: flutter build web --release
+        working-directory: ./front_app
 
       - name: Deploy to Vercel
         run: |
