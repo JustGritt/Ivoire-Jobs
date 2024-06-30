@@ -1,9 +1,14 @@
 name: Build and Deploy Flutter Web to Vercel
+env:
+  VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
 on:
   push:
     branches:
       - main  # Trigger the workflow on push to the main branch
+  workflow_dispatch:  # Allow manual triggering of the workflow
 
 jobs:
   build_and_deploy:
@@ -32,11 +37,9 @@ jobs:
         run: flutter build web --release
         working-directory: ./front_app
 
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
+
       - name: Deploy to Vercel
         run: |
-          npm install -g vercel
-          vercel ./build/web --prod --token=$VERCEL_TOKEN --org-id=$VERCEL_ORG_ID --project-id=$VERCEL_PROJECT_ID
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel ./build/web --prod --token="$VERCEL_TOKEN"
