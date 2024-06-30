@@ -409,7 +409,7 @@ func UpdateProfile(c *fiber.Ctx) error {
 // @Description Patch the token of the logged-in user
 // @Tags Auth
 // @Produce json
-// @Param payload body PatchUserObject true "Patch Token Body"
+// @Param payload body PushTokenObject true "Patch Token Body"
 // @Success 200 {object} Response "Updated user token data"
 // @Failure 400 {array} ErrorResponse "Validation error or user not found"
 // @Failure 401 {array} ErrorResponse "Incorrect email or password"
