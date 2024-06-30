@@ -42,4 +42,4 @@ jobs:
 
       - name: Deploy to Vercel
         run: |
-          vercel ./build/web --prod --token="$VERCEL_TOKEN"
+          vercel ./front_app/build/web --prod --token="$VERCEL_TOKEN"
