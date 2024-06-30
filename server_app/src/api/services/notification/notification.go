@@ -1,7 +1,9 @@
 package notification
 
 import (
+	"barassage/api/configs"
 	"context"
+	"fmt"
 	"log"
 
 	"firebase.google.com/go/v4/messaging"
@@ -12,10 +14,12 @@ var notif *fcm.Client
 
 // InitFCM initializes the FCM client
 func InitFCM() *fcm.Client {
+	cfg := configs.GetConfig().FCM
+	fmt.Println(cfg)
 	ctx := context.Background()
 	client, err := fcm.NewClient(
 		ctx,
-		fcm.WithCredentialsFile("./google-services.json"),
+		fcm.WithCredentialsFile("./fcm.json"),
 	)
 	if err != nil {
 		log.Fatalf("error initializing FCM client: %v", err)
