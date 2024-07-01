@@ -14,6 +14,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'dart:io' as io;
+import 'dart:io';
 
 import 'config/config.dart';
 
@@ -24,9 +26,15 @@ void main() async {
   await initDependencies();
   await initializeDateFormatting('fr_FR');
   await Firebase.initializeApp(
-     options: DefaultFirebaseOptions.currentPlatform
-  );
-  await dotenv.load();
+     options: DefaultFirebaseOptions.currentPlatform);
+
+  var envFile = "assets/.env";
+  try {
+    if (io.File(".env").existsSync()) envFile = ".env";
+    // ignore: empty_catches
+  } catch (e) {}
+  await dotenv.load(fileName: envFile);
+
   runApp(MultiBlocProvider(
       providers: [
         BlocProvider(
