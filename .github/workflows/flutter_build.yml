@@ -51,6 +51,8 @@ jobs:
         run: |
           LATEST_RELEASE=$(gh release list --limit 1 | awk '{print $2}')
           echo "LATEST_RELEASE=$LATEST_RELEASE" >> $GITHUB_ENV
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Increment version
         id: increment_version
@@ -58,6 +60,8 @@ jobs:
           VERSION_NUMBER=$(echo $LATEST_RELEASE | sed 's/v//')
           NEW_VERSION=$(echo $VERSION_NUMBER | awk -F. -v OFS=. '{print "v"$1"."$2"."$3+1}')
           echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create GitHub Release
         env:
