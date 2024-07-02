@@ -49,7 +49,7 @@ jobs:
       - name: Get the latest release tag
         id: get_latest_release
         run: |
-          LATEST_RELEASE=$(gh release list --limit 1 | awk '{print $1}' | tail -n 1)
+          LATEST_RELEASE=$(gh release list --limit 1 | awk '{print $2}')
           echo "LATEST_RELEASE=$LATEST_RELEASE" >> $GITHUB_ENV
 
       - name: Increment version
