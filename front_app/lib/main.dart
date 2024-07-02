@@ -28,7 +28,7 @@ void main() async {
   await Firebase.initializeApp(
      options: DefaultFirebaseOptions.currentPlatform);
 
-  var envFile = "assets/.env";
+  var envFile = ".env";
   try {
     if (io.File(".env").existsSync()) envFile = ".env";
     // ignore: empty_catches
