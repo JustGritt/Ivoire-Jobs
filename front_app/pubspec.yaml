@@ -108,7 +108,7 @@ flutter:
   generate: true
   uses-material-design: true
   assets:
-    - assets/.env
+    - .env
     - assets/images/ill_dx.svg
     - assets/images/ill_register.svg
     - assets/svg/confirmed.svg
