@@ -116,8 +116,9 @@ func Run() {
 
 	// cors
 	app.Use(cors.New(cors.Config{
-	    AllowOrigins: "*",
-	    AllowHeaders: "Origin, Content-Type, Accept, Authorization, Access-Control-Allow-Origin",
+		AllowOrigins: "*",
+		AllowHeaders: "Origin, Content-Type, Accept, Authorization, Access-Control-Allow-Origin, Access-Control-Allow-Methods",
+		AllowMethods: "GET, POST, PUT, PATCH, HEAD, DELETE, OPTIONS",
 	}))
 
 
