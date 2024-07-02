@@ -28,9 +28,9 @@ jobs:
 
       - name: Generate .env File for Flutter
         run: |
-          echo "MAPBOX_API_URL=${{ secrets.MAPBOX_API_URL }}" >> ./front_app/assets/.env
-          echo "MAPBOX_SEARCH_URL=${{ secrets.MAPBOX_SEARCH_URL }}" >> ./front_app/assets/.env
-          echo "MAPBOX_ACCESS_TOKEN=${{ secrets.MAPBOX_ACCESS_TOKEN }}" >> ./front_app/assets/.env
+          echo "MAPBOX_API_URL=${{ secrets.MAPBOX_API_URL }}" >> ./front_app/.env
+          echo "MAPBOX_SEARCH_URL=${{ secrets.MAPBOX_SEARCH_URL }}" >> ./front_app/.env
+          echo "MAPBOX_ACCESS_TOKEN=${{ secrets.MAPBOX_ACCESS_TOKEN }}" >> ./front_app/.env
 
       - run: flutter pub get
         working-directory: ./front_app
