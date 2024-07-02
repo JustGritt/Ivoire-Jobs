@@ -49,17 +49,13 @@ jobs:
       - name: Get the latest release tag
         id: get_latest_release
         run: |
-          LATEST_RELEASE=$(gh release list --limit 1 | awk '{print $1}')
+          LATEST_RELEASE=$(gh release list --limit 1 | awk '{print $1}' | tail -n 1)
           echo "LATEST_RELEASE=$LATEST_RELEASE" >> $GITHUB_ENV
 
       - name: Increment version
         id: increment_version
         run: |
-          if [ -z "$LATEST_RELEASE" ]; then
-            NEW_VERSION="v0.0.1"
-          else
-            NEW_VERSION=$(echo $LATEST_RELEASE | awk -F. -v OFS=. '{if($3+1 == 100){$2+=1;$3=0}else{$3+=1}}1')
-          fi
+          NEW_VERSION=$(echo $LATEST_RELEASE | awk -F. -v OFS=. '{$NF=$NF+1; print $0}')
           echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
 
       - name: Create GitHub Release
@@ -67,4 +63,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NEW_VERSION: ${{ env.NEW_VERSION }}
         run: |
-          gh release create "$NEW_VERSION" ./front_app/build/app/outputs/flutter-apk/release-apk.zip --title "Release $NEW_VERSION" --notes "Release version $NEW_VERSION"
+          gh release create $NEW_VERSION ./front_app/build/app/outputs/flutter-apk/release-apk.zip -t "Release $NEW_VERSION" -n "Release $NEW_VERSION"
