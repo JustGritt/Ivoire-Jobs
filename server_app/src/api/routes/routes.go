@@ -35,7 +35,7 @@ func SetupRoutes(app *fiber.App) {
 	auth.Patch("/update-token", middlewares.RequireLoggedIn(), ctl.PatchToken)
 	// Requires authentication
 	auth.Get("/me", middlewares.RequireLoggedIn(), ctl.GetMyProfile)
-	auth.Get("/users", middlewares.RequireAdmin(), ctl.GetAllUsers)
+	auth.Get("/users", ctl.GetAllUsers)
 
 	// Contact Group
 	contact := v1.Group("/contact")

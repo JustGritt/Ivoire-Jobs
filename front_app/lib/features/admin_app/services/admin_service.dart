@@ -18,14 +18,24 @@ class AdminService {
   // get an array of services
   Future<List<Service>> getAllServices() async {
     try {
-      Response res = (await _http.get(ApiEndpoint.serviceCollection));
-      debugPrint('services: $res');
+      Response res = await _http.get(ApiEndpoint.serviceCollection);
+      debugPrint('services: ${res.data}');
       if (res.statusCode == 200) {
-        List<Service> services =
-            res.data.map((e) => Service.fromJson(e)).toList();
-        return services;
+        debugPrint('services data type: ${res.data.runtimeType}');
+        // Check for direct list or nested list
+        if (res.data is List) {
+          List<Service> services =
+              (res.data as List).map((e) => Service.fromJson(e)).toList();
+          return services;
+        } else if (res.data['data'] is List) {
+          List<Service> services = (res.data['data'] as List)
+              .map((e) => Service.fromJson(e))
+              .toList();
+          return services;
+        }
+        throw Exception('Unexpected response format');
       }
-      throw Exception('Unexpected response format');
+      throw Exception('Failed to load services');
     } catch (e) {
       debugPrint('Error: $e');
       throw Exception('Failed to load services');
