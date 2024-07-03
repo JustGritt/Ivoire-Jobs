@@ -128,7 +128,7 @@ func Run() {
 		============ Set Up Routes ============
 	*/
 	routes.SetupRoutes(app)
-
+	app.Use(cors.New())
 	/*
 		============ Setup Swagger ===============
 	*/

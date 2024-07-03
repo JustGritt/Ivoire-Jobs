@@ -4,7 +4,9 @@
         "description": "Français"
     },
     "welcome_back": "Bienvenue à vous !",
+    "welcome_back_admin": "Bienvenue à vous, administrateur !",
     "welcome_back_description": "Connectez-vous à votre compte pour continuer.",
+    "welcome_back_description_admin": "Connectez-vous à votre compte administrateur pour continuer.",
     "welcome_register": "Commencez par vous enregistrer !",
     "no_account_text": "Vous n'avez pas de compte ?",
     "firstname": "Prénom",
@@ -16,8 +18,11 @@
     "btn_create ": "Créer un",
     "btn_cancel"   : "Annuler",
     "btn_register" : "S'enregistrer",
-    "btn_login"    : "Se connecter",
     "btn_forgot_password": "Mot de passe oublié ?",
+    "email_validation_success_title": "Votre email a été validé",
+    "email_validation_failure_title": "Votre email n'a pas pu être validé",
+    "email_validation_success_description": "Votre email a été validé avec succès. Vous pouvez maintenant vous connecter à votre compte.",
+    "email_validation_failure_description": "Votre email n'a pas pu être validé. Veuillez réessayer plus tard.",
     "welcome_title_message": "Bienvenue à vous !",
     "welcome_description_message": "Rendez-vous dans votre boîte mail pour activer votre compte.",
     "btn_go_to_mail": "Aller à ma boîte mail",
@@ -66,7 +71,4 @@
     "become_bassage_partner_input_placeholder": "Expliquez en quelques mots pourquoi vous souhaitez devenir barasseur ?",
     "become_bassage_partner_submit": "Envoyer ma demande",
     "become_bassage_partner_description": "Veuillez remplir le formulaire ci-dessous pour envoyer votre demande."
-
-
-
 }

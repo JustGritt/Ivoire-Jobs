@@ -85,8 +85,10 @@ type NotificationPref struct {
 // @Router /auth/register [post]
 func Register(c *fiber.Ctx) error {
 	var userInput UserObject
+
 	// Validate Input
 	if err := validator.ParseBodyAndValidate(c, &userInput); err != nil {
+		fmt.Println("Database error:", &userInput)
 		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(err))
 	}
 
@@ -256,6 +258,48 @@ func Login(c *fiber.Ctx) error {
 	}
 	// Return User and Token
 	return c.Status(http.StatusOK).JSON(HTTPResponse(http.StatusOK, "Login Success", fiber.Map{"user": mapUserToOutPut(user), "access_token": accessToken.Token, "refresh_token": refreshToken.Token}))
+
+}
+
+// GetAllUsers Godoc
+// @Summary Get all users
+// @Description Get the list of all users
+// @Tags Auth
+// @Produce json
+// @Param payload body UserLogin true "Login Body"
+// @Success 200 {object} Response "List of users"
+// @Failure 400 {array} ErrorResponse "Validation error or users not found"
+// @Failure 401 {array} ErrorResponse "Unauthorized"
+// @Failure 500 {array} ErrorResponse "Token issuing error"
+// @Router /auth/users [get]
+// @Security Bearer
+func GetAllUsers(c *fiber.Ctx) error {
+	var users []user.User
+	var errorList []*fiber.Error
+	users, err := userRepo.GetAllUsers()
+	if err != nil {
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusInternalServerError,
+				Message: "error getting users",
+			},
+		)
+		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
+	// Map users to UserOutput
+	var ouput []UserOutput
+	for _, s := range users {
+		ouput = append(ouput, *mapUserToOutPut(&s))
+	}
+
+	//if the users are empty send and empty array
+	if len(ouput) == 0 {
+		return c.Status(http.StatusOK).JSON([]UserOutput{})
+	}
+
+	return c.Status(http.StatusOK).JSON(ouput)
 
 }
 
