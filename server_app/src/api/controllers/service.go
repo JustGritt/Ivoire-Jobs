@@ -287,6 +287,7 @@ func GetAll(c *fiber.Ctx) error {
 // @Description Get all services by user id
 // @Tags Service
 // @Produce json
+// @Param id path string true "User ID"
 // @Success 200 {array} ServiceOutput
 // @Failure 400 {array} ErrorResponse
 // @Failure 401 {array} ErrorResponse
