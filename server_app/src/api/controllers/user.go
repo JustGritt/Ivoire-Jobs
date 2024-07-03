@@ -451,6 +451,10 @@ func PatchToken(c *fiber.Ctx) error {
 		return c.Status(http.StatusNotFound).JSON(HTTPErrorResponse(errorList))
 	}
 
+	if userInput.PushToken.Device == "" {
+		userInput.PushToken.Device = "unknown"
+	}
+
 	dbUser.PushToken = append(dbUser.PushToken, pushToken.PushToken{
 		UserID: dbUser.ID,
 		Token:  userInput.PushToken.Token,

@@ -20,6 +20,8 @@ import (
 	//mailer
 	mail "barassage/api/services/mailer"
 
+	//fcm notification
+
 	// models
 	"barassage/api/models/ban"
 	"barassage/api/models/booking"
@@ -97,6 +99,9 @@ func Run() {
 
 	// S3
 	bucket.InitS3Manager()
+
+	// FCM notification
+	//notif.InitFCM()
 
 	/*
 		============ Set Up Middlewares ============

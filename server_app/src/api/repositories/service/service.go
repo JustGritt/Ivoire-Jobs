@@ -24,6 +24,15 @@ func GetByID(id string) (*service.Service, error) {
 	return &service, nil
 }
 
+func GetByIDUnscoped(id string) (*service.Service, error) {
+	var service service.Service
+	//find the service by id, that is active and not banned
+	if err := db.PgDB.Preload("Images").Preload("Categories").Unscoped().Where("id = ?", id).First(&service).Error; err != nil {
+		return nil, err
+	}
+	return &service, nil
+}
+
 func IsBannedService(id string) (bool, error) {
 	var service service.Service
 	if err := db.PgDB.Where("id = ?", id).First(&service).Error; err != nil {
