@@ -11,7 +11,6 @@ class SectionInformationProfile extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     ThemeData theme = Theme.of(context);
 
-
     return Container(
       width: width * 0.9,
       padding: const EdgeInsets.all(16),
@@ -23,16 +22,63 @@ class SectionInformationProfile extends StatelessWidget {
         ),
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('General', style: theme.textTheme.labelMedium),
-          const SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('General',
+                  style: theme.textTheme.displayLarge?.copyWith(fontSize: 20)),
+              CupertinoButton(
+                  padding: EdgeInsets.all(0),
+                  minSize: 0,
+                  child: const Text('Edit'),
+                  onPressed: () {}),
+            ],
+          ),
+          const SizedBox(height: 25),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               const Icon(CupertinoIcons.person),
-              const SizedBox(width: 8),
-              Text(user.firstName, style: theme.textTheme.labelMedium),
+              const SizedBox(width: 20),
+              Text('${user.firstName} ${user.lastName}',
+                  style: theme.textTheme.labelMedium),
+            ],
+          ),
+          Container(
+            color: theme.colorScheme.surface.withOpacity(0.3),
+            height: 1,
+            margin: EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              const Icon(CupertinoIcons.mail),
+              const SizedBox(width: 20),
+              Text(user.email, style: theme.textTheme.labelMedium),
+            ],
+          ),
+          Container(
+            color: theme.colorScheme.surface.withOpacity(0.3),
+            height: 1,
+            margin: EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Icon(CupertinoIcons.text_alignleft),
+              const SizedBox(width: 20),
+              Flexible(
+                child: Wrap(alignment: WrapAlignment.start, children: [
+                  Text(
+                      "sdfsdfsdf jksdjfjsdkfjsdf sdfjsdfskdfjskdf sdlfsdfj sdfsdfs fsdfsdfsdfsdf sdfdsfdsfsdf sdfsdfsdfsd fsdfsdfsdfsdfsd fsdf",
+                      style: theme.textTheme.labelMedium)
+                ]),
+              ),
             ],
           ),
         ],
