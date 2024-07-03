@@ -61,5 +61,16 @@
 
     "delete": "Delete",
     "save": "Save",
-    "next": "Next"
+    "next": "Next",
+
+    "profile_push_notifications": "Push notifications",
+    "profile_messages": "New messages",
+    "profile_become_bassage_partner": "Become barasseur",
+
+    "become_bassage_partner_title": "Become a barasseur",
+    "become_bassage_partner_input_placeholder": "Why would you like to become a barasseur ?",
+    "become_bassage_partner_submit": "Send my request",
+    "become_bassage_partner_description": "Please fill in the form below to send your request."
+
+
 }

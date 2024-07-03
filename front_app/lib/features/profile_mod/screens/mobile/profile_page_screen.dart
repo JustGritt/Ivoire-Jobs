@@ -1,11 +1,17 @@
 import 'package:barassage_app/config/app_colors.dart';
 import 'package:barassage_app/core/blocs/authentication/authentication_bloc.dart';
 import 'package:barassage_app/core/classes/language_provider.dart';
+import 'package:barassage_app/core/helpers/constants_helper.dart';
+import 'package:barassage_app/features/main_app/app.dart';
 import 'package:barassage_app/features/profile_mod/widgets/avatar_profile.dart';
+import 'package:barassage_app/features/profile_mod/widgets/section_information_app.dart';
 import 'package:barassage_app/features/profile_mod/widgets/section_information_profile.dart';
+import 'package:barassage_app/features/profile_mod/widgets/section_notification_profile.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
@@ -30,6 +36,9 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
   Widget build(BuildContext context) {
     LanguageProvider languageProvider = Provider.of<LanguageProvider>(context);
     ThemeData theme = Theme.of(context);
+    AppLocalizations appLocalizations = AppLocalizations.of(context)!;
+
+    double width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: theme.scaffoldBackgroundColor,
@@ -69,11 +78,36 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
                       )),
                   const SizedBox(height: 20),
                   SectionInformationProfile(user: state.user),
+                  const SizedBox(height: 20),
+                  SectionNotificationProfile(user: state.user),
+                  const SizedBox(height: 20),
+                  Container(
+                      width: width * .9,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        gradient: LinearGradient(
+                            colors: [IVORYCOAST_COLORS[0], IVORYCOAST_COLORS[2]],
+                            begin: FractionalOffset(0.0, 0.0),
+                            end: FractionalOffset(0.5, 0.0),
+                            stops: [0.0, 1.0],
+                            tileMode: TileMode.clamp),
+                      ),
+                      child: CupertinoButton(
+                        color: Colors.transparent,
+                        child: Text(
+                            appLocalizations.profile_become_bassage_partner,
+                            style: theme.textTheme.displayMedium
+                                ?.copyWith(color: AppColors.white, fontSize: 17)),
+                        onPressed: () {
+                          context.pushNamed(App.becomeWorker);
+                        },
+                      )),
                   CupertinoButton(
                       child: const Text('Logout'),
                       onPressed: () {
                         context.read<AuthenticationBloc>().add(SignOut());
                       }),
+                  SectionInformationApp()
                 ],
               );
             } else {
