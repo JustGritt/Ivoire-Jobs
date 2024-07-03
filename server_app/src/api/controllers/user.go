@@ -269,7 +269,7 @@ func Login(c *fiber.Ctx) error {
 // @Failure 400 {array} ErrorResponse "Validation error or user not found"
 // @Failure 401 {array} ErrorResponse "Incorrect email or password"
 // @Failure 500 {array} ErrorResponse "Token issuing error"
-// @Router /auth/me [post]
+// @Router /auth/me [get]
 // @Security Bearer
 func GetMyProfile(c *fiber.Ctx) error {
 	user := c.Locals("user").(*jwt.Token)
