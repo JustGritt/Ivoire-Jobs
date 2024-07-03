@@ -30,6 +30,7 @@ import (
 	"barassage/api/models/configuration"
 	"barassage/api/models/image"
 	"barassage/api/models/member"
+	"barassage/api/models/notificationPreference"
 	"barassage/api/models/pushToken"
 	"barassage/api/models/rating"
 	"barassage/api/models/report"
@@ -89,6 +90,7 @@ func Run() {
 		&member.Member{},
 		&pushToken.PushToken{},
 		&configuration.Configuration{},
+		&notificationPreference.NotificationPreference{},
 	)
 
 	/*

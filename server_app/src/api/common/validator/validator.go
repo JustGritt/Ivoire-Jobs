@@ -45,7 +45,7 @@ func Validate(payload interface{}) []*fiber.Error {
 			if message == "" {
 				switch err.Tag() {
 				case "required":
-					message = fmt.Sprintf("%s is required", err.StructField())
+					message = fmt.Sprintf("%s is required %v", err.StructField(), payload)
 				case "email":
 					message = fmt.Sprintf("%s must be a valid email address", err.StructField())
 				case "min":
@@ -106,29 +106,7 @@ func ParseBodyAndValidate(c *fiber.Ctx, body interface{}) []*fiber.Error {
 		return err
 	}
 
-	/*
-		// Check for the admin field and validate if present
-		v := reflect.ValueOf(body).Elem()
-		t := v.Type()
-
-		for i := 0; i < v.NumField(); i++ {
-			field := t.Field(i)
-			if field.Tag.Get("validate") == "admin" {
-				if !ValidateAdmin(c) {
-					var errorList []*fiber.Error
-					errorList = append(
-						errorList,
-						&fiber.Error{
-							Code:    fiber.StatusForbidden,
-							Message: fmt.Sprintf("You must be an admin to edit : %s", field.Name),
-						},
-					)
-					return errorList
-				}
-
-			}
-		}
-	*/
+	//fmt.Println(string(c.Body())) // Print the body as string for debugging
 
 	// Then We Validate
 	return Validate(body)

@@ -82,6 +82,7 @@ func SetupRoutes(app *fiber.App) {
 	// User Group
 	user := v1.Group("/user")
 	user.Get("/:id/service", middlewares.RequireLoggedIn(), ctl.GetServiceByUserId)
+	user.Get("/member/status", middlewares.RequireLoggedIn(), ctl.GetUserMemberStatus)
 
 	// Member Group
 	member := v1.Group("/member", middlewares.RequireLoggedIn())
@@ -94,4 +95,7 @@ func SetupRoutes(app *fiber.App) {
 	configuration.Get("/:key", ctl.GetConfigurationByKey)
 	configuration.Put("/:key", ctl.UpdateConfiguration)
 
+	//notification-preferences
+	notification := v1.Group("/notification-preference", middlewares.RequireLoggedIn())
+	notification.Put("/", ctl.CreateOrUpdateNotificationPreference)
 }

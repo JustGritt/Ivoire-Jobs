@@ -18,9 +18,15 @@ type MemberObject struct {
 	Reason string `json:"reason" validate:"required,min=2,max=255"`
 }
 
+type MemberInput struct {
+	Status string `json:"status" validate:"required"`
+}
+
 type MemberOutput struct {
+	ID        string `json:"id"`
 	UserID    string `json:"userId"`
 	Reason    string `json:"reason"`
+	Status    string `json:"status"`
 	CreatedAt string `json:"createdAt"`
 }
 
@@ -104,7 +110,8 @@ func CreateMember(c *fiber.Ctx) error {
 // @Description Validate a member
 // @Tags Member
 // @Produce json
-// @Param memberID path string true "Member ID"
+// @Param id path string true "Member ID"
+// @Param payload body MemberInput true "Member Body"
 // @Success 200 {object} Response
 // @Failure 400 {array} ErrorResponse
 // @Failure 401 {array} ErrorResponse
@@ -115,8 +122,25 @@ func ValidateMember(c *fiber.Ctx) error {
 	var errorList []*fiber.Error
 	memberID := c.Params("id")
 
+	var memberInput MemberInput
+	if err := validator.ParseBodyAndValidate(c, &memberInput); err != nil {
+		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(err))
+	}
+
+	//the status could be only "accepted" or "rejected"
+	if memberInput.Status != "accepted" && memberInput.Status != "rejected" {
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusBadRequest,
+				Message: "status must be 'accepted' or 'rejected'",
+			},
+		)
+		return c.Status(fiber.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
 	// Validate the member
-	if err := memberRepo.ValidateMember(memberID); err != nil {
+	if err := memberRepo.ValidateMember(memberID, memberInput.Status); err != nil {
 		errorList = append(errorList, &fiber.Error{
 			Code:    http.StatusInternalServerError,
 			Message: err.Error(),
@@ -127,14 +151,62 @@ func ValidateMember(c *fiber.Ctx) error {
 	return c.SendStatus(http.StatusOK)
 }
 
+// GetUserMemberStatus handles the retrieval of a member status.
+// @Summary Get User Member Status
+// @Description Get a user member status
+// @Tags Member
+// @Produce json
+// @Success 200 {object} Response
+// @Failure 400 {array} ErrorResponse
+// @Failure 401 {array} ErrorResponse
+// @Failure 404 {array} ErrorResponse
+// @Failure 500 {array} ErrorResponse
+// @Router /user/member/status [get]
+// @Security Bearer
+func GetUserMemberStatus(c *fiber.Ctx) error {
+	var errorList []*fiber.Error
+	user := c.Locals("user").(*jwt.Token)
+	claims := user.Claims.(jwt.MapClaims)
+	userID := claims["userID"]
+
+	// Validate Input
+	if userID == nil {
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusBadRequest,
+				Message: "can't extract user info from request",
+			},
+		)
+		return c.Status(fiber.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
+	// Get the member by user id
+	member, err := memberRepo.GetByUserID(userID.(string))
+	if err != nil {
+		errorList = append(errorList, &fiber.Error{
+			Code:    http.StatusNotFound,
+			Message: "Member not found",
+		})
+		return c.Status(http.StatusNotFound).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
+	//map the member to output
+	memberOutput := mapMemberToOutput(member)
+
+	return c.Status(http.StatusOK).JSON(memberOutput)
+}
+
 // ============================================================
 // =================== Private Methods ========================
 // ============================================================
 
 func mapMemberToOutput(b *member.Member) *MemberOutput {
 	return &MemberOutput{
+		ID:        b.ID,
 		UserID:    b.UserID,
 		Reason:    b.Reason,
+		Status:    b.Status,
 		CreatedAt: b.CreatedAt.Format("2006-01-02"),
 	}
 }

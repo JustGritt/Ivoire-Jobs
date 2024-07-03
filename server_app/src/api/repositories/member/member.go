@@ -44,8 +44,8 @@ func GetAllMembers() ([]member.Member, error) {
 }
 
 // ValidateMember validates a member
-func ValidateMember(id string) error {
-	return db.PgDB.Model(&member.Member{}).Where("id = ?", id).Update("status", true).Error
+func ValidateMember(id string, status string) error {
+	return db.PgDB.Model(&member.Member{}).Where("id = ?", id).Update("status", status).Error
 }
 
 // GetErrors gets the errors

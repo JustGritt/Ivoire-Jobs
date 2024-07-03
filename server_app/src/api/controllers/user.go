@@ -53,14 +53,23 @@ type UserLogin struct {
 
 // UserOutput is the output format of the user
 type UserOutput struct {
-	FirstName      string `json:"firstName"`
-	LastName       string `json:"lastName"`
-	Email          string `json:"email"`
-	ProfilePicture string `json:"profilePicture"`
-	Bio            string `json:"bio"`
-	ID             string `json:"id"`
-	CreatedAt      string `json:"createdAt"`
-	UpdatedAt      string `json:"updatedAt"`
+	FirstName              string           `json:"firstName"`
+	LastName               string           `json:"lastName"`
+	Email                  string           `json:"email"`
+	ProfilePicture         string           `json:"profilePicture"`
+	Bio                    string           `json:"bio"`
+	ID                     string           `json:"id"`
+	Member                 string           `json:"member"`
+	NotificationPreference NotificationPref `json:"notificationPreferences"`
+	CreatedAt              string           `json:"createdAt"`
+	UpdatedAt              string           `json:"updatedAt"`
+}
+
+type NotificationPref struct {
+	PushNotification    bool `json:"pushNotification"`
+	MessageNotification bool `json:"messageNotification"`
+	ServiceNotification bool `json:"serviceNotification"`
+	BookingNotification bool `json:"bookingNotification"`
 }
 
 // Register Godoc
@@ -488,6 +497,16 @@ func mapInputToUser(userInput UserObject) user.User {
 }
 
 func mapUserToOutPut(u *user.User) *UserOutput {
+	//from the member get the member status if empty return not-member
+	var memberStatus string
+	if len(u.Member) == 0 {
+		memberStatus = "not-member"
+	} else {
+		memberStatus = u.Member[0].Status
+	}
+
+	//notificationPreference := mapNotificationPreferenceToOutput(u.NotificationPreference)
+
 	return &UserOutput{
 		ID:             u.ID,
 		FirstName:      u.Firstname,
@@ -495,6 +514,7 @@ func mapUserToOutPut(u *user.User) *UserOutput {
 		Email:          u.Email,
 		ProfilePicture: u.ProfilePicture,
 		Bio:            u.Bio,
+		Member:         memberStatus,
 		CreatedAt:      u.CreatedAt.Format("2006-01-02"),
 		UpdatedAt:      u.UpdatedAt.Format("2006-01-02"),
 	}

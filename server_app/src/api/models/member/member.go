@@ -10,5 +10,5 @@ type Member struct {
 	ID     string `gorm:"type:uuid;default:gen_random_uuid();unique"`
 	UserID string `gorm:"NOT NULL;type:uuid"`
 	Reason string `gorm:"NOT NULL;size:255"`
-	Status bool   `gorm:"NOT NULL;default:false"`
+	Status string `gorm:"type:varchar(20);not null;default:'processing'"`
 }
