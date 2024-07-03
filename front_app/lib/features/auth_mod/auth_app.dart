@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../core/classes/route_manager.dart';
 import 'controllers/controllers.dart';
+import 'controllers/register_email_validation_controller.dart';
 
 class AuthApp extends RouteManager {
   static const String login = '/auth/login';
@@ -13,6 +14,8 @@ class AuthApp extends RouteManager {
   static const String splashScreen = '/auth/splashScreen';
   static const String forget = '/forget';
   static const String register = '/auth/register';
+  static const String emailValidation = '/auth/verify-email';
+  static const String splash = '/splash';
 
   AuthApp() {
     addRoute(GoRoute(
@@ -43,5 +46,10 @@ class AuthApp extends RouteManager {
         pageBuilder: (context, state) {
           return const CupertinoPage(child: RegisterController());
         }));
+    addRoute(GoRoute(
+      path: AuthApp.emailValidation,
+      pageBuilder: (context, state) {
+        return const CupertinoPage(child: EmailValidationController());
+      }));
   }
 }

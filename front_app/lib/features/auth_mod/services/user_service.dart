@@ -77,4 +77,26 @@ class UserService {
     }
     throw res.data['message'];
   }
+
+  Future<bool> verifyEmailToken(String token) async {
+    Response res = await _http.get(
+      '${ApiEndpoint.appEmailValidationUrl}?token=$token',
+    );
+    if (res.statusCode == 200) {
+      return true;
+    }
+    return false;
+  }
+
+  Future<List<User>?> getUsers() async {
+    Response res = await _http.get(ApiEndpoint.adminUsers);
+    if (res.statusCode == 200) {
+      List<User> users
+      = (res.data as List)
+          .map((e) => User.fromJson(e))
+          .toList();
+      return users;
+    }
+    return null;
+  }
 }

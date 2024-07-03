@@ -84,3 +84,10 @@ func GetAllReports() ([]report.Report, error) {
 func SetUserBanStatus(userID string, isBanned bool) error {
 	return database.PgDB.Model(&user.User{}).Where("id = ?", userID).Update("active", !isBanned).Error
 }
+
+// Get all users
+func GetAllUsers() ([]user.User, error) {
+	var users []user.User
+	err := database.PgDB.Find(&users).Error
+	return users, err
+}

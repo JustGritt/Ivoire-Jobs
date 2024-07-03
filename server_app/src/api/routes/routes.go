@@ -35,6 +35,11 @@ func SetupRoutes(app *fiber.App) {
 	auth.Patch("/update-token", middlewares.RequireLoggedIn(), ctl.PatchToken)
 	// Requires authentication
 	auth.Get("/me", middlewares.RequireLoggedIn(), ctl.GetMyProfile)
+	auth.Get("/users", ctl.GetAllUsers)
+
+	// Contact Group
+	contact := v1.Group("/contact")
+	contact.Post("/create", ctl.AddContactInfo)
 
 	// Service Group
 	service := v1.Group("/service")
@@ -53,6 +58,12 @@ func SetupRoutes(app *fiber.App) {
 	booking.Get("/collection", ctl.GetBookings)
 	booking.Put("/:id", middlewares.RequireLoggedIn(), ctl.UpdateBooking)
 
+	// Tag Group
+	tag := v1.Group("/tag")
+	// tag.Get("/", ctl.GetAllTags)
+	tag.Post("/", ctl.AddTagInfo)
+
+	// Report Group
 	// Report Group
 	report := v1.Group("/report")
 	report.Post("/", middlewares.RequireLoggedIn(), ctl.CreateReport) // Ensure this route is correct
