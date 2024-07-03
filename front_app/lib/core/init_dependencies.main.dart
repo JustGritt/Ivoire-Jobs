@@ -5,7 +5,7 @@ final serviceLocator = GetIt.instance;
 Future<void> initDependencies() async {
   _initAuth();
   _initBloc();
-  
+
   await serviceLocator.allReady();
 }
 
@@ -31,6 +31,9 @@ Future<void> _initAuth() async {
     )
     ..registerLazySingleton(
       () => ServiceServices(),
+    )
+    ..registerLazySingleton(
+      () => PushTokensService(),
     );
   // // Bloc
   // ..registerLazySingleton(

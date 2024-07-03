@@ -123,7 +123,7 @@ class _StepFormCategoryState extends State<StepFormCategory> {
           }
         }, builder: (context, state) {
           return AppButton(
-          //  isLoading: state is CreateServiceLoading,
+            //  isLoading: state is CreateServiceLoading,
             onPressed: validate,
             backgroundColor: theme.primaryColorDark,
             label: appLocalizations.btn_create,

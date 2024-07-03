@@ -64,17 +64,13 @@ class _StepTimeServiceState extends State<StepTimeService> {
             spacing: 12,
             runSpacing: 12,
             children: timeServices
-                .map((e) => squareTimeService(
-                  context,
-                  selected: duration == e, 
-                  onPress: () {
-                    form['duration'] = e;
+                .map((e) => squareTimeService(context, selected: duration == e,
+                        onPress: () {
+                      form['duration'] = e;
                       setState(() {
                         duration = e;
                       });
-                  }, 
-                  text: e.toString().durationToTime
-                  ))
+                    }, text: e.toString().durationToTime))
                 .toList(),
           ),
           Text(
@@ -91,7 +87,7 @@ class _StepTimeServiceState extends State<StepTimeService> {
               color: Colors.grey.withOpacity(0.5),
               spreadRadius: 2,
               blurRadius: 7,
-              offset: Offset(0, 2),
+              offset: const Offset(0, 2),
             ),
             onPressed: validate,
             child: Text(appLocalizations.next,

@@ -1,6 +1,7 @@
 package configs
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"path/filepath"
@@ -27,6 +28,7 @@ type Config struct {
 	FrontendURL      string       `env:"FRONTEND_URL"`
 	S3               S3Config     `json:"s3"`
 	Stripe           StripeConfig `json:"stripe"`
+	FCM              FCMConfig    `json:"fcm"`
 }
 
 // IsProd Checks if env is production
@@ -41,9 +43,10 @@ func LoadConfig() {
 		log.Println(err)
 	}
 	environmentPath := filepath.Join(currentPath, ".env")
+	fmt.Println("Loading .env file from ", environmentPath)
 
 	if err := godotenv.Load(environmentPath); err != nil {
-		log.Fatal("Error loading .env file")
+		log.Fatal("Error loading .env file")  
 		log.Fatal(err)
 	}
 }
@@ -67,5 +70,6 @@ func GetConfig() Config {
 		FrontendURL:      os.Getenv("FRONTEND_URL"),
 		S3:               GetS3Config(),
 		Stripe:           GetStripeConfig(),
+		FCM:              GetFCMConfig(),
 	}
 }

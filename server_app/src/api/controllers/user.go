@@ -45,10 +45,6 @@ type UpdateUserObject struct {
 	Bio       string `json:"bio"`
 }
 
-type PatchUserObject struct {
-	PushToken PushTokenObject `json:"pushToken" validate:"required"`
-}
-
 // UserLogin is the login format expected
 type UserLogin struct {
 	Email    string `json:"email" validate:"required,min=5,max=100,email"`
@@ -457,7 +453,7 @@ func UpdateProfile(c *fiber.Ctx) error {
 // @Description Patch the token of the logged-in user
 // @Tags Auth
 // @Produce json
-// @Param payload body PatchUserObject true "Patch Token Body"
+// @Param payload body PushTokenObject true "Patch Token Body"
 // @Success 200 {object} Response "Updated user token data"
 // @Failure 400 {array} ErrorResponse "Validation error or user not found"
 // @Failure 401 {array} ErrorResponse "Incorrect email or password"
@@ -465,7 +461,7 @@ func UpdateProfile(c *fiber.Ctx) error {
 // @Router /auth/update-token [patch]
 // @Security Bearer
 func PatchToken(c *fiber.Ctx) error {
-	var userInput PatchUserObject
+	var userInput PushTokenObject
 	// Validate Input
 	if err := validator.ParseBodyAndValidate(c, &userInput); err != nil {
 		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(err))
@@ -495,10 +491,14 @@ func PatchToken(c *fiber.Ctx) error {
 		return c.Status(http.StatusNotFound).JSON(HTTPErrorResponse(errorList))
 	}
 
+	if userInput.Device == "" {
+		userInput.Device = "unknown"
+	}
+
 	dbUser.PushToken = append(dbUser.PushToken, pushToken.PushToken{
 		UserID: dbUser.ID,
-		Token:  userInput.PushToken.Token,
-		Device: userInput.PushToken.Device,
+		Token:  userInput.Token,
+		Device: userInput.Device,
 	})
 
 	// Save User To DB

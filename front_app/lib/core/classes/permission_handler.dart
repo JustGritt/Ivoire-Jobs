@@ -1,5 +1,3 @@
-
-
 class PermissionHandler {
   static Future<void> checkCamera() async {
 //     var status = await Permission.camera.status;

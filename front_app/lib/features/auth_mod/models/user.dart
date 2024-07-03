@@ -12,7 +12,6 @@ class User {
   String id;
   DateTime createdAt;
 
-
   User({
     required this.firstName,
     required this.lastName,
@@ -30,7 +29,8 @@ class User {
         email: json["email"],
         bio: '',
         profilePicture: '',
-        createdAt: DateTime.parse(json["createdAt"]?? DateTime.now().toString()),
+        createdAt:
+            DateTime.parse(json["createdAt"] ?? DateTime.now().toString()),
       );
 
   Map<String, dynamic> toJson() => {
@@ -42,6 +42,19 @@ class User {
         "bio": bio,
         "createdAt": createdAt,
       };
+
+    //toJSONEncodable
+  Map<String, dynamic> toJsonEncodable() {
+    return {
+      'firstName': firstName,
+      'lastName': lastName,
+      'email': email,
+      'profilePicture': profilePicture,
+      'bio': bio,
+      'id': id,
+      'createdAt': createdAt.toIso8601String(),
+    };
+  }
 
   User copyWith({
     String? firstName,
@@ -83,7 +96,6 @@ class User {
       bio: map['bio'] ?? '',
       id: map['id'] ?? '',
       createdAt: map['createdAt'] ?? DateTime.now(),
-    
     );
   }
 }

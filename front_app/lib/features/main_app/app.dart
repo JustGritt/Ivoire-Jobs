@@ -12,7 +12,6 @@ import 'package:barassage_app/features/main_app/controllers/main/services_contro
 import 'package:barassage_app/features/main_app/widgets/transition_page.dart';
 import 'package:barassage_app/features/profile_mod/controllers/main/profile_controller.dart';
 // import 'package:barassage_app/features/main_app/controllers/main/home_controller.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:place_picker/entities/localization_item.dart';
@@ -32,8 +31,6 @@ class App extends RouteManager {
   static const String contact = '${App.name}/contact';
   static const String news = '${App.name}/news';
   static const String profile = '${App.name}/profile';
-
-  
 
   final _rootKey = serviceLocator<AppContext>().navigatorKey;
   final _shellHomeKey = GlobalKey<NavigatorState>(debugLabel: 'shellHome');

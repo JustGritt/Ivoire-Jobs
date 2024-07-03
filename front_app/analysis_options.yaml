@@ -1,4 +1,12 @@
-include: package:flutter_lints/flutter.yaml
+analyzer:
+  errors:
+    avoid_catches_without_on_clauses: ignore
+    non_constant_identifier_names: ignore
+    unnecessary_brace_in_string_interps: ignore
+    unused_element: ignore
+    unused_field: ignore
+    unused_local_variable: ignore
+i ignorenclude: package:flutter_lints/flutter.yaml
 
 linter:
   rules:
@@ -14,7 +22,3 @@ linter:
     leading_newlines_in_multiline_strings: true
     curly_braces_in_flow_control_structures: true
     slash_for_doc_comments: true
-
-analyzer:
-  errors:
-    unused_import: error

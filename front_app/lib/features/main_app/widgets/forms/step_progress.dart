@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class StepProgress extends StatefulWidget {
   final int currentStepIndex;
@@ -39,7 +37,7 @@ class _StepProgressState extends State<StepProgress> {
                   'Informations',
                   style: getIndexTextStyle(0),
                 ),
-                SizedBox(height: 2.0),
+                const SizedBox(height: 2.0),
                 Container(
                   decoration: BoxDecoration(
                     color: theme.primaryColor,
@@ -50,7 +48,7 @@ class _StepProgressState extends State<StepProgress> {
               ],
             ),
           ),
-          SizedBox(width: 10.0),
+          const SizedBox(width: 10.0),
           Flexible(
             fit: FlexFit.tight,
             child: Column(
@@ -59,7 +57,7 @@ class _StepProgressState extends State<StepProgress> {
                   'Localization',
                   style: getIndexTextStyle(1),
                 ),
-                SizedBox(height: 2.0),
+                const SizedBox(height: 2.0),
                 Container(
                   decoration: BoxDecoration(
                     color: theme.primaryColor,
@@ -70,7 +68,7 @@ class _StepProgressState extends State<StepProgress> {
               ],
             ),
           ),
-          SizedBox(width: 10.0),
+          const SizedBox(width: 10.0),
           Flexible(
             fit: FlexFit.tight,
             child: Column(
@@ -79,7 +77,7 @@ class _StepProgressState extends State<StepProgress> {
                   'Category',
                   style: getIndexTextStyle(2),
                 ),
-                SizedBox(height: 2.0),
+                const SizedBox(height: 2.0),
                 Container(
                   decoration: BoxDecoration(
                     color: theme.primaryColor,

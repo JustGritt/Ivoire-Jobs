@@ -24,7 +24,8 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceCreateState> {
         if (e.message != null && e.message!.contains("413")) {
           return emit(const CreateServiceFailure("File too large"));
         }
-        if (e.response?.data['message']?.runtimeType == String && e.response?.data['message'] != null) {
+        if (e.response?.data['message']?.runtimeType == String &&
+            e.response?.data['message'] != null) {
           return emit(CreateServiceFailure(e.response?.data['message']));
         } else {
           return emit(const CreateServiceFailure("An error occurred"));

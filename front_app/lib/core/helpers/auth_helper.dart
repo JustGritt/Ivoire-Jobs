@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:barassage_app/core/classes/app_context.dart';
 import 'package:barassage_app/core/exceptions/dio_exceptions.dart';
 import 'package:barassage_app/core/init_dependencies.dart';

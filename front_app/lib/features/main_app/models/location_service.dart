@@ -15,7 +15,8 @@ class LocationService {
     this.country,
   });
 
-  factory LocationService.fromJson(Map<String, dynamic> json) => LocationService(
+  factory LocationService.fromJson(Map<String, dynamic> json) =>
+      LocationService(
         latitude: json["latitude"],
         longitude: json["longitude"],
         city: json["city"],

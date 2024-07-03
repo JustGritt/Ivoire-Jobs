@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:shared_preferences/shared_preferences.dart';
@@ -11,8 +12,10 @@ class Cache {
       prefs.setString(key, value);
     } else if (value is bool) {
       prefs.setBool(key, value);
+    } else if (value is Map<String, dynamic>) {
+      prefs.setString(key, jsonEncode(value));
     } else {
-      log("Invalid Type");
+      log('Cache: Unsupported data type');
     }
   }
 

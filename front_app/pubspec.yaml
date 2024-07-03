@@ -10,9 +10,14 @@ dependencies:
   avatar_glow: ^3.0.1
   bloc: ^8.1.4
   build_verify: ^3.1.0
-  dio: ^5.4.3+1
+  change_app_package_name: ^1.2.0
   cupertino_icons: ^1.0.8
+  device_info_plus: ^10.1.0
+  dio: ^5.3.3
+  extension_google_sign_in_as_googleapis_auth: ^2.0.12
   ez_validator: ^0.3.5
+  firebase_core: ^3.1.1
+  firebase_messaging: ^15.0.2
   flashy_tab_bar2: ^0.0.10
   flutter:
     sdk: flutter
@@ -33,6 +38,9 @@ dependencies:
   get_it: ^7.7.0
   go_router: ^14.1.4
   google_maps_flutter: ^2.7.0
+  googleapis: ^13.2.0
+  googleapis_auth: ^1.6.0
+  http: ^1.2.1
   icon_forest: ^1.1.8
   insta_assets_picker: ^2.3.0
   intl: any
@@ -47,6 +55,7 @@ dependencies:
   pretty_dio_logger: ^1.3.1
   provider: ^6.1.1
   pushable_button: ^0.0.4
+  rename: ^3.0.2
   shared_preferences: ^2.2.2
   speech_to_text: ^6.6.0
   super_cupertino_navigation_bar: ^2.1.2

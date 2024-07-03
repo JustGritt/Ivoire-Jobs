@@ -4,7 +4,6 @@ import 'package:barassage_app/features/main_app/models/service_models/service_cr
 import 'package:barassage_app/features/main_app/widgets/forms/step_progress.dart';
 import 'package:barassage_app/features/main_app/widgets/forms/steps/step_form_category.dart';
 import 'package:barassage_app/features/main_app/widgets/forms/steps/vertical_steps_informations/vertical_steps.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -58,7 +57,6 @@ class _NewServicePageState extends State<NewServicePage> {
           backgroundColor: AppColors.greyLight,
           title: const Text("Add new service"),
           largeTitle: SuperLargeTitle(
-            enabled: true,
             largeTitle: "New service",
           ),
           titleSpacing: 0.0,

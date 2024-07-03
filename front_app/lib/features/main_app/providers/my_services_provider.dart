@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:barassage_app/config/api_endpoints.dart';
 import 'package:barassage_app/config/app_cache.dart';
 import 'package:barassage_app/config/app_http.dart';
@@ -30,6 +32,7 @@ class MyServicesProvider extends ChangeNotifier {
         notifyListeners();
       }
     } catch (e) {
+      print(e);
       isLoading = false;
       notifyListeners();
     }
@@ -39,7 +42,7 @@ class MyServicesProvider extends ChangeNotifier {
     isLoading = true;
     try {
       Response res = await _http.delete(
-          ApiEndpoint.myServices.replaceAll(':id', id),
+          ApiEndpoint.serviceDetails.replaceAll(':id', id),
           params: {"serviceId": id});
       if (res.statusCode == 200) {
         _serviceModel.removeWhere((element) => element.id == id);

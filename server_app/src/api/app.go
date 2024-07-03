@@ -20,6 +20,9 @@ import (
 	//mailer
 	mail "barassage/api/services/mailer"
 
+	//fcm notification
+	notif "barassage/api/services/notification"
+
 	// models
 	"barassage/api/models/ban"
 	"barassage/api/models/booking"
@@ -98,6 +101,9 @@ func Run() {
 	// S3
 	bucket.InitS3Manager()
 
+	// FCM notification
+	notif.InitFCM()
+
 	/*
 		============ Set Up Middlewares ============
 	*/
@@ -111,8 +117,10 @@ func Run() {
 	// cors
 	app.Use(cors.New(cors.Config{
 		AllowOrigins: "*",
-		AllowHeaders: "Origin, Content-Type, Accept",
+		AllowHeaders: "Origin, Content-Type, Accept, Authorization, Access-Control-Allow-Origin, Access-Control-Allow-Methods",
+		AllowMethods: "GET, POST, PUT, PATCH, HEAD, DELETE, OPTIONS",
 	}))
+
 
 	/*
 		============ Set Up Routes ============

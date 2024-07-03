@@ -626,7 +626,7 @@ func DeleteService(c *fiber.Ctx) error {
 	}
 
 	// Check if the service exists and the user is the owner
-	existingService, err := serviceRepo.GetByID(serviceID)
+	existingService, err := serviceRepo.GetByIDUnscoped(serviceID)
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
 			errorList = append(
@@ -638,11 +638,23 @@ func DeleteService(c *fiber.Ctx) error {
 			)
 			return c.Status(http.StatusNotFound).JSON(HTTPFiberErrorResponse(errorList))
 		}
+
+		if existingService.IsBanned {
+			errorList = append(
+				errorList,
+				&fiber.Error{
+					Code:    fiber.StatusForbidden,
+					Message: "Cannot delete a banned service",
+				},
+			)
+			return c.Status(fiber.StatusForbidden).JSON(HTTPFiberErrorResponse(errorList))
+		}
+
 		errorList = append(
 			errorList,
 			&fiber.Error{
 				Code:    fiber.StatusForbidden,
-				Message: "An error occurred while updating service",
+				Message: "An error occurred while deleting service",
 			},
 		)
 		return c.Status(http.StatusForbidden).JSON(HTTPFiberErrorResponse(errorList))
