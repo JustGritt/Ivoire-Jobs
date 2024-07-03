@@ -97,7 +97,7 @@ func jwtError(c *fiber.Ctx, err error) error {
 		errorList,
 		&fiber.Error{
 			Code:    fiber.StatusUnauthorized,
-			Message: "Invalid or Expired Authentication Token",
+			Message: "Expired Authentication Token",
 		},
 	)
 	return c.Status(http.StatusUnauthorized).JSON(fiber.Map{"errors": errorList})

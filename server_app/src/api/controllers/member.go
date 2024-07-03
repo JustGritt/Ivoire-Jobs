@@ -90,6 +90,24 @@ func CreateMember(c *fiber.Ctx) error {
 		return c.Status(http.StatusNotFound).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
+	// check if the user is already a member
+	if memberRepo.CheckIfMemberExists(newMember.UserID) {
+		errorList = append(errorList, &fiber.Error{
+			Code:    http.StatusBadRequest,
+			Message: "User is already a member",
+		})
+		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
+	//check if the user has a pending request
+	if member, _ := memberRepo.GetPendingRequest(newMember.UserID); member != nil {
+		errorList = append(errorList, &fiber.Error{
+			Code:    http.StatusBadRequest,
+			Message: "User has a pending request",
+		})
+		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
 	// Create the member
 	if err := memberRepo.Create(&newMember); err != nil {
 		errorList = append(errorList, &fiber.Error{

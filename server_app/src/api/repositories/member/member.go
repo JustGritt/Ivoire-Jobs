@@ -33,6 +33,24 @@ func GetByUserID(userID string) (*member.Member, error) {
 	return &ban, nil
 }
 
+func CheckIfMemberExists(userID string) bool {
+	var ban member.Member
+	//find the ban by id
+	if err := db.PgDB.Where("user_id = ?", userID).First(&ban).Error; err != nil {
+		return false
+	}
+	return true
+}
+
+func GetPendingRequest(userID string) (*member.Member, error) {
+	var ban member.Member
+	//find the ban by id
+	if err := db.PgDB.Where("user_id = ? AND status = ?", userID, "pending").First(&ban).Error; err != nil {
+		return nil, err
+	}
+	return &ban, nil
+}
+
 // GetAllMembers gets all members
 func GetAllMembers() ([]member.Member, error) {
 	var bans []member.Member

@@ -45,7 +45,7 @@ func Validate(payload interface{}) []*fiber.Error {
 			if message == "" {
 				switch err.Tag() {
 				case "required":
-					message = fmt.Sprintf("%s is required %v", err.StructField(), payload)
+					message = fmt.Sprintf("%s is required", err.StructField())
 				case "email":
 					message = fmt.Sprintf("%s must be a valid email address", err.StructField())
 				case "min":
