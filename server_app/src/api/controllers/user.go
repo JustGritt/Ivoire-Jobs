@@ -264,7 +264,6 @@ func Login(c *fiber.Ctx) error {
 // @Description Get details of the logged-in user
 // @Tags Auth
 // @Produce json
-// @Param payload body UserLogin true "Login Body"
 // @Success 200 {object} Response "User profile data along with access and refresh tokens"
 // @Failure 400 {array} ErrorResponse "Validation error or user not found"
 // @Failure 401 {array} ErrorResponse "Incorrect email or password"
