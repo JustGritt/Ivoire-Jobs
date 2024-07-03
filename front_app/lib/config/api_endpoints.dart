@@ -29,4 +29,6 @@ class ApiEndpoint {
   static const serviceCategories = '/category/collection';
   // Push Token 
   static const pushTokens = '/auth/update-token';
+  // become barasseur
+  static const becomeBarasseur = '/member';
 }

@@ -11,6 +11,7 @@ import 'package:barassage_app/features/main_app/controllers/controller.dart';
 import 'package:barassage_app/features/main_app/controllers/main/services_controller.dart';
 import 'package:barassage_app/features/main_app/widgets/transition_page.dart';
 import 'package:barassage_app/features/profile_mod/controllers/main/profile_controller.dart';
+import 'package:barassage_app/features/profile_mod/screens/mobile/become_barasseur_screen.dart';
 // import 'package:barassage_app/features/main_app/controllers/main/home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -31,6 +32,7 @@ class App extends RouteManager {
   static const String contact = '${App.name}/contact';
   static const String news = '${App.name}/news';
   static const String profile = '${App.name}/profile';
+  static const String becomeWorker = 'becomeWorker';
 
   final _rootKey = serviceLocator<AppContext>().navigatorKey;
   final _shellHomeKey = GlobalKey<NavigatorState>(debugLabel: 'shellHome');
@@ -87,15 +89,6 @@ class App extends RouteManager {
                       ),
                     ),
                   ),
-                  GoRoute(
-                      name: App.serviceNewSuccess,
-                      path: App.serviceNewSuccess,
-                      parentNavigatorKey: _shellMapsKey,
-                      builder: (context, state) {
-                        CreateServiceSuccess serviceCreatedModel =
-                            state.extra as CreateServiceSuccess;
-                        return NewServiceSuccess(service: serviceCreatedModel);
-                      })
                 ],
               ),
             ],
@@ -104,11 +97,14 @@ class App extends RouteManager {
             navigatorKey: _shellProfileKey,
             routes: [
               GoRoute(
-                path: App.profile,
-                pageBuilder: (context, state) => const NoTransitionPage(
-                  child: ProfileController(),
-                ),
-              ),
+                  path: App.profile,
+                  builder: (context, state) => ProfileController(),
+                  routes: [
+                    GoRoute(
+                        name: App.becomeWorker,
+                        path: App.becomeWorker,
+                        builder: (context, state) => BecomeBarasseurScreen())
+                  ]),
             ],
           ),
         ]));

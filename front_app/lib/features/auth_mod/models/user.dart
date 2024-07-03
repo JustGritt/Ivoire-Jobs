@@ -8,7 +8,7 @@ class User {
   String lastName;
   String email;
   String profilePicture;
-  String bio;
+  String? bio;
   String id;
   DateTime createdAt;
 
@@ -17,7 +17,7 @@ class User {
     required this.lastName,
     required this.email,
     required this.profilePicture,
-    required this.bio,
+    this.bio,
     required this.id,
     required this.createdAt,
   });
@@ -27,7 +27,7 @@ class User {
         firstName: json["firstName"],
         lastName: json["lastName"],
         email: json["email"],
-        bio: '',
+        bio: json['bio'],
         profilePicture: '',
         createdAt:
             DateTime.parse(json["createdAt"] ?? DateTime.now().toString()),
