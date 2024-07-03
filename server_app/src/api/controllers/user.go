@@ -498,7 +498,7 @@ func mapInputToUser(userInput UserObject) user.User {
 func mapUserToOutPut(u *user.User) *UserOutput {
 	//from the member get the member status if empty return not-member
 	var memberStatus string
-	if len(u.Member) == 0 {
+	if u.Member == nil || len(u.Member) == 0 {
 		memberStatus = "not-member"
 	} else {
 		memberStatus = u.Member[0].Status
