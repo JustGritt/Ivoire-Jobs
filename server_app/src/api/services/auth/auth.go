@@ -67,17 +67,15 @@ func IssueAccessToken(u user.User) (*TokenDetails, error) {
 }
 
 // IssueRefreshToken generate refresh tokens used for auth
-func IssueRefreshToken(u user.User) (*TokenDetails, error) {
-	expireTime := time.Now().Add((24 * time.Hour) * 14) // 14 days
-	tokenUUID := uuid.New().String()
+func IssueRefreshToken(u user.User, tokenID string, expireTime int64) (*TokenDetails, error) {
 
 	// Generate encoded token
 	claims := RefreshClaims{
-		tokenUUID,
+		tokenID,
 		u.ID,
 		u.Role,
 		jwt.RegisteredClaims{
-			ExpiresAt: jwt.NewNumericDate(expireTime),
+			ExpiresAt: jwt.NewNumericDate(time.Unix(expireTime, 0)),
 			Issuer:    cfg.GetConfig().JWTIssuer,
 		},
 	}
@@ -91,7 +89,7 @@ func IssueRefreshToken(u user.User) (*TokenDetails, error) {
 
 	return &TokenDetails{
 		Token:        tk,
-		TokenUUID:    uuid.New().String(),
-		TokenExpires: expireTime.Unix(),
+		TokenUUID:    tokenID,
+		TokenExpires: expireTime,
 	}, nil
 }

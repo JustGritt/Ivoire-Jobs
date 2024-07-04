@@ -34,6 +34,7 @@ import (
 	"barassage/api/models/notificationPreference"
 	"barassage/api/models/pushToken"
 	"barassage/api/models/rating"
+	refreshtoken "barassage/api/models/refreshToken"
 	"barassage/api/models/report"
 	"barassage/api/models/room"
 	"barassage/api/models/service"
@@ -95,6 +96,7 @@ func Run() {
 		&notificationPreference.NotificationPreference{},
 		&room.Room{},
 		&message.Message{},
+		&refreshtoken.RefreshToken{},
 	)
 
 	/*
