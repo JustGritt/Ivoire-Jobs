@@ -58,11 +58,6 @@ func SetupRoutes(app *fiber.App) {
 	booking.Get("/collection", ctl.GetBookings)
 	booking.Put("/:id", middlewares.RequireLoggedIn(), ctl.UpdateBooking)
 
-	// Tag Group
-	tag := v1.Group("/tag")
-	// tag.Get("/", ctl.GetAllTags)
-	tag.Post("/", ctl.AddTagInfo)
-
 	// Report Group
 	// Report Group
 	report := v1.Group("/report")
@@ -99,6 +94,7 @@ func SetupRoutes(app *fiber.App) {
 	member := v1.Group("/member", middlewares.RequireLoggedIn())
 	member.Post("/", ctl.CreateMember)
 	member.Put("/:id/validate", middlewares.RequireAdmin(), ctl.ValidateMember)
+	member.Get("/pending", middlewares.RequireAdmin(), ctl.GetAllPendingRequests)
 
 	// Configuration Group
 	configuration := v1.Group("/configuration")

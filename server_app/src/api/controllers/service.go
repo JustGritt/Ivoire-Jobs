@@ -7,6 +7,7 @@ import (
 	"barassage/api/models/service"
 	categoryRepo "barassage/api/repositories/category"
 	serviceRepo "barassage/api/repositories/service"
+	userRepo "barassage/api/repositories/user"
 	"barassage/api/services/bucket"
 	"strconv"
 
@@ -109,6 +110,41 @@ func CreateService(c *fiber.Ctx) error {
 			},
 		)
 		return c.Status(fiber.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
+	dbUser, err := userRepo.GetById(userID.(string))
+	if err != nil {
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusBadRequest,
+				Message: "user not found",
+			},
+		)
+		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
+	if dbUser.Member == nil || len(dbUser.Member) == 0 {
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusBadRequest,
+				Message: "You are not authorized to create a service, you are not a member",
+			},
+		)
+		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
+	Member := dbUser.Member[len(dbUser.Member)-1]
+	if Member.ID != "" || Member.Status == "processing" {
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusBadRequest,
+				Message: "You are not authorized to create a service, your membership request is still pending",
+			},
+		)
+		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
 	//map the input to service model

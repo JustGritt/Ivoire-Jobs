@@ -545,7 +545,8 @@ func mapUserToOutPut(u *user.User) *UserOutput {
 	if u.Member == nil || len(u.Member) == 0 {
 		memberStatus = "not-member"
 	} else {
-		memberStatus = u.Member[0].Status
+		member := u.Member[len(u.Member)-1]
+		memberStatus = member.Status
 	}
 
 	//notificationPreference := mapNotificationPreferenceToOutput(u.NotificationPreference)
