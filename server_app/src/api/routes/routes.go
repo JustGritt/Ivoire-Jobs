@@ -6,9 +6,16 @@ import (
 	// Middlewares
 	"barassage/api/middlewares"
 
+	"github.com/gofiber/contrib/websocket"
+
+	_ "embed"
+
 	"github.com/gofiber/fiber/v2"
 	swagger "github.com/gofiber/swagger"
 )
+
+//go:embed index.html
+var indexHTML string
 
 // SetupRoutes setups router
 func SetupRoutes(app *fiber.App) {
@@ -47,6 +54,7 @@ func SetupRoutes(app *fiber.App) {
 	service.Get("/search", ctl.SearchService)
 	service.Get("/collection", ctl.GetAll)
 	service.Get("/:id/rating", ctl.GetAllRatingsFromService)
+	service.Get("/:id/room", middlewares.RequireLoggedIn(), ctl.CreateOrGetRoom)
 	//service.Get("/collection/user", ctl.GetServiceByUserId)
 	service.Get("/:id", ctl.GetServiceById)
 	service.Put("/:id", middlewares.RequireLoggedIn(), ctl.UpdateService)
@@ -58,7 +66,6 @@ func SetupRoutes(app *fiber.App) {
 	booking.Get("/collection", ctl.GetBookings)
 	booking.Put("/:id", middlewares.RequireLoggedIn(), ctl.UpdateBooking)
 
-	// Report Group
 	// Report Group
 	report := v1.Group("/report")
 	report.Post("/", middlewares.RequireLoggedIn(), ctl.CreateReport) // Ensure this route is correct
@@ -105,4 +112,13 @@ func SetupRoutes(app *fiber.App) {
 	//notification-preferences
 	notification := v1.Group("/notification-preference", middlewares.RequireLoggedIn())
 	notification.Put("/", ctl.CreateOrUpdateNotificationPreference)
+
+	// Room Group
+	room := v1.Group("/room")
+	room.Get("/:id/ws", websocket.New(ctl.HandleWebSocket)) // Add this line
+
+	// Serve the embedded HTML file at /test
+	app.Get("/test", func(c *fiber.Ctx) error {
+		return c.Type("html").SendString(indexHTML)
+	})
 }
