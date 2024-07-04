@@ -5,7 +5,13 @@
 </head>
 <body>
     <h1>WebSocket Test</h1>
-    <button id="connect">Connect</button>
+    <label for="userID">User ID:</label>
+    <input type="text" id="userID" placeholder="Enter User ID"><br>
+    <label for="roomID">Room ID:</label>
+    <input type="text" id="roomID" placeholder="Enter Room ID"><br>
+    <label for="token">Token:</label>
+    <input type="text" id="token" placeholder="Enter JWT Token"><br>
+    <button id="connect">Connect</button><br>
     <input type="text" id="message" placeholder="Enter message">
     <button id="send">Send</button>
     <div id="log"></div>
@@ -18,12 +24,11 @@
         const log = document.getElementById('log');
 
         connectButton.addEventListener('click', async () => {
-            const userID = 'b7a60f50-275e-4cbe-8c10-3a1b4566443a'; // Replace with actual user ID
-            const roomID = '05ffb537-27e2-4c83-b938-343da66d162c'; // Replace with actual room ID
-            const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3NUb2tlbklEIjoiYmNkYjk0MGUtN2FmNS00ZTRjLWFiMTYtMDkzYjQ3ZDAzNmI4IiwidXNlcklEIjoiYjdhNjBmNTAtMjc1ZS00Y2JlLThjMTAtM2ExYjQ1NjY0NDNhIiwicm9sZSI6InN0YW5kYXJkIiwiaXNzIjoibXktYW1hemluZy1jb21wYW55LW5hbWUiLCJleHAiOjE3MjAxMDUyNTh9.OaMMLWOj4py9dh7DUxwf_kp4tqJtojV9NYZqjjhn1NE'; // Replace with actual JWT token
+            const userID = document.getElementById('userID').value;
+            const roomID = document.getElementById('roomID').value;
+            const token = document.getElementById('token').value;
 
             try {
-
                 // Determine the WebSocket protocol to use
                 const protocol = (window.location.protocol === 'https:') ? 'wss:' : 'ws:';
                 const wsUrl = `${protocol}//${window.location.host}/api/v1/room/${roomID}/ws?token=${token}`;

@@ -93,8 +93,6 @@ func CreateOrGetRoom(c *fiber.Ctx) error {
 	roomInput.CreatorID = service.UserID
 	roomInput.ServiceID = serviceID
 
-	fmt.Println(roomInput)
-
 	//map the input to room object
 	roomInputMapped := mapInputToRoomObject(roomInput)
 
