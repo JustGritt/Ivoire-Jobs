@@ -20,6 +20,7 @@ func SeedDatabase(db *gorm.DB) {
 	// Configuration
 	//excute raw query to insert data
 	db.Exec(`INSERT INTO configurations (key, value) VALUES ('mode_maintenance', '["false"]')`)
+	db.Exec(`INSERT INTO configurations (key, value) VALUES ('whitelist', '["10.2.2.2", "121.0.0.1"]')`)
 
 	// Categories
 	if err := seedCategory(db); err != nil {

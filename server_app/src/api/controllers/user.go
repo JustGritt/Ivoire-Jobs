@@ -403,24 +403,8 @@ func GetMyProfile(c *fiber.Ctx) error {
 		return c.Status(http.StatusNotFound).JSON(HTTPErrorResponse(errorList))
 	}
 
-	// Issue Token
-	accessToken, err := auth.IssueAccessToken(*dbUser)
-	//refreshToken, err := auth.IssueRefreshToken(*dbUser)
-
-	if err != nil {
-		errorList = nil
-		errorList = append(
-			errorList,
-			&Response{
-				Code:    http.StatusInternalServerError,
-				Message: "Something Went Wrong: Could Not Issue Token",
-				Data:    err.Error(),
-			},
-		)
-		return c.Status(http.StatusInternalServerError).JSON(HTTPErrorResponse(errorList))
-	}
 	// Return User and Token
-	return c.Status(http.StatusOK).JSON(HTTPResponse(http.StatusOK, "This is your profile", fiber.Map{"user": mapUserToOutPut(dbUser), "access_token": accessToken.Token, "refresh_token": nil}))
+	return c.Status(http.StatusOK).JSON(HTTPResponse(http.StatusOK, "This is your profile", fiber.Map{"user": mapUserToOutPut(dbUser)}))
 }
 
 // Logout Godoc
@@ -565,6 +549,13 @@ func PatchToken(c *fiber.Ctx) error {
 
 	if userInput.Device == "" {
 		userInput.Device = "unknown"
+	}
+
+	//check if the token is already registered
+	for _, token := range dbUser.PushToken {
+		if token.Token == userInput.Token {
+			return c.SendStatus(http.StatusOK)
+		}
 	}
 
 	dbUser.PushToken = append(dbUser.PushToken, pushToken.PushToken{

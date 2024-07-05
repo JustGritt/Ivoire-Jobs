@@ -37,7 +37,9 @@ func main() {
 	db.ConnectPostgres()
 
 	// Drop all tables
+	//drop the many2many table first
 	db.PgDB.Migrator().DropTable(&myUser.User{},
+		"service_categories",
 		&category.Category{},
 		&service.Service{},
 		&booking.Booking{},
