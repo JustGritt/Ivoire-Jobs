@@ -9,6 +9,7 @@ on:
       - 'front_app/**'
       - 'server_app/src/api/build/**'
       - '.github/workflows/**'
+  workflow_dispatch: 
 
 jobs:
   build_and_publish_docker_image:
