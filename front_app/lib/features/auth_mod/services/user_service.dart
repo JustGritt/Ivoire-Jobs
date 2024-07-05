@@ -54,6 +54,11 @@ class UserService {
   Future<User?> register(UserSignup userSignup) async {
     Response res = await _http.post(
       ApiEndpoint.appRegisterUrl,
+      options: Options(
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      ),
       data: userSignup.toJson(),
     );
     if (res.statusCode == 200 || res.statusCode == 201) {

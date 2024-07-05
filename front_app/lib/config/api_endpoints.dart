@@ -11,8 +11,8 @@ class ApiEndpoint {
   static const news = '$rapidUrl/v1/search';
 
   // Server Links
-  // static const baseUrl = 'https://api.barassage.com';
-  static const baseUrl = 'http://localhost:8000';
+  static const baseUrl = 'https://api.barassage.com';
+  // static const baseUrl = 'http://localhost:8000';
   static const api = '$baseUrl/api/v1';
 
   // Enqueries Endpoints

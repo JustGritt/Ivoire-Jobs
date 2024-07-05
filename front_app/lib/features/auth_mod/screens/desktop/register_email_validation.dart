@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 // import 'dart:html' as html;
+import 'dart:core'; // Add
+import 'package:web/web.dart' as web;
 
 import '../../../../core/helpers/auth_helper.dart';
 import '../../services/user_service.dart';
@@ -16,9 +18,7 @@ class RegisterEmailValidation extends StatefulWidget {
 class _RegisterEmailValidationState extends State<RegisterEmailValidation> {
   bool isEmailValidated = false;
   bool isLoading = true;
-  var token =
-      // Uri.dataFromString(html.window.location.href).queryParameters['token'] ??
-          '';
+  var token = web.window.location.href.split('token=')[1] ?? '';
 
   @override
   void initState() {
@@ -40,7 +40,7 @@ class _RegisterEmailValidationState extends State<RegisterEmailValidation> {
         isLoading = false;
       });
     }
-    debugPrint('isEmailValidated: $isEmailValidated');
+    debugPrint('isEmailValidated: $isEmailValidated, $token');
   }
 
   @override
