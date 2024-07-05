@@ -57,6 +57,16 @@ func GetServicesByUserID(userID string) ([]service.Service, error) {
 	return services, nil
 }
 
+// Get all banned services
+func GetAllBannedServices() ([]service.Service, error) {
+	var services []service.Service
+	//find all banned services
+	if err := db.PgDB.Where("is_banned = ?", true).Find(&services).Error; err != nil {
+		return nil, err
+	}
+	return services, nil
+}
+
 func GetAllServices() ([]service.Service, error) {
 	var services []service.Service
 	///find all service that are not banned and are active

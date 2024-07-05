@@ -51,6 +51,7 @@ func SetupRoutes(app *fiber.App) {
 	service := v1.Group("/service")
 	service.Get("/search", ctl.SearchService)
 	service.Get("/collection", ctl.GetAll)
+	service.Get("/bans", ctl.GetAllBannedServices)
 	service.Get("/:id/rating", ctl.GetAllRatingsFromService)
 	service.Get("/:id", ctl.GetServiceById)
 	service.Get("/:id/room", middlewares.RequireLoggedIn(), ctl.CreateOrGetRoom)
@@ -64,9 +65,33 @@ func SetupRoutes(app *fiber.App) {
 	booking.Post("/", middlewares.RequireLoggedIn(), ctl.CreateBooking)
 	booking.Put("/:id", middlewares.RequireLoggedIn(), ctl.UpdateBooking)
 
+<<<<<<< Updated upstream
 	// Report Group
+||||||| Stash base
+	// Tag Group
+	tag := v1.Group("/tag")
+	// tag.Get("/", ctl.GetAllTags)
+	tag.Post("/", ctl.AddTagInfo)
+
+	// Report Group
+	// Report Group
+=======
+	// Tag Group
+	tag := v1.Group("/tag")
+	// tag.Get("/", ctl.GetAllTags)
+	tag.Post("/", ctl.AddTagInfo)
+
+	// Report Group
+>>>>>>> Stashed changes
 	report := v1.Group("/report")
+<<<<<<< Updated upstream
+||||||| Stash base
+	report.Post("/", middlewares.RequireLoggedIn(), ctl.CreateReport) // Ensure this route is correct
+=======
+	report.Post("/", middlewares.RequireLoggedIn(), ctl.CreateReport)
+>>>>>>> Stashed changes
 	report.Get("/collection", ctl.GetAllReports)
+	report.Get("/pending", ctl.GetAllPendingReports)
 	report.Put("/:id", ctl.ValidateReport)
 	report.Post("/", middlewares.RequireLoggedIn(), ctl.CreateReport)
 

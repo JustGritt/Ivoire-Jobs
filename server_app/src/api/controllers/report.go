@@ -111,6 +111,30 @@ func GetAllReports(c *fiber.Ctx) error {
 	return c.Status(http.StatusOK).JSON(reportOutputs)
 }
 
+// GetAllPendingReports retrieves all pending reports from the database.
+// @Summary Get all pending reports
+// @Description Get all pending reports
+// @Tags Report
+// @Produce json
+// @Success 200 {array} ReportOutput
+// @Failure 400 {array} ErrorResponse
+// @Failure 401 {array} ErrorResponse
+// @Failure 500 {array} ErrorResponse
+// @Router /report/pending [get]
+func GetAllPendingReports(c *fiber.Ctx) error {
+	reports, err := reportRepo.GetAllPendingReports()
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse([]*fiber.Error{{Code: fiber.StatusInternalServerError, Message: "error getting reports"}}))
+	}
+
+	var reportOutputs []ReportOutput
+	for _, r := range reports {
+		reportOutputs = append(reportOutputs, *mapReportToOutput(&r))
+	}
+
+	return c.Status(http.StatusOK).JSON(reportOutputs)
+}
+
 // Valide the report
 // @Summary Validate the report
 // @Description Validate the report

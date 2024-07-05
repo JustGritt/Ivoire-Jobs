@@ -47,6 +47,14 @@ func GetAllReports() ([]report.Report, error) {
 	return reports, nil
 }
 
+func GetAllPendingReports() ([]report.Report, error) {
+	var reports []report.Report
+	if err := db.PgDB.Where("status =  ?", false).Find(&reports).Error; err != nil {
+		return nil, err
+	}
+	return reports, nil
+}
+
 func GetReportCount(serviceId string) (int64, error) {
 	var count int64
 	if err := db.PgDB.Model(&report.Report{}).Where("service_id = ?", serviceId).Count(&count).Error; err != nil {

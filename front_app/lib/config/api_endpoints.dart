@@ -44,4 +44,7 @@ class ApiEndpoint {
   static const pushTokens = '/auth/update-token';
   // become barasseur
   static const becomeBarasseur = '/member';
+  // Reports Endpoints
+  static const reports = '${api}/report/pending';
+  static const reportsDetails = '${api}/report/:id';
 }

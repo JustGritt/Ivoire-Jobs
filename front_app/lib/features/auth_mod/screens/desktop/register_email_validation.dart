@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'dart:html' as html;
+// import 'dart:html' as html;
 
 import '../../../../core/helpers/auth_helper.dart';
 import '../../services/user_service.dart';
@@ -17,7 +17,7 @@ class _RegisterEmailValidationState extends State<RegisterEmailValidation> {
   bool isEmailValidated = false;
   bool isLoading = true;
   var token =
-      Uri.dataFromString(html.window.location.href).queryParameters['token'] ??
+      // Uri.dataFromString(html.window.location.href).queryParameters['token'] ??
           '';
 
   @override

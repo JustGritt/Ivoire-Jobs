@@ -67,6 +67,11 @@ class UserService {
     Map<String, dynamic> data = userLogin.toJson();
     Response res = await _http.post(
       ApiEndpoint.appLoginUrl,
+      options: Options(
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      ),
       data: jsonEncode(data),
     );
     if (res.statusCode == 200) {
