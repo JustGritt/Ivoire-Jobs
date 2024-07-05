@@ -28,7 +28,7 @@ type UserObject struct {
 	FirstName      string `json:"firstname" validate:"required,min=2,max=30"`
 	LastName       string `json:"lastname" validate:"required,min=2,max=30"`
 	Email          string `json:"email" validate:"required,min=5,max=100,email"`
-	Password       string `json:"password" validate:"required"`
+	Password       string `json:"password" validate:"required,password" message:"Password must be at least 8 characters, contain at least 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character"`
 	ProfilePicture string `json:"profilePicture"`
 	Bio            string `json:"bio"`
 	Role           string `json:"role"`
@@ -50,7 +50,7 @@ type UpdateUserObject struct {
 // UserLogin is the login format expected
 type UserLogin struct {
 	Email    string `json:"email" validate:"required,min=5,max=100,email"`
-	Password string `json:"password" validate:"password"`
+	Password string `json:"password"`
 }
 
 // UserOutput is the output format of the user
@@ -90,7 +90,6 @@ func Register(c *fiber.Ctx) error {
 
 	// Validate Input
 	if err := validator.ParseBodyAndValidate(c, &userInput); err != nil {
-		fmt.Println("Database error:", &userInput)
 		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(err))
 	}
 
