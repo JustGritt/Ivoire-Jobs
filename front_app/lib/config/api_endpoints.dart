@@ -19,6 +19,8 @@ class ApiEndpoint {
   static const appForgetUrl = AuthApp.forget;
   static const appProfileUrl = AuthApp.profile;
 
+  static const updateProfile = '/auth/update-profile';
+
   // My Services Endpoints
   static const myServices = '${api}/user/:id/service';
   // Services Endpoints

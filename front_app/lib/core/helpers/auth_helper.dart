@@ -41,9 +41,7 @@ doAuth(String email, String password) async {
 doRegister(UserSignup userSignup) async {
   UserService us = serviceLocator<UserService>();
   try {
-    debugPrint('Hee');
     User? user = await us.register(userSignup);
-    debugPrint('User: $user');
     SchedulerBinding.instance.addPostFrameCallback((_) {
       Nav.to(context, AuthApp.welcomeEmail);
       showMessage(context, 'Register Successful');

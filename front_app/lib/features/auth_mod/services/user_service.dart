@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:barassage_app/features/auth_mod/models/api_response.dart';
 import 'package:barassage_app/features/auth_mod/models/user.dart';
 import 'package:barassage_app/features/auth_mod/models/user_login.dart';
+import 'package:barassage_app/features/auth_mod/models/user_update.dart';
 import 'package:dio/dio.dart';
 
 import '../../../config/api_endpoints.dart';
@@ -76,5 +77,17 @@ class UserService {
       return userLogin;
     }
     throw res.data['message'];
+  }
+
+  Future<User?> update(UserUpdate user) async {
+    Response res = await _http.put(
+      ApiEndpoint.updateProfile,
+      data: user.toJson(),
+    );
+    if (res.statusCode == 200) {
+      ApiResponse apiResponse = ApiResponse.fromJson(res.data);
+      return User.fromJson(apiResponse.body);
+    }
+    return null;
   }
 }

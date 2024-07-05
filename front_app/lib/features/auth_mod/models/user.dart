@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:barassage_app/features/auth_mod/models/notification_preferences.dart';
+
 List<User> userFromJson(String str) =>
     List<User>.from(json.decode(str).map((x) => User.fromJson(x)));
 
@@ -11,12 +13,15 @@ class User {
   String? bio;
   String id;
   DateTime createdAt;
+  NotificationPreferences notificationPreferences;
+
 
   User({
     required this.firstName,
     required this.lastName,
     required this.email,
     required this.profilePicture,
+    required this.notificationPreferences,
     this.bio,
     required this.id,
     required this.createdAt,
@@ -29,6 +34,8 @@ class User {
         email: json["email"],
         bio: json['bio'],
         profilePicture: '',
+        notificationPreferences: NotificationPreferences.fromJson(
+            json["notificationPreferences"]),
         createdAt:
             DateTime.parse(json["createdAt"] ?? DateTime.now().toString()),
       );
@@ -43,7 +50,7 @@ class User {
         "createdAt": createdAt,
       };
 
-    //toJSONEncodable
+  //toJSONEncodable
   Map<String, dynamic> toJsonEncodable() {
     return {
       'firstName': firstName,
@@ -71,6 +78,7 @@ class User {
       email: email ?? this.email,
       profilePicture: profilePicture ?? this.profilePicture,
       bio: bio ?? this.bio,
+      notificationPreferences: notificationPreferences,
       id: id ?? this.id,
       createdAt: createdAt ?? this.createdAt,
     );
@@ -95,6 +103,8 @@ class User {
       profilePicture: map['profilePicture'] ?? '',
       bio: map['bio'] ?? '',
       id: map['id'] ?? '',
+      notificationPreferences:
+          NotificationPreferences.fromJson(map["notificationPreferences"]),
       createdAt: map['createdAt'] ?? DateTime.now(),
     );
   }
