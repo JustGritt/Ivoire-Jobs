@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"sync"
@@ -22,18 +23,38 @@ type Room struct {
 
 var rooms = make(map[string]*Room)
 
+// ErrorMessage represents the structure of an error message to send to the client
+type ErrorMessage struct {
+	Error string `json:"error"`
+}
+
+// Custom close codes
+const (
+	CloseCodeNormalClosure    = websocket.CloseNormalClosure
+	CloseCodePolicyViolation  = 1008
+	CloseCodeInternalError    = websocket.CloseInternalServerErr
+	CloseCodeInvalidToken     = 4001
+	CloseCodeInvalidUserID    = 4002
+	CloseCodeRoomFull         = 4003
+	CloseCodeNotAllowedInRoom = 4004
+)
+
 // HandleWebSocket manages the WebSocket connection
 func HandleWebSocket(c *websocket.Conn) {
-	defer c.Close()
+	// Ensure connection is closed after handling
+	defer func() {
+		if err := c.Close(); err != nil {
+			log.Println("Error closing connection:", err)
+		}
+	}()
 
 	// Extract token from query parameters
 	tokenString := c.Query("token")
 	if tokenString == "" {
-		log.Println("Missing token")
+		sendErrorAndClose(c, CloseCodePolicyViolation, "Missing token")
 		return
 	}
 
-	// Parse and validate the token
 	// Parse and validate the token
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
@@ -43,30 +64,40 @@ func HandleWebSocket(c *websocket.Conn) {
 	})
 
 	if err != nil || !token.Valid {
-		log.Println("Invalid token:", err)
+		sendErrorAndClose(c, CloseCodeInvalidToken, fmt.Sprintf("Invalid token: %v", err))
 		return
 	}
 
 	// Extract user ID from token claims
 	claims, ok := token.Claims.(jwt.MapClaims)
 	if !ok || !token.Valid {
-		log.Println("Invalid token claims")
+		sendErrorAndClose(c, CloseCodeInvalidToken, "Invalid token claims")
 		return
 	}
 
-	userID := claims["userID"].(string)
+	userID, ok := claims["userID"].(string)
+	if !ok {
+		sendErrorAndClose(c, CloseCodeInvalidUserID, "Invalid user ID in token claims")
+		return
+	}
 
 	roomID := c.Params("id")
 
 	if roomID == "" {
-		log.Println("Missing roomID")
+		sendErrorAndClose(c, CloseCodePolicyViolation, "Missing roomID")
 		return
 	}
 
-	//get the room
+	// Get the room
 	dbRoom, err := roomRepo.GetByID(roomID)
 	if err != nil {
-		log.Println("Error getting room:", err)
+		sendErrorAndClose(c, CloseCodeInternalError, fmt.Sprintf("Error getting room: %v", err))
+		return
+	}
+
+	// Check if the userID can participate in the room
+	if dbRoom.ClientID != userID && dbRoom.CreatorID != userID {
+		sendErrorAndClose(c, CloseCodeNotAllowedInRoom, "User is not allowed to participate in the room")
 		return
 	}
 
@@ -74,7 +105,7 @@ func HandleWebSocket(c *websocket.Conn) {
 
 	room := getRoom(roomID)
 	if !addParticipantToRoom(room, userID, c) {
-		log.Println("Room is full or user already exists")
+		sendErrorAndClose(c, CloseCodeRoomFull, "Room is full or user already exists")
 		return
 	}
 
@@ -90,7 +121,7 @@ func HandleWebSocket(c *websocket.Conn) {
 		// Save the message to the database
 		err = saveMessage(roomID, userID, dbRoom.CreatorID, message)
 		if err != nil {
-			log.Println("Error saving message:", err)
+			sendError(c, fmt.Sprintf("Error saving message: %v", err))
 			continue
 		}
 
@@ -145,7 +176,6 @@ func broadcastToRoom(room *Room, senderID string, messageType int, message []byt
 }
 
 func saveMessage(roomID string, senderID string, receiverID string, content []byte) error {
-
 	msg := message.Message{
 		RoomID:     roomID,
 		SenderID:   senderID,
@@ -154,4 +184,17 @@ func saveMessage(roomID string, senderID string, receiverID string, content []by
 	}
 
 	return messageRepo.Create(&msg)
+}
+
+func sendError(c *websocket.Conn, errorMsg string) {
+	errMsg := ErrorMessage{Error: errorMsg}
+	errMsgJSON, _ := json.Marshal(errMsg)
+	if err := c.WriteMessage(websocket.TextMessage, errMsgJSON); err != nil {
+		log.Println("Error sending error message:", err)
+	}
+}
+
+func sendErrorAndClose(c *websocket.Conn, closeCode int, errorMsg string) {
+	sendError(c, errorMsg)
+	c.WriteMessage(websocket.CloseMessage, websocket.FormatCloseMessage(closeCode, errorMsg))
 }
