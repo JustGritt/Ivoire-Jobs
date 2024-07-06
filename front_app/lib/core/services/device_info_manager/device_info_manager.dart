@@ -4,7 +4,7 @@ class DeviceInfoManager {
   //get device model
   Future<String> getDeviceModel() async {
     BaseDeviceInfo deviceInfo = await DeviceInfoPlugin().deviceInfo;
-    
+
     return deviceInfo.data['model'];
   }
 }

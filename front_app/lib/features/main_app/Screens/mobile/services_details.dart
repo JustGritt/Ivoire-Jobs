@@ -1,11 +1,16 @@
 import 'package:barassage_app/features/main_app/models/main/services_entry_model.dart';
 import 'package:barassage_app/features/main_app/models/main/services_model.dart';
 import 'package:flutter/material.dart';
+import 'package:barassage_app/features/main_app/widgets/forms/report_form.dart';
 
 class ServiceDetailPage extends StatelessWidget {
   final Service service = ServiceEntries().serviceEntries[0];
 
   ServiceDetailPage({super.key});
+
+  submitReport(String reportReason) {
+    // Implement the report submission logic here
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -121,6 +126,44 @@ class ServiceDetailPage extends StatelessWidget {
 
           const SizedBox(height: 16),
 
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            child: Align(
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal, // Enable horizontal scrolling
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment
+                      .center, // This centers the buttons within the Row itself
+                  children: [
+                    ElevatedButton(
+                      onPressed: null,
+                      child: const Text('Book Now'),
+                    ),
+                    const SizedBox(width: 16),
+                    ElevatedButton(
+                      onPressed: null,
+                      child: const Text('Let\'s Chat'),
+                    ),
+                    const SizedBox(width: 16),
+
+                    // Report button
+                    ElevatedButton(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return const ReportDialog(); // Use the new ReportDialog widget
+                          },
+                        );
+                      },
+                      child: const Text('Report'),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+
           // Align to the left
           const Padding(
             padding: EdgeInsets.only(left: 16.0),
@@ -146,16 +189,6 @@ class ServiceDetailPage extends StatelessWidget {
                     ),
                   ],
                 )),
-          ),
-
-          ElevatedButton(
-            onPressed: () {},
-            child: const Text('Book Now'),
-          ),
-
-          ElevatedButton(
-            onPressed: () {},
-            child: const Text('Let\'s Chat'),
           ),
         ],
       ),

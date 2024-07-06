@@ -3,9 +3,9 @@ package database
 import (
 	"log"
 	"math/rand"
-	"time"
 
 	"barassage/api/models/category"
+	"barassage/api/models/member"
 	"barassage/api/models/service"
 	"barassage/api/models/user"
 
@@ -17,19 +17,32 @@ import (
 func SeedDatabase(db *gorm.DB) {
 	log.Println("Starting database seeding...")
 
+	// Configuration
+	//excute raw query to insert data
+	db.Exec(`INSERT INTO configurations (key, value) VALUES ('mode_maintenance', '["false"]')`)
+	db.Exec(`INSERT INTO configurations (key, value) VALUES ('whitelist', '["10.2.2.2", "121.0.0.1"]')`)
+
 	// Categories
 	if err := seedCategory(db); err != nil {
 		log.Printf("Failed to seed categories: %v", err)
 	}
 
-	// Standard
+	// Standard User
 	if err := seedUser(db, "John", "Doe", "john@doe.com", "password", "standard"); err != nil {
 		log.Printf("Failed to seed user: %v", err)
 	}
 	if err := seedUser(db, "Jane", "Doe", "jane@doe.com", "password", "standard"); err != nil {
 		log.Printf("Failed to seed user: %v", err)
 	}
-	if err := seedUser(db, "John", "Wick", "john@wick.com", "password", "standard"); err != nil {
+
+	// Member User With Services
+	if err := seedMemberUser(db, "John", "Wick", "john@wick.com", "password", "standard"); err != nil {
+		log.Printf("Failed to seed user: %v", err)
+	}
+	if err := seedMemberUser(db, "Jane", "Wick", "jane@wick.com", "password", "standard"); err != nil {
+		log.Printf("Failed to seed user: %v", err)
+	}
+	if err := seedMemberUser(db, "Alexis", "Doe", "alexis@doe.com", "password", "standard"); err != nil {
 		log.Printf("Failed to seed user: %v", err)
 	}
 
@@ -41,8 +54,35 @@ func SeedDatabase(db *gorm.DB) {
 	log.Println("Database seeding completed.")
 }
 
-// seedUser seeds a user and their services
+// seedUser seeds a user
 func seedUser(db *gorm.DB, firstName, lastName, email, password, role string) error {
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if err != nil {
+		return err
+	}
+
+	user := user.User{
+		ID:        uuid.New().String(),
+		Firstname: firstName,
+		Lastname:  lastName,
+		Email:     email,
+		Password:  string(hashedPassword),
+		Role:      role,
+	}
+
+	err = db.Create(&user).Error
+	if err != nil {
+		log.Printf("Failed to create user %s %s: %v", firstName, lastName, err)
+		return err
+	} else {
+		log.Printf("User created successfully: %s %s", firstName, lastName)
+	}
+
+	return nil
+}
+
+// seedUser seeds a user and their services
+func seedMemberUser(db *gorm.DB, firstName, lastName, email, password, role string) error {
 	log.Printf("Seeding user %s...", email)
 
 	var existingUser user.User
@@ -81,7 +121,21 @@ func seedUser(db *gorm.DB, firstName, lastName, email, password, role string) er
 		log.Printf("User already exists: %s", email)
 	}
 
-	rand.Seed(time.Now().UnixNano())
+	//for the user create the member
+	newMember := member.Member{
+		UserID: existingUser.ID,
+		Reason: "I am a cool user from ESGI",
+		Status: "member",
+	}
+
+	err = db.Create(&newMember).Error
+	if err != nil {
+		log.Printf("Failed to create member %s: %v", existingUser.Email, err)
+		return err
+	} else {
+		log.Printf("Member created successfully: %s", existingUser.Email)
+	}
+
 	serviceNames := []string{
 		"Gura", "Kiara", "Ina", "Calli", "Watson", "Irys", "Fauna", "Kroni", "Mumei", "Bae",
 	}
@@ -115,6 +169,8 @@ func seedUser(db *gorm.DB, firstName, lastName, email, password, role string) er
 			Country:     "France",
 			Address:     "1 rue de la paix",
 			PostalCode:  "75000",
+			Latitude:    48.8566,
+			Longitude:   2.3522,
 		},
 		{
 			ID:          uuid.New().String(),
@@ -130,6 +186,8 @@ func seedUser(db *gorm.DB, firstName, lastName, email, password, role string) er
 			Country:     "France",
 			Address:     "1 rue de la paix",
 			PostalCode:  "75000",
+			Latitude:    48.8566,
+			Longitude:   2.3522,
 		},
 	}
 
@@ -151,18 +209,36 @@ func seedCategory(db *gorm.DB) error {
 
 	// Create sample categories, the name should be on service that could be performed in house outside the house, something like that jardinage, ménage, etc
 	categories := []category.Category{
-		{
-			ID:   uuid.New().String(),
-			Name: "Jardinage",
-		},
-		{
-			ID:   uuid.New().String(),
-			Name: "Ménage",
-		},
-		{
-			ID:   uuid.New().String(),
-			Name: "Cuisine",
-		},
+		{ID: uuid.New().String(), Name: "Jardinage"},
+		{ID: uuid.New().String(), Name: "Ménage"},
+		{ID: uuid.New().String(), Name: "Cuisine"},
+		{ID: uuid.New().String(), Name: "Réparation"},
+		{ID: uuid.New().String(), Name: "Déménagement"},
+		{ID: uuid.New().String(), Name: "Peinture"},
+		{ID: uuid.New().String(), Name: "Plomberie"},
+		{ID: uuid.New().String(), Name: "Électricité"},
+		{ID: uuid.New().String(), Name: "Nettoyage de vitres"},
+		{ID: uuid.New().String(), Name: "Entretien des sols"},
+		{ID: uuid.New().String(), Name: "Blanchisserie"},
+		{ID: uuid.New().String(), Name: "Garde d'enfants"},
+		{ID: uuid.New().String(), Name: "Soutien scolaire"},
+		{ID: uuid.New().String(), Name: "Coiffure"},
+		{ID: uuid.New().String(), Name: "Soins esthétiques"},
+		{ID: uuid.New().String(), Name: "Massage"},
+		{ID: uuid.New().String(), Name: "Toilettage pour animaux"},
+		{ID: uuid.New().String(), Name: "Promenade de chiens"},
+		{ID: uuid.New().String(), Name: "Courses"},
+		{ID: uuid.New().String(), Name: "Livraison de repas"},
+		{ID: uuid.New().String(), Name: "Décoration"},
+		{ID: uuid.New().String(), Name: "Serrurerie"},
+		{ID: uuid.New().String(), Name: "Menuiserie"},
+		{ID: uuid.New().String(), Name: "Montage de meubles"},
+		{ID: uuid.New().String(), Name: "Réparation d'appareils électroménagers"},
+		{ID: uuid.New().String(), Name: "Garde de maison"},
+		{ID: uuid.New().String(), Name: "Nettoyage de voitures"},
+		{ID: uuid.New().String(), Name: "Réparation de vélo"},
+		{ID: uuid.New().String(), Name: "Aménagement paysager"},
+		{ID: uuid.New().String(), Name: "Maintenance informatique"},
 	}
 
 	for _, c := range categories {

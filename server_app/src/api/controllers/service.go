@@ -7,6 +7,7 @@ import (
 	"barassage/api/models/service"
 	categoryRepo "barassage/api/repositories/category"
 	serviceRepo "barassage/api/repositories/service"
+	userRepo "barassage/api/repositories/user"
 	"barassage/api/services/bucket"
 	"strconv"
 
@@ -109,6 +110,41 @@ func CreateService(c *fiber.Ctx) error {
 			},
 		)
 		return c.Status(fiber.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
+	dbUser, err := userRepo.GetById(userID.(string))
+	if err != nil {
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusBadRequest,
+				Message: "user not found",
+			},
+		)
+		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
+	if dbUser.Member == nil || len(dbUser.Member) == 0 {
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusBadRequest,
+				Message: "You are not authorized to create a service, you are not a member",
+			},
+		)
+		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
+	Member := dbUser.Member[len(dbUser.Member)-1]
+	if Member.ID != "" || Member.Status == "processing" {
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusBadRequest,
+				Message: "You are not authorized to create a service, your membership request is still pending",
+			},
+		)
+		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
 	//map the input to service model
@@ -772,6 +808,39 @@ func SearchService(c *fiber.Ctx) error {
 	}
 
 	return c.Status(http.StatusOK).JSON(serviceOutputs)
+}
+
+// GetAllBannedServices Godoc
+// @Summary Get all banned services
+// @Description Get all banned services
+// @Tags Service
+// @Produce json
+// @Success 200 {array} ServiceOutput
+// @Failure 400 {array} ErrorResponse
+// @Failure 401 {array} ErrorResponse
+// @Failure 500 {array} ErrorResponse
+// @Router /service/bans [get]
+func GetAllBannedServices(c *fiber.Ctx) error {
+	var errorList []*fiber.Error
+	services, err := serviceRepo.GetAllBannedServices()
+	if err != nil {
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusInternalServerError,
+				Message: "error getting banned services",
+			},
+		)
+		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
+	// Map services to ServiceOutput
+	var ouput []ServiceOutput
+	for _, s := range services {
+		ouput = append(ouput, *mapServiceToOutPut(&s))
+	}
+
+	return c.Status(http.StatusOK).JSON(ouput)
 }
 
 // ============================================================

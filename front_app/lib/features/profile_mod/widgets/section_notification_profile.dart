@@ -50,7 +50,6 @@ class _SectionNotificationProfileState
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   const Icon(CupertinoIcons.app_badge),
@@ -78,7 +77,6 @@ class _SectionNotificationProfileState
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   const Icon(CupertinoIcons.mail),

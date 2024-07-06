@@ -1,11 +1,9 @@
 import 'package:barassage_app/config/app_config.dart';
-import 'package:barassage_app/core/blocs/service/service_bloc.dart';
 import 'package:barassage_app/core/classes/app_context.dart';
 import 'package:barassage_app/core/init_dependencies.dart';
 import 'package:barassage_app/features/auth_mod/screens/mobile/main_wrapper.dart';
 import 'package:barassage_app/features/auth_mod/screens/mobile/splash_mobile_screen.dart';
 import 'package:barassage_app/features/main_app/Screens/mobile/new_service.dart';
-import 'package:barassage_app/features/main_app/Screens/mobile/new_service_success.dart';
 import 'package:barassage_app/features/main_app/Screens/mobile/services_details.dart';
 import 'package:barassage_app/features/main_app/controllers/controller.dart';
 import 'package:barassage_app/features/main_app/controllers/main/services_controller.dart';

@@ -97,7 +97,7 @@ func jwtError(c *fiber.Ctx, err error) error {
 		errorList,
 		&fiber.Error{
 			Code:    fiber.StatusUnauthorized,
-			Message: "Invalid or Expired Authentication Token",
+			Message: "Expired Authentication Token",
 		},
 	)
 	return c.Status(http.StatusUnauthorized).JSON(fiber.Map{"errors": errorList})
@@ -107,12 +107,27 @@ func jwtError(c *fiber.Ctx, err error) error {
 func RequireAdmin() fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		token := c.Get("Authorization")
+		var errorList []*fiber.Error
 		if token == "" {
-			return c.Status(http.StatusUnauthorized).JSON(fiber.Map{"error": "Missing Authorization Token"})
+			errorList = append(
+				errorList,
+				&fiber.Error{
+					Code:    fiber.StatusUnauthorized,
+					Message: "Missing Authorization Token",
+				},
+			)
+			return c.Status(http.StatusUnauthorized).JSON(fiber.Map{"errors": errorList})
 		}
 		token = token[7:]
 		if token == "" {
-			return c.Status(http.StatusUnauthorized).JSON(fiber.Map{"error": "Missing Authorization Token"})
+			errorList = append(
+				errorList,
+				&fiber.Error{
+					Code:    fiber.StatusUnauthorized,
+					Message: "Missing Authorization Token",
+				},
+			)
+			return c.Status(http.StatusUnauthorized).JSON(fiber.Map{"errors": errorList})
 		}
 
 		claims := jwt.MapClaims{}
@@ -121,11 +136,25 @@ func RequireAdmin() fiber.Handler {
 		})
 
 		if err != nil {
-			return c.Status(http.StatusUnauthorized).JSON(fiber.Map{"error": "Invalid or Expired Token"})
+			errorList = append(
+				errorList,
+				&fiber.Error{
+					Code:    fiber.StatusUnauthorized,
+					Message: "Invalid or Expired Token",
+				},
+			)
+			return c.Status(http.StatusUnauthorized).JSON(fiber.Map{"errors": errorList})
 		}
 
 		if claims["role"] != "admin" {
-			return c.Status(http.StatusForbidden).JSON(fiber.Map{"error": "Unauthorized Access"})
+			errorList = append(
+				errorList,
+				&fiber.Error{
+					Code:    fiber.StatusForbidden,
+					Message: "Unauthorized Access",
+				},
+			)
+			return c.Status(http.StatusForbidden).JSON(fiber.Map{"errors": errorList})
 		}
 
 		return c.Next()

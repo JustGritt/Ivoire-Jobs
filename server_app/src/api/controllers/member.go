@@ -90,6 +90,24 @@ func CreateMember(c *fiber.Ctx) error {
 		return c.Status(http.StatusNotFound).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
+	// check if the user is already a member
+	if memberRepo.CheckIfMemberExists(newMember.UserID) {
+		errorList = append(errorList, &fiber.Error{
+			Code:    http.StatusBadRequest,
+			Message: "User is already a member",
+		})
+		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
+	//check if the user has a pending request
+	if member, _ := memberRepo.GetPendingRequest(newMember.UserID); member != nil {
+		errorList = append(errorList, &fiber.Error{
+			Code:    http.StatusBadRequest,
+			Message: "User has a pending request",
+		})
+		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
 	// Create the member
 	if err := memberRepo.Create(&newMember); err != nil {
 		errorList = append(errorList, &fiber.Error{
@@ -104,6 +122,40 @@ func CreateMember(c *fiber.Ctx) error {
 
 	return c.Status(http.StatusCreated).JSON(memberOutput)
 }
+
+// GetAll pending requests
+// @Summary Get All pending requests
+// @Description Get all pending requests
+// @Tags Member
+// @Produce json
+// @Success 200 {object} Response
+// @Failure 400 {array} ErrorResponse
+// @Failure 401 {array} ErrorResponse
+// @Failure 500 {array} ErrorResponse
+// @Router /member/pending [get]
+// @Security Bearer
+func GetAllPendingRequests(c *fiber.Ctx) error {
+	var errorList []*fiber.Error
+
+	// Get all pending requests
+	members, err := memberRepo.GetAllPendingRequests()
+	if err != nil {
+		errorList = append(errorList, &fiber.Error{
+			Code:    http.StatusInternalServerError,
+			Message: "Error getting pending requests",
+		})
+		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
+	//map the members to output
+	var memberOutputs []*MemberOutput
+	for _, member := range members {
+		memberOutputs = append(memberOutputs, mapMemberToOutput(&member))
+	}
+
+	return c.Status(http.StatusOK).JSON(memberOutputs)
+}
+
 
 // ValidateMember handles the validation of a member.
 // @Summary Validate Member
@@ -138,6 +190,10 @@ func ValidateMember(c *fiber.Ctx) error {
 		)
 		return c.Status(fiber.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
 	}
+
+	if memberInput.Status == "accepted" {
+		memberInput.Status = "member"
+	} 
 
 	// Validate the member
 	if err := memberRepo.ValidateMember(memberID, memberInput.Status); err != nil {

@@ -8,6 +8,7 @@ import (
 	"reflect"
 	"strconv"
 	"strings"
+	"unicode"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
@@ -45,7 +46,7 @@ func Validate(payload interface{}) []*fiber.Error {
 			if message == "" {
 				switch err.Tag() {
 				case "required":
-					message = fmt.Sprintf("%s is required %v", err.StructField(), payload)
+					message = fmt.Sprintf("%s is required", err.StructField())
 				case "email":
 					message = fmt.Sprintf("%s must be a valid email address", err.StructField())
 				case "min":
@@ -229,10 +230,29 @@ func ValidateFile(file *multipart.FileHeader, maxSize string, allowedExts []stri
 }
 
 var _ = validate.RegisterValidation("password", func(fl validator.FieldLevel) bool {
-	l := len(fl.Field().String())
+	password := fl.Field().String()
 
-	return l >= 6 && l < 100
-})
+	// Check length
+	if len(password) < 6 || len(password) > 100 {
+		return false
+	}
+
+	var hasUpper, hasLower, hasSpecial,  hasDigit bool
+	for _, char := range password {
+		switch {
+		case unicode.IsUpper(char):
+			hasUpper = true
+		case unicode.IsLower(char):
+			hasLower = true
+		case unicode.IsDigit(char):
+			hasDigit = true
+		case unicode.IsPunct(char) || unicode.IsSymbol(char):
+			hasSpecial = true
+		}
+	}
+
+	return hasUpper && hasLower && hasDigit && hasSpecial
+}) 
 
 // take a int and check if it is a multiple of the argument
 var _ = validate.RegisterValidation("step", func(fl validator.FieldLevel) bool {

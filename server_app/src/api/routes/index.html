@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WebSocket Test</title>
+</head>
+<body>
+    <h1>WebSocket Test</h1>
+    <label for="roomID">Room ID:</label>
+    <input type="text" id="roomID" placeholder="Enter Room ID"><br>
+    <label for="token">Token:</label>
+    <input type="text" id="token" placeholder="Enter JWT Token"><br>
+    <button id="connect">Connect</button><br>
+    <input type="text" id="message" placeholder="Enter message">
+    <button id="send">Send</button>
+    <div id="log"></div>
+
+    <script>
+        let socket;
+        const connectButton = document.getElementById('connect');
+        const sendButton = document.getElementById('send');
+        const messageInput = document.getElementById('message');
+        const log = document.getElementById('log');
+
+        connectButton.addEventListener('click', async () => {
+            const roomID = document.getElementById('roomID').value;
+            const token = document.getElementById('token').value;
+
+            try {
+                // Determine the WebSocket protocol to use
+                const protocol = (window.location.protocol === 'https:') ? 'wss:' : 'ws:';
+                const wsUrl = `${protocol}//${window.location.host}/api/v1/room/${roomID}/ws?token=${token}`;
+
+                log.innerHTML += `<p>Attempting to connect to WebSocket at ${wsUrl}</p>`;
+
+                socket = new WebSocket(wsUrl);
+
+                socket.onopen = () => {
+                    log.innerHTML += '<p>Connected to WebSocket</p>';
+                    console.log('WebSocket connection opened.');
+                };
+
+                socket.onmessage = (event) => {
+                    log.innerHTML += `<p>Received: ${event.data}</p>`;
+                    console.log('WebSocket message received:', event.data);
+                };
+
+                socket.onclose = (event) => {
+                    log.innerHTML += `<p>WebSocket closed (Code: ${event.code}, Reason: ${event.reason})</p>`;
+                    console.log('WebSocket connection closed. Code:', event.code, 'Reason:', event.reason);
+                };
+
+                socket.onerror = (error) => {
+                    log.innerHTML += `<p>Error: ${error.message}</p>`;
+                    console.error('WebSocket error:', error);
+                };
+
+            } catch (error) {
+                log.innerHTML += `<p>Error: ${error.message}</p>`;
+                console.error('Error during room fetch or WebSocket connection:', error);
+            }
+        });
+
+        sendButton.addEventListener('click', () => {
+            const message = messageInput.value;
+            if (socket && socket.readyState === WebSocket.OPEN) {
+                socket.send(message);
+                log.innerHTML += `<p>Sent: ${message}</p>`;
+                console.log('WebSocket message sent:', message);
+            } else {
+                log.innerHTML += '<p>WebSocket is not connected</p>';
+                console.warn('Attempted to send message, but WebSocket is not connected.');
+            }
+        });
+    </script>
+</body>
+</html>

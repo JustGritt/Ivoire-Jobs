@@ -5,8 +5,10 @@ import (
 	validator "barassage/api/common/validator"
 	cfg "barassage/api/configs"
 	"barassage/api/models/pushToken"
+	refreshtoken "barassage/api/models/refreshToken"
 	"barassage/api/models/user"
 	banRepo "barassage/api/repositories/ban"
+	refreshTokenRepo "barassage/api/repositories/refreshToken"
 	userRepo "barassage/api/repositories/user"
 	"barassage/api/services/auth"
 	"barassage/api/services/mailer"
@@ -26,7 +28,7 @@ type UserObject struct {
 	FirstName      string `json:"firstname" validate:"required,min=2,max=30"`
 	LastName       string `json:"lastname" validate:"required,min=2,max=30"`
 	Email          string `json:"email" validate:"required,min=5,max=100,email"`
-	Password       string `json:"password" validate:"required"`
+	Password       string `json:"password" validate:"required,password" message:"Password must be at least 8 characters, contain at least 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character"`
 	ProfilePicture string `json:"profilePicture"`
 	Bio            string `json:"bio"`
 	Role           string `json:"role"`
@@ -48,7 +50,7 @@ type UpdateUserObject struct {
 // UserLogin is the login format expected
 type UserLogin struct {
 	Email    string `json:"email" validate:"required,min=5,max=100,email"`
-	Password string `json:"password" validate:"password"`
+	Password string `json:"password"`
 }
 
 // UserOutput is the output format of the user
@@ -85,6 +87,7 @@ type NotificationPref struct {
 // @Router /auth/register [post]
 func Register(c *fiber.Ctx) error {
 	var userInput UserObject
+
 	// Validate Input
 	if err := validator.ParseBodyAndValidate(c, &userInput); err != nil {
 		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(err))
@@ -238,24 +241,128 @@ func Login(c *fiber.Ctx) error {
 		return c.Status(http.StatusUnauthorized).JSON(HTTPErrorResponse(errorList))
 	}
 
-	// Issue Token
-	accessToken, _ := auth.IssueAccessToken(*user)
-	refreshToken, err := auth.IssueRefreshToken(*user)
+	// Check if the user has a refresh token
+	dbRefreshToken, _ := refreshTokenRepo.GetRefreshTokenForUser(user.ID)
+	var tokenDetails *auth.TokenDetails
 
+	if dbRefreshToken == nil {
+		// Create a new refresh token
+		expireTime := time.Now().Add(14 * 24 * time.Hour).Unix()
+		tokenID := uuid.New().String()
+
+		tokenDetails, err = auth.IssueRefreshToken(*user, tokenID, expireTime)
+		if err != nil {
+			return c.Status(http.StatusInternalServerError).JSON(HTTPErrorResponse([]*Response{
+				{
+					Code:    http.StatusInternalServerError,
+					Message: "Something Went Wrong: Could Not Issue Token",
+					Data:    err.Error(),
+				},
+			}))
+		}
+
+		dbRefreshToken = &refreshtoken.RefreshToken{
+			TokenID:   tokenDetails.TokenUUID,
+			UserID:    user.ID,
+			ExpiresAt: tokenDetails.TokenExpires,
+		}
+
+		if err := refreshTokenRepo.Create(dbRefreshToken); err != nil {
+			return c.Status(http.StatusInternalServerError).JSON(HTTPErrorResponse([]*Response{
+				{
+					Code:    http.StatusInternalServerError,
+					Message: "Something Went Wrong: Could Not Save Token",
+					Data:    err.Error(),
+				},
+			}))
+		}
+	}
+
+	expireTime := time.Now().Add(14 * 24 * time.Hour).Unix()
+	tokenDetails, err = auth.IssueRefreshToken(*user, dbRefreshToken.TokenID, expireTime)
 	if err != nil {
-		errorList = nil
-		errorList = append(
-			errorList,
-			&Response{
+		return c.Status(http.StatusInternalServerError).JSON(HTTPErrorResponse([]*Response{
+			{
 				Code:    http.StatusInternalServerError,
 				Message: "Something Went Wrong: Could Not Issue Token",
 				Data:    err.Error(),
 			},
-		)
-		return c.Status(http.StatusInternalServerError).JSON(HTTPErrorResponse(errorList))
+		}))
 	}
-	// Return User and Token
-	return c.Status(http.StatusOK).JSON(HTTPResponse(http.StatusOK, "Login Success", fiber.Map{"user": mapUserToOutPut(user), "access_token": accessToken.Token, "refresh_token": refreshToken.Token}))
+	if time.Until(time.Unix(dbRefreshToken.ExpiresAt, 0)) < 7*24*time.Hour {
+		dbRefreshToken.TokenID = tokenDetails.TokenUUID
+		dbRefreshToken.ExpiresAt = tokenDetails.TokenExpires
+
+		if err := refreshTokenRepo.Update(dbRefreshToken); err != nil {
+			return c.Status(http.StatusInternalServerError).JSON(HTTPErrorResponse([]*Response{
+				{
+					Code:    http.StatusInternalServerError,
+					Message: "Something Went Wrong: Could Not Update Token",
+					Data:    err.Error(),
+				},
+			}))
+		}
+	}
+
+	// Issue Access Token
+	accessToken, err := auth.IssueAccessToken(*user)
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(HTTPErrorResponse([]*Response{
+			{
+				Code:    http.StatusInternalServerError,
+				Message: "Something Went Wrong: Could Not Issue Access Token",
+				Data:    err.Error(),
+			},
+		}))
+	}
+
+	// Return User and Tokens
+	return c.Status(http.StatusOK).JSON(HTTPResponse(http.StatusOK, "Login Success", fiber.Map{
+		"user":          mapUserToOutPut(user),
+		"access_token":  accessToken.Token,
+		"refresh_token": tokenDetails.Token,
+	}))
+}
+
+// GetAllUsers Godoc
+// @Summary Get all users
+// @Description Get the list of all users
+// @Tags Auth
+// @Produce json
+// @Param payload body UserLogin true "Login Body"
+// @Success 200 {object} Response "List of users"
+// @Failure 400 {array} ErrorResponse "Validation error or users not found"
+// @Failure 401 {array} ErrorResponse "Unauthorized"
+// @Failure 500 {array} ErrorResponse "Token issuing error"
+// @Router /auth/users [get]
+// @Security Bearer
+func GetAllUsers(c *fiber.Ctx) error {
+	var users []user.User
+	var errorList []*fiber.Error
+	users, err := userRepo.GetAllUsers()
+	if err != nil {
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusInternalServerError,
+				Message: "error getting users",
+			},
+		)
+		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
+	// Map users to UserOutput
+	var ouput []UserOutput
+	for _, s := range users {
+		ouput = append(ouput, *mapUserToOutPut(&s))
+	}
+
+	//if the users are empty send and empty array
+	if len(ouput) == 0 {
+		return c.Status(http.StatusOK).JSON([]UserOutput{})
+	}
+
+	return c.Status(http.StatusOK).JSON(ouput)
 
 }
 
@@ -295,24 +402,8 @@ func GetMyProfile(c *fiber.Ctx) error {
 		return c.Status(http.StatusNotFound).JSON(HTTPErrorResponse(errorList))
 	}
 
-	// Issue Token
-	accessToken, _ := auth.IssueAccessToken(*dbUser)
-	refreshToken, err := auth.IssueRefreshToken(*dbUser)
-
-	if err != nil {
-		errorList = nil
-		errorList = append(
-			errorList,
-			&Response{
-				Code:    http.StatusInternalServerError,
-				Message: "Something Went Wrong: Could Not Issue Token",
-				Data:    err.Error(),
-			},
-		)
-		return c.Status(http.StatusInternalServerError).JSON(HTTPErrorResponse(errorList))
-	}
 	// Return User and Token
-	return c.Status(http.StatusOK).JSON(HTTPResponse(http.StatusOK, "This is your profile", fiber.Map{"user": mapUserToOutPut(dbUser), "access_token": accessToken.Token, "refresh_token": refreshToken.Token}))
+	return c.Status(http.StatusOK).JSON(HTTPResponse(http.StatusOK, "This is your profile", fiber.Map{"user": mapUserToOutPut(dbUser)}))
 }
 
 // Logout Godoc
@@ -459,6 +550,13 @@ func PatchToken(c *fiber.Ctx) error {
 		userInput.Device = "unknown"
 	}
 
+	//check if the token is already registered
+	for _, token := range dbUser.PushToken {
+		if token.Token == userInput.Token {
+			return c.SendStatus(http.StatusOK)
+		}
+	}
+
 	dbUser.PushToken = append(dbUser.PushToken, pushToken.PushToken{
 		UserID: dbUser.ID,
 		Token:  userInput.Token,
@@ -501,7 +599,8 @@ func mapUserToOutPut(u *user.User) *UserOutput {
 	if u.Member == nil || len(u.Member) == 0 {
 		memberStatus = "not-member"
 	} else {
-		memberStatus = u.Member[0].Status
+		member := u.Member[len(u.Member)-1]
+		memberStatus = member.Status
 	}
 
 	//notificationPreference := mapNotificationPreferenceToOutput(u.NotificationPreference)

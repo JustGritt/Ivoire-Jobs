@@ -26,7 +26,7 @@ func GetByEmail(email string) (*user.User, error) {
 // GetByEmail gets user with the given email check if active is true, banned is false
 func GetById(id string) (*user.User, error) {
 	var user user.User
-	if err := database.PgDB.Preload("Member").Preload("NotificationPreference").Where("id = ? AND active = ?", id, true).First(&user).Error; err != nil {
+	if err := database.PgDB.Preload("Member").Preload("NotificationPreference").Preload("PushToken").Where("id = ? AND active = ?", id, true).First(&user).Error; err != nil {
 		return nil, err
 	}
 	return &user, nil
@@ -83,4 +83,11 @@ func GetAllReports() ([]report.Report, error) {
 // Set User Ban Status
 func SetUserBanStatus(userID string, isBanned bool) error {
 	return database.PgDB.Model(&user.User{}).Where("id = ?", userID).Update("active", !isBanned).Error
+}
+
+// Get all users
+func GetAllUsers() ([]user.User, error) {
+	var users []user.User
+	err := database.PgDB.Find(&users).Error
+	return users, err
 }

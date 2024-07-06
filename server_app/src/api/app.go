@@ -30,10 +30,13 @@ import (
 	"barassage/api/models/configuration"
 	"barassage/api/models/image"
 	"barassage/api/models/member"
+	"barassage/api/models/message"
 	"barassage/api/models/notificationPreference"
 	"barassage/api/models/pushToken"
 	"barassage/api/models/rating"
+	refreshtoken "barassage/api/models/refreshToken"
 	"barassage/api/models/report"
+	"barassage/api/models/room"
 	"barassage/api/models/service"
 	"barassage/api/models/user"
 
@@ -91,6 +94,9 @@ func Run() {
 		&pushToken.PushToken{},
 		&configuration.Configuration{},
 		&notificationPreference.NotificationPreference{},
+		&room.Room{},
+		&message.Message{},
+		&refreshtoken.RefreshToken{},
 	)
 
 	/*
@@ -123,12 +129,11 @@ func Run() {
 		AllowMethods: "GET, POST, PUT, PATCH, HEAD, DELETE, OPTIONS",
 	}))
 
-
 	/*
 		============ Set Up Routes ============
 	*/
 	routes.SetupRoutes(app)
-
+	app.Use(cors.New())
 	/*
 		============ Setup Swagger ===============
 	*/

@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:barassage_app/core/classes/app_context.dart';
 import 'package:barassage_app/core/exceptions/dio_exceptions.dart';
@@ -48,7 +47,6 @@ doRegister(UserSignup userSignup) async {
     });
   } on DioException catch (e) {
     logger.e(e);
-    print(e.message);
     showError(context, DioExceptionHandler(e).title);
   }
 }
@@ -88,4 +86,29 @@ void checkLogin(
       });
     }
   });
+}
+
+void checkRegisterToken(BuildContext context, String token) {
+  UserService us = UserService();
+  us.verifyEmailToken(token).then((value) {
+    if (value == false) {
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        // setState(() {
+        //   isEmailValidated = false;
+        //   isLoading = false;
+        // });
+      });
+    }
+  });
+}
+
+Future<List<User>?> getUsers() async {
+  UserService us = serviceLocator<UserService>();
+  try {
+    return await us.getUsers();
+  } on DioException catch (e) {
+    logger.e(DioExceptionHandler(e).error.message);
+    showError(context, DioExceptionHandler(e).title);
+    return null;
+  }
 }

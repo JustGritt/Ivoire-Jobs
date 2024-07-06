@@ -23,7 +23,7 @@ type RefreshClaims struct {
 	RefreshTokenID string `json:"refreshTokenID"`
 	UserID         string `json:"userID"`
 	Role           string `json:"role"`
-	jwt.MapClaims
+	jwt.RegisteredClaims
 }
 
 // AccessClaims represents access token JWT claims
@@ -31,12 +31,12 @@ type AccessClaims struct {
 	AccessTokenID string `json:"accessTokenID"`
 	UserID        string `json:"userID"`
 	Role          string `json:"role"`
-	jwt.MapClaims
+	jwt.RegisteredClaims
 }
 
 // IssueAccessToken generate access tokens used for auth
 func IssueAccessToken(u user.User) (*TokenDetails, error) {
-	expireTime := time.Now().Add(time.Hour) // 1 hour
+	expireTime := time.Now().Add(time.Hour * 4) // 4 hour
 	tokenUUID := uuid.New().String()
 	if u.Role == "" {
 		u.Role = "user"
@@ -46,9 +46,9 @@ func IssueAccessToken(u user.User) (*TokenDetails, error) {
 		tokenUUID,
 		u.ID,
 		u.Role,
-		jwt.MapClaims{
-			"exp": expireTime.Unix(),
-			"iss": cfg.GetConfig().JWTIssuer,
+		jwt.RegisteredClaims{
+			ExpiresAt: jwt.NewNumericDate(expireTime),
+			Issuer:    cfg.GetConfig().JWTIssuer,
 		},
 	}
 
@@ -67,18 +67,16 @@ func IssueAccessToken(u user.User) (*TokenDetails, error) {
 }
 
 // IssueRefreshToken generate refresh tokens used for auth
-func IssueRefreshToken(u user.User) (*TokenDetails, error) {
-	expireTime := time.Now().Add((24 * time.Hour) * 14) // 14 days
-	tokenUUID := uuid.New().String()
+func IssueRefreshToken(u user.User, tokenID string, expireTime int64) (*TokenDetails, error) {
 
 	// Generate encoded token
 	claims := RefreshClaims{
-		tokenUUID,
+		tokenID,
 		u.ID,
 		u.Role,
-		jwt.MapClaims{
-			"exp": expireTime.Unix(),
-			"iss": cfg.GetConfig().JWTIssuer,
+		jwt.RegisteredClaims{
+			ExpiresAt: jwt.NewNumericDate(time.Unix(expireTime, 0)),
+			Issuer:    cfg.GetConfig().JWTIssuer,
 		},
 	}
 
@@ -91,7 +89,7 @@ func IssueRefreshToken(u user.User) (*TokenDetails, error) {
 
 	return &TokenDetails{
 		Token:        tk,
-		TokenUUID:    uuid.New().String(),
-		TokenExpires: expireTime.Unix(),
+		TokenUUID:    tokenID,
+		TokenExpires: expireTime,
 	}, nil
 }

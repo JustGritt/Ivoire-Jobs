@@ -7,7 +7,7 @@ class TrendingServices {
       title: 'Spa for dogs and cats',
       description:
           'Provides a relaxing and pampering spa experience for dogs and cats.',
-      image: 'https://source.unsplash.com/random/200x128',
+      image: 'https://placehold.co/600x400.png',
       category: ServiceCategory.animalCare,
       price: 49.99,
       rating: 9.1,
@@ -20,7 +20,7 @@ class TrendingServices {
       title: 'Japanese tutoring',
       description:
           'Learn the basics of Japanese conversation and communication.',
-      image: 'https://source.unsplash.com/random/200x128',
+      image: 'https://placehold.co/600x400.png',
       category: ServiceCategory.privateTuition,
       price: 22.99,
       rating: 8.9,
@@ -33,7 +33,7 @@ class TrendingServices {
       title: 'Trimming your lawn',
       description:
           'Cutting your lawn is a great way to get rid of the weeds and keep your lawn looking fresh.',
-      image: 'https://source.unsplash.com/random/200x128',
+      image: 'https://placehold.co/600x400.png',
       category: ServiceCategory.gardening,
       price: 12.59,
       rating: 8.4,
@@ -46,7 +46,7 @@ class TrendingServices {
       title: 'Plumbing',
       description:
           'We are a plumbing service that will help you to fix any plumbing issues.',
-      image: 'https://source.unsplash.com/random/200x128',
+      image: 'https://placehold.co/600x400.png',
       category: ServiceCategory.housework,
       price: 149.99,
       rating: 7.9,
@@ -58,7 +58,7 @@ class TrendingServices {
       providerName: 'Jimmy Doe',
       title: 'Flutter development',
       description: 'We develop your flutter application as a challenge',
-      image: 'https://source.unsplash.com/random/200x128',
+      image: 'https://placehold.co/600x400.png',
       category: ServiceCategory.computers,
       price: 99.00,
       rating: 7.8,

@@ -54,6 +54,11 @@ class UserService {
   Future<User?> register(UserSignup userSignup) async {
     Response res = await _http.post(
       ApiEndpoint.appRegisterUrl,
+      options: Options(
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      ),
       data: userSignup.toJson(),
     );
     if (res.statusCode == 200 || res.statusCode == 201) {
@@ -67,6 +72,11 @@ class UserService {
     Map<String, dynamic> data = userLogin.toJson();
     Response res = await _http.post(
       ApiEndpoint.appLoginUrl,
+      options: Options(
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      ),
       data: jsonEncode(data),
     );
     if (res.statusCode == 200) {
@@ -77,8 +87,8 @@ class UserService {
     }
     throw res.data['message'];
   }
-
-  Future<User?> update(UserUpdate user) async {
+  
+   Future<User?> update(UserUpdate user) async {
     Response res = await _http.put(
       ApiEndpoint.updateProfile,
       data: user.toJson(),
@@ -86,6 +96,26 @@ class UserService {
     if (res.statusCode == 200) {
       ApiResponse apiResponse = ApiResponse.fromJson(res.data);
       return User.fromJson(apiResponse.body);
+    }
+    return null;
+  }
+
+  Future<bool> verifyEmailToken(String token) async {
+    Response res = await _http.get(
+      '${ApiEndpoint.appEmailValidationUrl}?token=$token',
+    );
+    if (res.statusCode == 200) {
+      return true;
+    }
+    return false;
+  }
+
+  Future<List<User>?> getUsers() async {
+    Response res = await _http.get(ApiEndpoint.adminUsers);
+    if (res.statusCode == 200) {
+      List<User> users =
+          (res.data as List).map((e) => User.fromJson(e)).toList();
+      return users;
     }
     return null;
   }

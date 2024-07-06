@@ -2,6 +2,8 @@ name: Build Flutter Android App
 
 on:
   push:
+    branches:
+      - main 
     paths:
       - 'front_app/**'  # Trigger this workflow only on changes to the front_app directory
   workflow_dispatch:  # Allow manual triggering of the workflow

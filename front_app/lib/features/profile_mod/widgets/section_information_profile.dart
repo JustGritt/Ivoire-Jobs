@@ -42,7 +42,6 @@ class SectionInformationProfile extends StatelessWidget {
           ),
           const SizedBox(height: 25),
           Row(
-            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               const Icon(CupertinoIcons.person),
@@ -57,7 +56,6 @@ class SectionInformationProfile extends StatelessWidget {
             margin: EdgeInsets.symmetric(vertical: 10, horizontal: 8),
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               const Icon(CupertinoIcons.mail),
@@ -71,7 +69,6 @@ class SectionInformationProfile extends StatelessWidget {
             margin: EdgeInsets.symmetric(vertical: 10, horizontal: 8),
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Icon(CupertinoIcons.text_alignleft),

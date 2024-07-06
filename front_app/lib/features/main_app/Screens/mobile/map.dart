@@ -4,6 +4,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
@@ -14,11 +16,10 @@ class MapScreen extends StatefulWidget {
 
 class _MapScreenState extends State<MapScreen> {
   final TextEditingController _searchController = TextEditingController();
-  LatLng _currentPosition = const LatLng(3.785834, -122.406417);
+  LatLng _currentPosition = const LatLng(37.785834, -122.406417);
   List<Marker> markers = [];
   final mapController = MapController();
 
-  // Speech to text variables
   late stt.SpeechToText _speech;
   bool _isListening = false;
   String _recognizedText = '';
@@ -43,9 +44,7 @@ class _MapScreenState extends State<MapScreen> {
       point: _currentPosition,
       width: 80,
       height: 80,
-      child: const Icon(
-        Icons.location_on,
-      ),
+      child: const Icon(Icons.location_on),
     );
     setState(() {
       markers.add(newMarker);
@@ -54,19 +53,6 @@ class _MapScreenState extends State<MapScreen> {
 
   void animatePosition() {
     mapController.move(_currentPosition, 16);
-  }
-
-  void _getCurrentSearch() async {
-    try {
-      Position position = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high);
-      setState(() {
-        _currentPosition = LatLng(position.latitude, position.longitude);
-        _searchController.text = '${position.latitude}, ${position.longitude}';
-      });
-    } catch (e) {
-      _showErrorDialog('Failed to get current location: $e');
-    }
   }
 
   void _getCurrentLocation() async {
@@ -100,8 +86,9 @@ class _MapScreenState extends State<MapScreen> {
       setState(() {
         _currentPosition = LatLng(position.latitude, position.longitude);
         _searchController.text = '';
+        _setMarkerToCurrentPosition();
       });
-      _setMarkerToCurrentPosition();
+      mapController.move(_currentPosition, 18); // Move map to current location
     } catch (e) {
       _showErrorDialog('Failed to get current location: $e');
     }
@@ -140,7 +127,7 @@ class _MapScreenState extends State<MapScreen> {
           onResult: (val) => setState(() {
             _recognizedText = val.recognizedWords;
             _searchController.text = _recognizedText;
-            // Here you can handle the recognized text, e.g., search for the location
+            _performSearch(); // Perform search based on recognized text
           }),
         );
       }
@@ -150,31 +137,51 @@ class _MapScreenState extends State<MapScreen> {
     }
   }
 
-  TileLayer openStreetMapTileLayer = TileLayer(
-    urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-    // userAgentPackageName: 'dev.fleaflet.flutter_map.example',
-  );
+  void _performSearch() async {
+    final query = _searchController.text;
+    if (query.isEmpty) {
+      _showErrorDialog('Please enter a location to search.');
+      return;
+    }
+
+    final response = await http.get(
+      Uri.parse(
+        'https://api.mapbox.com/geocoding/v5/mapbox.places/$query.json?access_token=${dotenv.env['MAPBOX_ACCESS_TOKEN']}',
+      ),
+    );
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      final features = data['features'];
+      if (features.isNotEmpty) {
+        final firstResult = features[0];
+        final center = firstResult['center'];
+        final lng = center[0];
+        final lat = center[1];
+
+        setState(() {
+          _currentPosition = LatLng(lat, lng);
+          markers.clear();
+          _setMarkerToCurrentPosition();
+          mapController.move(_currentPosition, 18);
+        });
+      } else {
+        _showErrorDialog('No results found for "$query".');
+      }
+    } else {
+      _showErrorDialog('Failed to fetch search results.');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.grey[100],
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-      ),
       body: Container(
-        decoration: const BoxDecoration(
-            // transparent
-            color: Color.fromARGB(0, 255, 0, 1)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              padding: const EdgeInsets.all(8.0),
               child: Container(
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.grey[300]!),
@@ -183,15 +190,28 @@ class _MapScreenState extends State<MapScreen> {
                 ),
                 child: Row(
                   children: [
+                    IconButton(
+                      icon: const Icon(Icons.arrow_back, color: Colors.black),
+                      onPressed: () => Navigator.of(context).pop(),
+                    ),
                     Expanded(
                       child: TextField(
                         controller: _searchController,
                         decoration: const InputDecoration(
                           contentPadding: EdgeInsets.only(left: 8),
                           border: InputBorder.none,
-                          hintText: 'Your position',
+                          hintText: 'Search location',
                         ),
+                        onSubmitted: (value) {
+                          _performSearch();
+                        },
                       ),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.search),
+                      onPressed: () {
+                        _performSearch();
+                      },
                     ),
                     IconButton(
                       icon: const Icon(Icons.location_on),
@@ -213,75 +233,22 @@ class _MapScreenState extends State<MapScreen> {
                 ),
               ),
             ),
-            const SizedBox(height: 8),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
-                    FilterChip(
-                      label: const Text('Pet care'),
-                      onSelected: (bool value) {},
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                    ),
+                    // TODO: Replace with API categories
+                    _buildFilterChip('All'),
                     const SizedBox(width: 8),
-                    FilterChip(
-                      label: const Text('Pet care'),
-                      onSelected: (bool value) {},
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                    ),
+                    _buildFilterChip('Pet care'),
                     const SizedBox(width: 8),
-                    FilterChip(
-                      label: const Text('Pet care'),
-                      onSelected: (bool value) {},
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                    ),
+                    _buildFilterChip('Gardening'),
                     const SizedBox(width: 8),
-                    FilterChip(
-                      label: const Text('Pet care'),
-                      onSelected: (bool value) {},
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                    ),
+                    _buildFilterChip('Cooking'),
                     const SizedBox(width: 8),
-                    FilterChip(
-                      label: const Text('Pet care'),
-                      onSelected: (bool value) {},
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    FilterChip(
-                      label: const Text('Pet care'),
-                      onSelected: (bool value) {},
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    FilterChip(
-                      label: const Text('Pet care'),
-                      onSelected: (bool value) {},
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                    ),
+                    _buildFilterChip('Teaching'),
                   ],
                 ),
               ),
@@ -291,12 +258,12 @@ class _MapScreenState extends State<MapScreen> {
                 mapController: mapController,
                 options: MapOptions(
                   initialCenter: _currentPosition,
-                  initialZoom: 18,
+                  initialZoom: 16,
                 ),
                 children: [
                   TileLayer(
                     urlTemplate:
-                        '${dotenv.env['MAPBOX_API_URL']}?access_token=${dotenv.env['MAPBOX_ACCESS_TOKEN']}',
+                        'https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=${dotenv.env['MAPBOX_ACCESS_TOKEN']}',
                   ),
                   MarkerLayer(
                     markers: markers,
@@ -306,6 +273,25 @@ class _MapScreenState extends State<MapScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildFilterChip(String label) {
+    return FilterChip(
+      label: Text(
+        label,
+        style: TextStyle(
+          color: Colors.black,
+          fontWeight: FontWeight.bold,
+          fontSize: 16,
+        ),
+      ),
+      onSelected: (bool value) {},
+      backgroundColor: Colors.grey[300],
+      selectedColor: Colors.blue,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
       ),
     );
   }

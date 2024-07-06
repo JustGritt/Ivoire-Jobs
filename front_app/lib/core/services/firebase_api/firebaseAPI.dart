@@ -13,7 +13,7 @@ class Firebaseapi {
         AuthorizationStatus.authorized) {
       try {
         final token = await _firebaseMessaging.getToken();
-          if (token == null) throw Exception("No token found");
+        if (token == null) throw Exception("No token found");
         _pushTokensService.storeToken(token);
         print(token);
       } on Exception catch (e) {
