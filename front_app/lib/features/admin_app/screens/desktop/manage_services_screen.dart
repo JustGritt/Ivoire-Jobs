@@ -24,7 +24,7 @@ class _ManageServicesScreenState extends State<ManageServicesScreen> {
     AdminService as = AdminService();
     try {
       var values = await as.getAllServices();
-      if (values != null && values is List<Service>) {
+      if (values is List<Service>) {
         debugPrint('values: $values');
         setState(() {
           services = values.cast<Service>();
