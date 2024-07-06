@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import 'package:barassage_app/features/admin_app/providers/reports_provider.dart';
 import 'package:intl/intl.dart';
 
-
 class ReportScreen extends StatefulWidget {
   const ReportScreen({Key? key});
 
@@ -19,7 +18,8 @@ class _ReportScreenState extends State<ReportScreen> {
   @override
   void initState() {
     super.initState();
-    final reportsProvider = Provider.of<ReportsProvider>(context, listen: false);
+    final reportsProvider =
+        Provider.of<ReportsProvider>(context, listen: false);
     futureReports = reportsProvider.getAllReports();
   }
 

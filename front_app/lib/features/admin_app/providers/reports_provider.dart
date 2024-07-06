@@ -24,7 +24,8 @@ class ReportsProvider extends ChangeNotifier {
       Response res = await _http.get(ApiEndpoint.reports);
       if (res.statusCode == 200 && res.data is List) {
         print(res.data);
-        _reports = List<Report>.from(res.data.map((item) => Report.fromJson(item)));
+        _reports =
+            List<Report>.from(res.data.map((item) => Report.fromJson(item)));
       } else {
         print("Unexpected response format");
       }
@@ -39,8 +40,9 @@ class ReportsProvider extends ChangeNotifier {
 
   Future<void> updateReportStatus(Report report) async {
     try {
-      Response res = await _http.put('${ApiEndpoint.reportsDetails.replaceAll(':id', report.id)}',
-      data: { 'status': !report.status });
+      Response res = await _http.put(
+          '${ApiEndpoint.reportsDetails.replaceAll(':id', report.id)}',
+          data: {'status': !report.status});
       if (res.statusCode == 200) {
         final index = _reports.indexWhere((r) => r.id == report.id);
         if (index != -1) {

@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../screens/desktop/register_email_validation.dart';
 
-
 class EmailValidationController extends StatelessWidget {
-
   const EmailValidationController({Key? key}) : super(key: key);
 
   @override

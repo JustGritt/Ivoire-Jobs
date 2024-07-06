@@ -1,18 +1,14 @@
 import 'package:barassage_app/core/classes/app_context.dart';
-import 'package:barassage_app/core/helpers/utils_helper.dart';
 import 'package:barassage_app/core/init_dependencies.dart';
 import 'package:barassage_app/features/profile_mod/services/become_barasseur_services.dart';
 import 'package:ez_validator/ez_validator.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:glassmorphism/glassmorphism.dart';
-import 'package:go_router/go_router.dart';
 import 'package:ionicons/ionicons.dart';
 //local
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../auth_mod/widgets/app_button.dart';
-
 
 BuildContext rootContext = serviceLocator<AppContext>().navigatorContext;
 
@@ -93,7 +89,6 @@ class _BecomeBarasseurInfoState extends State<BecomeBarasseurInfo> {
           child: Padding(
             padding: const EdgeInsets.all(12.0),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Icon(
                   Ionicons.star,

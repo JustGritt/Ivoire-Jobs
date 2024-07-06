@@ -59,21 +59,21 @@ class _ManageServicesScreenState extends State<ManageServicesScreen> {
       body: isLoading
           ? Center(child: CircularProgressIndicator())
           : services.isEmpty
-          ? Center(child: Text('No services available'))
-          : ListView.builder(
-        itemCount: services.length,
-        itemBuilder: (context, index) {
-          final service = services[index];
-          return ListTile(
-            title: Text(service.title),
-            subtitle: Text(service.description),
-            trailing: Icon(Icons.edit),
-            onTap: () {
-              // Handle tap to edit service
-            },
-          );
-        },
-      ),
+              ? Center(child: Text('No services available'))
+              : ListView.builder(
+                  itemCount: services.length,
+                  itemBuilder: (context, index) {
+                    final service = services[index];
+                    return ListTile(
+                      title: Text(service.title),
+                      subtitle: Text(service.description),
+                      trailing: Icon(Icons.edit),
+                      onTap: () {
+                        // Handle tap to edit service
+                      },
+                    );
+                  },
+                ),
     );
   }
 }

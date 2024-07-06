@@ -40,7 +40,7 @@ class ApiEndpoint {
   static const serviceDetails = '${api}/service/:id';
   // Services Categories Endpoints
   static const serviceCategories = '/category/collection';
-  // Push Token 
+  // Push Token
   static const pushTokens = '/auth/update-token';
   // become barasseur
   static const becomeBarasseur = '/member';

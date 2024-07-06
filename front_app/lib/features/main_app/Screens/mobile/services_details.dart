@@ -132,7 +132,8 @@ class ServiceDetailPage extends StatelessWidget {
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal, // Enable horizontal scrolling
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center, // This centers the buttons within the Row itself
+                  mainAxisAlignment: MainAxisAlignment
+                      .center, // This centers the buttons within the Row itself
                   children: [
                     ElevatedButton(
                       onPressed: null,

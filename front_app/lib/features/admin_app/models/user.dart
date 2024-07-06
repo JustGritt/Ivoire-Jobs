@@ -43,7 +43,7 @@ class User {
         "createdAt": createdAt,
       };
 
-    //toJSONEncodable
+  //toJSONEncodable
   Map<String, dynamic> toJsonEncodable() {
     return {
       'firstName': firstName,

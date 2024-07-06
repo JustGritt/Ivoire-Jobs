@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../screens/desktop/admin_dashboard_screen.dart';
 
 class AdminDashboardController extends StatelessWidget {
-
   const AdminDashboardController({super.key});
 
   @override

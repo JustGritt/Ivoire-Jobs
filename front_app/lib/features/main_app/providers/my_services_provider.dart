@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:barassage_app/config/api_endpoints.dart';
 import 'package:barassage_app/config/app_cache.dart';

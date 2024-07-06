@@ -28,20 +28,19 @@ class AdminApp extends RouteManager {
       },
     ));
     addRoute(GoRoute(
-      path: AdminApp.services,
-      pageBuilder: (context, state) {
-        return const CupertinoPage(child: ServicesController());
-      }));
+        path: AdminApp.services,
+        pageBuilder: (context, state) {
+          return const CupertinoPage(child: ServicesController());
+        }));
     addRoute(GoRoute(
-      path: AdminApp.dashboard,
-      pageBuilder: (context, state) {
-        return const CupertinoPage(child: AdminDashboardController());
-      }
-    ));
+        path: AdminApp.dashboard,
+        pageBuilder: (context, state) {
+          return const CupertinoPage(child: AdminDashboardController());
+        }));
     addRoute(GoRoute(
-      path: AdminApp.abuseClaims,
-      pageBuilder: (context, state) {
-        return const CupertinoPage(child: AbuseClaimsController());
-      }));
+        path: AdminApp.abuseClaims,
+        pageBuilder: (context, state) {
+          return const CupertinoPage(child: AbuseClaimsController());
+        }));
   }
 }

@@ -1,5 +1,4 @@
 import 'package:barassage_app/core/helpers/profile_helper.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -17,7 +16,6 @@ class SectionInformationApp extends StatelessWidget {
       width: width * 0.9,
       padding: const EdgeInsets.all(16),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(

@@ -62,7 +62,8 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
               itemCount: users.length,
               itemBuilder: (context, index) {
                 return ListTile(
-                  title: Text('${users[index].firstName} ${users[index].lastName}'),
+                  title: Text(
+                      '${users[index].firstName} ${users[index].lastName}'),
                   subtitle: Text(users[index].email),
                   leading: CircleAvatar(
                     backgroundImage: NetworkImage(users[index].profilePicture),

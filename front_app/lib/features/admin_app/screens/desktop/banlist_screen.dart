@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import 'package:barassage_app/features/admin_app/providers/banned_services_provider.dart';
 import 'package:intl/intl.dart';
 
-
 class BanListScreen extends StatefulWidget {
   const BanListScreen({Key? key});
 
@@ -19,7 +18,8 @@ class _BanListScreenState extends State<BanListScreen> {
   @override
   void initState() {
     super.initState();
-    final bannedServicesProvier = Provider.of<BannedServicesProvier>(context, listen: false);
+    final bannedServicesProvier =
+        Provider.of<BannedServicesProvier>(context, listen: false);
     futureBannedService = bannedServicesProvier.getAllBannedServices();
   }
 
@@ -34,7 +34,8 @@ class _BanListScreenState extends State<BanListScreen> {
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (snapshot.hasData && snapshot.data!.isEmpty) {
-            return const Center(child: Text('There is no banned services yet.'));
+            return const Center(
+                child: Text('There is no banned services yet.'));
           } else if (snapshot.hasData) {
             List<Service> services = snapshot.data!;
             return ListView.builder(
@@ -45,7 +46,9 @@ class _BanListScreenState extends State<BanListScreen> {
               },
             );
           }
-          return const Center(child: Text('An error occurred on our end. Please try again later.'));
+          return const Center(
+              child: Text(
+                  'An error occurred on our end. Please try again later.'));
         },
       ),
     );
@@ -66,7 +69,8 @@ class ServiceDetailScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 8.0),
-            Text('Serviceed on ${DateFormat.yMMMd().format(service.createdAt)}'),
+            Text(
+                'Serviceed on ${DateFormat.yMMMd().format(service.createdAt)}'),
             const SizedBox(height: 16.0),
           ],
         ),

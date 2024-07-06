@@ -101,10 +101,8 @@ class UserService {
   Future<List<User>?> getUsers() async {
     Response res = await _http.get(ApiEndpoint.adminUsers);
     if (res.statusCode == 200) {
-      List<User> users
-      = (res.data as List)
-          .map((e) => User.fromJson(e))
-          .toList();
+      List<User> users =
+          (res.data as List).map((e) => User.fromJson(e)).toList();
       return users;
     }
     return null;

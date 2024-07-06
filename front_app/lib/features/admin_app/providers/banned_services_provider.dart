@@ -26,8 +26,10 @@ class BannedServicesProvier extends ChangeNotifier {
       Response res = await _http.get('${ApiEndpoint.services}/bans');
       if (res.statusCode == 200 && res.data is List) {
         print(res.data);
-        _services = List<Service>.from(res.data.map((item) => Service.fromJson(item)));
-        bannedServices = _services.where((service) => service.isBanned).toList();
+        _services =
+            List<Service>.from(res.data.map((item) => Service.fromJson(item)));
+        bannedServices =
+            _services.where((service) => service.isBanned).toList();
       } else {
         print("Unexpected response format");
       }

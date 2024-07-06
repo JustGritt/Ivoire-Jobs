@@ -86,18 +86,20 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                         gradient: LinearGradient(
-                            colors: [IVORYCOAST_COLORS[0], IVORYCOAST_COLORS[2]],
+                            colors: [
+                              IVORYCOAST_COLORS[0],
+                              IVORYCOAST_COLORS[2]
+                            ],
                             begin: FractionalOffset(0.0, 0.0),
                             end: FractionalOffset(0.5, 0.0),
-                            stops: [0.0, 1.0],
-                            tileMode: TileMode.clamp),
+                            stops: [0.0, 1.0]),
                       ),
                       child: CupertinoButton(
                         color: Colors.transparent,
                         child: Text(
                             appLocalizations.profile_become_bassage_partner,
-                            style: theme.textTheme.displayMedium
-                                ?.copyWith(color: AppColors.white, fontSize: 17)),
+                            style: theme.textTheme.displayMedium?.copyWith(
+                                color: AppColors.white, fontSize: 17)),
                         onPressed: () {
                           context.pushNamed(App.becomeWorker);
                         },
