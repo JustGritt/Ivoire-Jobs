@@ -5,7 +5,10 @@ import 'package:go_router/go_router.dart';
 
 import '../../core/classes/route_manager.dart';
 import 'controllers/controllers.dart';
-import 'controllers/register_email_validation_controller.dart';
+//import 'controllers/register_email_validation_controller.dart';
+// Conditionally import the web-specific controller if running on the web
+import 'controllers/register_email_validation_controller_import.dart'; // Conditional import for email validation controller
+//import 'controllers/register_email_validation_controller.dart';
 
 class AuthApp extends RouteManager {
   static const String login = '/auth/login';
