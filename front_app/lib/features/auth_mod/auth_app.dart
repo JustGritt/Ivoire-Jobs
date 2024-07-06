@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../core/classes/route_manager.dart';
 import 'controllers/controllers.dart';
-import 'controllers/register_email_validation_controller.dart';
+import 'controllers/register_email_validation_controller.dart' as webEmailValidation;
 // Conditionally import the web-specific controller if running on the web
 //import 'controllers/register_email_validation_controller_import.dart'; // Conditional import for email validation controller
 
@@ -54,7 +54,7 @@ class AuthApp extends RouteManager {
       addRoute(GoRoute(
           path: AuthApp.emailValidation,
           pageBuilder: (context, state) {
-            return const CupertinoPage(child: EmailValidationController());
+            return const CupertinoPage(child: webEmailValidation.EmailValidationController());
           }));
     }
   }
