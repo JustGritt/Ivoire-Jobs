@@ -38,6 +38,8 @@ class ApiEndpoint {
   static const myServices = '${api}/user/:id/service';
   // Services Endpoints
   static const services = '${api}/service';
+  // Services collection 
+  static const servicesCollection = '${api}/service/collection';
   // Services details Endpoints
   static const serviceDetails = '${api}/service/:id';
   // Services Categories Endpoints

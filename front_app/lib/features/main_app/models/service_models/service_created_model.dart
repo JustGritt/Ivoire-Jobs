@@ -1,3 +1,8 @@
+List<ServiceCreatedModel> servicesFromJson(List<dynamic> data) {
+  return List<ServiceCreatedModel>.from(
+      data.map((x) => ServiceCreatedModel.fromJson(x)));
+}
+
 class ServiceCreatedModel {
   final String id;
   final String userId;
