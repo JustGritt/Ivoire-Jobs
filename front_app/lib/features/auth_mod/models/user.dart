@@ -5,16 +5,26 @@ import 'package:barassage_app/features/auth_mod/models/notification_preferences.
 List<User> userFromJson(String str) =>
     List<User>.from(json.decode(str).map((x) => User.fromJson(x)));
 
+List<String> member = ['member', 'processing', 'user'];
+
+UserMemberStatusEnum userMemberStatusEnumFromJson(String str) {
+  print('str: $str');
+  return  member.contains(str)
+        ? UserMemberStatusEnum.values[member.indexOf(str)]
+        : UserMemberStatusEnum.user;}
+
+enum UserMemberStatusEnum { member, processing, user }
+
 class User {
   String firstName;
   String lastName;
   String email;
   String profilePicture;
   String? bio;
+  UserMemberStatusEnum member;
   String id;
   DateTime createdAt;
   NotificationPreferences notificationPreferences;
-
 
   User({
     required this.firstName,
@@ -23,6 +33,7 @@ class User {
     required this.profilePicture,
     required this.notificationPreferences,
     this.bio,
+    required this.member,
     required this.id,
     required this.createdAt,
   });
@@ -34,8 +45,9 @@ class User {
         email: json["email"],
         bio: json['bio'],
         profilePicture: '',
-        notificationPreferences: NotificationPreferences.fromJson(
-            json["notificationPreferences"]),
+        member: userMemberStatusEnumFromJson(json["member"]),
+        notificationPreferences:
+            NotificationPreferences.fromJson(json["notificationPreferences"]),
         createdAt:
             DateTime.parse(json["createdAt"] ?? DateTime.now().toString()),
       );
@@ -78,6 +90,7 @@ class User {
       email: email ?? this.email,
       profilePicture: profilePicture ?? this.profilePicture,
       bio: bio ?? this.bio,
+      member: member,
       notificationPreferences: notificationPreferences,
       id: id ?? this.id,
       createdAt: createdAt ?? this.createdAt,
@@ -103,9 +116,12 @@ class User {
       profilePicture: map['profilePicture'] ?? '',
       bio: map['bio'] ?? '',
       id: map['id'] ?? '',
+      member: userMemberStatusEnumFromJson(map["member"]),
       notificationPreferences:
           NotificationPreferences.fromJson(map["notificationPreferences"]),
-      createdAt: map['createdAt'] ?? DateTime.now(),
+      createdAt: map['createdAt'] != null
+          ? DateTime.parse(map['createdAt'])
+          : DateTime.now(),
     );
   }
 }

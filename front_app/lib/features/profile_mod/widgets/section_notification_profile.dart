@@ -3,9 +3,26 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class SectionNotificationProfile extends StatelessWidget {
+class SectionNotificationProfile extends StatefulWidget {
   final User user;
   const SectionNotificationProfile({super.key, required this.user});
+
+  @override
+  State<SectionNotificationProfile> createState() =>
+      _SectionNotificationProfileState();
+}
+
+class _SectionNotificationProfileState
+    extends State<SectionNotificationProfile> {
+  bool pushNotifications = true;
+  bool pushMessages = true;
+
+  @override
+  void initState() {
+    super.initState();
+    pushNotifications = widget.user.notificationPreferences.pushNotification;
+    pushMessages = widget.user.notificationPreferences.messageNotification;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,9 +60,13 @@ class SectionNotificationProfile extends StatelessWidget {
                 ],
               ),
               CupertinoSwitch(
-                  value: true,
+                  value: pushNotifications,
                   activeColor: theme.primaryColor,
-                  onChanged: (f) {})
+                  onChanged: (f) {
+                    setState(() {
+                      pushNotifications = f;
+                    });
+                  })
             ],
           ),
           Container(
@@ -67,9 +88,13 @@ class SectionNotificationProfile extends StatelessWidget {
                 ],
               ),
               CupertinoSwitch(
-                  value: true,
+                  value: pushMessages,
                   activeColor: theme.primaryColor,
-                  onChanged: (f) {})
+                  onChanged: (f) {
+                    setState(() {
+                      pushMessages = f;
+                    });
+                  })
             ],
           )
         ],

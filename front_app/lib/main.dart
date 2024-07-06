@@ -38,7 +38,7 @@ void main() async {
   runApp(MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (_) => serviceLocator<AuthenticationBloc>(),
+          create: (_) => serviceLocator<AuthenticationBloc>()..add(InitiateAuth()),
         ),
         BlocProvider(
           create: (_) => serviceLocator<ServiceBloc>(),

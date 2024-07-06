@@ -1,3 +1,4 @@
+import 'package:barassage_app/core/blocs/authentication/authentication_bloc.dart';
 import 'package:barassage_app/core/classes/app_context.dart';
 import 'package:barassage_app/core/helpers/utils_helper.dart';
 import 'package:barassage_app/core/init_dependencies.dart';

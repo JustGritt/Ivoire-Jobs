@@ -7,6 +7,7 @@ import 'package:barassage_app/features/auth_mod/services/user_service.dart';
 import 'package:bloc/bloc.dart';
 import 'package:barassage_app/core/helpers/auth_helper.dart';
 import 'package:barassage_app/features/auth_mod/models/user.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 

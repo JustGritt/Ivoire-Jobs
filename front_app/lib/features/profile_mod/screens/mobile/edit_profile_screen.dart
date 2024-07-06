@@ -12,10 +12,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:super_cupertino_navigation_bar/super_cupertino_navigation_bar.dart';
 
-
 AuthenticationBloc authenticationBloc = serviceLocator<AuthenticationBloc>();
-
-
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({super.key});
@@ -43,7 +40,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   @override
   void initState() {
-    authenticationBloc.stream.listen((event) {
+    context.read<AuthenticationBloc>().stream.listen((event) {
       if (event is AuthenticationSuccessState) {
         firstNameController.text = event.user.firstName;
         lastNameController.text = event.user.lastName;
@@ -51,20 +48,18 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         bioController.text = event.user.bio ?? "";
       }
     });
-    authenticationBloc.add(InitiateAuth());
+    context.read<AuthenticationBloc>().add(InitiateAuth());
     super.initState();
   }
 
   @override
   void dispose() {
-    firstNameController.dispose();
-    lastNameController.dispose();
-    emailController.dispose();
-    bioController.dispose();
+    // firstNameController.dispose();
+    // lastNameController.dispose();
+    // emailController.dispose();
+    // bioController.dispose();
     super.dispose();
   }
-
-  
 
   void validate() {
     Map<String, dynamic> form = {
@@ -104,6 +99,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               color: theme.primaryColorDark,
             ),
             onPressed: () {
+              context.read<AuthenticationBloc>().add(InitiateAuth());
               Navigator.of(context).pop();
             },
           ),
@@ -190,10 +186,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             ),
                           ),
                         ),
-                        errors['firstName'] != null
+                        errors['lastName'] != null
                             ? Row(
                                 children: [
-                                  Text(errors['firstName'] ?? '',
+                                  Text(errors['lastName'] ?? '',
                                       textAlign: TextAlign.start,
                                       style:
                                           theme.textTheme.bodyLarge?.copyWith(
@@ -220,6 +216,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 child: CupertinoTextField(
                                   placeholder: appLocalizations.email,
                                   controller: emailController,
+                                  enabled: false,
                                   padding: EdgeInsets.symmetric(
                                       horizontal: 10, vertical: 5),
                                   decoration: BoxDecoration(
@@ -274,25 +271,27 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             ]),
                         Row(
                           children: [
-                            errors['bio'] != null ?Text(errors['bio'] ?? '',
-                                textAlign: TextAlign.start,
-                                style: theme.textTheme.bodyLarge?.copyWith(
-                                  color: AppColors.red,
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 12,
-                                  wordSpacing: 1,
-                                )): Container(),
+                            errors['bio'] != null
+                                ? Text(errors['bio'] ?? '',
+                                    textAlign: TextAlign.start,
+                                    style: theme.textTheme.bodyLarge?.copyWith(
+                                      color: AppColors.red,
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 12,
+                                      wordSpacing: 1,
+                                    ))
+                                : Container(),
                           ],
                         ),
                       ],
                     ),
                   ),
                   SizedBox(height: 20),
-                  BlocConsumer<AuthenticationBloc, AuthenticationState>(
-                    listener: (context, state) {},
+                  BlocBuilder<AuthenticationBloc, AuthenticationState>(
                     builder: (context, state) {
                       return AppButton(
-                        isLoading: state is AuthenticationLoadingState || state is UpdateProfileLoadingState,
+                        isLoading: state is AuthenticationLoadingState ||
+                            state is UpdateProfileLoadingState,
                         onPressed: validate,
                         label: 'Save',
                         backgroundColor: theme.primaryColor,

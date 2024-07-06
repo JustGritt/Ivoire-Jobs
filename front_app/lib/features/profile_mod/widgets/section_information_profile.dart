@@ -78,8 +78,7 @@ class SectionInformationProfile extends StatelessWidget {
               const SizedBox(width: 20),
               Flexible(
                 child: Wrap(alignment: WrapAlignment.start, children: [
-                  Text(
-                      "sdfsdfsdf jksdjfjsdkfjsdf sdfjsdfskdfjskdf sdlfsdfj sdfsdfs fsdfsdfsdfsdf sdfdsfdsfsdf sdfsdfsdfsd fsdfsdfsdfsdfsd fsdf",
+                  Text(user.bio ?? 'No bio available',
                       style: theme.textTheme.labelMedium)
                 ]),
               ),

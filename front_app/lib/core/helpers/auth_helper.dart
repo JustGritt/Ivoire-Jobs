@@ -56,8 +56,8 @@ doRegister(UserSignup userSignup) async {
 Future<User?> getMyProfile() async {
   UserService us = serviceLocator<UserService>();
   try {
-    UserLoginResponse userLogin = await us.getMyProfile();
-    return userLogin.user;
+    User user = await us.getMyProfile();
+    return user;
   } on DioException catch (e) {
     logger.e(DioExceptionHandler(e).error.message);
     showError(context, DioExceptionHandler(e).title);

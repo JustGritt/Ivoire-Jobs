@@ -24,7 +24,7 @@ class UserService {
     return null;
   }
 
-  Future<UserLoginResponse> getMyProfile() async {
+  Future<User> getMyProfile() async {
     Response res = await _http
         .get(
           ApiEndpoint.appProfileUrl,
@@ -32,9 +32,8 @@ class UserService {
         .timeout(const Duration(seconds: 4));
     if (res.statusCode == 200) {
       ApiResponse apiResponse = ApiResponse.fromJson(res.data);
-      UserLoginResponse userLogin =
-          UserLoginResponse.fromJson(apiResponse.body);
-      return userLogin;
+      User user = User.fromMap(apiResponse.body['user']);
+      return user;
     }
     throw res.data['message'];
   }
