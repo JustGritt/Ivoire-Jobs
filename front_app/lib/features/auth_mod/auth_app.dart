@@ -47,9 +47,9 @@ class AuthApp extends RouteManager {
           return const CupertinoPage(child: RegisterController());
         }));
     addRoute(GoRoute(
-      path: AuthApp.emailValidation,
-      pageBuilder: (context, state) {
-        return const CupertinoPage(child: EmailValidationController());
-      }));
+        path: AuthApp.emailValidation,
+        pageBuilder: (context, state) {
+          return const CupertinoPage(child: EmailValidationController());
+        }));
   }
 }

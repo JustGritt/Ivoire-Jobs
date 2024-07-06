@@ -72,5 +72,4 @@ class DefaultFirebaseOptions {
     storageBucket: 'barassageapp.appspot.com',
     iosBundleId: 'app.barassage.com',
   );
-
 }

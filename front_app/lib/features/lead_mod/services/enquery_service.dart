@@ -48,6 +48,11 @@ class EnqueryService {
     };
     Response res = await _http.post(
       ApiEndpoint.enquery,
+      options: Options(
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      ),
       data: jsonEncode(_data),
     );
     if (res.statusCode == 200 || res.statusCode == 201) {

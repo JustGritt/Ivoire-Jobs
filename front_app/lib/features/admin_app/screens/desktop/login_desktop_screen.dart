@@ -106,7 +106,8 @@ class _LoginDesktopScreenState extends State<LoginDesktopScreen> {
                                   textAlign: TextAlign.center,
                                 ),
                                 Text(
-                                  appLocalizations.welcome_back_admin_description,
+                                  appLocalizations
+                                      .welcome_back_admin_description,
                                   style: theme.textTheme.displayMedium,
                                   textAlign: TextAlign.center,
                                 ),

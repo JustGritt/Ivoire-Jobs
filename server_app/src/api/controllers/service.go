@@ -810,6 +810,39 @@ func SearchService(c *fiber.Ctx) error {
 	return c.Status(http.StatusOK).JSON(serviceOutputs)
 }
 
+// GetAllBannedServices Godoc
+// @Summary Get all banned services
+// @Description Get all banned services
+// @Tags Service
+// @Produce json
+// @Success 200 {array} ServiceOutput
+// @Failure 400 {array} ErrorResponse
+// @Failure 401 {array} ErrorResponse
+// @Failure 500 {array} ErrorResponse
+// @Router /service/bans [get]
+func GetAllBannedServices(c *fiber.Ctx) error {
+	var errorList []*fiber.Error
+	services, err := serviceRepo.GetAllBannedServices()
+	if err != nil {
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusInternalServerError,
+				Message: "error getting banned services",
+			},
+		)
+		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
+	// Map services to ServiceOutput
+	var ouput []ServiceOutput
+	for _, s := range services {
+		ouput = append(ouput, *mapServiceToOutPut(&s))
+	}
+
+	return c.Status(http.StatusOK).JSON(ouput)
+}
+
 // ============================================================
 // =================== Private Methods ========================
 // ============================================================

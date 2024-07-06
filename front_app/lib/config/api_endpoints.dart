@@ -11,8 +11,8 @@ class ApiEndpoint {
   static const news = '$rapidUrl/v1/search';
 
   // Server Links
-  // static const baseUrl = 'https://api.barassage.com';
-  static const baseUrl = 'http://localhost:8000';
+  static const baseUrl = 'https://api.barassage.com';
+  // static const baseUrl = 'http://localhost:8000';
   static const api = '$baseUrl/api/v1';
 
   // Enqueries Endpoints
@@ -40,8 +40,11 @@ class ApiEndpoint {
   static const serviceDetails = '${api}/service/:id';
   // Services Categories Endpoints
   static const serviceCategories = '/category/collection';
-  // Push Token 
+  // Push Token
   static const pushTokens = '/auth/update-token';
   // become barasseur
   static const becomeBarasseur = '/member';
+  // Reports Endpoints
+  static const reports = '${api}/report/pending';
+  static const reportsDetails = '${api}/report/:id';
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'abuse_claims_screen.dart';
+import 'reports_screen.dart';
+import 'banlist_screen.dart';
 import 'manage_users_screen.dart';
 import 'manage_services_screen.dart';
 
@@ -17,7 +18,8 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
   final List<Widget> _screens = [
     const ManageUsersScreen(),
     const ManageServicesScreen(),
-    const AbuseClaimsScreen(),
+    const ReportScreen(),
+    const BanListScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -70,8 +72,13 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
             ),
             ListTile(
               leading: const Icon(Icons.warning),
-              title: const Text('Abuse Claims'),
+              title: const Text('Reports'),
               onTap: () => _onItemTapped(2),
+            ),
+            ListTile(
+              leading: const Icon(Icons.warning),
+              title: const Text('Ban List'),
+              onTap: () => _onItemTapped(3),
             ),
           ],
         ),

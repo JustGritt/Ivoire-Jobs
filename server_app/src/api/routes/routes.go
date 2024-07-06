@@ -51,6 +51,7 @@ func SetupRoutes(app *fiber.App) {
 	service := v1.Group("/service")
 	service.Get("/search", ctl.SearchService)
 	service.Get("/collection", ctl.GetAll)
+	service.Get("/bans", ctl.GetAllBannedServices)
 	service.Get("/:id/rating", ctl.GetAllRatingsFromService)
 	service.Get("/:id", ctl.GetServiceById)
 	service.Get("/:id/room", middlewares.RequireLoggedIn(), ctl.CreateOrGetRoom)
@@ -67,6 +68,7 @@ func SetupRoutes(app *fiber.App) {
 	// Report Group
 	report := v1.Group("/report")
 	report.Get("/collection", ctl.GetAllReports)
+	report.Get("/pending", ctl.GetAllPendingReports)
 	report.Put("/:id", ctl.ValidateReport)
 	report.Post("/", middlewares.RequireLoggedIn(), ctl.CreateReport)
 

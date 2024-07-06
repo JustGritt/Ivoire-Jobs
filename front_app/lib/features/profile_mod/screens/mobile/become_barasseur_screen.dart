@@ -3,9 +3,7 @@ import 'package:barassage_app/features/profile_mod/widgets/become_barasseur_info
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:animate_gradient/animate_gradient.dart';
-import 'package:glassmorphism/glassmorphism.dart';
 
-import '../../../auth_mod/widgets/app_button.dart';
 
 class BecomeBarasseurScreen extends StatefulWidget {
   const BecomeBarasseurScreen({super.key});
@@ -40,7 +38,7 @@ class _BecomeBarasseurScreenState extends State<BecomeBarasseurScreen>
 
     return CupertinoPageScaffold(
         child: AnimateGradient(
-          controller: _controller,
+      controller: _controller,
       primaryColors: IVORYCOAST_COLORS_SHUFFLED,
       secondaryColors: IVORYCOAST_COLORS,
       child: SizedBox(
@@ -51,9 +49,7 @@ class _BecomeBarasseurScreenState extends State<BecomeBarasseurScreen>
           children: [
             AnimateGradient(
               controller: _controller,
-              primaryBegin: Alignment.topLeft,
               primaryEnd: Alignment.bottomLeft,
-              secondaryBegin: Alignment.bottomLeft,
               secondaryEnd: Alignment.topRight,
               primaryColors: IVORYCOAST_COLORS,
               secondaryColors: IVORYCOAST_COLORS_SHUFFLED,
