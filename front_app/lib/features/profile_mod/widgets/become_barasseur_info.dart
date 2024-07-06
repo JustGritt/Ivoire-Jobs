@@ -56,8 +56,9 @@ class _BecomeBarasseurInfoState extends State<BecomeBarasseurInfo> {
         });
         if (errors_.entries.every((element) => element.value == null)) {
           becomeBarasseurFuture =
-              becomeBarasseurService.sendRequest(data['reason']);
-          context.read<AuthenticationBloc>().add(InitiateAuth());
+              becomeBarasseurService.sendRequest(data['reason']).then((data) {
+            context.read<AuthenticationBloc>().add(InitiateAuth());
+          });
         }
       } catch (e) {
         print(e);
