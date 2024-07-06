@@ -1,5 +1,6 @@
 import 'package:barassage_app/features/admin_app/admin_app.dart';
 import 'package:barassage_app/features/auth_mod/auth_app.dart';
+import 'package:flutter/foundation.dart';
 
 
 import '../core/classes/route_manager.dart';
@@ -10,6 +11,9 @@ import '../features/main_app/app.dart';
 
 class Routes extends RouteManager {
   Routes() {
+    if (kIsWeb) {
+      addAll(AdminApp().routes);
+    }
     addAll(AuthApp().routes);
     // addAll(LeadApp().routes);
     addAll(AdminApp().routes);
