@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:barassage_app/features/auth_mod/models/api_response.dart';
 import 'package:barassage_app/features/auth_mod/models/user.dart';
 import 'package:barassage_app/features/auth_mod/models/user_login.dart';
+import 'package:barassage_app/features/auth_mod/models/user_update.dart';
 import 'package:dio/dio.dart';
 
 import '../../../config/api_endpoints.dart';
@@ -23,7 +24,7 @@ class UserService {
     return null;
   }
 
-  Future<UserLoginResponse> getMyProfile() async {
+  Future<User> getMyProfile() async {
     Response res = await _http
         .get(
           ApiEndpoint.appProfileUrl,
@@ -31,9 +32,8 @@ class UserService {
         .timeout(const Duration(seconds: 4));
     if (res.statusCode == 200) {
       ApiResponse apiResponse = ApiResponse.fromJson(res.data);
-      UserLoginResponse userLogin =
-          UserLoginResponse.fromJson(apiResponse.body);
-      return userLogin;
+      User user = User.fromMap(apiResponse.body['user']);
+      return user;
     }
     throw res.data['message'];
   }
@@ -54,11 +54,6 @@ class UserService {
   Future<User?> register(UserSignup userSignup) async {
     Response res = await _http.post(
       ApiEndpoint.appRegisterUrl,
-      options: Options(
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      ),
       data: userSignup.toJson(),
     );
     if (res.statusCode == 200 || res.statusCode == 201) {
@@ -72,11 +67,6 @@ class UserService {
     Map<String, dynamic> data = userLogin.toJson();
     Response res = await _http.post(
       ApiEndpoint.appLoginUrl,
-      options: Options(
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      ),
       data: jsonEncode(data),
     );
     if (res.statusCode == 200) {
@@ -88,7 +78,19 @@ class UserService {
     throw res.data['message'];
   }
 
-  Future<bool> verifyEmailToken(String token) async {
+  Future<User?> update(UserUpdate user) async {
+    Response res = await _http.put(
+      ApiEndpoint.updateProfile,
+      data: user.toJson(),
+    );
+    if (res.statusCode == 200) {
+      ApiResponse apiResponse = ApiResponse.fromJson(res.data);
+      return User.fromJson(apiResponse.body);
+    }
+    return null;
+  }
+
+    Future<bool> verifyEmailToken(String token) async {
     Response res = await _http.get(
       '${ApiEndpoint.appEmailValidationUrl}?token=$token',
     );
@@ -96,15 +98,5 @@ class UserService {
       return true;
     }
     return false;
-  }
-
-  Future<List<User>?> getUsers() async {
-    Response res = await _http.get(ApiEndpoint.adminUsers);
-    if (res.statusCode == 200) {
-      List<User> users =
-          (res.data as List).map((e) => User.fromJson(e)).toList();
-      return users;
-    }
-    return null;
   }
 }

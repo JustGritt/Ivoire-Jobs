@@ -1,3 +1,4 @@
+import 'dart:developer';
 
 import 'package:barassage_app/core/classes/app_context.dart';
 import 'package:barassage_app/core/exceptions/dio_exceptions.dart';
@@ -40,15 +41,14 @@ doAuth(String email, String password) async {
 doRegister(UserSignup userSignup) async {
   UserService us = serviceLocator<UserService>();
   try {
-    debugPrint('Hee');
     User? user = await us.register(userSignup);
-    debugPrint('User: $user');
     SchedulerBinding.instance.addPostFrameCallback((_) {
       Nav.to(context, AuthApp.welcomeEmail);
       showMessage(context, 'Register Successful');
     });
   } on DioException catch (e) {
     logger.e(e);
+    print(e.message);
     showError(context, DioExceptionHandler(e).title);
   }
 }
@@ -56,8 +56,8 @@ doRegister(UserSignup userSignup) async {
 Future<User?> getMyProfile() async {
   UserService us = serviceLocator<UserService>();
   try {
-    UserLoginResponse userLogin = await us.getMyProfile();
-    return userLogin.user;
+    User user = await us.getMyProfile();
+    return user;
   } on DioException catch (e) {
     logger.e(DioExceptionHandler(e).error.message);
     showError(context, DioExceptionHandler(e).title);
@@ -88,29 +88,4 @@ void checkLogin(
       });
     }
   });
-}
-
-void checkRegisterToken(BuildContext context, String token) {
-  UserService us = UserService();
-  us.verifyEmailToken(token).then((value) {
-    if (value == false) {
-      SchedulerBinding.instance.addPostFrameCallback((_) {
-        // setState(() {
-        //   isEmailValidated = false;
-        //   isLoading = false;
-        // });
-      });
-    }
-  });
-}
-
-Future<List<User>?> getUsers() async {
-  UserService us = serviceLocator<UserService>();
-  try {
-    return await us.getUsers();
-  } on DioException catch (e) {
-    logger.e(DioExceptionHandler(e).error.message);
-    showError(context, DioExceptionHandler(e).title);
-    return null;
-  }
 }
