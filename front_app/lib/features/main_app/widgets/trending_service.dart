@@ -1,8 +1,9 @@
+import 'package:barassage_app/features/main_app/models/service_models/service_created_model.dart';
 import 'package:flutter/material.dart';
 import '../models/main/services_model.dart';
 
 class TrendingService extends StatelessWidget {
-  final Service service;
+  final ServiceCreatedModel service;
 
   const TrendingService({
     super.key,
@@ -39,7 +40,7 @@ class TrendingService extends StatelessWidget {
                       topRight: Radius.circular(8),
                     ),
                     image: DecorationImage(
-                      image: NetworkImage(service.image),
+                      image: NetworkImage(service.images.first),
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -55,7 +56,7 @@ class TrendingService extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(
-                      service.category.label, // Use the label property
+                      service.category.first, // Use the label property
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 12,
@@ -64,43 +65,43 @@ class TrendingService extends StatelessWidget {
                     ),
                   ),
                 ),
-                Positioned(
-                  top: 8,
-                  right: 8,
-                  child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: Colors.black54,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Row(
-                      children: [
-                        Text(
-                          service.rating.toString(),
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(width: 4),
-                        const Icon(
-                          Icons.star,
-                          color: Colors.white,
-                          size: 12,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                // Positioned(
+                //   top: 8,
+                //   right: 8,
+                //   child: Container(
+                //     padding:
+                //         const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                //     decoration: BoxDecoration(
+                //       color: Colors.black54,
+                //       borderRadius: BorderRadius.circular(8),
+                //     ),
+                //     child: Row(
+                //       children: [
+                //         Text(
+                //           service.rating.toString(),
+                //           style: const TextStyle(
+                //             color: Colors.white,
+                //             fontSize: 12,
+                //             fontWeight: FontWeight.bold,
+                //           ),
+                //         ),
+                //         const SizedBox(width: 4),
+                //         const Icon(
+                //           Icons.star,
+                //           color: Colors.white,
+                //           size: 12,
+                //         ),
+                //       ],
+                //     ),
+                //   ),
+                // ),
               ],
             ),
             const SizedBox(height: 8),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Text(
-                service.title,
+                service.name,
                 style: const TextStyle(
                   color: Colors.black,
                   fontSize: 16,
@@ -120,7 +121,7 @@ class TrendingService extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: Text(
-                    '\$${service.price.toStringAsFixed(2)}${service.paymentType == PaymentType.perHour ? ' /h' : ''}',
+                    '\$${service.price.toStringAsFixed(2)}${service.duration > 1 ? ' / ${service.duration} hours' : ''}',
                     style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,

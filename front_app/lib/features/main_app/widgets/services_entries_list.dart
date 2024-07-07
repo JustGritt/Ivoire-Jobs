@@ -1,28 +1,60 @@
 import 'package:barassage_app/features/main_app/app.dart';
+import 'package:barassage_app/features/main_app/models/service_models/service_created_model.dart';
+import 'package:barassage_app/features/main_app/services/service_services.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../models/main/services_entry_model.dart';
 import 'service_entry.dart';
 
-class ServicesEntriesList extends StatelessWidget {
-  final ServiceEntries serviceEntries = ServiceEntries();
-
+class ServicesEntriesList extends StatefulWidget {
   ServicesEntriesList({super.key});
 
   @override
+  State<ServicesEntriesList> createState() => _ServicesEntriesListState();
+}
+
+class _ServicesEntriesListState extends State<ServicesEntriesList> {
+  Future<List<ServiceCreatedModel>> serviceEntries = Future.value([]);
+
+  @override
+  void initState() {
+    serviceEntries = ServiceServices.getAll();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Column(
-      children: serviceEntries.serviceEntries.map((e) {
-        return Padding(
-          padding: const EdgeInsets.only(left: 8.0, bottom: 8.0, right: 8.0),
-          child: GestureDetector(
-            onTap: () {
-              context.push(App.detailService);
-            },
-            child: ServiceEntry(service: e),
-          ),
-        );
-      }).toList(),
-    );
+    return FutureBuilder(
+        future: serviceEntries,
+        builder: (context, state) {
+          if (state.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (state.hasError) {
+            return Center(
+              child: Text('Error: ${state.error}'),
+            );
+          } else if (state.data?.isEmpty ?? true) {
+            return Center(
+              child: Container(margin: EdgeInsets.symmetric(vertical: 50), child: Text('No data found')),
+            );
+          }
+
+          return Container(
+            child: ListView.builder(
+              itemCount: state.data?.length,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: GestureDetector(
+                    onTap: () {
+                      context.push('${App.home}/${App.detailService}');
+                    },
+                    child: ServiceEntry(service: state.data![index]),
+                  ),
+                );
+              },
+            ),
+          );
+        });
   }
 }

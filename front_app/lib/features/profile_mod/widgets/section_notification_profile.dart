@@ -45,9 +45,7 @@ class _SectionNotificationProfileState extends State<SectionNotificationProfile>
           color: theme.colorScheme.surface.withOpacity(0.3),
         ),
       ),
-      child: _preferences == null
-          ? Center(child: CircularProgressIndicator())
-          : Column(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text('Notifications',
@@ -66,11 +64,11 @@ class _SectionNotificationProfileState extends State<SectionNotificationProfile>
                 ],
               ),
               CupertinoSwitch(
-                  value: _preferences!.pushNotification == 'enabled',
+                  value: _preferences?.pushNotification == 'enabled',
                   activeColor: theme.primaryColor,
                   onChanged: (value) {
                     setState(() {
-                      _preferences = _preferences!.copyWith(
+                      _preferences = _preferences?.copyWith(
                           pushNotification: value ? 'enabled' : 'disabled');
                     });
                     _updatePreferences();
@@ -95,11 +93,11 @@ class _SectionNotificationProfileState extends State<SectionNotificationProfile>
                 ],
               ),
               CupertinoSwitch(
-                  value: _preferences!.messageNotification == 'enabled',
+                  value: _preferences?.messageNotification == 'enabled',
                   activeColor: theme.primaryColor,
                   onChanged: (value) {
                     setState(() {
-                      _preferences = _preferences!.copyWith(
+                      _preferences = _preferences?.copyWith(
                           messageNotification: value ? 'enabled' : 'disabled');
                     });
                     _updatePreferences();
