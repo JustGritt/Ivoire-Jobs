@@ -33,7 +33,7 @@ class HttpManager {
     // how to solve flutter CERTIFICATE_VERIFY_FAILED error
     // while performing a POST request?
     if (kIsWeb) {
-      _dio.options.headers['content-Type'] = '*';
+      _dio.options.headers['content-Type'] = 'application/json';
       _dio.options.headers['Access-Control-Allow-Origin'] = '*';
       _dio.options.headers['Access-Control-Allow-Methods'] = '*';
     }

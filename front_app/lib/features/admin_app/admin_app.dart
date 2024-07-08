@@ -1,14 +1,9 @@
-//import 'package:barassage_app/features/admin_app/controllers/abuse_claims_controller.dart';
-//import 'package:barassage_app/features/admin_app/controllers/admin_dashboard_controller.dart';
-//import 'package:barassage_app/features/admin_app/controllers/manage_services_controller.dart';
 import 'package:barassage_app/features/admin_app/controllers/controllers.dart';
 import 'package:barassage_app/features/admin_app/screens/desktop/splash_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/classes/route_manager.dart';
-//import 'controllers/login_admin_controller.dart';
-//import 'controllers/manage_users_controller.dart';
 
 class AdminApp extends RouteManager {
   static const String users = '/admin/users';
