@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"sync"
+	"time"
 
 	cfg "barassage/api/configs"
 	"barassage/api/models/message"
@@ -39,12 +40,38 @@ const (
 	CloseCodeNotAllowedInRoom = 4004
 )
 
+// Time intervals for ping-pong mechanism
+const (
+	pingPeriod = 30 * time.Second
+	pongWait   = 60 * time.Second
+)
+
 // HandleWebSocket manages the WebSocket connection
 func HandleWebSocket(c *websocket.Conn) {
 	// Ensure connection is closed after handling
 	defer func() {
 		if err := c.Close(); err != nil {
 			log.Println("Error closing connection:", err)
+		}
+	}()
+
+	// Set the initial read deadline
+	c.SetReadDeadline(time.Now().Add(pongWait))
+	c.SetPongHandler(func(string) error {
+		c.SetReadDeadline(time.Now().Add(pongWait))
+		return nil
+	})
+
+	// Start a goroutine to send ping messages periodically
+	ticker := time.NewTicker(pingPeriod)
+	defer ticker.Stop()
+	go func() {
+		for {
+			<-ticker.C
+			if err := c.WriteMessage(websocket.PingMessage, nil); err != nil {
+				log.Println("Error sending ping:", err)
+				return
+			}
 		}
 	}()
 
