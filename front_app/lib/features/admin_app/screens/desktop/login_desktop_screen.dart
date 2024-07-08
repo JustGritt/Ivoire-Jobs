@@ -49,12 +49,13 @@ class _LoginDesktopScreenState extends State<LoginDesktopScreen> {
                     child: ConstrainedBox(
                       constraints: const BoxConstraints(maxWidth: 400),
                       child: Column(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
                           Stack(
                             children: [
                               Container(
                                 padding:
-                                    const EdgeInsets.symmetric(vertical: 18.0),
+                                const EdgeInsets.symmetric(vertical: 18.0),
                                 child: SvgPicture.asset(
                                   fit: BoxFit.fill,
                                   'assets/images/ill_dx.svg',
@@ -71,7 +72,6 @@ class _LoginDesktopScreenState extends State<LoginDesktopScreen> {
                                     filter: ImageFilter.blur(
                                         sigmaX: 2.0, sigmaY: 2.0),
                                     child: Container(
-                                      // the size where the blurring starts
                                       height: 40,
                                       color: Colors.transparent,
                                     ),
@@ -87,7 +87,6 @@ class _LoginDesktopScreenState extends State<LoginDesktopScreen> {
                                     filter: ImageFilter.blur(
                                         sigmaX: 2.0, sigmaY: 2.0),
                                     child: Container(
-                                      // the size where the blurring starts
                                       height: 50,
                                       color: Colors.transparent,
                                     ),
@@ -142,20 +141,26 @@ class _LoginDesktopScreenState extends State<LoginDesktopScreen> {
                             ],
                           ),
                           const SizedBox(height: 15),
-                          SizedBox(
-                            width: double.infinity,
-                            child: AppButton(
-                              isLoading: state is AuthenticationLoadingState,
-                              onPressed: () async {
-                                if (_globalKey.currentState!.validate()) {
-                                  context.read<AuthenticationBloc>().add(
-                                        SignInUser(username!, password!),
-                                      );
-                                }
-                              },
-                              backgroundColor: theme.primaryColorDark,
-                              label: 'Login',
-                              stretch: true,
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 1.0),
+                            child: ConstrainedBox(
+                              constraints: const BoxConstraints(
+                                maxHeight: 64, // ensure button height is adequate
+                                maxWidth: 400, // ensure button width is adequate
+                              ),
+                              child: AppButton(
+                                isLoading: state is AuthenticationLoadingState,
+                                onPressed: () async {
+                                  if (_globalKey.currentState!.validate()) {
+                                    context.read<AuthenticationBloc>().add(
+                                      SignInUser(username!, password!),
+                                    );
+                                  }
+                                },
+                                backgroundColor: theme.primaryColorDark,
+                                label: 'Login',
+                                width: 400,
+                              ),
                             ),
                           ),
                           const SizedBox(height: 30),
@@ -165,14 +170,12 @@ class _LoginDesktopScreenState extends State<LoginDesktopScreen> {
                               children: <InlineSpan>[
                                 TextSpan(
                                   text: appLocalizations.btn_create,
-                                  style:
-                                      theme.textTheme.displayMedium?.copyWith(
+                                  style: theme.textTheme.displayMedium?.copyWith(
                                     color: theme.primaryColorDark,
                                     fontWeight: FontWeight.bold,
                                   ),
                                   recognizer: TapGestureRecognizer()
-                                    ..onTap =
-                                        () => context.push(AuthApp.register),
+                                    ..onTap = () => context.push(AuthApp.register),
                                 )
                               ],
                             ),
