@@ -8,7 +8,8 @@ class ApiEndpoint {
   // News Server
 
   // Server Links
-  static const baseUrl = 'https://api.barassage.com';
+  //static const baseUrl = 'https://api.barassage.com';
+  static const baseUrl = 'https://fantastic-space-doodle-w59vv7w5w7pfp9j-8000.app.github.dev';
   static const api = '${baseUrl}/api/v1';
 
   // Enqueries Endpoints
@@ -27,6 +28,7 @@ class ApiEndpoint {
   static const serviceCollection = '${api}/service/collection';
   static const adminLogin = AuthApp.login;
   static const abuseClaims = AdminApp.abuseClaims;
+  static const dashboardSettings =  '${api}/configuration';
 
   static const updateProfile = '/auth/update-profile';
 
