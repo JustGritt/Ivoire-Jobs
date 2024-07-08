@@ -50,6 +50,7 @@ func SetupRoutes(app *fiber.App) {
 	// Service Group
 	service := v1.Group("/service")
 	service.Get("/search", ctl.SearchService)
+	service.Get("/trending", ctl.GetTrendingServices)
 	service.Get("/collection", ctl.GetAll)
 	service.Get("/bans", ctl.GetAllBannedServices)
 	service.Get("/:id/rating", ctl.GetAllRatingsFromService)
