@@ -5,6 +5,7 @@ import (
 	"barassage/api/models/category"
 	"barassage/api/models/image"
 	"barassage/api/models/service"
+
 	categoryRepo "barassage/api/repositories/category"
 	serviceRepo "barassage/api/repositories/service"
 	userRepo "barassage/api/repositories/user"
@@ -61,23 +62,33 @@ type ServiceUpdateObject struct {
 }
 
 type ServiceOutput struct {
-	ServiceID   string   `json:"id"`
-	UserID      string   `json:"userId"`
-	Name        string   `json:"name"`
-	Description string   `json:"description"`
-	Price       float64  `json:"price"`
-	Status      bool     `json:"status"`
-	Duration    int      `json:"duration"`
-	IsBanned    bool     `json:"isBanned"`
-	Latitude    float64  `json:"latitude"`
-	Longitude   float64  `json:"longitude"`
-	Address     string   `json:"address"`
-	City        string   `json:"city"`
-	PostalCode  string   `json:"postalCode"`
-	Country     string   `json:"country"`
-	Images      []string `json:"images"`
-	CreatedAt   string   `json:"createdAt"`
-	Category    []string `json:"category"`
+	ServiceID   string     `json:"id"`
+	UserID      string     `json:"userId"`
+	Name        string     `json:"name"`
+	Description string     `json:"description"`
+	Price       float64    `json:"price"`
+	Status      bool       `json:"status"`
+	Duration    int        `json:"duration"`
+	IsBanned    bool       `json:"isBanned"`
+	Latitude    float64    `json:"latitude"`
+	Longitude   float64    `json:"longitude"`
+	Address     string     `json:"address"`
+	City        string     `json:"city"`
+	PostalCode  string     `json:"postalCode"`
+	Country     string     `json:"country"`
+	Images      []string   `json:"images"`
+	CreatedAt   string     `json:"createdAt"`
+	Category    []string   `json:"category"`
+	User        CustomUser `json:"user"`
+}
+
+type CustomUser struct {
+	ID        string `json:"id"`
+	Email     string `json:"email"`
+	FristName string `json:"firstname"`
+	LastName  string `json:"lastname"`
+	Bio       string `json:"bio"`
+	Member    string `json:"member"`
 }
 
 // CreateService Godoc
@@ -966,6 +977,18 @@ func mapServiceToOutPut(u *service.Service) *ServiceOutput {
 	for i, cat := range u.Categories {
 		categoriesNames[i] = cat.Name
 	}
+	user, err := userRepo.GetById(u.UserID)
+	if err != nil {
+		return nil
+	}
+	CustomUser := CustomUser{
+		ID:        u.UserID,
+		Email:     user.Email,
+		FristName: user.Firstname,
+		LastName:  user.Lastname,
+		Bio:       user.Bio,
+		Member:    user.Member[len(user.Member)-1].Status,
+	}
 	return &ServiceOutput{
 		ServiceID:   u.ID,
 		UserID:      u.UserID,
@@ -983,6 +1006,7 @@ func mapServiceToOutPut(u *service.Service) *ServiceOutput {
 		Country:     u.Country,
 		Images:      imageUrls,
 		Category:    categoriesNames,
+		User:        CustomUser,
 		CreatedAt:   u.CreatedAt.Format("2006-01-02"),
 	}
 }
