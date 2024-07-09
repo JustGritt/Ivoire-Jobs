@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../screens/desktop/admin_dashboard_screen.dart';
 
 class AdminDashboardController extends StatelessWidget {
@@ -10,7 +9,7 @@ class AdminDashboardController extends StatelessWidget {
     return Title(
       title: 'Admin Dashboard',
       color: Colors.blue,
-      child: const AdminDashboardScreen(),
+      child: AdminDashboardScreen(),
     );
   }
 }
