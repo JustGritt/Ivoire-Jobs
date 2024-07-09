@@ -329,7 +329,6 @@ func Login(c *fiber.Ctx) error {
 // @Description Get the list of all users
 // @Tags Auth
 // @Produce json
-// @Param payload body UserLogin true "Login Body"
 // @Success 200 {object} Response "List of users"
 // @Failure 400 {array} ErrorResponse "Validation error or users not found"
 // @Failure 401 {array} ErrorResponse "Unauthorized"

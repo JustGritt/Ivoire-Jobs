@@ -69,7 +69,7 @@ func GetAllBannedServices() ([]service.Service, error) {
 
 func GetAllServices() ([]service.Service, error) {
 	var services []service.Service
-	///find all service that are not banned and are active
+	// Find all services that are not banned and are active, preload with their categories and images and left join raw queri on userID to get the user
 	if err := db.PgDB.Preload("Images").Preload("Categories").Where("status = ? AND is_banned = ?", true, false).Find(&services).Error; err != nil {
 		return nil, err
 	}
