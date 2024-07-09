@@ -89,6 +89,7 @@ type CustomUser struct {
 	LastName  string `json:"lastname"`
 	Bio       string `json:"bio"`
 	Member    string `json:"member"`
+	CreateAt  string `json:"createdAt"`
 }
 
 // CreateService Godoc
@@ -988,6 +989,7 @@ func mapServiceToOutPut(u *service.Service) *ServiceOutput {
 		LastName:  user.Lastname,
 		Bio:       user.Bio,
 		Member:    user.Member[len(user.Member)-1].Status,
+		CreateAt:  user.CreatedAt.Format("2006-01-02"),
 	}
 	return &ServiceOutput{
 		ServiceID:   u.ID,
