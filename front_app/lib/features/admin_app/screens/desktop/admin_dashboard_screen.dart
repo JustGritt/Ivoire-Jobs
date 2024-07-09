@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:barassage_app/core/blocs/authentication/authentication_bloc.dart';
 import 'package:go_router/go_router.dart';
 import '../screens.dart';
+import '../../widgets/admin_menu.dart'; // Import the common AdminScaffold widget
 
 class AdminDashboardScreen extends StatefulWidget {
   const AdminDashboardScreen({super.key});
@@ -12,7 +11,7 @@ class AdminDashboardScreen extends StatefulWidget {
 }
 
 class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
-  int _selectedIndex = 0;
+  int _selectedIndex = -1; // Default to a placeholder screen
 
   final List<String> _routes = [
     '/admin/users',
@@ -26,94 +25,22 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     setState(() {
       _selectedIndex = index;
     });
-    context.push(_routes[index]); // Navigate to the selected route and update the URL
-    Navigator.pop(context); // Close the drawer
-  }
 
-  void _logout() {
-    BlocProvider.of<AuthenticationBloc>(context).add(AdminSignOut());
+    // Defer the navigation to avoid modifying the widget tree during the build phase
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.go(_routes[index]); // Use context.go instead of push to replace the current route
+
+      if (Scaffold.of(context).isDrawerOpen) {
+        Navigator.pop(context); // Close the drawer if it's open
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        iconTheme: const IconThemeData(
-          color: Colors.black,
-        ),
-        title: const Text(
-          'Admin Dashboard',
-          style: TextStyle(
-            color: Colors.black,
-          ),
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: _logout,
-          ),
-        ],
-      ),
-      drawer: Drawer(
-        backgroundColor: Colors.white,
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.black,
-              ),
-              child: Text(
-                'Admin Menu',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                ),
-              ),
-            ),
-            _buildDrawerItem(
-              icon: Icons.people,
-              text: 'Manage Users',
-              index: 0,
-            ),
-            _buildDrawerItem(
-              icon: Icons.build,
-              text: 'Manage Services',
-              index: 1,
-            ),
-            _buildDrawerItem(
-              icon: Icons.warning,
-              text: 'Reports',
-              index: 2,
-            ),
-            _buildDrawerItem(
-              icon: Icons.block,
-              text: 'Ban List',
-              index: 3,
-            ),
-            _buildDrawerItem(
-              icon: Icons.settings,
-              text: 'Settings',
-              index: 4,
-            ),
-            const Divider(),
-            ListTile(
-              leading: const Icon(Icons.logout),
-              title: const Text('Logout'),
-              onTap: _logout,
-            ),
-          ],
-        ),
-      ),
+    return AdminScaffold(
+      title: 'Admin Dashboard',
       body: _buildBody(),
-    );
-  }
-
-  Widget _buildDrawerItem({required IconData icon, required String text, required int index}) {
-    return ListTile(
-      leading: Icon(icon),
-      title: Text(text),
-      onTap: () => _onItemTapped(index),
     );
   }
 

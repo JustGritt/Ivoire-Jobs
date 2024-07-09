@@ -8,6 +8,7 @@ import '../../core/blocs/authentication/authentication_bloc.dart';
 import 'package:barassage_app/features/admin_app/screens/desktop/splash_screen.dart';
 
 class AdminApp extends RouteManager {
+  static const String home = '/';
   static const String users = '/admin/users';
   static const String adminLogin = '/admin/login';
   static const String services = '/admin/services';
@@ -17,11 +18,17 @@ class AdminApp extends RouteManager {
   static const String settings = '/admin/settings';
 
   AdminApp() {
-    //add initial route
+    //add non authenticated routes
+    addRoute(GoRoute(
+      path: AdminApp.home,
+      pageBuilder: (context, state) {
+        return const CupertinoPage(child: HomeController());
+        },
+    ));
     addRoute(GoRoute(
       path: AdminApp.adminLogin,
       pageBuilder: (context, state) {
-        return const CupertinoPage(child: LoginDesktopScreen());
+        return const CupertinoPage(child: LoginDesktopController());
       },
     ));
 
@@ -89,7 +96,7 @@ class AdminApp extends RouteManager {
       redirect: (context, state) {
         final authenticationState = BlocProvider.of<AuthenticationBloc>(context).state;
         if (authenticationState is! AuthenticationSuccessState) {
-          return AdminApp.adminLogin;
+          return AdminApp.home;
         }
         return null;
       },

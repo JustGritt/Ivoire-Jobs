@@ -134,9 +134,6 @@ class _DashboardSettingsState extends State<DashboardSettings> {
     final double maxWidth = MediaQuery.of(context).size.width * 2 / 3;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Settings'),
-      ),
       body: Center(
         child: Container(
           width: maxWidth,

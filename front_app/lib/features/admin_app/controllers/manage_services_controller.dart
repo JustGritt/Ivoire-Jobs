@@ -1,5 +1,7 @@
 import 'package:barassage_app/features/admin_app/screens/desktop/manage_services_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:barassage_app/features/admin_app/widgets/admin_menu.dart'; // Import the common AdminScaffold widget
+
 
 class ServicesController extends StatelessWidget {
   const ServicesController({super.key});
@@ -7,9 +9,11 @@ class ServicesController extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Title(
-      title: 'Manage Users',
       color: Colors.blue,
-      child: const ManageServicesScreen(),
+      child: AdminScaffold(
+        title: 'Manage Services',
+        body: const ManageServicesScreen(),
+      ),
     );
   }
 }

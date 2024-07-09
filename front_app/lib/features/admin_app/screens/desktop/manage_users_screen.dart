@@ -68,14 +68,6 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Manage Users',
-          style: TextStyle(
-            color: Colors.black,
-          ),
-        ),
-      ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : Center(
