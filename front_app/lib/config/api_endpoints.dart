@@ -29,6 +29,7 @@ class ApiEndpoint {
   static const adminLogin = AuthApp.login;
   static const abuseClaims = AdminApp.abuseClaims;
   static const dashboardSettings =  '${api}/configuration';
+  static const banUser = '${api}/ban';
 
   static const updateProfile = '/auth/update-profile';
 
