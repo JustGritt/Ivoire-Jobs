@@ -20,7 +20,10 @@ class BottomBarGoRouter extends StatelessWidget {
     List<String> hideBottomBarPaths = [
       '/app/services/newService',
       '/app/services/placesPicker',
-      '/app/profile/becomeWorker'
+      '/app/profile/becomeWorker',
+      '/app/home/detailService',
+      '/app/home/bookingService',
+   
     ];
 
     final currentPath = navigationShell.shellRouteContext.routerState.uri;

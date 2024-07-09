@@ -6,14 +6,11 @@ import '../features/features.dart';
 
 class ApiEndpoint {
   // News Server
-  static const rapidUrl = 'https://free-news.p.rapidapi.com';
-  static const apiUrl = 'http://10.237.232.0:8000';
-  static const news = '$rapidUrl/v1/search';
 
   // Server Links
-  static const baseUrl = 'https://api.barassage.com';
-  // static const baseUrl = 'http://localhost:8000';
-  static const api = '$baseUrl/api/v1';
+  //static const baseUrl = 'https://api.barassage.com';
+  static const baseUrl = 'https://fantastic-space-doodle-w59vv7w5w7pfp9j-8000.app.github.dev';
+  static const api = '${baseUrl}/api/v1';
 
   // Enqueries Endpoints
   static const enqueries = '${api}enqueries?populate=*&sort[0]=id%3Adesc';
@@ -31,6 +28,7 @@ class ApiEndpoint {
   static const serviceCollection = '${api}/service/collection';
   static const adminLogin = AuthApp.login;
   static const abuseClaims = AdminApp.abuseClaims;
+  static const dashboardSettings =  '${api}/configuration';
 
   static const updateProfile = '/auth/update-profile';
 
@@ -38,7 +36,7 @@ class ApiEndpoint {
   static const myServices = '${api}/user/:id/service';
   // Services Endpoints
   static const services = '${api}/service';
-  // Services collection 
+  // Services collection
   static const servicesCollection = '${api}/service/collection';
   // Services details Endpoints
   static const serviceDetails = '${api}/service/:id';
@@ -46,6 +44,8 @@ class ApiEndpoint {
   static const serviceCategories = '/category/collection';
   // Push Token
   static const pushTokens = '/auth/update-token';
+  // Notifications preferences
+  static const notificationPreferences = '/user/notification-preference';
   // become barasseur
   static const becomeBarasseur = '/member';
   // Reports Endpoints

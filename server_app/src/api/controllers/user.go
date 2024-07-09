@@ -149,7 +149,7 @@ func Register(c *fiber.Ctx) error {
 	}
 
 	// Send verification email
-	verificationLink := fmt.Sprintf("%s/verify-email?token=%s", cfg.GetConfig().FrontendURL, tokenString)
+	verificationLink := fmt.Sprintf("%s/#/auth/verify-email?token=%s", cfg.GetConfig().FrontendURL, tokenString)
 	emailData := map[string]interface{}{
 		"action_url": verificationLink,
 		"email":      u.Email,

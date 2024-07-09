@@ -1,15 +1,16 @@
+import 'package:barassage_app/core/helpers/extentions/string_extension.dart';
+import 'package:barassage_app/features/main_app/models/service_models/service_created_model.dart';
 import 'package:flutter/material.dart';
-import '../models/main/services_model.dart';
 
 class ServiceEntry extends StatelessWidget {
-  final Service service;
+  final ServiceCreatedModel service;
 
   const ServiceEntry({super.key, required this.service});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 5.0),
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
@@ -26,50 +27,6 @@ class ServiceEntry extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 8),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Row(
-                children: [
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: Colors.black54,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Text(
-                      service.category.label,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: Colors.black54,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Row(children: [
-                        Text(
-                          service.rating.toStringAsFixed(2),
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(width: 4),
-                        const Icon(Icons.star, color: Colors.white, size: 12),
-                      ])),
-                ],
-              ),
-            ),
-            const SizedBox(height: 8),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -79,7 +36,7 @@ class ServiceEntry extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Text(
-                        service.title,
+                        service.name,
                         style: const TextStyle(
                           color: Colors.black,
                           fontSize: 16,
@@ -101,7 +58,7 @@ class ServiceEntry extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Text(
-                        '\$${service.price.toStringAsFixed(2)}${service.paymentType == PaymentType.perHour ? ' /h' : ''}',
+                        '${service.price.toStringAsFixed(2)} XOF',
                         style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
@@ -116,13 +73,15 @@ class ServiceEntry extends StatelessWidget {
             const SizedBox(height: 8),
             Row(
               children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Text(
-                    service.providerName,
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 14,
+                Flexible(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Text(
+                      service.address,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                      ),
                     ),
                   ),
                 ),
@@ -132,7 +91,7 @@ class ServiceEntry extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: Text(
-                    service.location,
+                    service.description.truncateTo(20),
                     style: const TextStyle(
                       color: Colors.black,
                       fontSize: 14,

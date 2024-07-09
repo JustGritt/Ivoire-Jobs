@@ -1,13 +1,12 @@
 package controllers
 
 import (
+	userRepo "barassage/api/repositories/user"
+	"barassage/api/services/notification"
 	"context"
 	"log"
 	"net/http"
 
-	"barassage/api/services/notification"
-
-	"firebase.google.com/go/v4/messaging"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -19,25 +18,25 @@ import (
 // @Router /home [get]
 func HomeController(c *fiber.Ctx) error {
 
-	// Send to a single device
-	token := "dZGeqepVHk0pr25DTN6EY4:APA91bHLgtqodZI_8jQ5tuE6SY5rQGeGFMORpVW6I1nre2e5K9kImjyHn4FOrbJ3RWPxDThwwOR7Tgku-1QMAZ-VsnNPy45I7y2WuV_o1fK__DGCxm8PBxs6RWJwsG6AvH64Urdot1ME"
+	//get the user from the context
+	user, err := userRepo.GetById("d4e1f48c-8afc-458a-a63b-e08e5ffbae12")
+	if err != nil {
+		log.Fatalf("error getting user: %v", err)
+	}
+	domain := notification.ServiceDomain
 	resp, err := notification.Send(
 		context.TODO(),
-		&messaging.Message{
-			Token: token,
-			Data: map[string]string{
-				"Indexeur": "Le poulet c'est delicieux",
-			},
+		map[string]string{
+			"Indexeur": "Le poulet c'est delicieux",
 		},
+		user,
+		domain,
 	)
 	if err != nil {
-		log.Fatalf("error sending message: %v", err)
+		log.Printf("error sending message: %v", err)
+		return c.Status(http.StatusInternalServerError).JSON(HTTPResponse(http.StatusInternalServerError, "Error", err.Error()))
 	}
-	log.Println("success count:", resp.SuccessCount)
-	log.Println("failure count:", resp.FailureCount)
-	log.Println("message id:", resp.Responses[0].MessageID)
-	log.Println("error msg:", resp.Responses[0].Error)
-
+	log.Printf("%d messages were sent successfully\n", resp.SuccessCount)
 	response := HTTPResponse(http.StatusOK, "Success", "Welcome Home")
 	return c.JSON(response)
 }

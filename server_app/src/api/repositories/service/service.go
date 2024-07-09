@@ -89,28 +89,83 @@ func Delete(service *service.Service) error {
 }
 
 // SearchServices searches for services by name, price, or both using dynamic query construction
-func SearchServices(name string, minPrice float64, maxPrice float64) ([]service.Service, error) {
+func SearchServices(name string, minPrice float64, maxPrice float64, city string, country string, categories []string) ([]service.Service, error) {
 	var services []service.Service
 	query := db.PgDB.Model(&service.Service{})
 
 	// Construct the query based on the provided parameters
 	if name != "" {
-		query = query.Where("LOWER(name) LIKE ?", "%"+strings.ToLower(name)+"%")
+		query = query.Where("LOWER(services.name) LIKE ?", "%"+strings.ToLower(name)+"%")
 	}
 	if minPrice > 0 {
-		query = query.Where("price >= ?", minPrice)
+		query = query.Where("services.price >= ?", minPrice)
 	}
 	if maxPrice > 0 {
-		query = query.Where("price <= ?", maxPrice)
+		query = query.Where("services.price <= ?", maxPrice)
+	}
+	if city != "" {
+		query = query.Where("LOWER(services.city) LIKE ?", "%"+strings.ToLower(city)+"%")
+	}
+	if country != "" {
+		query = query.Where("LOWER(services.country) LIKE ?", "%"+strings.ToLower(country)+"%")
+	}
+	if len(categories) > 0 {
+		query = query.Joins("JOIN service_categories ON services.id = service_categories.service_id").
+			Joins("JOIN categories ON service_categories.category_id = categories.id").
+			Where("categories.name IN (?)", categories)
 	}
 
-	//check if the service is active and not banned
-	query = query.Where("status = ? AND is_banned = ?", true, false)
+	// Check if the service is active and not banned
+	query = query.Where("services.status = ? AND services.is_banned = ?", true, false)
 
-	// Execute the query and preload the images
+	// Execute the query and preload the images and categories
 	if err := query.Preload("Images").Preload("Categories").Find(&services).Error; err != nil {
 		return nil, err
 	}
+	return services, nil
+}
+
+// GetTrendingServices returns the top 5 services with the most views
+func GetTrendingServices() ([]service.Service, error) {
+	var services []service.Service
+	// Find the top 5 services with the most bookings form bookings table
+	query := db.PgDB.Model(&service.Service{}).
+		Select("services.*").
+		Joins("JOIN bookings ON services.id = bookings.service_id").
+		Group("services.id").
+		Order("COUNT(bookings.id) DESC").
+		Limit(5).
+		Preload("Images").
+		Preload("Categories")
+
+	if err := query.Find(&services).Error; err != nil {
+		return nil, err
+	}
+
+	// If less than 5 services are found, add remaining services from the service table
+	if len(services) < 5 {
+		var remainingServices []service.Service
+		// Add the remaining services from the service table
+		subQuery := db.PgDB.Model(&service.Service{}).
+			Select("services.id").
+			Joins("JOIN bookings ON services.id = bookings.service_id").
+			Group("services.id").
+			Order("COUNT(bookings.id) DESC").
+			Limit(5)
+
+		if err := db.PgDB.Model(&service.Service{}).
+			Where("services.id NOT IN (?)", subQuery).
+			Limit(5 - len(services)).
+			Preload("Images").
+			Preload("Categories").
+			Find(&remainingServices).Error; err != nil {
+			return nil, err
+		}
+
+		// Combine the two lists
+		services = append(services, remainingServices...)
+	}
+
 	return services, nil
 }
 

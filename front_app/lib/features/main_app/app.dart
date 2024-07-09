@@ -4,9 +4,12 @@ import 'package:barassage_app/core/init_dependencies.dart';
 import 'package:barassage_app/features/auth_mod/screens/mobile/main_wrapper.dart';
 import 'package:barassage_app/features/auth_mod/screens/mobile/splash_mobile_screen.dart';
 import 'package:barassage_app/features/main_app/Screens/mobile/new_service.dart';
+import 'package:barassage_app/features/main_app/Screens/mobile/service_booking.dart';
 import 'package:barassage_app/features/main_app/Screens/mobile/services_details.dart';
 import 'package:barassage_app/features/main_app/controllers/controller.dart';
 import 'package:barassage_app/features/main_app/controllers/main/services_controller.dart';
+import 'package:barassage_app/features/main_app/models/service_models/service_create_model.dart';
+import 'package:barassage_app/features/main_app/models/service_models/service_created_model.dart';
 import 'package:barassage_app/features/main_app/widgets/transition_page.dart';
 import 'package:barassage_app/features/profile_mod/controllers/main/profile_controller.dart';
 import 'package:barassage_app/features/profile_mod/screens/mobile/become_barasseur_screen.dart';
@@ -27,6 +30,7 @@ class App extends RouteManager {
   static const String placePicker = 'placesPicker';
   static const String serviceNew = 'newService';
   static const String serviceNewSuccess = 'newServiceSuccess';
+  static const String bookingService = 'bookingService';
   static const String splash = '${App.name}/splash';
   static const String contact = '${App.name}/contact';
   static const String news = '${App.name}/news';
@@ -55,7 +59,12 @@ class App extends RouteManager {
                 routes: [
                   GoRoute(
                     path: App.detailService,
-                    builder: (context, state) => ServiceDetailPage(),
+                    builder: (context, state) => ServiceDetailPage(service: state.extra as ServiceCreatedModel,),
+                  ),
+                  GoRoute(
+                    name: App.bookingService,
+                    path: App.bookingService,
+                    builder: (context, state) => ServiceBookingScreen(),
                   ),
                 ],
               ),
