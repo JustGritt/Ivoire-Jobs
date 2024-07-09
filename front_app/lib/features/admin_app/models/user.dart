@@ -29,8 +29,8 @@ class User {
         email: json["email"] ?? '',
         bio: json['bio'],
         profilePicture: json['profilePicture'] ?? '',
-        createdAt:
-            DateTime.parse(json["createdAt"] ?? DateTime.now().toIso8601String()),
+        createdAt: DateTime.parse(
+            json["createdAt"] ?? DateTime.now().toIso8601String()),
       );
 
   Map<String, dynamic> toJson() => {
@@ -94,7 +94,9 @@ class User {
       profilePicture: map['profilePicture'] ?? '',
       bio: map['bio'] ?? '',
       id: map['id'] ?? '',
-      createdAt: map['createdAt'] != null ? DateTime.parse(map['createdAt']) : DateTime.now(),
+      createdAt: map['createdAt'] != null
+          ? DateTime.parse(map['createdAt'])
+          : DateTime.now(),
     );
   }
 }

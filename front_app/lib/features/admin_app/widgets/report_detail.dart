@@ -92,8 +92,12 @@ class _ReportDetailsScreenState extends State<ReportDetailsScreen> {
                     ElevatedButton(
                       onPressed: () {
                         // Using Provider to access ReportProvider and validate the report
-                        final reportProvider = Provider.of<ReportsProvider>(context, listen: false);
-                        reportProvider.updateReportStatus(widget.report).then((_) {
+                        final reportProvider = Provider.of<ReportsProvider>(
+                            context,
+                            listen: false);
+                        reportProvider
+                            .updateReportStatus(widget.report)
+                            .then((_) {
                           // After updating the report status, pop the current screen
                           Navigator.of(context).pop();
                         }).catchError((error) {

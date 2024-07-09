@@ -91,7 +91,6 @@ class ServiceDetailPage extends StatelessWidget {
             ),
           ),
 
-
           Column(
             children: [
               const SizedBox(height: 24),

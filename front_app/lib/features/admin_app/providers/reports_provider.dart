@@ -24,7 +24,8 @@ class ReportsProvider extends ChangeNotifier {
     try {
       Response res = await _http.get(ApiEndpoint.reports);
       if (res.statusCode == 200 && res.data is List) {
-        _reports = List<Report>.from(res.data.map((item) => Report.fromJson(item)));
+        _reports =
+            List<Report>.from(res.data.map((item) => Report.fromJson(item)));
       } else {
         print("Unexpected response format");
       }

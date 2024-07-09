@@ -18,7 +18,8 @@ class _ReportScreenState extends State<ReportScreen> {
   @override
   void initState() {
     super.initState();
-    final reportsProvider = Provider.of<ReportsProvider>(context, listen: false);
+    final reportsProvider =
+        Provider.of<ReportsProvider>(context, listen: false);
     futureReports = reportsProvider.getAllReports();
   }
 

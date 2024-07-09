@@ -16,7 +16,7 @@ class RegisterEmailValidation extends StatefulWidget {
 class _RegisterEmailValidationState extends State<RegisterEmailValidation> {
   bool isEmailValidated = false;
   bool isLoading = true;
-  var token = web.window.location.href.split('token=')[1] ?? '';
+  var token = web.window.location.href.split('token=')[1];
 
   @override
   void initState() {

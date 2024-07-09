@@ -22,10 +22,12 @@ class _BanListScreenState extends State<BanListScreen> {
   void initState() {
     super.initState();
     Future.microtask(() {
-      final bannedServicesProvider = Provider.of<BannedServicesProvider>(context, listen: false);
+      final bannedServicesProvider =
+          Provider.of<BannedServicesProvider>(context, listen: false);
       futureBannedService = bannedServicesProvider.getAllBannedServices();
 
-      final bannedUsersProvider = Provider.of<BannedUsersProvider>(context, listen: false);
+      final bannedUsersProvider =
+          Provider.of<BannedUsersProvider>(context, listen: false);
       futureBannedUsers = bannedUsersProvider.getAllBannedUsers();
     });
   }
@@ -96,7 +98,8 @@ class _BanListScreenState extends State<BanListScreen> {
                             DataCell(Text(user.userId)),
                             DataCell(Text(user.reason)),
                             DataCell(Text(user.nbReports)),
-                            DataCell(Text(DateFormat.yMMMd().format(user.createdAt))),
+                            DataCell(Text(
+                                DateFormat.yMMMd().format(user.createdAt))),
                           ],
                         );
                       }).toList(),

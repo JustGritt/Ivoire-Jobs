@@ -36,14 +36,22 @@ class Service {
       title: json['name'] ?? '',
       description: json['description'] ?? '',
       image: json['image'] ?? '',
-      price: json['price'].toString(), // Ensuring price is a string
-      duration: json['duration'].toString(), // Ensuring duration is a string
-      status: json['status'].toString(), // Ensuring status is a string
+      price: json['price'].toString(),
+      duration: json['duration'].toString(),
+      status: json['status'].toString(),
       isBanned: json['isBanned'] ?? false,
-      createdAt: json['createdAt'] != null ? DateTime.parse(json['createdAt']) : DateTime.now(),
-      updatedAt: json['updatedAt'] != null ? DateTime.parse(json['updatedAt']) : DateTime.now(),
-      category: json['category'] != null && json['category'].isNotEmpty ? Category.fromJson(json['category']) : null,
-      user: json['user'] != null && json['user'].isNotEmpty ? User.fromJson(json['user']) : null,
+      createdAt: json['createdAt'] != null
+          ? DateTime.parse(json['createdAt'])
+          : DateTime.now(),
+      updatedAt: json['updatedAt'] != null
+          ? DateTime.parse(json['updatedAt'])
+          : DateTime.now(),
+      category: json['category'] != null && json['category'].isNotEmpty
+          ? Category.fromJson(json['category'])
+          : null,
+      user: json['user'] != null && json['user'].isNotEmpty
+          ? User.fromJson(json['user'])
+          : null,
     );
   }
 

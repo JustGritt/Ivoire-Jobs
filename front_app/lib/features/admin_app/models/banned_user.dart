@@ -18,8 +18,11 @@ class BannedUser {
       id: json['id'] ?? '',
       userId: json['userId'] ?? '',
       reason: json['reason'] ?? 'No reason provided',
-      nbReports: json['nbReports'] ?? '0', // Default to '0' if nbReports is null
-      createdAt: json['createdAt'] != null ? DateTime.parse(json['createdAt']) : DateTime.now(),
+      nbReports:
+          json['nbReports'] ?? '0',
+      createdAt: json['createdAt'] != null
+          ? DateTime.parse(json['createdAt'])
+          : DateTime.now(),
     );
   }
 
