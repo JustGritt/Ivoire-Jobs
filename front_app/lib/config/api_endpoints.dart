@@ -8,8 +8,8 @@ class ApiEndpoint {
   // News Server
 
   // Server Links
-  //static const baseUrl = 'https://api.barassage.com';
-  static const baseUrl = 'https://fantastic-space-doodle-w59vv7w5w7pfp9j-8000.app.github.dev';
+  static const baseUrl = 'https://api.barassage.com';
+  //static const baseUrl = 'https://fantastic-space-doodle-w59vv7w5w7pfp9j-8000.app.github.dev';
   static const api = '${baseUrl}/api/v1';
 
   // Enqueries Endpoints
