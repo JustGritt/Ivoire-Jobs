@@ -17,15 +17,14 @@ class ReportsProvider extends ChangeNotifier {
 
   List<Report> get reports => _reports;
 
+  // Handle fetching all reports
   Future<List<Report>> getAllReports() async {
     isLoading = true;
     notifyListeners();
     try {
       Response res = await _http.get(ApiEndpoint.reports);
       if (res.statusCode == 200 && res.data is List) {
-        print(res.data);
-        _reports =
-            List<Report>.from(res.data.map((item) => Report.fromJson(item)));
+        _reports = List<Report>.from(res.data.map((item) => Report.fromJson(item)));
       } else {
         print("Unexpected response format");
       }

@@ -17,6 +17,9 @@ class _ReportDetailsScreenState extends State<ReportDetailsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Report Details'),
+        titleTextStyle: const TextStyle(color: Colors.black, fontSize: 20),
+        backgroundColor: Colors.white,
+        iconTheme: const IconThemeData(color: Colors.black),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -27,7 +30,7 @@ class _ReportDetailsScreenState extends State<ReportDetailsScreen> {
             borderRadius: BorderRadius.circular(10),
           ),
           child: Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -77,10 +80,10 @@ class _ReportDetailsScreenState extends State<ReportDetailsScreen> {
                             horizontal: 20, vertical: 10),
                         backgroundColor: Colors.redAccent,
                         shadowColor: Colors.redAccent,
+                        foregroundColor: Colors.white, // Ensure text is white
                         textStyle: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black,
                         ),
                       ),
                       child: const Text('Remove'),
@@ -107,10 +110,10 @@ class _ReportDetailsScreenState extends State<ReportDetailsScreen> {
                             horizontal: 20, vertical: 10),
                         backgroundColor: Colors.green,
                         shadowColor: Colors.green,
+                        foregroundColor: Colors.white, // Ensure text is white
                         textStyle: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black,
                         ),
                       ),
                       child: const Text('Validate'),

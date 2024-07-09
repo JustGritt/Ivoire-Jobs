@@ -47,4 +47,6 @@ class ApiEndpoint {
   // Reports Endpoints
   static const reports = '${api}/report/pending';
   static const reportsDetails = '${api}/report/:id';
+  // Ban Endpoints
+  static const bannedUsers = '${api}/ban/collection';
 }

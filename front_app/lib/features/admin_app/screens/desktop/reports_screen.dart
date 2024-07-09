@@ -1,8 +1,8 @@
-import 'package:barassage_app/features/admin_app/models/report.dart';
-import 'package:barassage_app/features/admin_app/widgets/report_card.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:barassage_app/features/admin_app/providers/reports_provider.dart';
+import 'package:barassage_app/features/admin_app/widgets/report_card.dart';
+import 'package:barassage_app/features/admin_app/models/report.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class ReportScreen extends StatefulWidget {
@@ -18,8 +18,7 @@ class _ReportScreenState extends State<ReportScreen> {
   @override
   void initState() {
     super.initState();
-    final reportsProvider =
-        Provider.of<ReportsProvider>(context, listen: false);
+    final reportsProvider = Provider.of<ReportsProvider>(context, listen: false);
     futureReports = reportsProvider.getAllReports();
   }
 
@@ -37,12 +36,28 @@ class _ReportScreenState extends State<ReportScreen> {
             return const Center(child: Text('No reports found.'));
           } else if (snapshot.hasData) {
             List<Report> reports = snapshot.data!;
-            return ListView.builder(
-              itemCount: reports.length,
-              itemBuilder: (context, index) {
-                final report = reports[index];
-                return ReportCard(report: report);
-              },
+            return Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    'Total Reports: ${reports.length}',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: reports.length,
+                    itemBuilder: (context, index) {
+                      final report = reports[index];
+                      return ReportCard(report: report);
+                    },
+                  ),
+                ),
+              ],
             );
           }
           return const Center(child: Text('No reports available.'));

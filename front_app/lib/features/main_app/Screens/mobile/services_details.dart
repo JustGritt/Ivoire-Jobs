@@ -46,39 +46,6 @@ class ServiceDetailPage extends StatelessWidget {
             fit: BoxFit.cover,
           ),
 
-          Column(
-            children: [
-              const SizedBox(height: 24),
-
-              // Title
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Text(
-                  service.title,
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 16),
-
-              // Description
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Text(
-                  service.description,
-                  style: const TextStyle(
-                    color: Colors.grey,
-                    fontSize: 16,
-                  ),
-                ),
-              ),
-            ],
-          ),
-
           const SizedBox(height: 16),
 
           // Details
@@ -122,6 +89,40 @@ class ServiceDetailPage extends StatelessWidget {
                 ),
               ),
             ),
+          ),
+
+
+          Column(
+            children: [
+              const SizedBox(height: 24),
+
+              // Title
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Text(
+                  service.title,
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 16),
+
+              // Description
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Text(
+                  service.description,
+                  style: const TextStyle(
+                    color: Colors.grey,
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+            ],
           ),
 
           const SizedBox(height: 16),

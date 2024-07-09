@@ -76,7 +76,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
               onTap: () => _onItemTapped(2),
             ),
             ListTile(
-              leading: const Icon(Icons.warning),
+              leading: const Icon(Icons.block),
               title: const Text('Ban List'),
               onTap: () => _onItemTapped(3),
             ),
