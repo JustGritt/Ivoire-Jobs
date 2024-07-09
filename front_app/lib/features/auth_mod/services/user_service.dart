@@ -77,6 +77,18 @@ class UserService {
     }
     throw res.data['message'];
   }
+  
+   Future<User?> update(UserUpdate user) async {
+    Response res = await _http.put(
+      ApiEndpoint.updateProfile,
+      data: user.toJson(),
+    );
+    if (res.statusCode == 200) {
+      ApiResponse apiResponse = ApiResponse.fromJson(res.data);
+      return User.fromJson(apiResponse.body);
+    }
+    return null;
+  }
 
   Future<User?> update(UserUpdate user) async {
     Response res = await _http.put(

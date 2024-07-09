@@ -27,4 +27,14 @@ class SignInUser extends AuthenticationEvent {
 
 class InitiateAuth extends AuthenticationEvent {}
 
+class UpdateUserEvent extends AuthenticationEvent {
+  final UserUpdate user;
+
+  const UpdateUserEvent(this.user);
+
+  @override
+  List<Object> get props => [user];
+}
+
+
 class SignOut extends AuthenticationEvent {}

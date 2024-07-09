@@ -1,3 +1,4 @@
+import 'package:barassage_app/config/app_colors.dart';
 import 'package:barassage_app/features/auth_mod/auth_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -48,6 +49,7 @@ TextFormField passwordField({
 TextFormField Field({
   required String nameField,
   String? Function(String?)? onValid,
+  String? error,
 }) {
   return TextFormField(
     keyboardType: TextInputType.emailAddress,
@@ -56,10 +58,17 @@ TextFormField Field({
       contentPadding:
           const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15),
       hintText: nameField,
-      border: const OutlineInputBorder(
+      border: OutlineInputBorder(
+          gapPadding: 10,
           borderSide: BorderSide(
               color: Color.fromARGB(255, 233, 233, 233),
               style: BorderStyle.none),
+          borderRadius: BorderRadius.all(
+            Radius.circular(12),
+          )),
+      errorBorder: OutlineInputBorder(
+          gapPadding: 10,
+          borderSide: BorderSide(color: AppColors.red, style: BorderStyle.none),
           borderRadius: BorderRadius.all(
             Radius.circular(12),
           )),
