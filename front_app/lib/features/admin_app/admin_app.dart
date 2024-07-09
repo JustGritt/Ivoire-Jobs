@@ -1,17 +1,21 @@
+
 import 'package:barassage_app/features/admin_app/controllers/controllers.dart';
 import 'package:barassage_app/features/admin_app/screens/desktop/splash_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/classes/route_manager.dart';
+//import 'controllers/login_admin_controller.dart';
+//import 'controllers/manage_users_controller.dart';
 
 class AdminApp extends RouteManager {
   static const String users = '/admin/users';
   static const String adminLogin = '/admin/login';
-  static const String services = '/admin/service';
+  static const String services = '/admin/services';
   static const String dashboard = '/admin/dashboard';
   static const String abuseClaims = '/admin/abuse-claims';
   static const String splash = '/admin/splash';
+  static const String settings = '/admin/settings';
 
   AdminApp() {
     addRoute(GoRoute(
@@ -45,5 +49,11 @@ class AdminApp extends RouteManager {
         pageBuilder: (context, state) {
           return const CupertinoPage(child: SplashDesktopScreen());
         }));
+    addRoute(GoRoute(
+        path: AdminApp.settings,
+        pageBuilder: (context, state) {
+          return const CupertinoPage(child: AdminSettingsController());
+        }));
+
   }
 }

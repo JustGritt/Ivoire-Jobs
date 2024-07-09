@@ -77,8 +77,8 @@ class UserService {
     }
     throw res.data['message'];
   }
-
-  Future<User?> update(UserUpdate user) async {
+  
+   Future<User?> update(UserUpdate user) async {
     Response res = await _http.put(
       ApiEndpoint.updateProfile,
       data: user.toJson(),
@@ -89,6 +89,7 @@ class UserService {
     }
     return null;
   }
+
 
     Future<bool> verifyEmailToken(String token) async {
     Response res = await _http.get(

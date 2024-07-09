@@ -1,6 +1,8 @@
 import 'package:barassage_app/features/auth_mod/models/user.dart';
+import 'package:barassage_app/features/main_app/app.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class SectionInformationProfile extends StatelessWidget {
   final User user;
@@ -33,7 +35,9 @@ class SectionInformationProfile extends StatelessWidget {
                   padding: EdgeInsets.all(0),
                   minSize: 0,
                   child: const Text('Edit'),
-                  onPressed: () {}),
+                  onPressed: () {
+                    context.pushNamed(App.editProfile);
+                  }),
             ],
           ),
           const SizedBox(height: 25),
@@ -70,9 +74,8 @@ class SectionInformationProfile extends StatelessWidget {
               const Icon(CupertinoIcons.text_alignleft),
               const SizedBox(width: 20),
               Flexible(
-                child: Wrap(children: [
-                  Text(
-                      "sdfsdfsdf jksdjfjsdkfjsdf sdfjsdfskdfjskdf sdlfsdfj sdfsdfs fsdfsdfsdfsdf sdfdsfdsfsdf sdfsdfsdfsd fsdfsdfsdfsdfsd fsdf",
+                child: Wrap(alignment: WrapAlignment.start, children: [
+                  Text(user.bio ?? 'No bio available',
                       style: theme.textTheme.labelMedium)
                 ]),
               ),

@@ -1,6 +1,6 @@
 part of 'authentication_bloc.dart';
 
-abstract class AuthenticationState {
+class AuthenticationState extends Equatable {
   const AuthenticationState();
 
   List<Object> get props => [];
@@ -27,4 +27,10 @@ class AuthenticationFailureState extends AuthenticationState {
 
   @override
   List<Object> get props => [errorMessage];
+}
+
+
+/// events update profile
+class UpdateProfileLoadingState extends AuthenticationState {
+  UpdateProfileLoadingState();
 }
