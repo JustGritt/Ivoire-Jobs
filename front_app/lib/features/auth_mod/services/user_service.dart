@@ -25,11 +25,13 @@ class UserService {
   }
 
   Future<User> getMyProfile() async {
+    print('Token: $token');
     Response res = await _http
         .get(
           ApiEndpoint.appProfileUrl,
         )
         .timeout(const Duration(seconds: 4));
+
     if (res.statusCode == 200) {
       ApiResponse apiResponse = ApiResponse.fromJson(res.data);
       User user = User.fromMap(apiResponse.body['user']);
@@ -73,6 +75,21 @@ class UserService {
       ApiResponse apiResponse = ApiResponse.fromJson(res.data);
       UserLoginResponse userLogin =
           UserLoginResponse.fromJson(apiResponse.body);
+      return userLogin;
+    }
+    throw res.data['message'];
+  }
+
+  Future<UserLoginResponse> adminLogin(UserLogin userLogin) async {
+    Map<String, dynamic> data = userLogin.toJson();
+    Response res = await _http.post(
+      ApiEndpoint.adminLogin,
+      data: jsonEncode(data),
+    );
+    if (res.statusCode == 200) {
+      ApiResponse apiResponse = ApiResponse.fromJson(res.data);
+      UserLoginResponse userLogin =
+      UserLoginResponse.fromJson(apiResponse.body);
       return userLogin;
     }
     throw res.data['message'];

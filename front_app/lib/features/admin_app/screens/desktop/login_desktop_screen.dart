@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:barassage_app/features/admin_app/admin_mod.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/svg.dart';
@@ -36,15 +37,17 @@ class _LoginDesktopScreenState extends State<LoginDesktopScreen> {
       body: SafeArea(
         child: BlocConsumer<AuthenticationBloc, AuthenticationState>(
           listener: (context, state) {
-            // TODO: implement listener
+            print (state);
+            if (state is AuthenticationSuccessState) {
+              context.go(AdminApp.dashboard);
+            }
           },
           builder: (context, state) {
             return SingleChildScrollView(
               child: Form(
                 key: _globalKey,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 8.0, horizontal: 14.0),
+                  padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 14.0),
                   child: Center(
                     child: ConstrainedBox(
                       constraints: const BoxConstraints(maxWidth: 400),
@@ -54,8 +57,7 @@ class _LoginDesktopScreenState extends State<LoginDesktopScreen> {
                           Stack(
                             children: [
                               Container(
-                                padding:
-                                const EdgeInsets.symmetric(vertical: 18.0),
+                                padding: const EdgeInsets.symmetric(vertical: 18.0),
                                 child: SvgPicture.asset(
                                   fit: BoxFit.fill,
                                   'assets/images/ill_dx.svg',
@@ -69,8 +71,7 @@ class _LoginDesktopScreenState extends State<LoginDesktopScreen> {
                                 right: 0,
                                 child: ClipRect(
                                   child: BackdropFilter(
-                                    filter: ImageFilter.blur(
-                                        sigmaX: 2.0, sigmaY: 2.0),
+                                    filter: ImageFilter.blur(sigmaX: 2.0, sigmaY: 2.0),
                                     child: Container(
                                       height: 40,
                                       color: Colors.transparent,
@@ -84,8 +85,7 @@ class _LoginDesktopScreenState extends State<LoginDesktopScreen> {
                                 right: 0,
                                 child: ClipRect(
                                   child: BackdropFilter(
-                                    filter: ImageFilter.blur(
-                                        sigmaX: 2.0, sigmaY: 2.0),
+                                    filter: ImageFilter.blur(sigmaX: 2.0, sigmaY: 2.0),
                                     child: Container(
                                       height: 50,
                                       color: Colors.transparent,
@@ -105,8 +105,7 @@ class _LoginDesktopScreenState extends State<LoginDesktopScreen> {
                                   textAlign: TextAlign.center,
                                 ),
                                 Text(
-                                  appLocalizations
-                                      .welcome_back_admin_description,
+                                  appLocalizations.welcome_back_admin_description,
                                   style: theme.textTheme.displayMedium,
                                   textAlign: TextAlign.center,
                                 ),
@@ -153,7 +152,7 @@ class _LoginDesktopScreenState extends State<LoginDesktopScreen> {
                                 onPressed: () async {
                                   if (_globalKey.currentState!.validate()) {
                                     context.read<AuthenticationBloc>().add(
-                                      SignInUser(username!, password!),
+                                      AdminSignIn(username!, password!),
                                     );
                                   }
                                 },

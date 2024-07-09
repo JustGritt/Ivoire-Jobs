@@ -26,10 +26,9 @@ class ApiEndpoint {
   // Admin App Links
   static const adminUsers = '${api}/auth/users';
   static const serviceCollection = '${api}/service/collection';
-  static const adminLogin = AuthApp.login;
-  static const abuseClaims = AdminApp.abuseClaims;
   static const dashboardSettings =  '${api}/configuration';
   static const banUser = '${api}/ban';
+  static const adminLogin = '${api}/auth/admin-login';
 
   static const updateProfile = '/auth/update-profile';
 

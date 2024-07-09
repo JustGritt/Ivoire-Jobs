@@ -1,5 +1,6 @@
 import 'package:barassage_app/core/helpers/utils_helper.dart';
 import 'package:barassage_app/core/init_dependencies.dart';
+import 'package:barassage_app/features/admin_app/admin_app.dart';
 import 'package:barassage_app/features/auth_mod/auth_app.dart';
 import 'package:barassage_app/features/auth_mod/models/user_signup.dart';
 import 'package:barassage_app/features/auth_mod/models/user_update.dart';
@@ -26,6 +27,21 @@ class AuthenticationBloc
       emit(AuthenticationLoadingState());
       try {
         User? user = await doAuth(event.email, event.password);
+        if (user != null) {
+          emit(AuthenticationSuccessState(user));
+        } else {
+          emit(const AuthenticationFailureState('create user failed'));
+        }
+      } catch (e) {
+        emit(const AuthenticationFailureState('create user failed'));
+        debugPrint(e.toString());
+      }
+    });
+
+    on<AdminSignIn>((event, emit) async {
+      emit(AuthenticationLoadingState());
+      try {
+        User? user = await doAdminAuth(event.email, event.password);
         if (user != null) {
           emit(AuthenticationSuccessState(user));
         } else {
@@ -90,10 +106,21 @@ class AuthenticationBloc
       }
     });
 
+
     on<SignOut>((event, emit) async {
       try {
         GoRouter.of(context).go(AuthApp.login);
         doLogout();
+      } catch (e) {
+        print('error');
+        print(e.toString());
+      }
+    });
+
+    on<AdminSignOut>((event, emit) async {
+      try {
+        GoRouter.of(context).go(AdminApp.adminLogin);
+        AdminDoLogout();
       } catch (e) {
         print('error');
         print(e.toString());

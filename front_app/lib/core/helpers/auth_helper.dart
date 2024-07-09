@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:barassage_app/core/classes/app_context.dart';
 import 'package:barassage_app/core/exceptions/dio_exceptions.dart';
 import 'package:barassage_app/core/init_dependencies.dart';
+import 'package:barassage_app/features/admin_app/admin_app.dart';
 import 'package:barassage_app/features/auth_mod/auth_app.dart';
 import 'package:barassage_app/features/auth_mod/models/user.dart';
 import 'package:barassage_app/features/auth_mod/models/user_login.dart';
@@ -38,6 +39,25 @@ doAuth(String email, String password) async {
   }
 }
 
+doAdminAuth(String email, String password) async {
+  AppCache ac = AppCache();
+  UserService us = UserService();
+  try {
+    UserLoginResponse userLoginResponse = await us.adminLogin(UserLogin(email: email, password: password));
+    ac.doLogin(userLoginResponse.user, userLoginResponse.accessToken);
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      Nav.to(context, AdminApp.dashboard);
+      showMessage(context, 'Login Successful');
+    });
+    return userLoginResponse.user;
+  } on DioException catch (e) {
+    logger.e(DioExceptionHandler(e).error.message);
+    showError(context, DioExceptionHandler(e).title);
+    rethrow;  // Propagate the error to be handled by the caller
+  }
+}
+
+
 doRegister(UserSignup userSignup) async {
   UserService us = serviceLocator<UserService>();
   try {
@@ -72,6 +92,13 @@ void doLogout() async {
   AppCache ac = AppCache();
   ac.doLogout();
   checkLogin(context, auth: true);
+  showMessage(context, 'Logout Successfull');
+}
+
+void AdminDoLogout() async {
+  AppCache ac = AppCache();
+  ac.doLogout();
+  checkLogin(context, auth: true, loginUrl: AdminApp.adminLogin);
   showMessage(context, 'Logout Successfull');
 }
 

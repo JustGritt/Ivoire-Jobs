@@ -49,6 +49,7 @@ class AppCache {
 
   void doLogout() {
     Cache.deleteData('auth_data');
+    Cache.deleteData('user');
     Cache.deleteData('token');
   }
 

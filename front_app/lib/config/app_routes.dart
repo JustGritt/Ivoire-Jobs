@@ -11,13 +11,13 @@ import '../features/main_app/app.dart';
 
 class Routes extends RouteManager {
   Routes() {
-    if (kIsWeb) {
+    if (!kIsWeb) {
+      addAll(AuthApp().routes);
+      // addAll(LeadApp().routes);
+      addAll(AdminApp().routes);
+      addAll(App().routes);
+    } else {
       addAll(AdminApp().routes);
     }
-    addAll(AuthApp().routes);
-    // addAll(LeadApp().routes);
-    addAll(AdminApp().routes);
-    addAll(App().routes);
-    // addAll(FeatureApp().routes);
   }
 }

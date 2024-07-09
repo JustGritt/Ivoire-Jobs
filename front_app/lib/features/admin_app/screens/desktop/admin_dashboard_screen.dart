@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:barassage_app/core/blocs/authentication/authentication_bloc.dart';
 import 'package:go_router/go_router.dart';
 import '../screens.dart';
 
@@ -28,6 +30,10 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     Navigator.pop(context); // Close the drawer
   }
 
+  void _logout() {
+    BlocProvider.of<AuthenticationBloc>(context).add(AdminSignOut());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,6 +47,12 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
             color: Colors.black,
           ),
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: _logout,
+          ),
+        ],
       ),
       drawer: Drawer(
         backgroundColor: Colors.white,
@@ -83,6 +95,12 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
               icon: Icons.settings,
               text: 'Settings',
               index: 4,
+            ),
+            const Divider(),
+            ListTile(
+              leading: const Icon(Icons.logout),
+              title: const Text('Logout'),
+              onTap: _logout,
             ),
           ],
         ),
