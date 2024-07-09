@@ -324,6 +324,178 @@ func Login(c *fiber.Ctx) error {
 	}))
 }
 
+// Admin Login Godoc
+// @Summary Admin Login
+// @Description Logs in a user
+// @Tags Auth
+// @Produce json
+// @Param payload body UserLogin true "Login Body"
+// @Success 200 {object} Response
+// @Failure 400 {array} ErrorResponse
+// @Router /auth/admin-login [post]
+func AdminLogin(c *fiber.Ctx) error {
+	var userInput UserLogin
+	// Validate Input
+	if err := validator.ParseBodyAndValidate(c, &userInput); err != nil {
+		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(err))
+
+	}
+
+	// Check If User Exists
+	user, err := userRepo.GetByEmail(userInput.Email)
+	if err != nil {
+		errorList = nil
+		errorList = append(
+			errorList,
+			&Response{
+				Code:    http.StatusNotFound,
+				Message: "User Doesn't Exist",
+				Data:    err.Error(),
+			},
+		)
+		return c.Status(http.StatusNotFound).JSON(HTTPErrorResponse(errorList))
+	}
+
+	//check if the user is an admin
+	if user.Role != "admin" {
+		errorList = nil
+		errorList = append(
+			errorList,
+			&Response{
+				Code:    http.StatusUnauthorized,
+				Message: "You are not authorized to access this route",
+			},
+		)
+		return c.Status(http.StatusUnauthorized).JSON(HTTPErrorResponse(errorList))
+	}
+
+	// Check if Password is Correct (Hash and Compare DB Hash)
+	passwordIsCorrect := passwordUtil.CheckPasswordHash(userInput.Password, user.Password)
+	if !passwordIsCorrect {
+		errorList = nil
+		errorList = append(
+			errorList,
+			&Response{
+				Code:    http.StatusUnauthorized,
+				Message: "Email or Password is Incorrect",
+				Data:    err,
+			},
+		)
+		return c.Status(http.StatusUnauthorized).JSON(HTTPErrorResponse(errorList))
+	}
+
+	// Check if User is Active
+	if !user.Active {
+		errorList = nil
+		errorList = append(
+			errorList,
+			&Response{
+				Code:    http.StatusUnauthorized,
+				Message: "Please Activate Your Account first",
+				Data:    err,
+			},
+		)
+		return c.Status(http.StatusUnauthorized).JSON(HTTPErrorResponse(errorList))
+	}
+
+	// Check if User is Banned
+	ban, err := banRepo.GetByUserID(user.ID)
+	if err == nil && ban.UserID == user.ID {
+		errorList = nil
+		errorList = append(
+			errorList,
+			&Response{
+				Code:    http.StatusUnauthorized,
+				Message: "Can't login to your account, you are banned",
+				Data:    err,
+			},
+		)
+		return c.Status(http.StatusUnauthorized).JSON(HTTPErrorResponse(errorList))
+	}
+
+	// Check if the user has a refresh token
+	dbRefreshToken, _ := refreshTokenRepo.GetRefreshTokenForUser(user.ID)
+	var tokenDetails *auth.TokenDetails
+
+	if dbRefreshToken == nil {
+		// Create a new refresh token
+		expireTime := time.Now().Add(14 * 24 * time.Hour).Unix()
+		tokenID := uuid.New().String()
+
+		tokenDetails, err = auth.IssueRefreshToken(*user, tokenID, expireTime)
+		if err != nil {
+			return c.Status(http.StatusInternalServerError).JSON(HTTPErrorResponse([]*Response{
+				{
+					Code:    http.StatusInternalServerError,
+					Message: "Something Went Wrong: Could Not Issue Token",
+					Data:    err.Error(),
+				},
+			}))
+		}
+
+		dbRefreshToken = &refreshtoken.RefreshToken{
+			TokenID:   tokenDetails.TokenUUID,
+			UserID:    user.ID,
+			ExpiresAt: tokenDetails.TokenExpires,
+		}
+
+		if err := refreshTokenRepo.Create(dbRefreshToken); err != nil {
+			return c.Status(http.StatusInternalServerError).JSON(HTTPErrorResponse([]*Response{
+				{
+					Code:    http.StatusInternalServerError,
+					Message: "Something Went Wrong: Could Not Save Token",
+					Data:    err.Error(),
+				},
+			}))
+		}
+	}
+
+	expireTime := time.Now().Add(14 * 24 * time.Hour).Unix()
+	tokenDetails, err = auth.IssueRefreshToken(*user, dbRefreshToken.TokenID, expireTime)
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(HTTPErrorResponse([]*Response{
+			{
+				Code:    http.StatusInternalServerError,
+				Message: "Something Went Wrong: Could Not Issue Token",
+				Data:    err.Error(),
+			},
+		}))
+	}
+	if time.Until(time.Unix(dbRefreshToken.ExpiresAt, 0)) < 7*24*time.Hour {
+		dbRefreshToken.TokenID = tokenDetails.TokenUUID
+		dbRefreshToken.ExpiresAt = tokenDetails.TokenExpires
+
+		if err := refreshTokenRepo.Update(dbRefreshToken); err != nil {
+			return c.Status(http.StatusInternalServerError).JSON(HTTPErrorResponse([]*Response{
+				{
+					Code:    http.StatusInternalServerError,
+					Message: "Something Went Wrong: Could Not Update Token",
+					Data:    err.Error(),
+				},
+			}))
+		}
+	}
+
+	// Issue Access Token
+	accessToken, err := auth.IssueAccessToken(*user)
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(HTTPErrorResponse([]*Response{
+			{
+				Code:    http.StatusInternalServerError,
+				Message: "Something Went Wrong: Could Not Issue Access Token",
+				Data:    err.Error(),
+			},
+		}))
+	}
+
+	// Return User and Tokens
+	return c.Status(http.StatusOK).JSON(HTTPResponse(http.StatusOK, "Login Success", fiber.Map{
+		"user":          mapUserToOutPut(user),
+		"access_token":  accessToken.Token,
+		"refresh_token": tokenDetails.Token,
+	}))
+}
+
 // GetAllUsers Godoc
 // @Summary Get all users
 // @Description Get the list of all users
