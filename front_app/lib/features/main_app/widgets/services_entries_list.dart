@@ -3,7 +3,6 @@ import 'package:barassage_app/features/main_app/models/service_models/service_cr
 import 'package:barassage_app/features/main_app/services/service_services.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../models/main/services_entry_model.dart';
 import 'service_entry.dart';
 
 class ServicesEntriesList extends StatefulWidget {
@@ -35,26 +34,21 @@ class _ServicesEntriesListState extends State<ServicesEntriesList> {
             );
           } else if (state.data?.isEmpty ?? true) {
             return Center(
-              child: Container(margin: EdgeInsets.symmetric(vertical: 50), child: Text('No data found')),
+              child: Container(
+                  margin: EdgeInsets.symmetric(vertical: 0),
+                  child: Text('No data found')),
             );
           }
 
-          return Container(
-            child: ListView.builder(
-              itemCount: state.data?.length,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.only(left: 8.0),
-                  child: GestureDetector(
-                    onTap: () {
-                      context.push('${App.home}/${App.detailService}');
-                    },
-                    child: ServiceEntry(service: state.data![index]),
-                  ),
-                );
+          return Column(
+              children: state.data!.map((entry) {
+            return GestureDetector(
+              onTap: () {
+                context.push('${App.home}/${App.detailService}', extra: entry);
               },
-            ),
-          );
+              child: ServiceEntry(service: entry),
+            );
+          }).toList());
         });
   }
 }
