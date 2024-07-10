@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:barassage_app/features/admin_app/utils/home_colors.dart'; // Import the custom colors
 
 class HeroScreen extends StatelessWidget {
   final GlobalKey aboutUsKey;
@@ -11,27 +12,48 @@ class HeroScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool isDesktop = MediaQuery.of(context).size.width >= 800;
+    final double? containerHeight = isDesktop ? 700 : null;
+
     return Container(
       key: aboutUsKey,
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 60),
+      padding:  EdgeInsets.symmetric(
+        horizontal: 20,
+        vertical: isDesktop ? 110 : 40,
+      ),
+      color: tertiary,
+      height: containerHeight,
+      width: double.infinity,
       child: Column(
         children: [
-          const Text(
+          if (isDesktop)
+            const SizedBox(height: 10), // Add additional padding for desktop
+          Text(
             'ABOUT US',
-            style: TextStyle(fontSize: 18, color: Colors.blueAccent),
-          ),
-          const SizedBox(height: 10),
-          const Text(
-            'Build Powerful Apps Effortlessly',
             style: TextStyle(
-                fontSize: 48, fontWeight: FontWeight.bold, color: Colors.white),
+              fontSize: isDesktop ? 24 : 16,
+              fontWeight: FontWeight.bold,
+              color: primary,
+            ),
+          ),
+          const SizedBox(height: 32),
+          Text(
+            'Find your perfect Service near you !',
+            style: TextStyle(
+              fontSize: isDesktop ? 48 : 32,
+              fontWeight: FontWeight.bold,
+              color: primary,
+            ),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 20),
-          const Text(
-            'Easily build beautiful apps, connect data, and implement advanced functionality. '
-                'Create your app in just a few hours, with an attractive design and a smooth experience.',
-            style: TextStyle(fontSize: 18, color: Colors.white70),
+          Text(
+            'Easily find the best service providers near you. '
+                'We have a wide range of services to choose from. ',
+            style: TextStyle(
+              fontSize: isDesktop ? 18 : 16,
+              color: primary,
+            ),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 40),
@@ -40,37 +62,13 @@ class HeroScreen extends StatelessWidget {
             runSpacing: 20,
             spacing: 20,
             children: [
-              _buildStatisticCard('235', 'Days of hard work to bring Flutterviz to life!', columns),
-              _buildStatisticCard('100+', 'more than 200 demo screen to start your project', columns),
-              _buildStatisticCard('50+', 'Get all the standard Flutter widgets you\'ll need', columns),
+              _buildStatisticCard(
+                  '235+', 'Monthly user that using our app!', columns),
+              _buildStatisticCard(
+                  '100+', 'More than 100 services available', columns),
+              _buildStatisticCard(
+                  '10+', 'Available in 10 countries', columns),
             ],
-          ),
-          const SizedBox(height: 60),
-          const Text(
-            'OUR STORY',
-            style: TextStyle(fontSize: 18, color: Colors.blueAccent),
-          ),
-          const SizedBox(height: 10),
-          const Text(
-            'We\'re just getting started',
-            style: TextStyle(
-                fontSize: 36, fontWeight: FontWeight.bold, color: Colors.white),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 20),
-          const Text(
-            'We already help over 4000+ companies achieve remarkable results.',
-            style: TextStyle(fontSize: 18, color: Colors.white70),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 20),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: Text(
-              'Aliqua id fugiat nostrud irure ex duis ea quis id quis ad et. Sunt qui esse pariatur duis deserunt mollit dolore cillum minim tempor enim. Elit aute irure tempor cupidatat incididunt sint deserunt ut voluptate aute id deserunt nisi. Aliqua id fugiat nostrud irure ex duis ea quis id quis ad et. Sunt qui esse pariatur duis deserunt mollit dolore cillum minim tempor enim.',
-              style: TextStyle(fontSize: 16, color: Colors.white70),
-              textAlign: TextAlign.justify,
-            ),
           ),
         ],
       ),
@@ -91,20 +89,27 @@ class HeroScreen extends StatelessWidget {
       width: width,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.grey[850],
+        color: Colors.white,
         borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: primary, width: 1.3),
       ),
       child: Column(
         children: [
           Text(
             title,
             style: const TextStyle(
-                fontSize: 32, fontWeight: FontWeight.bold, color: Colors.white),
+              fontSize: 32,
+              fontWeight: FontWeight.bold,
+              color: secondary,
+            ),
           ),
           const SizedBox(height: 10),
           Text(
             subtitle,
-            style: const TextStyle(fontSize: 14, color: Colors.white70),
+            style: const TextStyle(
+              fontSize: 14,
+              color: primary,
+            ),
             textAlign: TextAlign.center,
           ),
         ],

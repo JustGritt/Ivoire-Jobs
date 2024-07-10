@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:barassage_app/features/admin_app/utils/responsive_utils.dart';
 import 'package:barassage_app/features/admin_app/screens/home/screens.dart';
+import 'package:barassage_app/features/admin_app/utils/home_colors.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class HomeScreenContent extends StatefulWidget {
@@ -133,8 +134,8 @@ class _HomeScreenContentState extends State<HomeScreenContent> {
             right: 20,
             child: FloatingActionButton(
               onPressed: _scrollToTop,
-              child: const Icon(Icons.arrow_upward),
-              backgroundColor: Colors.blueAccent,
+              child: const Icon(Icons.arrow_upward, color: tertiary,),
+              backgroundColor: primary,
             ),
           ),
       ],
