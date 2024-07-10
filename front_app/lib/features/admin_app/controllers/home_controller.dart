@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:barassage_app/features/admin_app/screens/desktop/home_screen.dart';
+import 'package:barassage_app/features/admin_app/screens/home/home_screen.dart';
 
 class HomeController extends StatefulWidget {
   const HomeController({super.key});

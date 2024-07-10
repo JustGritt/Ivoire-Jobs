@@ -101,10 +101,16 @@ fonts:
 dev_dependencies:
   build_runner: ^2.4.9
   flutter_lints: ^4.0.0
+  flutter_launcher_icons: ^0.13.0
 
   flutter_test:
     sdk: flutter
   mockito: ^5.4.3
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/app-logo.png"
 
 flutter:
   generate: true
@@ -117,3 +123,4 @@ flutter:
     - assets/svg/gift_ico.svg
     - assets/svg/gift.svg
     - assets/svg/test_gift.svg
+    - assets/images/app-logo.png
