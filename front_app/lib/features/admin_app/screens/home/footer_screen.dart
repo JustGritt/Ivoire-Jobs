@@ -44,7 +44,7 @@ class FooterScreen extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Column(
-                        //crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start, // Align text to start
                         children: [
                           Text('Notre mission', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
                           SizedBox(height: 10),
@@ -69,7 +69,7 @@ class FooterScreen extends StatelessWidget {
                     ),
                     Expanded(
                       child: Column(
-                        //crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start, // Align text to start
                         children: [
                           Text('Utiliser Barasseur', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
                           SizedBox(height: 10),
@@ -86,7 +86,7 @@ class FooterScreen extends StatelessWidget {
                     ),
                     Expanded(
                       child: Column(
-                       //crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start, // Align text to start
                         children: [
                           Text('Besoin d\'aide ?', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
                           SizedBox(height: 10),
@@ -109,11 +109,11 @@ class FooterScreen extends StatelessWidget {
                 )
               else
                 SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start, // Align columns at the start
                     children: [
                       Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start, // Align text to start
                         children: [
                           Text('Notre mission', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
                           SizedBox(height: 10),
@@ -135,9 +135,9 @@ class FooterScreen extends StatelessWidget {
                           ),
                         ],
                       ),
-                      SizedBox(width: 20),
+                      SizedBox(height: 20),
                       Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start, // Align text to start
                         children: [
                           Text('Utiliser Barasseur', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
                           SizedBox(height: 10),
@@ -151,9 +151,9 @@ class FooterScreen extends StatelessWidget {
                           ),
                         ],
                       ),
-                      SizedBox(width: 20),
+                      SizedBox(height: 20),
                       Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start, // Align text to start
                         children: [
                           Text('Besoin d\'aide ?', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
                           SizedBox(height: 10),
@@ -176,44 +176,87 @@ class FooterScreen extends StatelessWidget {
                 ),
               const SizedBox(height: 20),
               // Social media links and language selector
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Text('© 2024 Barassage Inc.', style: TextStyle(color: Colors.white54)),
-                  Row(
-                    children: [
-                      IconButton(
-                        onPressed: () {},
-                        icon: Icon(Icons.screen_lock_landscape, color: Colors.white),
-                      ),
-                      IconButton(
-                        onPressed: () {},
-                        icon: Icon(Icons.screen_lock_landscape, color: Colors.white),
-                      ),
-                      IconButton(
-                        onPressed: () {},
-                        icon: Icon(Icons.facebook, color: Colors.white),
-                      ),
-                      IconButton(
-                        onPressed: () {},
-                        icon: Icon(Icons.screen_lock_landscape, color: Colors.white),
-                      ),
-                    ],
-                  ),
-                  DropdownButton<String>(
-                    value: 'français',
-                    dropdownColor: Color(0xFF0F2027),
-                    icon: Icon(Icons.arrow_drop_down, color: Colors.white),
-                    items: <String>['français', 'english'].map((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value, style: TextStyle(color: Colors.white)),
-                      );
-                    }).toList(),
-                    onChanged: (_) {},
-                  ),
-                ],
-              ),
+              if (isDesktop)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text('© 2024 Barassage Inc.', style: TextStyle(color: Colors.white54)),
+                    Row(
+                      children: [
+                        IconButton(
+                          onPressed: () {},
+                          icon: Icon(Icons.screen_lock_landscape, color: Colors.white),
+                        ),
+                        IconButton(
+                          onPressed: () {},
+                          icon: Icon(Icons.screen_lock_landscape, color: Colors.white),
+                        ),
+                        IconButton(
+                          onPressed: () {},
+                          icon: Icon(Icons.facebook, color: Colors.white),
+                        ),
+                        IconButton(
+                          onPressed: () {},
+                          icon: Icon(Icons.screen_lock_landscape, color: Colors.white),
+                        ),
+                      ],
+                    ),
+                    DropdownButton<String>(
+                      value: 'français',
+                      dropdownColor: Color(0xFF0F2027),
+                      icon: Icon(Icons.arrow_drop_down, color: Colors.white),
+                      items: <String>['français', 'english'].map((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value, style: TextStyle(color: Colors.white)),
+                        );
+                      }).toList(),
+                      onChanged: (_) {},
+                    ),
+                  ],
+                )
+              else
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text('© 2024 Barassage Inc.', style: TextStyle(color: Colors.white54)),
+                    const SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        IconButton(
+                          onPressed: () {},
+                          icon: Icon(Icons.screen_lock_landscape, color: Colors.white),
+                        ),
+                        IconButton(
+                          onPressed: () {},
+                          icon: Icon(Icons.screen_lock_landscape, color: Colors.white),
+                        ),
+                        IconButton(
+                          onPressed: () {},
+                          icon: Icon(Icons.facebook, color: Colors.white),
+                        ),
+                        IconButton(
+                          onPressed: () {},
+                          icon: Icon(Icons.screen_lock_landscape, color: Colors.white),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    DropdownButton<String>(
+                      value: 'français',
+                      dropdownColor: Color(0xFF0F2027),
+                      icon: Icon(Icons.arrow_drop_down, color: Colors.white),
+                      items: <String>['français', 'english'].map((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value, style: TextStyle(color: Colors.white)),
+                        );
+                      }).toList(),
+                      onChanged: (_) {},
+                    ),
+                  ],
+                ),
             ],
           ),
         ),
