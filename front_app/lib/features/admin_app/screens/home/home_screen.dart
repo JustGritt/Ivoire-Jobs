@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'home_screen_content.dart';
 import 'package:barassage_app/features/admin_app/utils/responsive_utils.dart';
+import 'package:barassage_app/features/admin_app/utils/home_colors.dart';
+
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -8,9 +10,11 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black45,
+      backgroundColor: tertiary,
       endDrawer: isMobile(context) ? _buildDrawer(context) : null,
-      body: HomeScreenContent(),
+      body: SafeArea(
+        child: HomeScreenContent(),
+      ),
     );
   }
 
