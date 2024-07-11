@@ -31,7 +31,7 @@ type BookingObject struct {
 }
 
 type Contact struct {
-	Phone      string  `json:"phone" validate:"required"`
+	Phone      string  `json:"phone" validate:"required,phone"`
 	Address    string  `json:"address" validate:"required"`
 	City       string  `json:"city" validate:"required"`
 	Country    string  `json:"country" validate:"required"`
@@ -108,7 +108,7 @@ func CreateBooking(c *fiber.Ctx) error {
 				Message: "Error while fetching service",
 			},
 		)
-		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
+		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
 	// Convert datatypes.Date to time.Time for calculation
@@ -130,11 +130,11 @@ func CreateBooking(c *fiber.Ctx) error {
 		errorList = append(
 			errorList,
 			&fiber.Error{
-				Code:    fiber.StatusInternalServerError,
+				Code:    fiber.StatusBadRequest,
 				Message: "Error while checking booking overlap",
 			},
 		)
-		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
+		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
 	}
 	if overlap {
 		errorList = append(
