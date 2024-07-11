@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:barassage_app/features/admin_app/utils/home_colors.dart';
+
 
 class FooterScreen extends StatelessWidget {
   @override
@@ -6,7 +8,7 @@ class FooterScreen extends StatelessWidget {
     final bool isDesktop = MediaQuery.of(context).size.width >= 800;
 
     return Container(
-      color: Color(0xFF0F2027),
+      color: background,
       padding: const EdgeInsets.all(20),
       child: Center(
         child: ConstrainedBox(
@@ -21,13 +23,13 @@ class FooterScreen extends StatelessWidget {
                     children: [
                       Image.asset(
                         'assets/images/app-logo.png', // Your logo here
-                        height: 40,
+                        height: 60,
                       ),
                       const SizedBox(width: 8),
                       Text(
                         'Barassage', // Replace with your app name
                         style: TextStyle(
-                          color: Colors.white,
+                          color: tertiary,
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
                         ),
@@ -46,23 +48,23 @@ class FooterScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start, // Align text to start
                         children: [
-                          Text('Notre mission', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                          Text('Notre mission', style: TextStyle(color: tertiary, fontWeight: FontWeight.bold)),
                           SizedBox(height: 10),
                           TextButton(
                             onPressed: () {},
-                            child: Text('Fonctionnalités', style: TextStyle(color: Colors.white70)),
+                            child: Text('Fonctionnalités', style: TextStyle(color: tertiary.withOpacity(0.8))),
                           ),
                           TextButton(
                             onPressed: () {},
-                            child: Text('Blog', style: TextStyle(color: Colors.white70)),
+                            child: Text('Blog', style: TextStyle(color: tertiary.withOpacity(0.8))),
                           ),
                           TextButton(
                             onPressed: () {},
-                            child: Text('Sécurité', style: TextStyle(color: Colors.white70)),
+                            child: Text('Sécurité', style: TextStyle(color: tertiary.withOpacity(0.8))),
                           ),
                           TextButton(
                             onPressed: () {},
-                            child: Text('Pour les entreprises', style: TextStyle(color: Colors.white70)),
+                            child: Text('Pour les entreprises', style: TextStyle(color: tertiary.withOpacity(0.8))),
                           ),
                         ],
                       ),
@@ -71,15 +73,15 @@ class FooterScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start, // Align text to start
                         children: [
-                          Text('Utiliser Barasseur', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                          Text('Utiliser Barasseur', style: TextStyle(color: tertiary, fontWeight: FontWeight.bold)),
                           SizedBox(height: 10),
                           TextButton(
                             onPressed: () {},
-                            child: Text('Android', style: TextStyle(color: Colors.white70)),
+                            child: Text('Android', style: TextStyle(color: tertiary.withOpacity(0.8))),
                           ),
                           TextButton(
                             onPressed: () {},
-                            child: Text('iPhone', style: TextStyle(color: Colors.white70)),
+                            child: Text('iPhone', style: TextStyle(color: tertiary.withOpacity(0.8))),
                           ),
                         ],
                       ),
@@ -88,19 +90,19 @@ class FooterScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start, // Align text to start
                         children: [
-                          Text('Besoin d\'aide ?', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                          Text('Besoin d\'aide ?', style: TextStyle(color: tertiary, fontWeight: FontWeight.bold)),
                           SizedBox(height: 10),
                           TextButton(
                             onPressed: () {},
-                            child: Text('Nous contacter', style: TextStyle(color: Colors.white70)),
+                            child: Text('Nous contacter', style: TextStyle(color: tertiary.withOpacity(0.8))),
                           ),
                           TextButton(
                             onPressed: () {},
-                            child: Text('Télécharger', style: TextStyle(color: Colors.white70)),
+                            child: Text('Télécharger', style: TextStyle(color: tertiary.withOpacity(0.8))),
                           ),
                           TextButton(
                             onPressed: () {},
-                            child: Text('Avis de sécurité', style: TextStyle(color: Colors.white70)),
+                            child: Text('Avis de sécurité', style: TextStyle(color: tertiary.withOpacity(0.8))),
                           ),
                         ],
                       ),
@@ -115,23 +117,23 @@ class FooterScreen extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start, // Align text to start
                         children: [
-                          Text('Notre mission', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                          Text('Notre mission', style: TextStyle(color: tertiary, fontWeight: FontWeight.bold)),
                           SizedBox(height: 10),
                           TextButton(
                             onPressed: () {},
-                            child: Text('Fonctionnalités', style: TextStyle(color: Colors.white70)),
+                            child: Text('Fonctionnalités', style: TextStyle(color: tertiary.withOpacity(0.8))),
                           ),
                           TextButton(
                             onPressed: () {},
-                            child: Text('Blog', style: TextStyle(color: Colors.white70)),
+                            child: Text('Blog', style: TextStyle(color: tertiary.withOpacity(0.8))),
                           ),
                           TextButton(
                             onPressed: () {},
-                            child: Text('Sécurité', style: TextStyle(color: Colors.white70)),
+                            child: Text('Sécurité', style: TextStyle(color: tertiary.withOpacity(0.8))),
                           ),
                           TextButton(
                             onPressed: () {},
-                            child: Text('Pour les entreprises', style: TextStyle(color: Colors.white70)),
+                            child: Text('Pour les entreprises', style: TextStyle(color: tertiary.withOpacity(0.8))),
                           ),
                         ],
                       ),
@@ -139,15 +141,15 @@ class FooterScreen extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start, // Align text to start
                         children: [
-                          Text('Utiliser Barasseur', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                          Text('Utiliser Barasseur', style: TextStyle(color: tertiary, fontWeight: FontWeight.bold)),
                           SizedBox(height: 10),
                           TextButton(
                             onPressed: () {},
-                            child: Text('Android', style: TextStyle(color: Colors.white70)),
+                            child: Text('Android', style: TextStyle(color: tertiary.withOpacity(0.8))),
                           ),
                           TextButton(
                             onPressed: () {},
-                            child: Text('iPhone', style: TextStyle(color: Colors.white70)),
+                            child: Text('iPhone', style: TextStyle(color: tertiary.withOpacity(0.8))),
                           ),
                         ],
                       ),
@@ -155,19 +157,19 @@ class FooterScreen extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start, // Align text to start
                         children: [
-                          Text('Besoin d\'aide ?', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                          Text('Besoin d\'aide ?', style: TextStyle(color: tertiary, fontWeight: FontWeight.bold)),
                           SizedBox(height: 10),
                           TextButton(
                             onPressed: () {},
-                            child: Text('Nous contacter', style: TextStyle(color: Colors.white70)),
+                            child: Text('Nous contacter', style: TextStyle(color: tertiary.withOpacity(0.8))),
                           ),
                           TextButton(
                             onPressed: () {},
-                            child: Text('Télécharger', style: TextStyle(color: Colors.white70)),
+                            child: Text('Télécharger', style: TextStyle(color: tertiary.withOpacity(0.8))),
                           ),
                           TextButton(
                             onPressed: () {},
-                            child: Text('Avis de sécurité', style: TextStyle(color: Colors.white70)),
+                            child: Text('Avis de sécurité', style: TextStyle(color: tertiary.withOpacity(0.8))),
                           ),
                         ],
                       ),
@@ -180,35 +182,35 @@ class FooterScreen extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Text('© 2024 Barassage Inc.', style: TextStyle(color: Colors.white54)),
+                    Text('© 2024 Barassage Inc.', style: TextStyle(color: tertiary)),
                     Row(
                       children: [
                         IconButton(
                           onPressed: () {},
-                          icon: Icon(Icons.screen_lock_landscape, color: Colors.white),
+                          icon: Icon(Icons.screen_lock_landscape, color: tertiary),
                         ),
                         IconButton(
                           onPressed: () {},
-                          icon: Icon(Icons.screen_lock_landscape, color: Colors.white),
+                          icon: Icon(Icons.screen_lock_landscape, color: tertiary),
                         ),
                         IconButton(
                           onPressed: () {},
-                          icon: Icon(Icons.facebook, color: Colors.white),
+                          icon: Icon(Icons.facebook, color: tertiary),
                         ),
                         IconButton(
                           onPressed: () {},
-                          icon: Icon(Icons.screen_lock_landscape, color: Colors.white),
+                          icon: Icon(Icons.screen_lock_landscape, color: tertiary),
                         ),
                       ],
                     ),
                     DropdownButton<String>(
                       value: 'français',
                       dropdownColor: Color(0xFF0F2027),
-                      icon: Icon(Icons.arrow_drop_down, color: Colors.white),
+                      icon: Icon(Icons.arrow_drop_down, color: tertiary),
                       items: <String>['français', 'english'].map((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
-                          child: Text(value, style: TextStyle(color: Colors.white)),
+                          child: Text(value, style: TextStyle(color: tertiary)),
                         );
                       }).toList(),
                       onChanged: (_) {},
@@ -217,28 +219,27 @@ class FooterScreen extends StatelessWidget {
                 )
               else
                 Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text('© 2024 Barassage Inc.', style: TextStyle(color: Colors.white54)),
+                    Text('© 2024 Barassage Inc.', style: TextStyle(color: tertiary)),
                     const SizedBox(height: 10),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         IconButton(
                           onPressed: () {},
-                          icon: Icon(Icons.screen_lock_landscape, color: Colors.white),
+                          icon: Icon(Icons.screen_lock_landscape, color: tertiary),
                         ),
                         IconButton(
                           onPressed: () {},
-                          icon: Icon(Icons.screen_lock_landscape, color: Colors.white),
+                          icon: Icon(Icons.screen_lock_landscape, color: tertiary),
                         ),
                         IconButton(
                           onPressed: () {},
-                          icon: Icon(Icons.facebook, color: Colors.white),
+                          icon: Icon(Icons.facebook, color: tertiary),
                         ),
                         IconButton(
                           onPressed: () {},
-                          icon: Icon(Icons.screen_lock_landscape, color: Colors.white),
+                          icon: Icon(Icons.screen_lock_landscape, color: tertiary),
                         ),
                       ],
                     ),
@@ -246,11 +247,11 @@ class FooterScreen extends StatelessWidget {
                     DropdownButton<String>(
                       value: 'français',
                       dropdownColor: Color(0xFF0F2027),
-                      icon: Icon(Icons.arrow_drop_down, color: Colors.white),
+                      icon: Icon(Icons.arrow_drop_down, color: tertiary),
                       items: <String>['français', 'english'].map((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
-                          child: Text(value, style: TextStyle(color: Colors.white)),
+                          child: Text(value, style: TextStyle(color: tertiary)),
                         );
                       }).toList(),
                       onChanged: (_) {},

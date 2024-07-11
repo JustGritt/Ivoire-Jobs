@@ -9,6 +9,7 @@ class Header extends StatefulWidget {
   final GlobalKey appsKey;
   final GlobalKey faqKey;
   final String downloadUrl;
+  final double scrollOffset;
 
   const Header({
     required this.scrollToSection,
@@ -16,6 +17,7 @@ class Header extends StatefulWidget {
     required this.appsKey,
     required this.faqKey,
     required this.downloadUrl,
+    required this.scrollOffset,
   });
 
   @override
@@ -58,12 +60,15 @@ class _HeaderState extends State<Header> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     final bool isDesktop = MediaQuery.of(context).size.width >= 800;
+    final bool isScrolled = widget.scrollOffset > 80.0;
+    final Color backgroundColor = isScrolled ? Color(0xFFFBFBF7) : tertiary;
+
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: 20,
         vertical: isDesktop ? 10 : 20,
       ),
-      color: tertiary,
+      color: backgroundColor,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

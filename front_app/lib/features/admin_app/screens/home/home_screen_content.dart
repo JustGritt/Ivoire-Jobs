@@ -16,6 +16,7 @@ class HomeScreenContent extends StatefulWidget {
 class _HomeScreenContentState extends State<HomeScreenContent> {
   final ScrollController _scrollController = ScrollController();
   bool _showScrollToTopButton = false;
+  double _scrollOffset = 0;
 
   final GlobalKey _aboutUsKey = GlobalKey();
   final GlobalKey _appsKey = GlobalKey();
@@ -49,16 +50,15 @@ class _HomeScreenContentState extends State<HomeScreenContent> {
   }
 
   void _scrollListener() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent * 0.4) {
-      setState(() {
+    setState(() {
+      _scrollOffset = _scrollController.offset;
+      if (_scrollController.position.pixels >=
+          _scrollController.position.maxScrollExtent * 0.4) {
         _showScrollToTopButton = true;
-      });
-    } else {
-      setState(() {
+      } else {
         _showScrollToTopButton = false;
-      });
-    }
+      }
+    });
   }
 
   void scrollToSection(GlobalKey? key) {
@@ -78,12 +78,20 @@ class _HomeScreenContentState extends State<HomeScreenContent> {
   }
 
   void _startAutoPlay() {
-    _timer = Timer.periodic(const Duration(seconds: 10), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 4), (timer) {
       setState(() {
         _expanded[_currentIndex] = false;
         _currentIndex = (_currentIndex + 1) % _expanded.length;
         _expanded[_currentIndex] = true;
       });
+    });
+  }
+
+  void _onExpansionChanged(int index, bool expanded) {
+    setState(() {
+      for (int i = 0; i < _expanded.length; i++) {
+        _expanded[i] = i == index && expanded;
+      }
     });
   }
 
@@ -103,30 +111,43 @@ class _HomeScreenContentState extends State<HomeScreenContent> {
   Widget _buildContent(BuildContext context, int columns) {
     return Stack(
       children: [
-        SingleChildScrollView(
+        CustomScrollView(
           controller: _scrollController,
-          child: Column(
-            children: [
-              // Header
-              Header(scrollToSection: scrollToSection, aboutUsKey: _aboutUsKey, appsKey: _appsKey,  faqKey: _faqKey, downloadUrl: dotenv.env['DOWNLOAD_URL'] ?? ''),
-              // Main Content
-              HeroScreen(aboutUsKey: _aboutUsKey, columns: columns),
-              // Additional Content
-              AdditionalContent(appsKey: _appsKey),
-              // FAQ Section
-              FAQScreen(
-                faqKey: _faqKey,
-                expanded: _expanded,
-                onExpansionChanged: (index, expanded) {
-                  setState(() {
-                    _expanded[index] = expanded;
-                  });
-                },
+          slivers: [
+            SliverPersistentHeader(
+              pinned: true,
+              delegate: _SliverAppBarDelegate(
+                minHeight: 80.0,
+                maxHeight: 80.0,
+                child: Header(
+                  scrollToSection: scrollToSection,
+                  aboutUsKey: _aboutUsKey,
+                  appsKey: _appsKey,
+                  faqKey: _faqKey,
+                  downloadUrl: dotenv.env['DOWNLOAD_URL'] ?? '',
+                  scrollOffset: _scrollOffset,
+                ),
               ),
-              // Footer
-              FooterScreen(),
-            ],
-          ),
+            ),
+            SliverList(
+              delegate: SliverChildListDelegate(
+                [
+                  // Main Content
+                  HeroScreen(aboutUsKey: _aboutUsKey, columns: columns),
+                  // Additional Content
+                  AdditionalContent(appsKey: _appsKey, downloadUrl: dotenv.env['DOWNLOAD_URL'] ?? '',),
+                  // FAQ Section
+                  FAQScreen(
+                    faqKey: _faqKey,
+                    expanded: _expanded,
+                    onExpansionChanged: _onExpansionChanged,
+                  ),
+                  // Footer
+                  FooterScreen(),
+                ],
+              ),
+            ),
+          ],
         ),
         if (_showScrollToTopButton)
           Positioned(
@@ -134,11 +155,42 @@ class _HomeScreenContentState extends State<HomeScreenContent> {
             right: 20,
             child: FloatingActionButton(
               onPressed: _scrollToTop,
-              child: const Icon(Icons.arrow_upward, color: tertiary,),
+              child: const Icon(Icons.arrow_upward, color: tertiary),
               backgroundColor: primary,
             ),
           ),
       ],
     );
+  }
+}
+
+class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
+  _SliverAppBarDelegate({
+    required this.minHeight,
+    required this.maxHeight,
+    required this.child,
+  });
+
+  final double minHeight;
+  final double maxHeight;
+  final Widget child;
+
+  @override
+  double get minExtent => minHeight;
+
+  @override
+  double get maxExtent => maxHeight;
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return SizedBox.expand(child: child);
+  }
+
+  @override
+  bool shouldRebuild(_SliverAppBarDelegate oldDelegate) {
+    return maxHeight != oldDelegate.maxHeight ||
+        minHeight != oldDelegate.minHeight ||
+        child != oldDelegate.child;
   }
 }

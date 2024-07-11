@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:barassage_app/features/admin_app/utils/home_colors.dart';
 
 class FAQScreen extends StatelessWidget {
   final List<bool> expanded;
@@ -13,45 +14,56 @@ class FAQScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool isDesktop = MediaQuery.of(context).size.width >= 800;
+    final double? containerHeight = isDesktop ? 600 : 500;
     return Container(
       key: faqKey,
+      height: containerHeight,
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 60),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'FAQ',
-            style: TextStyle(fontSize: 36, color: Colors.white),
+      color: tertiary, // Matching background color
+      child: Center(
+        child: FractionallySizedBox(
+          widthFactor: isDesktop ? 2 / 3 : 1,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Center(
+                child: Text(
+                  'FAQ',
+                  style: TextStyle(fontSize: 36, color: primary, fontWeight: FontWeight.bold),
+                ),
+              ),
+              const SizedBox(height: 40),
+              _buildExpansionTile(
+                title: 'How can I reset my password?',
+                content:
+                'To reset your password, go to the login page and click on "Forgot Password". You will receive an email with instructions to reset your password.',
+                isExpanded: expanded[0],
+                onExpansionChanged: (expanded) {
+                  onExpansionChanged(0, expanded);
+                },
+              ),
+              _buildExpansionTile(
+                title: 'How do I contact customer support?',
+                content:
+                'You can contact our customer support team via the "Contact Us" page on our website. We are available 24/7 to assist you with any issues.',
+                isExpanded: expanded[1],
+                onExpansionChanged: (expanded) {
+                  onExpansionChanged(1, expanded);
+                },
+              ),
+              _buildExpansionTile(
+                title: 'Where can I find the user manual?',
+                content:
+                'The user manual can be found in the "Help" section of our website. It contains detailed information on how to use our application.',
+                isExpanded: expanded[2],
+                onExpansionChanged: (expanded) {
+                  onExpansionChanged(2, expanded);
+                },
+              ),
+            ],
           ),
-          const SizedBox(height: 20),
-          _buildExpansionTile(
-            title: 'How can I reset my password?',
-            content:
-            'To reset your password, go to the login page and click on "Forgot Password". You will receive an email with instructions to reset your password.',
-            isExpanded: expanded[0],
-            onExpansionChanged: (expanded) {
-              onExpansionChanged(0, expanded);
-            },
-          ),
-          _buildExpansionTile(
-            title: 'How do I contact customer support?',
-            content:
-            'You can contact our customer support team via the "Contact Us" page on our website. We are available 24/7 to assist you with any issues.',
-            isExpanded: expanded[1],
-            onExpansionChanged: (expanded) {
-              onExpansionChanged(1, expanded);
-            },
-          ),
-          _buildExpansionTile(
-            title: 'Where can I find the user manual?',
-            content:
-            'The user manual can be found in the "Help" section of our website. It contains detailed information on how to use our application.',
-            isExpanded: expanded[2],
-            onExpansionChanged: (expanded) {
-              onExpansionChanged(2, expanded);
-            },
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -65,10 +77,10 @@ class FAQScreen extends StatelessWidget {
     return ExpansionTile(
       title: Text(
         title,
-        style: const TextStyle(color: Colors.white),
+        style: const TextStyle(color: tertiary),
       ),
-      backgroundColor: Colors.grey[800],
-      collapsedBackgroundColor: Colors.grey[850],
+      backgroundColor: primary,
+      collapsedBackgroundColor: background,
       textColor: Colors.white,
       iconColor: Colors.white,
       collapsedTextColor: Colors.white,
@@ -83,7 +95,9 @@ class FAQScreen extends StatelessWidget {
         ),
       ],
       initiallyExpanded: isExpanded,
-      onExpansionChanged: onExpansionChanged,
+      onExpansionChanged: (expanded) {
+        onExpansionChanged(expanded);
+      },
     );
   }
 }
