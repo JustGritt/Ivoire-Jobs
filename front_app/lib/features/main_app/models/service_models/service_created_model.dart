@@ -48,7 +48,7 @@ class ServiceCreatedModel {
       userId: json['userId'],
       name: json['name'],
       description: json['description'],
-      price: (json['price'] as int).toDouble(),
+      price: (json['price'] as dynamic).toDouble(),
       status: json['status'],
       duration: json['duration'],
       isBanned: json['isBanned'],

@@ -4,7 +4,7 @@ import 'package:barassage_app/core/init_dependencies.dart';
 import 'package:barassage_app/features/auth_mod/screens/mobile/main_wrapper.dart';
 import 'package:barassage_app/features/auth_mod/screens/mobile/splash_mobile_screen.dart';
 import 'package:barassage_app/features/main_app/Screens/mobile/new_service.dart';
-import 'package:barassage_app/features/main_app/Screens/mobile/service_booking.dart';
+import 'package:barassage_app/features/main_app/Screens/mobile/service_booking/service_booking.dart';
 import 'package:barassage_app/features/main_app/Screens/mobile/services_details.dart';
 import 'package:barassage_app/features/main_app/controllers/controller.dart';
 import 'package:barassage_app/features/main_app/controllers/main/services_controller.dart';
@@ -64,7 +64,7 @@ class App extends RouteManager {
                   GoRoute(
                     name: App.bookingService,
                     path: App.bookingService,
-                    builder: (context, state) => ServiceBookingScreen(),
+                    builder: (context, state) => ServiceBookingScreen(service: state.extra as ServiceCreatedModel,),
                   ),
                 ],
               ),

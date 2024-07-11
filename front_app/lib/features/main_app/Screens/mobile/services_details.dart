@@ -1,23 +1,15 @@
-import 'package:barassage_app/config/config.dart';
-import 'package:barassage_app/features/auth_mod/widgets/app_button.dart';
 import 'package:barassage_app/features/main_app/app.dart';
 import 'package:barassage_app/features/main_app/models/service_models/service_created_model.dart';
 import 'package:barassage_app/features/main_app/widgets/details_service/section_client_detail_service.dart';
 import 'package:barassage_app/features/main_app/widgets/details_service/section_top_detail_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:barassage_app/features/main_app/widgets/forms/report_form.dart';
 import 'package:go_router/go_router.dart';
-import 'package:ionicons/ionicons.dart';
 
 class ServiceDetailPage extends StatelessWidget {
   final ServiceCreatedModel service;
 
   ServiceDetailPage({super.key, required this.service});
-
-  submitReport(String reportReason) {
-    // Implement the report submission logic here
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -165,6 +157,7 @@ class ServiceDetailPage extends StatelessWidget {
                     ],
                   ),
                 ),
+                
                 Positioned(
                   bottom: 10,
                   left: 0,
@@ -223,7 +216,7 @@ class ServiceDetailPage extends StatelessWidget {
                           CupertinoButton(
                               color: theme.primaryColor,
                               onPressed: () {
-                                context.pushNamed(App.bookingService);
+                                context.pushNamed(App.bookingService, extra: service);
                               },
                               child: Row(
                                 children: [
@@ -242,11 +235,13 @@ class ServiceDetailPage extends StatelessWidget {
                                   ),
                                 ],
                               )),
+                        
                         ],
                       ),
                     ),
                   ),
                 ),
+              
               ],
             )));
   }

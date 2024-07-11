@@ -70,7 +70,9 @@
     "become_bassage_partner_title": "Become a barasseur",
     "become_bassage_partner_input_placeholder": "Why would you like to become a barasseur ?",
     "become_bassage_partner_submit": "Send my request",
-    "become_bassage_partner_description": "Please fill in the form below to send your request."
+    "become_bassage_partner_description": "Please fill in the form below to send your request.",
+
+    "book": "Book now"
 
 
 }

@@ -130,8 +130,8 @@ Widget buttonSearchInput(
             locationService != null
                 ? locationService.address.truncateTo(38)
                 : "Search for a location",
-            style: const TextStyle(
-              color: Colors.grey,
+            style:  TextStyle(
+              color: locationService != null ? Colors.black : Colors.grey[400],
               fontSize: 16,
             ),
           ),

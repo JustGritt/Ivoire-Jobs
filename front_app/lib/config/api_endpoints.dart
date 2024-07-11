@@ -8,8 +8,8 @@ class ApiEndpoint {
   // News Server
 
   // Server Links
-  static const baseUrl = 'https://api.barassage.com';
-  //static const baseUrl = 'https://fantastic-space-doodle-w59vv7w5w7pfp9j-8000.app.github.dev';
+  //static const baseUrl = 'https://api.barassage.com';
+  static const baseUrl = 'https://fantastic-space-doodle-w59vv7w5w7pfp9j-8000.app.github.dev';
   static const api = '${baseUrl}/api/v1';
 
   // Enqueries Endpoints
@@ -48,6 +48,8 @@ class ApiEndpoint {
   static const notificationPreferences = '/user/notification-preference';
   // become barasseur
   static const becomeBarasseur = '/member';
+  // Booking Services
+  static const bookingServices = '/booking';
   // Reports Endpoints
   static const reports = '${api}/report/pending';
   static const reportsDetails = '${api}/report/:id';
