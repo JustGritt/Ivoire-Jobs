@@ -70,9 +70,9 @@ func SetupRoutes(app *fiber.App) {
 
 	// Report Group
 	report := v1.Group("/report")
-	report.Get("/collection", ctl.GetAllReports)
-	report.Get("/pending", ctl.GetAllPendingReports)
-	report.Put("/:id", ctl.ValidateReport)
+	report.Get("/collection", middlewares.RequireAdmin(), ctl.GetAllReports)
+	report.Get("/pending", middlewares.RequireAdmin(), ctl.GetAllPendingReports)
+	report.Put("/:id", middlewares.RequireAdmin(), ctl.ValidateReport)
 	report.Post("/", middlewares.RequireLoggedIn(), ctl.CreateReport)
 
 	// Category Group

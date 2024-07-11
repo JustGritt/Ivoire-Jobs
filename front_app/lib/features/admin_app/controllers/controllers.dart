@@ -5,3 +5,5 @@ export './admin_dashboard_controller.dart';
 export './login_admin_controller.dart';
 export './admin_settings_controller.dart';
 export './home_controller.dart';
+export './banlist_controller.dart';
+export './reports_controller.dart';
