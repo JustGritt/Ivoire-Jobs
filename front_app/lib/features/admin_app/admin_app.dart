@@ -15,6 +15,7 @@ class AdminApp extends RouteManager {
   static const String dashboard = '/admin/dashboard';
   static const String abuseClaims = '/admin/abuse-claims';
   static const String splash = '/admin/splash';
+  static const String teams = '/admin/teams';
   static const String settings = '/admin/settings';
 
   AdminApp() {
@@ -64,6 +65,20 @@ class AdminApp extends RouteManager {
       path: AdminApp.services,
       pageBuilder: (context, state) {
         return const CupertinoPage(child: ServicesController());
+      },
+      redirect: (context, state) {
+        final authenticationState = BlocProvider.of<AuthenticationBloc>(context).state;
+        if (authenticationState is! AuthenticationSuccessState) {
+          return AdminApp.adminLogin;
+        }
+        return null;
+      },
+    ));
+
+    addRoute(GoRoute(
+      path: AdminApp.teams,
+      pageBuilder: (context, state) {
+        return const CupertinoPage(child: TeamManagerController());
       },
       redirect: (context, state) {
         final authenticationState = BlocProvider.of<AuthenticationBloc>(context).state;

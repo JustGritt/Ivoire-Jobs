@@ -5,3 +5,4 @@ export './desktop/manage_users_screen.dart';
 export './desktop/manage_services_screen.dart';
 export './desktop/banlist_screen.dart';
 export './desktop/splash_screen.dart';
+export './desktop/team_manager_screen.dart';

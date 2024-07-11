@@ -118,7 +118,7 @@ class _HeaderState extends State<Header> with SingleTickerProviderStateMixin {
                   ],
                 ),
                 style: OutlinedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 20.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 14.0),
                   side: BorderSide(
                     color: secondary,
                     width: 2,
