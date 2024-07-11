@@ -28,6 +28,7 @@ import (
 	"barassage/api/models/booking"
 	"barassage/api/models/category"
 	"barassage/api/models/configuration"
+	"barassage/api/models/contact"
 	"barassage/api/models/image"
 	"barassage/api/models/member"
 	"barassage/api/models/message"
@@ -80,6 +81,9 @@ func Run() {
 	// Connect to Postgres
 	db.ConnectPostgres()
 
+	//Drop Booking
+	//db.PgDB.Migrator().DropTable(&booking.Booking{}, &contact.Contact{})
+
 	// Migration
 	db.PgDB.AutoMigrate(
 		&user.User{},
@@ -88,6 +92,7 @@ func Run() {
 		&image.Image{},
 		&report.Report{},
 		&category.Category{},
+		&contact.Contact{},
 		&ban.Ban{},
 		&rating.Rating{},
 		&member.Member{},

@@ -1,5 +1,5 @@
-import 'package:barassage_app/features/admin_app/models/service.dart';
 import 'package:flutter/material.dart';
+import 'package:barassage_app/features/admin_app/models/service.dart';
 import 'package:intl/intl.dart';
 
 class BanCard extends StatelessWidget {
@@ -9,20 +9,59 @@ class BanCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      margin: const EdgeInsets.symmetric(vertical: 8.0),
       color: Colors.grey[200],
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15.0),
+      ),
+      elevation: 5,
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Reason: ${service.title} - ${DateFormat.yMMMd().format(service.createdAt)}',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              'Service: ${service.title}',
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-            SizedBox(height: 4),
-            Text('User ID: ${service.id}'),
-            SizedBox(height: 4),
-            Text('Service ID: ${service.price}'),
+            const SizedBox(height: 8),
+            Text(
+              'Banned on: ${DateFormat.yMMMd().format(service.createdAt)}',
+              style: const TextStyle(
+                fontSize: 14,
+                color: Colors.red,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const Divider(),
+            Text(
+              'Description: ${service.description}',
+              style: const TextStyle(fontSize: 14),
+            ),
+            const SizedBox(height: 8),
+            // TODO: Replace with user ID
+            Text(
+              'User ID: ${'N/A'}',
+              style: const TextStyle(fontSize: 14),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Price: ${service.price}',
+              style: const TextStyle(fontSize: 14),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Duration: ${service.duration}',
+              style: const TextStyle(fontSize: 14),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Status: ${service.status}',
+              style: const TextStyle(fontSize: 14),
+            ),
           ],
         ),
       ),

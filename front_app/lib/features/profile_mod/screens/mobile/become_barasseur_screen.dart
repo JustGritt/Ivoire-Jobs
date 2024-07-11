@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:animate_gradient/animate_gradient.dart';
 
-
 class BecomeBarasseurScreen extends StatefulWidget {
   const BecomeBarasseurScreen({super.key});
 

@@ -86,9 +86,22 @@ func SetUserBanStatus(userID string, isBanned bool) error {
 }
 
 // Get all users
-func GetAllUsers() ([]user.User, error) {
+func GetAllUsers(userType string) ([]user.User, error) {
 	var users []user.User
-	//get all user that is not banned from bans table left join with users table
-	err := database.PgDB.Table("users").Select("users.*").Joins("left join bans on users.id = bans.user_id").Where("bans.user_id is null").Find(&users).Error
+
+	// Build the query
+	query := database.PgDB.Table("users").Select("users.*").
+		Joins("left join bans on users.id = bans.user_id").
+		Where("bans.user_id is null")
+
+	// Add role filtering based on userType
+	if userType == "users" {
+		query = query.Where("users.role = ?", "standard")
+	} else if userType == "admin" {
+		query = query.Where("users.role = ?", "admin")
+	}
+
+	// Execute the query
+	err := query.Find(&users).Error
 	return users, err
 }

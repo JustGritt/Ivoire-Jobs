@@ -34,6 +34,7 @@ func SetupRoutes(app *fiber.App) {
 	// Auth Group
 	auth := v1.Group("/auth")
 	auth.Post("/register", ctl.Register)
+	auth.Post("/register-admin", middlewares.RequireAdmin(), ctl.RegisterAdmin)
 	auth.Post("/login", ctl.Login)
 	auth.Post("/admin-login", ctl.AdminLogin)
 	auth.Post("/logout", ctl.Logout)
@@ -55,6 +56,7 @@ func SetupRoutes(app *fiber.App) {
 	service.Get("/collection", ctl.GetAll)
 	service.Get("/bans", ctl.GetAllBannedServices)
 	service.Get("/:id/rating", ctl.GetAllRatingsFromService)
+	service.Get("/:id/booking", middlewares.RequireLoggedIn(), ctl.GetBookingService)
 	service.Get("/:id", ctl.GetServiceById)
 	service.Get("/:id/room", middlewares.RequireLoggedIn(), ctl.CreateOrGetRoom)
 	service.Post("/", middlewares.RequireLoggedIn(), ctl.CreateService)
@@ -63,15 +65,15 @@ func SetupRoutes(app *fiber.App) {
 
 	// Booking Group
 	booking := v1.Group("/booking")
-	booking.Get("/collection", ctl.GetBookings)
+	booking.Get("/collection", middlewares.RequireLoggedIn(), ctl.GetBookings)
 	booking.Post("/", middlewares.RequireLoggedIn(), ctl.CreateBooking)
 	booking.Put("/:id", middlewares.RequireLoggedIn(), ctl.UpdateBooking)
 
 	// Report Group
 	report := v1.Group("/report")
-	report.Get("/collection", ctl.GetAllReports)
-	report.Get("/pending", ctl.GetAllPendingReports)
-	report.Put("/:id", ctl.ValidateReport)
+	report.Get("/collection", middlewares.RequireAdmin(), ctl.GetAllReports)
+	report.Get("/pending", middlewares.RequireAdmin(), ctl.GetAllPendingReports)
+	report.Put("/:id", middlewares.RequireAdmin(), ctl.ValidateReport)
 	report.Post("/", middlewares.RequireLoggedIn(), ctl.CreateReport)
 
 	// Category Group

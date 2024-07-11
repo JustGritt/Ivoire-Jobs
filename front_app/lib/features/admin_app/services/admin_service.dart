@@ -85,8 +85,7 @@ class AdminService {
       throw Exception('Failed to ban user');
     }
   }
-
-
+  
   Future<AdminUser?> createAdminUser(AdminUser user) async {
     try {
       print(user.toJson());
@@ -111,6 +110,5 @@ class AdminService {
       throw Exception('Failed to create admin user: $e');
     }
   }
-
-
+  
 }

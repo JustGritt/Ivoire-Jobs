@@ -7,10 +7,11 @@ import (
 	contactRepo "barassage/api/repositories/contact"
 	userRepo "barassage/api/repositories/user"
 	"fmt"
+	"net/http"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
-	"net/http"
 )
 
 type ContactObject struct {
@@ -98,24 +99,21 @@ func AddContactInfo(c *fiber.Ctx) error {
 
 func mapInputToContact(contactInfo fillingContactObject) contact.Contact {
 	return contact.Contact{
-		Phone:       contactInfo.Phone,
-		Address:     contactInfo.Address,
-		City:        contactInfo.City,
-		Country:     contactInfo.Country,
-		PostalCode:  contactInfo.PostalCode,
-		Description: contactInfo.Description,
-		ExternalID:  uuid.New().String(),
+		ID:         uuid.New().String(),
+		Phone:      contactInfo.Phone,
+		Address:    contactInfo.Address,
+		City:       contactInfo.City,
+		Country:    contactInfo.Country,
+		PostalCode: contactInfo.PostalCode,
 	}
 }
 
 func mapContactToOutput(contact *contact.Contact) *ContactObject {
 	return &ContactObject{
-		ID:          contact.ExternalID,
-		Phone:       contact.Phone,
-		Address:     contact.Address,
-		City:        contact.City,
-		Country:     contact.Country,
-		PostalCode:  contact.PostalCode,
-		Description: contact.Description,
+		Phone:      contact.Phone,
+		Address:    contact.Address,
+		City:       contact.City,
+		Country:    contact.Country,
+		PostalCode: contact.PostalCode,
 	}
 }

@@ -81,7 +81,7 @@ class AdminScaffold extends StatelessWidget {
               title: const Text('Ban List'),
               onTap: () {
                 Navigator.pop(context);
-                context.go('/admin/ban-list');
+                context.go('/admin/banlist');
               },
             ),
             ListTile(
@@ -115,3 +115,4 @@ class AdminScaffold extends StatelessWidget {
     );
   }
 }
+

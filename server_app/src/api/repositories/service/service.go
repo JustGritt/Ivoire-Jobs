@@ -51,7 +51,7 @@ func GetServiceByNameForUser(name string, userID string) (*service.Service, erro
 
 func GetServicesByUserID(userID string) ([]service.Service, error) {
 	var services []service.Service
-	if err := db.PgDB.Preload("Images").Preload("Categories").Where("user_id = ?", userID).Find(&services).Error; err != nil {
+	if err := db.PgDB.Preload("Images").Preload("Categories").Preload("Bookings").Where("user_id = ?", userID).Find(&services).Error; err != nil {
 		return nil, err
 	}
 	return services, nil
