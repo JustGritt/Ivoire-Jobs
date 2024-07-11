@@ -95,8 +95,8 @@ func GetAllUsers(userType string) ([]user.User, error) {
 		Where("bans.user_id is null")
 
 	// Add role filtering based on userType
-	if userType == "user" {
-		query = query.Where("users.role = ?", "user")
+	if userType == "users" {
+		query = query.Where("users.role = ?", "standard")
 	} else if userType == "admin" {
 		query = query.Where("users.role = ?", "admin")
 	}
