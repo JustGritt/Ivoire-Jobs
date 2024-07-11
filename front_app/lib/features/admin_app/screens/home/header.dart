@@ -78,9 +78,9 @@ class _HeaderState extends State<Header> with SingleTickerProviderStateMixin {
                 'assets/images/app-logo.png',
                 height: isDesktop ? 72 : 52,
               ),
-              SizedBox(width: isDesktop ? 10 : 4), // Add spacing between logo and app name
+              SizedBox(width: isDesktop ? 10 : 4),
               Text(
-                'Barassage', // Replace with your app name
+                'Barassage',
                 style: TextStyle(
                   color: primary,
                   fontSize: 24,
@@ -164,14 +164,14 @@ class _HeaderState extends State<Header> with SingleTickerProviderStateMixin {
                 ),
                 const SizedBox(width: 24),
                 OutlinedButton(
-                  onPressed: _launchURL, // Add the URL launch function here
+                  onPressed: _launchURL,
                   child: Row(
                     children: [
                       Text(
                         'Download',
                         style: TextStyle(color: primary, fontSize: 18),
                       ),
-                      const SizedBox(width: 8), // Add spacing between text and icon
+                      const SizedBox(width: 8),
                       AnimatedBuilder(
                         animation: _animation,
                         builder: (context, child) {
@@ -181,7 +181,7 @@ class _HeaderState extends State<Header> with SingleTickerProviderStateMixin {
                           );
                         },
                         child: Icon(
-                          Icons.download, // Use the download icon
+                          Icons.download,
                           color: primary,
                           size: 18,
                         ),
@@ -194,8 +194,8 @@ class _HeaderState extends State<Header> with SingleTickerProviderStateMixin {
                       color: secondary,
                       width: 2,
                     ),
-                    foregroundColor: primary, // Text color
-                    backgroundColor: Colors.transparent, // Button background color
+                    foregroundColor: primary,
+                    backgroundColor: Colors.transparent,
                     overlayColor: primary,
                   ),
                 ),

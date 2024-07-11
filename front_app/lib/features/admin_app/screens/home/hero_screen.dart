@@ -27,7 +27,7 @@ class HeroScreen extends StatelessWidget {
       child: Column(
         children: [
           if (isDesktop)
-            const SizedBox(height: 10), // Add additional padding for desktop
+            const SizedBox(height: 10),
           Text(
             'ABOUT US',
             style: TextStyle(

@@ -22,12 +22,12 @@ class FooterScreen extends StatelessWidget {
                   Row(
                     children: [
                       Image.asset(
-                        'assets/images/app-logo.png', // Your logo here
+                        'assets/images/app-logo.png',
                         height: 60,
                       ),
                       const SizedBox(width: 8),
                       Text(
-                        'Barassage', // Replace with your app name
+                        'Barassage',
                         style: TextStyle(
                           color: tertiary,
                           fontSize: 24,
@@ -42,11 +42,11 @@ class FooterScreen extends StatelessWidget {
               // Navigation links
               if (isDesktop)
                 Row(
-                  crossAxisAlignment: CrossAxisAlignment.start, // Align columns at the top
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start, // Align text to start
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text('Notre mission', style: TextStyle(color: tertiary, fontWeight: FontWeight.bold)),
                           SizedBox(height: 10),

@@ -20,7 +20,7 @@ class FAQScreen extends StatelessWidget {
       key: faqKey,
       height: containerHeight,
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 60),
-      color: tertiary, // Matching background color
+      color: tertiary,
       child: Center(
         child: FractionallySizedBox(
           widthFactor: isDesktop ? 2 / 3 : 1,
