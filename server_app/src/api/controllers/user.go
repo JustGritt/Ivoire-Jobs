@@ -510,7 +510,25 @@ func AdminLogin(c *fiber.Ctx) error {
 func GetAllUsers(c *fiber.Ctx) error {
 	var users []user.User
 	var errorList []*fiber.Error
-	users, err := userRepo.GetAllUsers()
+
+	// get the query param name type and check if empty
+	userType := c.Query("type")
+	if userType == "" {
+		userType = "users"
+	}
+	//check if the type is users or admin
+	if userType != "users" && userType != "admin" {
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusBadRequest,
+				Message: "Invalid user type",
+			},
+		)
+		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
+	users, err := userRepo.GetAllUsers(userType)
 	if err != nil {
 		errorList = append(
 			errorList,
