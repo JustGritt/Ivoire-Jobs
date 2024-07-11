@@ -62,24 +62,31 @@ type ServiceUpdateObject struct {
 }
 
 type ServiceOutput struct {
-	ServiceID   string     `json:"id"`
-	UserID      string     `json:"userId"`
-	Name        string     `json:"name"`
-	Description string     `json:"description"`
-	Price       float64    `json:"price"`
-	Status      bool       `json:"status"`
-	Duration    int        `json:"duration"`
-	IsBanned    bool       `json:"isBanned"`
-	Latitude    float64    `json:"latitude"`
-	Longitude   float64    `json:"longitude"`
-	Address     string     `json:"address"`
-	City        string     `json:"city"`
-	PostalCode  string     `json:"postalCode"`
-	Country     string     `json:"country"`
-	Images      []string   `json:"images"`
-	CreatedAt   string     `json:"createdAt"`
-	Category    []string   `json:"category"`
-	User        CustomUser `json:"user"`
+	ServiceID   string          `json:"id"`
+	UserID      string          `json:"userId"`
+	Name        string          `json:"name"`
+	Description string          `json:"description"`
+	Price       float64         `json:"price"`
+	Status      bool            `json:"status"`
+	Duration    int             `json:"duration"`
+	IsBanned    bool            `json:"isBanned"`
+	Latitude    float64         `json:"latitude"`
+	Longitude   float64         `json:"longitude"`
+	Address     string          `json:"address"`
+	City        string          `json:"city"`
+	PostalCode  string          `json:"postalCode"`
+	Country     string          `json:"country"`
+	Images      []string        `json:"images"`
+	CreatedAt   string          `json:"createdAt"`
+	Category    []string        `json:"category"`
+	User        CustomUser      `json:"user"`
+	Bookings    []CustomBooking `json:"bookings"`
+}
+
+type CustomBooking struct {
+	BookingID string `json:"id"`
+	StartAt   string `json:"startAt"`
+	EndAt     string `json:"endAt"`
 }
 
 type CustomUser struct {
@@ -89,6 +96,7 @@ type CustomUser struct {
 	LastName  string `json:"lastname"`
 	Bio       string `json:"bio"`
 	Member    string `json:"member"`
+	CreateAt  string `json:"createdAt"`
 }
 
 // CreateService Godoc
@@ -358,6 +366,8 @@ func GetServiceByUserId(c *fiber.Ctx) error {
 		)
 		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
 	}
+
+	//for each service create the customBooking
 
 	// Map services to ServiceOutput
 	var ouput []ServiceOutput
@@ -988,7 +998,23 @@ func mapServiceToOutPut(u *service.Service) *ServiceOutput {
 		LastName:  user.Lastname,
 		Bio:       user.Bio,
 		Member:    user.Member[len(user.Member)-1].Status,
+		CreateAt:  user.CreatedAt.Format("2006-01-02"),
 	}
+
+	//trim the object booking
+	var customBooking []CustomBooking
+	for _, booking := range u.Bookings {
+		customBooking = append(customBooking, CustomBooking{
+			BookingID: booking.ID,
+			StartAt:   booking.StartTime.Format("2006-01-02"),
+			EndAt:     booking.EndTime.Format("2006-01-02"),
+		})
+	}
+	//if empty return []
+	if len(customBooking) == 0 {
+		customBooking = []CustomBooking{}
+	}
+
 	return &ServiceOutput{
 		ServiceID:   u.ID,
 		UserID:      u.UserID,
@@ -1007,6 +1033,7 @@ func mapServiceToOutPut(u *service.Service) *ServiceOutput {
 		Images:      imageUrls,
 		Category:    categoriesNames,
 		User:        CustomUser,
+		Bookings:    customBooking,
 		CreatedAt:   u.CreatedAt.Format("2006-01-02"),
 	}
 }

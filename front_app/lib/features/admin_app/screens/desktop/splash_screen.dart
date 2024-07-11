@@ -28,7 +28,7 @@ class _SplashDesktopScreenState extends State<SplashDesktopScreen>
       if (state is AuthenticationSuccessState) {
         context.go(AdminApp.dashboard);
       } else if (state is AuthenticationFailureState) {
-        context.go(AdminApp.adminLogin);
+        context.go(AdminApp.home);
       }
     });
   }

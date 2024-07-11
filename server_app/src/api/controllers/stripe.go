@@ -27,6 +27,8 @@ func HandleWebhook(c *fiber.Ctx) error {
 
 	// Unmarshal the event data into an appropriate struct depending on its Type
 	switch event.Type {
+	case "payment_intent.created":
+		fmt.Println("PaymentIntent was created!")
 	case "payment_intent.succeeded":
 		// Then define and call a function to handle the event payment_intent.succeeded
 		fmt.Println("PaymentIntent was successful!")
