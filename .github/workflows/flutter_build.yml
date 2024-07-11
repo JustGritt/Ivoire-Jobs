@@ -3,7 +3,7 @@ name: Build Flutter Android App
 on:
   push:
     branches:
-      - main 
+      - main
     paths:
       - 'front_app/**'  # Trigger this workflow only on changes to the front_app directory
   workflow_dispatch:  # Allow manual triggering of the workflow
@@ -27,24 +27,7 @@ jobs:
         with:
           channel: stable
           flutter-version: 3.22.2
-
-      - name: Generate .env File for Flutter
-        run: |
-          echo "MAPBOX_API_URL=${{ secrets.MAPBOX_API_URL }}" >> ./front_app/.env
-          echo "MAPBOX_SEARCH_URL=${{ secrets.MAPBOX_SEARCH_URL }}" >> ./front_app/.env
-          echo "MAPBOX_ACCESS_TOKEN=${{ secrets.MAPBOX_ACCESS_TOKEN }}" >> ./front_app/.env
-
-      - run: flutter pub get
-        working-directory: ./front_app
-
-      - run: flutter build apk --release
-        working-directory: ./front_app
-
-      - name: Zip the APK
-        run: |
-          cd ./front_app/build/app/outputs/flutter-apk
-          zip -r release-apk.zip app-release.apk
-
+      
       - name: Install GitHub CLI
         run: sudo apt-get install gh -y
 
@@ -64,6 +47,36 @@ jobs:
           echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Generate .env File for Flutter
+        run: |
+          echo "MAPBOX_API_URL=${{ secrets.MAPBOX_API_URL }}" >> ./front_app/.env
+          echo "MAPBOX_SEARCH_URL=${{ secrets.MAPBOX_SEARCH_URL }}" >> ./front_app/.env
+          echo "MAPBOX_ACCESS_TOKEN=${{ secrets.MAPBOX_ACCESS_TOKEN }}" >> ./front_app/.env
+          echo "DOWNLOAD_URL=https://s3.${{ secrets.CLOUDFLARE_R2_BUCKET_NAME }}.com/apk-${{ env.NEW_VERSION }}.apk" >> ./front_app/.env
+
+      - run: flutter pub get
+        working-directory: ./front_app
+
+      - run: flutter build apk --release
+        working-directory: ./front_app
+
+      - name: Zip the APK
+        run: |
+          cd ./front_app/build/app/outputs/flutter-apk
+          zip -r release-apk.zip app-release.apk
+
+      - name: Install rclone
+        run: |
+          curl https://rclone.org/install.sh | sudo bash
+
+      - name: Configure rclone
+        run: |
+          rclone config create myr2 s3 env_auth true provider Cloudflare access_key_id ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }} secret_access_key ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }} region auto endpoint https://${{ secrets.CLOUDFLARE_ACCOUNT_ID }}.r2.cloudflarestorage.com
+
+      - name: Upload APK to Cloudflare R2
+        run: |
+          rclone copy ./front_app/build/app/outputs/flutter-apk/app-release.apk myr2:${{ secrets.CLOUDFLARE_R2_BUCKET_NAME }}/apk-${{ env.NEW_VERSION }}.apk
 
       - name: Create GitHub Release
         env:
