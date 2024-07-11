@@ -17,7 +17,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     '/admin/users',
     '/admin/services',
     '/admin/reports',
-    '/admin/ban-list',
+    '/admin/banlist',
     '/admin/settings',
   ];
 

@@ -8,9 +8,9 @@ class ApiEndpoint {
   // News Server
 
   // Server Links
+  // static const baseUrl = 'http://localhost:8000';
   static const baseUrl = 'https://api.barassage.com';
-  //static const baseUrl = 'https://fantastic-space-doodle-w59vv7w5w7pfp9j-8000.app.github.dev';
-  static const api = '${baseUrl}/api/v1';
+  static const api = '$baseUrl/api/v1';
 
   // Enqueries Endpoints
   static const enqueries = '${api}enqueries?populate=*&sort[0]=id%3Adesc';
@@ -51,4 +51,6 @@ class ApiEndpoint {
   // Reports Endpoints
   static const reports = '${api}/report/pending';
   static const reportsDetails = '${api}/report/:id';
+  // Ban Endpoints
+  static const bannedUsers = '${api}/ban/collection';
 }
