@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:barassage_app/features/admin_app/providers/banned_services_provider.dart';
 import 'package:barassage_app/features/admin_app/providers/banned_users_provider.dart';
-import 'package:barassage_app/features/admin_app/widgets/ban_card.dart';
+import 'package:barassage_app/features/admin_app/widgets/banned_service_card.dart';
+import 'package:barassage_app/features/admin_app/widgets/banned_user_card.dart';
 import 'package:barassage_app/features/admin_app/models/service.dart';
 import 'package:barassage_app/features/admin_app/models/banned_user.dart';
-import 'package:intl/intl.dart';
 
 class BanListScreen extends StatefulWidget {
   const BanListScreen({super.key});
@@ -88,29 +88,13 @@ class _BanListScreenState extends State<BanListScreen> with SingleTickerProvider
         } else if (provider.users.isEmpty) {
           return const Center(child: Text('No banned users found.'));
         } else {
-          return SingleChildScrollView(
+          return ListView.builder(
             padding: const EdgeInsets.all(16.0),
-            scrollDirection: Axis.horizontal,
-            child: DataTable(
-              columns: const [
-                DataColumn(label: Text('ID')),
-                DataColumn(label: Text('User ID')),
-                DataColumn(label: Text('Reason')),
-                DataColumn(label: Text('Number of Reports')),
-                DataColumn(label: Text('Banned At')),
-              ],
-              rows: provider.users.map((user) {
-                return DataRow(
-                  cells: [
-                    DataCell(Text(user.id)),
-                    DataCell(Text(user.userId)),
-                    DataCell(Text(user.reason)),
-                    DataCell(Text(user.nbReports)),
-                    DataCell(Text(DateFormat.yMMMd().format(user.createdAt))),
-                  ],
-                );
-              }).toList(),
-            ),
+            itemCount: provider.users.length,
+            itemBuilder: (context, index) {
+              final bannedUser = provider.users[index];
+              return BannedUserCard(bannedUser: bannedUser);
+            },
           );
         }
       },
