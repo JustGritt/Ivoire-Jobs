@@ -24,8 +24,8 @@ class User {
 
   factory User.fromJson(Map<String, dynamic> json) => User(
         id: json["id"] ?? '',
-        firstName: json["firstName"] ?? '',
-        lastName: json["lastName"] ?? '',
+        firstName: json["firstname"] ?? '',
+        lastName: json["lastname"] ?? '',
         email: json["email"] ?? '',
         bio: json['bio'],
         profilePicture: json['profilePicture'] ?? '',
@@ -83,13 +83,14 @@ class User {
       'profilePicture': profilePicture,
       'bio': bio,
       'id': id,
+      'createdAt': createdAt.toIso8601String(),
     };
   }
 
   factory User.fromMap(Map<String, dynamic> map) {
     return User(
-      firstName: map['firstName'] ?? '',
-      lastName: map['lastName'] ?? '',
+      firstName: map['firstname'] ?? '',
+      lastName: map['lastname'] ?? '',
       email: map['email'] ?? '',
       profilePicture: map['profilePicture'] ?? '',
       bio: map['bio'] ?? '',
