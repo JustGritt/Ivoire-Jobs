@@ -66,7 +66,7 @@ class _HeaderState extends State<Header> with SingleTickerProviderStateMixin {
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: 20,
-        vertical: isDesktop ? 10 : 20,
+        vertical: 10,
       ),
       color: backgroundColor,
       child: Row(
@@ -90,40 +90,43 @@ class _HeaderState extends State<Header> with SingleTickerProviderStateMixin {
             ],
           ),
           if (isMobile(context))
-            OutlinedButton(
-              onPressed: _launchURL,
-              child: Row(
-                children: [
-                  Text(
-                    'Download',
-                    style: TextStyle(color: primary, fontSize: 14),
-                  ),
-                  const SizedBox(width: 8),
-                  AnimatedBuilder(
-                    animation: _animation,
-                    builder: (context, child) {
-                      return Transform.translate(
-                        offset: Offset(0, _animation.value),
-                        child: child,
-                      );
-                    },
-                    child: Icon(
-                      Icons.download, // Use the download icon
-                      color: primary,
-                      size: 18,
+            Flexible(
+              child: OutlinedButton(
+                onPressed: _launchURL,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'Download',
+                      style: TextStyle(color: primary, fontSize: 14),
                     ),
-                  ),
-                ],
-              ),
-              style: OutlinedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 20.0),
-                side: BorderSide(
-                  color: secondary,
-                  width: 2,
+                    const SizedBox(width: 8),
+                    AnimatedBuilder(
+                      animation: _animation,
+                      builder: (context, child) {
+                        return Transform.translate(
+                          offset: Offset(0, _animation.value),
+                          child: child,
+                        );
+                      },
+                      child: Icon(
+                        Icons.download, // Use the download icon
+                        color: primary,
+                        size: 18,
+                      ),
+                    ),
+                  ],
                 ),
-                foregroundColor: primary, // Text color
-                backgroundColor: Colors.transparent, // Button background color
-                overlayColor: primary,
+                style: OutlinedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 20.0),
+                  side: BorderSide(
+                    color: secondary,
+                    width: 2,
+                  ),
+                  foregroundColor: primary, // Text color
+                  backgroundColor: Colors.transparent, // Button background color
+                  overlayColor: primary,
+                ),
               ),
             )
           else
