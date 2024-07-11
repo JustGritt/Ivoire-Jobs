@@ -534,7 +534,6 @@ func GetAllUsers(c *fiber.Ctx) error {
 	}
 
 	return c.Status(http.StatusOK).JSON(ouput)
-
 }
 
 // GetMyProfile Godoc

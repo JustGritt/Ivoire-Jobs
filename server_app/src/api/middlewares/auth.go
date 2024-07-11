@@ -1,6 +1,7 @@
 package middlewares
 
 import (
+	"fmt"
 	"net/http"
 
 	cfg "barassage/api/configs"
@@ -53,6 +54,9 @@ func CheckAppStatus() fiber.Handler {
 				//get form request header the IP address
 				requestIP := c.Get("X-Original-Forwarded-For")
 				cloudFlareRealIP := c.Get("CF-Connecting-IP")
+				fmt.Println("requestIP", requestIP)
+				fmt.Println("cloudFlareRealIP", cloudFlareRealIP)
+				fmt.Println("ip", ip)
 				//get the all request hed
 				if requestIP == "" {
 					requestIP = c.IP()

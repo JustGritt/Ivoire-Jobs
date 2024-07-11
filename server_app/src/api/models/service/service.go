@@ -1,6 +1,7 @@
 package service
 
 import (
+	"barassage/api/models/booking"
 	"barassage/api/models/category"
 	"barassage/api/models/image"
 	"os/user"
@@ -28,4 +29,5 @@ type Service struct {
 	Images      []image.Image       `gorm:"foreignKey:ServiceID;constraint:OnDelete:CASCADE"`
 	Categories  []category.Category `gorm:"many2many:service_categories;constraint:OnDelete:CASCADE"`
 	User        user.User           `gorm:"-"`
+	Bookings    []booking.Booking   `gorm:"foreignKey:ServiceID;constraint:OnDelete:CASCADE"`
 }
