@@ -7,31 +7,24 @@ import 'package:barassage_app/features/admin_app/models/banned_user.dart';
 class BannedUsersProvider extends ChangeNotifier {
   List<BannedUser> _users = [];
   bool isLoading = false;
+  String errorMessage = '';
   final AppHttp _http = AppHttp();
 
   List<BannedUser> get users => _users;
 
   Future<List<BannedUser>> getAllBannedUsers() async {
     isLoading = true;
+    errorMessage = '';
     notifyListeners();
     try {
       Response res = await _http.get('${ApiEndpoint.bannedUsers}');
       if (res.statusCode == 200 && res.data is List) {
-        print(res.data);
-        _users = List<BannedUser>.from(res.data.map((item) {
-          try {
-            return BannedUser.fromJson(item);
-          } catch (e) {
-            print("Error parsing user: $item");
-            print(e);
-            return null; // Skip invalid entries
-          }
-        }).where((element) => element != null));
+        _users = List<BannedUser>.from(res.data.map((item) => BannedUser.fromJson(item)));
       } else {
-        print("Unexpected response format");
+        errorMessage = "Unexpected response format";
       }
     } catch (e) {
-      print("Error: $e");
+      errorMessage = "Error fetching banned users: $e";
     } finally {
       isLoading = false;
       notifyListeners();

@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:barassage_app/features/admin_app/models/service.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class BanCard extends StatelessWidget {
@@ -21,7 +21,7 @@ class BanCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Service: ${service.title}',
+              'Service: ${service.name}',
               style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -42,9 +42,8 @@ class BanCard extends StatelessWidget {
               style: const TextStyle(fontSize: 14),
             ),
             const SizedBox(height: 8),
-            // TODO: Replace with user ID
             Text(
-              'User ID: ${'N/A'}',
+              'Author: ${service.user.firstName} ${service.user.lastName}',
               style: const TextStyle(fontSize: 14),
             ),
             const SizedBox(height: 8),
@@ -54,12 +53,12 @@ class BanCard extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              'Duration: ${service.duration}',
+              'Duration: ${service.duration} minutes',
               style: const TextStyle(fontSize: 14),
             ),
             const SizedBox(height: 8),
             Text(
-              'Status: ${service.status}',
+              'Status: ${service.status ? 'Active' : 'Inactive'}',
               style: const TextStyle(fontSize: 14),
             ),
           ],

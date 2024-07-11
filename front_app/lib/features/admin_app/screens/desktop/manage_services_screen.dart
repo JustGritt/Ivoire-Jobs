@@ -75,7 +75,7 @@ class _ManageServicesScreenState extends State<ManageServicesScreen> {
                     Icons.image,
                     size: 50,
                   ),
-                  title: Text(service.title),
+                  title: Text(service.name),
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

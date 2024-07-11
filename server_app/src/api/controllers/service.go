@@ -952,26 +952,19 @@ func GetTrendingServices(c *fiber.Ctx) error {
 // @Failure 500 {array} ErrorResponse
 // @Router /service/bans [get]
 func GetAllBannedServices(c *fiber.Ctx) error {
-	var errorList []*fiber.Error
 	services, err := serviceRepo.GetAllBannedServices()
 	if err != nil {
-		errorList = append(
-			errorList,
-			&fiber.Error{
-				Code:    fiber.StatusInternalServerError,
-				Message: "error getting banned services",
-			},
-		)
-		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Error fetching banned services",
+		})
 	}
 
-	// Map services to ServiceOutput
-	var ouput []ServiceOutput
+	var serviceOutputs []ServiceOutput
 	for _, s := range services {
-		ouput = append(ouput, *mapServiceToOutPut(&s))
+		serviceOutputs = append(serviceOutputs, *mapServiceToOutPut(&s))
 	}
 
-	return c.Status(http.StatusOK).JSON(ouput)
+	return c.Status(http.StatusOK).JSON(serviceOutputs)
 }
 
 // ============================================================
