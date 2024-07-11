@@ -26,6 +26,15 @@ class _ReportScreenState extends State<ReportScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Reports'),
+        // leading: IconButton(
+        //   onPressed: () {
+        //     Navigator.of(context).pop();
+        //   },
+        //   icon: const Icon(Icons.arrow_back),
+        // ),
+      ),
       body: FutureBuilder<List<Report>>(
         future: futureReports,
         builder: (context, snapshot) {

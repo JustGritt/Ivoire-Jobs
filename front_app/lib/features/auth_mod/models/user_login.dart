@@ -22,12 +22,10 @@ class UserLogin {
 
 class UserLoginResponse {
   final String accessToken;
-  final String refreshToken;
   final User user;
 
   UserLoginResponse({
     required this.accessToken,
-    required this.refreshToken,
     required this.user,
   });
 
@@ -38,13 +36,11 @@ class UserLoginResponse {
   }) =>
       UserLoginResponse(
         accessToken: accessToken ?? this.accessToken,
-        refreshToken: refreshToken ?? this.refreshToken,
         user: user ?? this.user,
       );
   factory UserLoginResponse.fromJson(Map<String, dynamic> json) =>
       UserLoginResponse(
         accessToken: json["access_token"],
-        refreshToken: json["refresh_token"],
         user: User.fromJson(json["user"]),
       );
 }

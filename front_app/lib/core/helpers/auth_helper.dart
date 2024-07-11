@@ -1,6 +1,7 @@
 import 'package:barassage_app/core/classes/app_context.dart';
 import 'package:barassage_app/core/exceptions/dio_exceptions.dart';
 import 'package:barassage_app/core/init_dependencies.dart';
+import 'package:barassage_app/features/admin_app/admin_app.dart';
 import 'package:barassage_app/features/auth_mod/auth_app.dart';
 import 'package:barassage_app/features/auth_mod/models/user.dart';
 import 'package:barassage_app/features/auth_mod/models/user_login.dart';
@@ -36,18 +37,36 @@ doAuth(String email, String password) async {
   }
 }
 
+doAdminAuth(String email, String password) async {
+  AppCache ac = AppCache();
+  UserService us = UserService();
+  try {
+    UserLoginResponse userLoginResponse = await us.adminLogin(UserLogin(email: email, password: password));
+    ac.doLogin(userLoginResponse.user, userLoginResponse.accessToken);
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      Nav.to(context, AdminApp.dashboard);
+      showMessage(context, 'Login Successful');
+    });
+    return userLoginResponse.user;
+  } on DioException catch (e) {
+    logger.e(DioExceptionHandler(e).error.message);
+    showError(context, DioExceptionHandler(e).title);
+    rethrow;  // Propagate the error to be handled by the caller
+  }
+}
+
+
 doRegister(UserSignup userSignup) async {
   UserService us = serviceLocator<UserService>();
   try {
-    debugPrint('Hee');
     User? user = await us.register(userSignup);
-    debugPrint('User: $user');
     SchedulerBinding.instance.addPostFrameCallback((_) {
       Nav.to(context, AuthApp.welcomeEmail);
       showMessage(context, 'Register Successful');
     });
   } on DioException catch (e) {
     logger.e(e);
+    print(e.message);
     showError(context, DioExceptionHandler(e).title);
   }
 }
@@ -55,8 +74,8 @@ doRegister(UserSignup userSignup) async {
 Future<User?> getMyProfile() async {
   UserService us = serviceLocator<UserService>();
   try {
-    UserLoginResponse userLogin = await us.getMyProfile();
-    return userLogin.user;
+    User user = await us.getMyProfile();
+    return user;
   } on DioException catch (e) {
     logger.e(DioExceptionHandler(e).error.message);
     showError(context, DioExceptionHandler(e).title);
@@ -74,6 +93,13 @@ void doLogout() async {
   showMessage(context, 'Logout Successfull');
 }
 
+void AdminDoLogout() async {
+  AppCache ac = AppCache();
+  ac.doLogout();
+  checkLogin(context, auth: true, loginUrl: AdminApp.adminLogin);
+  showMessage(context, 'Logout Successfull');
+}
+
 void checkLogin(
   BuildContext context, {
   bool? auth = false,
@@ -87,29 +113,4 @@ void checkLogin(
       });
     }
   });
-}
-
-void checkRegisterToken(BuildContext context, String token) {
-  UserService us = UserService();
-  us.verifyEmailToken(token).then((value) {
-    if (value == false) {
-      SchedulerBinding.instance.addPostFrameCallback((_) {
-        // setState(() {
-        //   isEmailValidated = false;
-        //   isLoading = false;
-        // });
-      });
-    }
-  });
-}
-
-Future<List<User>?> getUsers() async {
-  UserService us = serviceLocator<UserService>();
-  try {
-    return await us.getUsers();
-  } on DioException catch (e) {
-    logger.e(DioExceptionHandler(e).error.message);
-    showError(context, DioExceptionHandler(e).title);
-    return null;
-  }
 }

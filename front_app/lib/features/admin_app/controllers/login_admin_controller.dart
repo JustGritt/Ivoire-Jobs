@@ -8,7 +8,7 @@ class LoginDesktopController extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Title(
-      title: 'Admin Login Section',
+      title: 'Admin Login',
       color: Colors.blue,
       child: const LoginDesktopScreen(),
     );

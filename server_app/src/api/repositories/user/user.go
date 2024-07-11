@@ -88,6 +88,7 @@ func SetUserBanStatus(userID string, isBanned bool) error {
 // Get all users
 func GetAllUsers() ([]user.User, error) {
 	var users []user.User
-	err := database.PgDB.Find(&users).Error
+	//get all user that is not banned from bans table left join with users table
+	err := database.PgDB.Table("users").Select("users.*").Joins("left join bans on users.id = bans.user_id").Where("bans.user_id is null").Find(&users).Error
 	return users, err
 }

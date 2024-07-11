@@ -15,22 +15,17 @@ class AdminService {
     baseUrl: ApiEndpoint.baseUrl,
   );
 
-  // get an array of services
   Future<List<Service>> getAllServices() async {
     try {
       Response res = await _http.get(ApiEndpoint.serviceCollection);
       debugPrint('services: ${res.data}');
       if (res.statusCode == 200) {
         debugPrint('services data type: ${res.data.runtimeType}');
-        // Check for direct list or nested list
         if (res.data is List) {
-          List<Service> services =
-              (res.data as List).map((e) => Service.fromJson(e)).toList();
+          List<Service> services = (res.data as List).map((e) => Service.fromJson(e)).toList();
           return services;
         } else if (res.data['data'] is List) {
-          List<Service> services = (res.data['data'] as List)
-              .map((e) => Service.fromJson(e))
-              .toList();
+          List<Service> services = (res.data['data'] as List).map((e) => Service.fromJson(e)).toList();
           return services;
         }
         throw Exception('Unexpected response format');
@@ -46,13 +41,31 @@ class AdminService {
     try {
       Response res = await _http.get(ApiEndpoint.adminUsers);
       if (res.statusCode == 200) {
-        List<User> users = res.data.map((e) => User.fromJson(e)).toList();
+        debugPrint('users: ${res.data}');
+        List<User> users = (res.data as List).map((e) => User.fromJson(e)).toList();
         return users;
       }
       throw Exception('Unexpected response format');
     } catch (e) {
       debugPrint('Error: $e');
       throw Exception('Failed to load users');
+    }
+  }
+
+  //ban a user
+ Future<void> banUser(String userId, String reason) async {
+    try {
+      Response res = await _http.post(ApiEndpoint.banUser, data: {
+        'userId': userId,
+        'reason': reason,
+      });
+      if (res.statusCode == 201) {
+        return;
+      }
+      throw Exception('Failed to ban user');
+    } catch (e) {
+      debugPrint('Error: $e');
+      throw Exception('Failed to ban user');
     }
   }
 }

@@ -2,10 +2,32 @@ import 'package:barassage_app/features/auth_mod/models/user.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import '../services/notification_preferences.dart';
+import '../models/notification_preferences.dart';
 
-class SectionNotificationProfile extends StatelessWidget {
+class SectionNotificationProfile extends StatefulWidget {
   final User user;
   const SectionNotificationProfile({super.key, required this.user});
+
+  @override
+  _SectionNotificationProfileState createState() => _SectionNotificationProfileState();
+}
+
+class _SectionNotificationProfileState extends State<SectionNotificationProfile> {
+  late NotificationPreferencesService _notificationPreferencesService;
+  NotificationPreferences? _preferences;
+
+  @override
+  void initState() {
+    super.initState();
+    _notificationPreferencesService = NotificationPreferencesService();
+  }
+
+  Future<void> _updatePreferences() async {
+    if (_preferences != null) {
+      await _notificationPreferencesService.storePreferences(_preferences!);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,9 +64,15 @@ class SectionNotificationProfile extends StatelessWidget {
                 ],
               ),
               CupertinoSwitch(
-                  value: true,
+                  value: _preferences?.pushNotification == 'enabled',
                   activeColor: theme.primaryColor,
-                  onChanged: (f) {})
+                  onChanged: (value) {
+                    setState(() {
+                      _preferences = _preferences?.copyWith(
+                          pushNotification: value ? 'enabled' : 'disabled');
+                    });
+                    _updatePreferences();
+                  })
             ],
           ),
           Container(
@@ -65,9 +93,15 @@ class SectionNotificationProfile extends StatelessWidget {
                 ],
               ),
               CupertinoSwitch(
-                  value: true,
+                  value: _preferences?.messageNotification == 'enabled',
                   activeColor: theme.primaryColor,
-                  onChanged: (f) {})
+                  onChanged: (value) {
+                    setState(() {
+                      _preferences = _preferences?.copyWith(
+                          messageNotification: value ? 'enabled' : 'disabled');
+                    });
+                    _updatePreferences();
+                  })
             ],
           )
         ],

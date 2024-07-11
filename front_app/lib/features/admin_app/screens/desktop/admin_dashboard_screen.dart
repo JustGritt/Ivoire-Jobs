@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'reports_screen.dart';
-import 'banlist_screen.dart';
-import 'manage_users_screen.dart';
-import 'manage_services_screen.dart';
+import 'package:go_router/go_router.dart';
+import '../screens.dart';
+import '../../widgets/admin_menu.dart'; // Import the common AdminScaffold widget
 
 class AdminDashboardScreen extends StatefulWidget {
   const AdminDashboardScreen({super.key});
@@ -12,78 +11,53 @@ class AdminDashboardScreen extends StatefulWidget {
 }
 
 class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
-  int _selectedIndex = 0;
+  int _selectedIndex = -1; // Default to a placeholder screen
 
-  // List of screens to show based on selected index
-  final List<Widget> _screens = [
-    const ManageUsersScreen(),
-    const ManageServicesScreen(),
-    const ReportScreen(),
-    const BanListScreen(),
+  final List<String> _routes = [
+    '/admin/users',
+    '/admin/services',
+    '/admin/reports',
+    '/admin/banlist',
+    '/admin/settings',
   ];
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
-    Navigator.pop(context); // Close the drawer
+
+    // Defer the navigation to avoid modifying the widget tree during the build phase
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.go(_routes[index]); // Use context.go instead of push to replace the current route
+
+      if (Scaffold.of(context).isDrawerOpen) {
+        Navigator.pop(context); // Close the drawer if it's open
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        iconTheme: const IconThemeData(
-          color: Colors.black,
-        ),
-        title: const Text(
-          'Admin Dashboard',
-          style: TextStyle(
-            color: Colors.black,
-          ),
-        ),
-      ),
-      drawer: Drawer(
-        backgroundColor: Colors.white,
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.black,
-              ),
-              child: Text(
-                'Admin Menu',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                ),
-              ),
-            ),
-            ListTile(
-              leading: const Icon(Icons.people),
-              title: const Text('Manage Users'),
-              onTap: () => _onItemTapped(0),
-            ),
-            ListTile(
-              leading: const Icon(Icons.build),
-              title: const Text('Manage Services'),
-              onTap: () => _onItemTapped(1),
-            ),
-            ListTile(
-              leading: const Icon(Icons.warning),
-              title: const Text('Reports'),
-              onTap: () => _onItemTapped(2),
-            ),
-            ListTile(
-              leading: const Icon(Icons.block),
-              title: const Text('Ban List'),
-              onTap: () => _onItemTapped(3),
-            ),
-          ],
-        ),
-      ),
-      body: _screens[_selectedIndex],
+    return AdminScaffold(
+      title: 'Admin Dashboard',
+      body: _buildBody(),
     );
+  }
+
+  Widget _buildBody() {
+    switch (_selectedIndex) {
+      case 0:
+        return const ManageUsersScreen();
+      case 1:
+        return const ManageServicesScreen();
+      case 2:
+        return const Placeholder(); // Replace with ReportsScreen
+      case 3:
+        return const BanListScreen();
+      case 4:
+        return const DashboardSettings();
+      default:
+        return const Placeholder();
+    }
   }
 }

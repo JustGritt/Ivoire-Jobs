@@ -5,11 +5,14 @@ import (
 	"barassage/api/models/category"
 	"barassage/api/models/image"
 	"barassage/api/models/service"
+
 	categoryRepo "barassage/api/repositories/category"
 	serviceRepo "barassage/api/repositories/service"
 	userRepo "barassage/api/repositories/user"
 	"barassage/api/services/bucket"
+	"regexp"
 	"strconv"
+	"strings"
 
 	"fmt"
 	"mime/multipart"
@@ -59,23 +62,33 @@ type ServiceUpdateObject struct {
 }
 
 type ServiceOutput struct {
-	ServiceID   string   `json:"id"`
-	UserID      string   `json:"userId"`
-	Name        string   `json:"name"`
-	Description string   `json:"description"`
-	Price       float64  `json:"price"`
-	Status      bool     `json:"status"`
-	Duration    int      `json:"duration"`
-	IsBanned    bool     `json:"isBanned"`
-	Latitude    float64  `json:"latitude"`
-	Longitude   float64  `json:"longitude"`
-	Address     string   `json:"address"`
-	City        string   `json:"city"`
-	PostalCode  string   `json:"postalCode"`
-	Country     string   `json:"country"`
-	Images      []string `json:"images"`
-	CreatedAt   string   `json:"createdAt"`
-	Category    []string `json:"category"`
+	ServiceID   string     `json:"id"`
+	UserID      string     `json:"userId"`
+	Name        string     `json:"name"`
+	Description string     `json:"description"`
+	Price       float64    `json:"price"`
+	Status      bool       `json:"status"`
+	Duration    int        `json:"duration"`
+	IsBanned    bool       `json:"isBanned"`
+	Latitude    float64    `json:"latitude"`
+	Longitude   float64    `json:"longitude"`
+	Address     string     `json:"address"`
+	City        string     `json:"city"`
+	PostalCode  string     `json:"postalCode"`
+	Country     string     `json:"country"`
+	Images      []string   `json:"images"`
+	CreatedAt   string     `json:"createdAt"`
+	Category    []string   `json:"category"`
+	User        CustomUser `json:"user"`
+}
+
+type CustomUser struct {
+	ID        string `json:"id"`
+	Email     string `json:"email"`
+	FristName string `json:"firstname"`
+	LastName  string `json:"lastname"`
+	Bio       string `json:"bio"`
+	Member    string `json:"member"`
 }
 
 // CreateService Godoc
@@ -726,12 +739,15 @@ func DeleteService(c *fiber.Ctx) error {
 
 // SearchService Godoc
 // @Summary Search services
-// @Description Search services by name, price, or both
+// @Description Search services by name, price, categories, city, or country
 // @Tags Service
 // @Produce json
 // @Param name query string false "Service Name"
 // @Param min_price query number false "Minimum Price"
 // @Param max_price query number false "Maximum Price"
+// @Param city query string false "Service City"
+// @Param country query string false "Service Country"
+// @Param categories query string false "Service Categories (comma separated)"
 // @Success 200 {array} ServiceOutput
 // @Failure 400 {array} ErrorResponse
 // @Failure 401 {array} ErrorResponse
@@ -744,7 +760,57 @@ func SearchService(c *fiber.Ctx) error {
 	serviceName := c.Query("name")
 	minPriceStr := c.Query("min_price")
 	maxPriceStr := c.Query("max_price")
+	serviceCity := c.Query("city")
+	serviceCountry := c.Query("country")
+	categoriesStr := c.Query("categories")
 
+	// Validate and sanitize string inputs
+	if !isValidName(serviceName) {
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusBadRequest,
+				Message: "Invalid service name",
+			},
+		)
+	}
+	if !isValidLocation(serviceCity) {
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusBadRequest,
+				Message: "Invalid city name",
+			},
+		)
+	}
+	if !isValidLocation(serviceCountry) {
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusBadRequest,
+				Message: "Invalid country name",
+			},
+		)
+	}
+
+	// Split and validate categories
+	var categories []string
+	if categoriesStr != "" {
+		categories = strings.Split(categoriesStr, ",")
+		for _, cat := range categories {
+			if !isValidName(cat) {
+				errorList = append(
+					errorList,
+					&fiber.Error{
+						Code:    fiber.StatusBadRequest,
+						Message: fmt.Sprintf("Invalid category name: %s", cat),
+					},
+				)
+			}
+		}
+	}
+
+	// Validate and convert price parameters
 	var minPrice, maxPrice float64
 	var err error
 
@@ -758,7 +824,6 @@ func SearchService(c *fiber.Ctx) error {
 					Message: "Invalid minimum price value",
 				},
 			)
-			return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
 		}
 	}
 
@@ -772,12 +837,35 @@ func SearchService(c *fiber.Ctx) error {
 					Message: "Invalid maximum price value",
 				},
 			)
-			return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
 		}
 	}
 
+	// Sanitize the price parameters
+	if minPrice < 0 {
+		minPrice = 0
+	}
+
+	if maxPrice < 0 {
+		maxPrice = 0
+	}
+
+	if minPrice > maxPrice {
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusBadRequest,
+				Message: "Minimum price should be less than maximum price",
+			},
+		)
+	}
+
+	// Return if any validation errors occurred
+	if len(errorList) > 0 {
+		return c.Status(fiber.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
 	// Fetch services based on the query parameters
-	services, err := serviceRepo.SearchServices(serviceName, minPrice, maxPrice)
+	services, err := serviceRepo.SearchServices(serviceName, minPrice, maxPrice, serviceCity, serviceCountry, categories)
 	if err != nil {
 		errorList = append(
 			errorList,
@@ -786,7 +874,7 @@ func SearchService(c *fiber.Ctx) error {
 				Message: "Error searching services",
 			},
 		)
-		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
+		return c.Status(fiber.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
 	// Map services to ServiceOutput
@@ -795,7 +883,7 @@ func SearchService(c *fiber.Ctx) error {
 		serviceOutputs = append(serviceOutputs, *mapServiceToOutPut(&s))
 	}
 
-	//check if the serviceOuputs is empty
+	// Check if serviceOutputs is empty
 	if len(serviceOutputs) == 0 {
 		errorList = append(
 			errorList,
@@ -804,10 +892,43 @@ func SearchService(c *fiber.Ctx) error {
 				Message: "No services found",
 			},
 		)
-		return c.Status(http.StatusNotFound).JSON(HTTPFiberErrorResponse(errorList))
+		return c.Status(fiber.StatusNotFound).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
-	return c.Status(http.StatusOK).JSON(serviceOutputs)
+	return c.Status(fiber.StatusOK).JSON(serviceOutputs)
+}
+
+// GetTrendingServices Godoc
+// @Summary Get trending services
+// @Description Get trending services
+// @Tags Service
+// @Produce json
+// @Success 200 {array} ServiceOutput
+// @Failure 400 {array} ErrorResponse
+// @Failure 401 {array} ErrorResponse
+// @Failure 500 {array} ErrorResponse
+// @Router /service/trending [get]
+func GetTrendingServices(c *fiber.Ctx) error {
+	var errorList []*fiber.Error
+	services, err := serviceRepo.GetTrendingServices()
+	if err != nil {
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusInternalServerError,
+				Message: "error getting trending services",
+			},
+		)
+		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
+	// Map services to ServiceOutput
+	var ouput []ServiceOutput
+	for _, s := range services {
+		ouput = append(ouput, *mapServiceToOutPut(&s))
+	}
+
+	return c.Status(http.StatusOK).JSON(ouput)
 }
 
 // GetAllBannedServices Godoc
@@ -856,6 +977,18 @@ func mapServiceToOutPut(u *service.Service) *ServiceOutput {
 	for i, cat := range u.Categories {
 		categoriesNames[i] = cat.Name
 	}
+	user, err := userRepo.GetById(u.UserID)
+	if err != nil {
+		return nil
+	}
+	CustomUser := CustomUser{
+		ID:        u.UserID,
+		Email:     user.Email,
+		FristName: user.Firstname,
+		LastName:  user.Lastname,
+		Bio:       user.Bio,
+		Member:    user.Member[len(user.Member)-1].Status,
+	}
 	return &ServiceOutput{
 		ServiceID:   u.ID,
 		UserID:      u.UserID,
@@ -873,6 +1006,25 @@ func mapServiceToOutPut(u *service.Service) *ServiceOutput {
 		Country:     u.Country,
 		Images:      imageUrls,
 		Category:    categoriesNames,
+		User:        CustomUser,
 		CreatedAt:   u.CreatedAt.Format("2006-01-02"),
 	}
+}
+
+// isValidName validates the service name using a regex
+func isValidName(name string) bool {
+	if name == "" {
+		return true // If name is empty, it's considered valid (optional parameter)
+	}
+	re := regexp.MustCompile(`^[\p{L}\s]+$`)
+	return re.MatchString(name)
+}
+
+// isValidLocation validates the city or country name using a regex
+func isValidLocation(location string) bool {
+	if location == "" {
+		return true // If location is empty, it's considered valid (optional parameter)
+	}
+	re := regexp.MustCompile(`^[\p{L}\s]+$`)
+	return re.MatchString(location)
 }

@@ -1,74 +1,61 @@
-import 'package:barassage_app/features/admin_app/models/category.dart';
-import 'package:barassage_app/features/auth_mod/models/user.dart';
-
 class Service {
-  String id;
-  String title;
-  String description;
-  String image;
-  String price;
-  String duration;
-  String status;
-  bool isBanned;
-  DateTime createdAt;
-  DateTime updatedAt;
-  Category? category;
-  User? user;
+  final String id;
+  final String userId;
+  final String title;
+  final String description;
+  final double price;
+  final bool status;
+  final int duration;
+  final bool isBanned;
+  final double latitude;
+  final double longitude;
+  final String address;
+  final String city;
+  final String postalCode;
+  final String country;
+  final List<String> images;
+  final DateTime createdAt;
+  final List<String> category;
 
   Service({
     required this.id,
+    required this.userId,
     required this.title,
     required this.description,
-    required this.image,
     required this.price,
-    required this.duration,
     required this.status,
+    required this.duration,
     required this.isBanned,
+    required this.latitude,
+    required this.longitude,
+    required this.address,
+    required this.city,
+    required this.postalCode,
+    required this.country,
+    required this.images,
     required this.createdAt,
-    required this.updatedAt,
-    this.category,
-    this.user,
+    required this.category,
   });
 
   factory Service.fromJson(Map<String, dynamic> json) {
     return Service(
       id: json['id'] ?? '',
-      title: json['name'] ?? '',
+      userId: json['userId'] ?? '',
+      title: json['title'] ?? '',
       description: json['description'] ?? '',
-      image: json['image'] ?? '',
-      price: json['price'].toString(),
-      duration: json['duration'].toString(),
-      status: json['status'].toString(),
+      price: (json['price'] ?? 0).toDouble(),
+      status: json['status'] ?? false,
+      duration: json['duration'] ?? 0,
       isBanned: json['isBanned'] ?? false,
-      createdAt: json['createdAt'] != null
-          ? DateTime.parse(json['createdAt'])
-          : DateTime.now(),
-      updatedAt: json['updatedAt'] != null
-          ? DateTime.parse(json['updatedAt'])
-          : DateTime.now(),
-      category: json['category'] != null && json['category'].isNotEmpty
-          ? Category.fromJson(json['category'])
-          : null,
-      user: json['user'] != null && json['user'].isNotEmpty
-          ? User.fromJson(json['user'])
-          : null,
+      latitude: (json['latitude'] ?? 0.0).toDouble(),
+      longitude: (json['longitude'] ?? 0.0).toDouble(),
+      address: json['address'] ?? '',
+      city: json['city'] ?? '',
+      postalCode: json['postalCode'] ?? '',
+      country: json['country'] ?? '',
+      images: json['images'] != null ? List<String>.from(json['images']) : [],
+      createdAt: json['createdAt'] != null ? DateTime.parse(json['createdAt']) : DateTime.now(),
+      category: json['category'] != null ? List<String>.from(json['category']) : [],
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': title,
-      'description': description,
-      'image': image,
-      'price': price,
-      'duration': duration,
-      'status': status,
-      'isBanned': isBanned,
-      'createdAt': createdAt.toIso8601String(),
-      'updatedAt': updatedAt.toIso8601String(),
-      'category': category?.toJson(),
-      'user': user?.toJson(),
-    };
   }
 }

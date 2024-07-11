@@ -42,8 +42,9 @@ class BanCard extends StatelessWidget {
               style: const TextStyle(fontSize: 14),
             ),
             const SizedBox(height: 8),
+            // TODO: Replace with user ID
             Text(
-              'User ID: ${service.user?.id ?? 'N/A'}',
+              'User ID: ${'N/A'}',
               style: const TextStyle(fontSize: 14),
             ),
             const SizedBox(height: 8),

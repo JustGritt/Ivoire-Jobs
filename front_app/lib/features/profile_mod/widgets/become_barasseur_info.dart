@@ -1,3 +1,4 @@
+import 'package:barassage_app/core/blocs/authentication/authentication_bloc.dart';
 import 'package:barassage_app/core/classes/app_context.dart';
 import 'package:barassage_app/core/init_dependencies.dart';
 import 'package:barassage_app/features/profile_mod/services/become_barasseur_services.dart';
@@ -8,6 +9,7 @@ import 'package:glassmorphism/glassmorphism.dart';
 import 'package:ionicons/ionicons.dart';
 //local
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 import '../../auth_mod/widgets/app_button.dart';
 
 BuildContext rootContext = serviceLocator<AppContext>().navigatorContext;
@@ -51,7 +53,9 @@ class _BecomeBarasseurInfoState extends State<BecomeBarasseurInfo> {
         });
         if (errors_.entries.every((element) => element.value == null)) {
           becomeBarasseurFuture =
-              becomeBarasseurService.sendRequest(data['reason']);
+              becomeBarasseurService.sendRequest(data['reason']).then((data) {
+            context.read<AuthenticationBloc>().add(InitiateAuth());
+          });
         }
       } catch (e) {
         print(e);

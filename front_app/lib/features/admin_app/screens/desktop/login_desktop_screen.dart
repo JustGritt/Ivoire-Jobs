@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:barassage_app/features/admin_app/admin_mod.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/svg.dart';
@@ -36,25 +37,27 @@ class _LoginDesktopScreenState extends State<LoginDesktopScreen> {
       body: SafeArea(
         child: BlocConsumer<AuthenticationBloc, AuthenticationState>(
           listener: (context, state) {
-            // TODO: implement listener
+            print (state);
+            if (state is AuthenticationSuccessState) {
+              context.go(AdminApp.dashboard);
+            }
           },
           builder: (context, state) {
             return SingleChildScrollView(
               child: Form(
                 key: _globalKey,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 8.0, horizontal: 14.0),
+                  padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 14.0),
                   child: Center(
                     child: ConstrainedBox(
                       constraints: const BoxConstraints(maxWidth: 400),
                       child: Column(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
                           Stack(
                             children: [
                               Container(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 18.0),
+                                padding: const EdgeInsets.symmetric(vertical: 18.0),
                                 child: SvgPicture.asset(
                                   fit: BoxFit.fill,
                                   'assets/images/ill_dx.svg',
@@ -68,10 +71,8 @@ class _LoginDesktopScreenState extends State<LoginDesktopScreen> {
                                 right: 0,
                                 child: ClipRect(
                                   child: BackdropFilter(
-                                    filter: ImageFilter.blur(
-                                        sigmaX: 2.0, sigmaY: 2.0),
+                                    filter: ImageFilter.blur(sigmaX: 2.0, sigmaY: 2.0),
                                     child: Container(
-                                      // the size where the blurring starts
                                       height: 40,
                                       color: Colors.transparent,
                                     ),
@@ -84,10 +85,8 @@ class _LoginDesktopScreenState extends State<LoginDesktopScreen> {
                                 right: 0,
                                 child: ClipRect(
                                   child: BackdropFilter(
-                                    filter: ImageFilter.blur(
-                                        sigmaX: 2.0, sigmaY: 2.0),
+                                    filter: ImageFilter.blur(sigmaX: 2.0, sigmaY: 2.0),
                                     child: Container(
-                                      // the size where the blurring starts
                                       height: 50,
                                       color: Colors.transparent,
                                     ),
@@ -106,8 +105,7 @@ class _LoginDesktopScreenState extends State<LoginDesktopScreen> {
                                   textAlign: TextAlign.center,
                                 ),
                                 Text(
-                                  appLocalizations
-                                      .welcome_back_admin_description,
+                                  appLocalizations.welcome_back_admin_description,
                                   style: theme.textTheme.displayMedium,
                                   textAlign: TextAlign.center,
                                 ),
@@ -142,20 +140,26 @@ class _LoginDesktopScreenState extends State<LoginDesktopScreen> {
                             ],
                           ),
                           const SizedBox(height: 15),
-                          SizedBox(
-                            width: double.infinity,
-                            child: AppButton(
-                              isLoading: state is AuthenticationLoadingState,
-                              onPressed: () async {
-                                if (_globalKey.currentState!.validate()) {
-                                  context.read<AuthenticationBloc>().add(
-                                        SignInUser(username!, password!),
-                                      );
-                                }
-                              },
-                              backgroundColor: theme.primaryColorDark,
-                              label: 'Login',
-                              stretch: true,
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 1.0),
+                            child: ConstrainedBox(
+                              constraints: const BoxConstraints(
+                                maxHeight: 64, // ensure button height is adequate
+                                maxWidth: 400, // ensure button width is adequate
+                              ),
+                              child: AppButton(
+                                isLoading: state is AuthenticationLoadingState,
+                                onPressed: () async {
+                                  if (_globalKey.currentState!.validate()) {
+                                    context.read<AuthenticationBloc>().add(
+                                      AdminSignIn(username!, password!),
+                                    );
+                                  }
+                                },
+                                backgroundColor: theme.primaryColorDark,
+                                label: 'Login',
+                                width: 400,
+                              ),
                             ),
                           ),
                           const SizedBox(height: 30),
@@ -165,14 +169,12 @@ class _LoginDesktopScreenState extends State<LoginDesktopScreen> {
                               children: <InlineSpan>[
                                 TextSpan(
                                   text: appLocalizations.btn_create,
-                                  style:
-                                      theme.textTheme.displayMedium?.copyWith(
+                                  style: theme.textTheme.displayMedium?.copyWith(
                                     color: theme.primaryColorDark,
                                     fontWeight: FontWeight.bold,
                                   ),
                                   recognizer: TapGestureRecognizer()
-                                    ..onTap =
-                                        () => context.push(AuthApp.register),
+                                    ..onTap = () => context.push(AuthApp.register),
                                 )
                               ],
                             ),

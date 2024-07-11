@@ -109,10 +109,9 @@ func GetConfigurationByKey(c *fiber.Ctx) error {
 // @Param payload body ConfigurationObject true "Configuration Body"
 // @Success 200 {object} Response
 // @Failure 400 {array} ErrorResponse
-// @Router /configuration/{key} [put]
+// @Router /configuration [put]
 // @Security Bearer
 func UpdateConfiguration(c *fiber.Ctx) error {
-	key := c.Params("key")
 	var configurationInput ConfigurationOutput
 	var errorList []*fiber.Error
 
@@ -120,7 +119,7 @@ func UpdateConfiguration(c *fiber.Ctx) error {
 		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(err))
 	}
 
-	configuration, err := configRepo.GetByKey(key)
+	configuration, err := configRepo.GetByKey(configurationInput.Key)
 	if err != nil {
 		errorList = append(errorList, &fiber.Error{
 			Code:    http.StatusNotFound,
@@ -130,7 +129,8 @@ func UpdateConfiguration(c *fiber.Ctx) error {
 		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
-	if configurationInput.Key != "" {
+	//replace the name of key if change
+	if configurationInput.Key !=  configuration.Key {
 		configuration.Key = configurationInput.Key
 	}
 

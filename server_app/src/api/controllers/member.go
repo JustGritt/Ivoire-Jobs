@@ -2,6 +2,8 @@ package controllers
 
 import (
 	"barassage/api/models/member"
+	"barassage/api/services/notification"
+	"log"
 
 	memberRepo "barassage/api/repositories/member"
 	userRepo "barassage/api/repositories/user"
@@ -156,7 +158,6 @@ func GetAllPendingRequests(c *fiber.Ctx) error {
 	return c.Status(http.StatusOK).JSON(memberOutputs)
 }
 
-
 // ValidateMember handles the validation of a member.
 // @Summary Validate Member
 // @Description Validate a member
@@ -193,7 +194,7 @@ func ValidateMember(c *fiber.Ctx) error {
 
 	if memberInput.Status == "accepted" {
 		memberInput.Status = "member"
-	} 
+	}
 
 	// Validate the member
 	if err := memberRepo.ValidateMember(memberID, memberInput.Status); err != nil {
@@ -203,6 +204,54 @@ func ValidateMember(c *fiber.Ctx) error {
 		})
 		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
 	}
+
+	//get USerid via memberid
+	member, err := memberRepo.GetByID(memberID)
+	if err != nil {
+		errorList = append(errorList, &fiber.Error{
+			Code:    http.StatusNotFound,
+			Message: "Member not found",
+		})
+		return c.Status(http.StatusNotFound).JSON(HTTPFiberErrorResponse(errorList))
+	}
+	// get the user
+	user, err := userRepo.GetById(member.UserID)
+	if err != nil {
+		errorList = append(errorList, &fiber.Error{
+			Code:    http.StatusNotFound,
+			Message: "User not found",
+		})
+		return c.Status(http.StatusNotFound).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
+	//create the accurate message
+	var message map[string]string
+	if memberInput.Status == "member" {
+		message = map[string]string{
+			"Title": "Membership Update !",
+			"Body":  "Hey! We are happy to announce that you are now a member!",
+		}
+	} else {
+		message = map[string]string{
+			"Title": "Membership Update !",
+			"Body":  "Hey! We are sorry to announce that your membership request has been rejected!",
+		}
+
+	}
+
+	// Send FCM notification
+	domain := notification.ServiceDomain
+	resp, err := notification.Send(
+		c.Context(),
+		message,
+		user,
+		domain,
+	)
+	if err != nil {
+		log.Printf("error sending message: %v", err)
+		return c.Status(http.StatusInternalServerError).JSON(HTTPResponse(http.StatusInternalServerError, "Error", err.Error()))
+	}
+	log.Printf("%d messages were sent successfully\n", resp.SuccessCount)
 
 	return c.SendStatus(http.StatusOK)
 }

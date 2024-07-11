@@ -25,6 +25,28 @@ class SignInUser extends AuthenticationEvent {
   List<Object> get props => [email, password];
 }
 
+class AdminSignIn extends AuthenticationEvent {
+  final String email;
+  final String password;
+
+  const AdminSignIn(this.email, this.password);
+
+  @override
+  List<Object> get props => [email, password];
+}
+
 class InitiateAuth extends AuthenticationEvent {}
 
+class UpdateUserEvent extends AuthenticationEvent {
+  final UserUpdate user;
+
+  const UpdateUserEvent(this.user);
+
+  @override
+  List<Object> get props => [user];
+}
+
+
 class SignOut extends AuthenticationEvent {}
+
+class AdminSignOut extends AuthenticationEvent {}

@@ -36,7 +36,7 @@ class _BanListScreenState extends State<BanListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Admin Dashboard'),
+        title: const Text('Ban List'),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
