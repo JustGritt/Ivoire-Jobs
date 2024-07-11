@@ -72,11 +72,11 @@ jobs:
 
       - name: Configure rclone
         run: |
-          rclone config create myr2 s3 env_auth true provider Cloudflare access_key_id ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }} secret_access_key ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }} region auto endpoint https://${{ secrets.CLOUDFLARE_ACCOUNT_ID }}.r2.cloudflarestorage.com
+          rclone config create myr2 s3 env_auth true provider Cloudflare access_key_id ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }} secret_access_key ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }} no_check_bucket true endpoint https://${{ secrets.CLOUDFLARE_ACCOUNT_ID }}.r2.cloudflarestorage.com
 
       - name: Upload APK to Cloudflare R2
         run: |
-          rclone copy ./front_app/build/app/outputs/flutter-apk/app-release.apk myr2:${{ secrets.CLOUDFLARE_R2_BUCKET_NAME }}/apk-${{ env.NEW_VERSION }}.apk
+          rclone copy ./front_app/build/app/outputs/flutter-apk/app-release.apk myr2:/${{ secrets.CLOUDFLARE_R2_BUCKET_NAME }}/apk-${{ env.NEW_VERSION }}.apk --no-traverse
 
       - name: Create GitHub Release
         env:
