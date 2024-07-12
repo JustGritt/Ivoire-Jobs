@@ -124,7 +124,7 @@ class _HomeScreenContentState extends State<HomeScreenContent> {
                   aboutUsKey: _aboutUsKey,
                   appsKey: _appsKey,
                   faqKey: _faqKey,
-                  downloadUrl: dotenv.env['DOWNLOAD_URL'] ?? '',
+                  downloadUrl: dotenv.env['FLUTTER_DOWNLOAD_URL'] ?? '',
                   scrollOffset: _scrollOffset,
                 ),
               ),
@@ -135,7 +135,7 @@ class _HomeScreenContentState extends State<HomeScreenContent> {
                   // Main Content
                   HeroScreen(aboutUsKey: _aboutUsKey, columns: columns),
                   // Additional Content
-                  AdditionalContent(appsKey: _appsKey, downloadUrl: dotenv.env['DOWNLOAD_URL'] ?? '',),
+                  AdditionalContent(appsKey: _appsKey, downloadUrl: dotenv.env['FLUTTER_DOWNLOAD_URL'] ?? '',),
                   // FAQ Section
                   FAQScreen(
                     faqKey: _faqKey,
