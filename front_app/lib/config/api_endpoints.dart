@@ -51,4 +51,9 @@ class ApiEndpoint {
   // Reports Endpoints
   static const reports = '${api}/report/pending';
   static const reportsDetails = '${api}/report/:id';
+
+  // categories Endpoints
+  static const categories = '${api}/category';
+  // categories collection
+  static const categoriesCollection = '${api}/category/collection';
 }
