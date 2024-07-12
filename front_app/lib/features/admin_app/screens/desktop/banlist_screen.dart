@@ -15,7 +15,7 @@ class BanListScreen extends StatefulWidget {
 }
 
 class _BanListScreenState extends State<BanListScreen>
-  with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin {
   late Future<List<Service>> futureBannedService;
   late Future<List<BannedUser>> futureBannedUsers;
   late TabController _tabController;
@@ -40,22 +40,31 @@ class _BanListScreenState extends State<BanListScreen>
     return Scaffold(
       body: Column(
         children: [
-          TabBar(
-            controller: _tabController,
-            tabs: const [
-              Tab(text: 'Banned Services'),
-              Tab(text: 'Banned Users'),
-            ],
-            unselectedLabelColor: Colors.grey, // Adjust the color as needed
-            indicatorColor: Colors.blue, // Adjust the color as needed
-            labelColor: Colors.blue, // Adjust the color as needed
+          Container(
+            color: Colors.grey[200],
+            child: TabBar(
+              controller: _tabController,
+              tabs: const [
+                Tab(text: 'Banned Services'),
+                Tab(text: 'Banned Users'),
+              ],
+              unselectedLabelColor: Colors.grey,
+              indicatorColor: Colors.blue,
+              labelColor: Colors.blue,
+            ),
           ),
           Expanded(
             child: TabBarView(
               controller: _tabController,
               children: [
-                _buildBannedServicesView(),
-                _buildBannedUsersView(),
+                Container(
+                  color: Colors.white,
+                  child: _buildBannedServicesView(),
+                ),
+                Container(
+                  color: Colors.white,
+                  child: _buildBannedUsersView(),
+                ),
               ],
             ),
           ),

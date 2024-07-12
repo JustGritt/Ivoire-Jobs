@@ -29,7 +29,7 @@ class UserDetailsScreen extends StatelessWidget {
     final snackBar = SnackBar(
       content: Text(
         message,
-        style: const TextStyle(fontSize: 16, color: Colors.white), // Text color set to white
+        style: const TextStyle(fontSize: 16, color: Colors.white),
       ),
       backgroundColor: backgroundColor,
       duration: const Duration(seconds: 3),
@@ -55,7 +55,7 @@ class UserDetailsScreen extends StatelessWidget {
           ),
           title: const Text(
             'Ban User',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black),
           ),
           content: SizedBox(
             width: MediaQuery.of(context).size.width * 0.7,
@@ -121,7 +121,17 @@ class UserDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('${user.firstName} ${user.lastName} Details'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        title: Text('${user.firstName} ${user.lastName} Details',
+          style: TextStyle(
+            color: Colors.black,
+          ),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

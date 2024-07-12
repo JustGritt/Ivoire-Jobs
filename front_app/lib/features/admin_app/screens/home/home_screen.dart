@@ -28,7 +28,7 @@ class HomeScreen extends StatelessWidget {
               color: Colors.white38,
             ),
             child: Image.asset(
-              'assets/images/app-logo.png', // Add your logo here
+              'assets/images/app-logo.png',
               height: 40,
             ),
           ),

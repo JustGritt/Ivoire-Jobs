@@ -11,7 +11,7 @@ class AdminDashboardScreen extends StatefulWidget {
 }
 
 class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
-  int _selectedIndex = -1; // Default to a placeholder screen
+  int _selectedIndex = -1;
 
   final List<String> _routes = [
     '/admin/users',
@@ -26,12 +26,12 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
       _selectedIndex = index;
     });
 
-    // Defer the navigation to avoid modifying the widget tree during the build phase
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.go(_routes[index]); // Use context.go instead of push to replace the current route
+      context.go(_routes[index]);
 
       if (Scaffold.of(context).isDrawerOpen) {
-        Navigator.pop(context); // Close the drawer if it's open
+        Navigator.pop(context);
       }
     });
   }
@@ -51,7 +51,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
       case 1:
         return const ManageServicesScreen();
       case 2:
-        return const Placeholder(); // Replace with ReportsScreen
+        return const Placeholder();
       case 3:
         return const BanListScreen();
       case 4:
