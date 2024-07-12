@@ -53,7 +53,7 @@ jobs:
           echo "MAPBOX_API_URL=${{ secrets.MAPBOX_API_URL }}" >> ./front_app/.env
           echo "MAPBOX_SEARCH_URL=${{ secrets.MAPBOX_SEARCH_URL }}" >> ./front_app/.env
           echo "MAPBOX_ACCESS_TOKEN=${{ secrets.MAPBOX_ACCESS_TOKEN }}" >> ./front_app/.env
-          echo "FLUTTER_DOWNLOAD_URL=https://s3.${{ secrets.CLOUDFLARE_R2_BUCKET_NAME }}.com/barassage-${{ env.NEW_VERSION }}/app-release.apk" >> ./front_app/.env
+          echo "FLUTTER_DOWNLOAD_URL=https://s3.${{ secrets.CLOUDFLARE_R2_BUCKET_NAME }}.com/barassage-${{ env.NEW_VERSION }}/app-release.apk" >> ./front_app/assets/.env
 
       - run: flutter pub get
         working-directory: ./front_app
