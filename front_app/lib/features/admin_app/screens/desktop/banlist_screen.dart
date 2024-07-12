@@ -35,21 +35,27 @@ class _BanListScreenState extends State<BanListScreen> with SingleTickerProvider
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Admin Dashboard'),
-        bottom: TabBar(
-          controller: _tabController,
-          tabs: const [
-            Tab(text: 'Banned Services'),
-            Tab(text: 'Banned Users'),
-          ],
-        ),
-      ),
-      body: TabBarView(
-        controller: _tabController,
+      body: Column(
         children: [
-          _buildBannedServicesView(),
-          _buildBannedUsersView(),
+          TabBar(
+            controller: _tabController,
+            tabs: const [
+              Tab(text: 'Banned Services'),
+              Tab(text: 'Banned Users'),
+            ],
+            indicatorColor: Colors.blue, // Adjust the color as needed
+            labelColor: Colors.blue, // Adjust the color as needed
+            unselectedLabelColor: Colors.grey, // Adjust the color as needed
+          ),
+          Expanded(
+            child: TabBarView(
+              controller: _tabController,
+              children: [
+                _buildBannedServicesView(),
+                _buildBannedUsersView(),
+              ],
+            ),
+          ),
         ],
       ),
     );
