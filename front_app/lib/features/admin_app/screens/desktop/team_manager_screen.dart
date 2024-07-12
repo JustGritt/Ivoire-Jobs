@@ -1,4 +1,6 @@
 import 'package:barassage_app/features/admin_app/services/admin_service.dart';
+import 'package:barassage_app/features/admin_app/widgets/admin_dialog.dart';
+import 'package:barassage_app/features/admin_app/widgets/user_list.dart';
 import 'package:barassage_app/features/admin_app/models/admin_user.dart';
 import 'package:barassage_app/features/auth_mod/models/user.dart';
 import 'package:flutter/material.dart';
@@ -7,10 +9,10 @@ class TeamManagerScreen extends StatefulWidget {
   const TeamManagerScreen({super.key});
 
   @override
-  State<TeamManagerScreen> createState() => _TeamManagerScreenScreenState();
+  State<TeamManagerScreen> createState() => _TeamManagerScreenState();
 }
 
-class _TeamManagerScreenScreenState extends State<TeamManagerScreen> {
+class _TeamManagerScreenState extends State<TeamManagerScreen> {
   List<User> users = [];
   bool isLoading = true;
 
@@ -49,217 +51,14 @@ class _TeamManagerScreenScreenState extends State<TeamManagerScreen> {
     }
   }
 
-  Color _getBadgeColor(String role) {
-    switch (role) {
-      case 'admin':
-        return Colors.blue;
-      default:
-        return Colors.grey;
-    }
-  }
-
-  DataRow _userDataRow(User user) {
-    return DataRow(
-      cells: [
-        DataCell(
-          Row(
-            children: [
-              user.profilePicture.isNotEmpty
-                  ? CircleAvatar(
-                      radius: 24,
-                      backgroundImage: NetworkImage(user.profilePicture),
-                    )
-                  : CircleAvatar(
-                      radius: 24,
-                      backgroundColor: Colors.white,
-                      child: Text(
-                        '${user.lastName[0]}${user.firstName[0]}',
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Text(
-                  '${user.firstName} ${user.lastName}',
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        DataCell(Text(user.email)),
-      ],
-    );
-  }
-
-  void _showCreateAdminDialog() {
-    showDialog(
-      context: context,
-      builder: (context) {
-        final _formKey = GlobalKey<FormState>();
-        final TextEditingController passwordController = TextEditingController();
-        final TextEditingController repeatPasswordController = TextEditingController();
-
-        String firstName = '';
-        String lastName = '';
-        String email = '';
-        bool _obscurePassword = true;
-        bool _obscureRepeatPassword = true;
-
-        return StatefulBuilder(
-          builder: (context, setState) {
-            return AlertDialog(
-              title: const Text('Create New Admin'),
-              content: Container(
-                width: MediaQuery.of(context).size.width * 0.6, // Set the width here
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      TextFormField(
-                        decoration: const InputDecoration(labelText: 'First Name'),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter first name';
-                          }
-                          return null;
-                        },
-                        onSaved: (value) {
-                          firstName = value!;
-                        },
-                      ),
-                      TextFormField(
-                        decoration: const InputDecoration(labelText: 'Last Name'),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter last name';
-                          }
-                          return null;
-                        },
-                        onSaved: (value) {
-                          lastName = value!;
-                        },
-                      ),
-                      TextFormField(
-                        decoration: const InputDecoration(labelText: 'Email'),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter email';
-                          }
-                          return null;
-                        },
-                        onSaved: (value) {
-                          email = value!;
-                        },
-                      ),
-                      TextFormField(
-                        controller: passwordController,
-                        decoration: InputDecoration(
-                          labelText: 'Password',
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              _obscurePassword
-                                  ? Icons.visibility
-                                  : Icons.visibility_off,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                _obscurePassword = !_obscurePassword;
-                              });
-                            },
-                          ),
-                        ),
-                        obscureText: _obscurePassword,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter password';
-                          } else if (!RegExp(
-                                  r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$')
-                              .hasMatch(value)) {
-                            return 'Password must be at least 8 characters long, include an uppercase letter, a lowercase letter, a number, and a special character';
-                          }
-                          return null;
-                        },
-                      ),
-                      TextFormField(
-                        controller: repeatPasswordController,
-                        decoration: InputDecoration(
-                          labelText: 'Repeat Password',
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              _obscureRepeatPassword
-                                  ? Icons.visibility
-                                  : Icons.visibility_off,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                _obscureRepeatPassword =
-                                    !_obscureRepeatPassword;
-                              });
-                            },
-                          ),
-                        ),
-                        obscureText: _obscureRepeatPassword,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please repeat the password';
-                          }
-                          if (value != passwordController.text) {
-                            return 'Passwords do not match';
-                          }
-                          return null;
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text('Cancel'),
-                ),
-                Center(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        _formKey.currentState!.save();
-                        _createAdminUser(firstName, lastName, email,
-                            passwordController.text);
-                        Navigator.of(context).pop();
-                      }
-                    },
-                    child: const Text('Create'),
-                  ),
-                ),
-              ],
-            );
-          },
-        );
-      },
-    );
-  }
-
-  void _createAdminUser(
-      String firstName, String lastName, String email, String password) async {
+  void _createAdminUser(String firstName, String lastName, String email, String password) async {
     AdminUser newUser = AdminUser(
       firstName: firstName,
       lastName: lastName,
       email: email,
-      profilePicture: '', // You can update this based on your needs
+      profilePicture: '',
       bio: '',
-      id: '', // The id should be generated by the backend
+      id: '',
       role: 'admin',
       password: password,
     );
@@ -267,7 +66,7 @@ class _TeamManagerScreenScreenState extends State<TeamManagerScreen> {
     AdminService as = AdminService();
     try {
       await as.createAdminUser(newUser);
-      getUsers(); // Refresh the user list after creating a new admin
+      getUsers();
     } catch (e) {
       _showErrorDialog('Failed to create admin user: $e');
     }
@@ -293,57 +92,68 @@ class _TeamManagerScreenScreenState extends State<TeamManagerScreen> {
     );
   }
 
+  void _handleDetailsPressed(User user) {
+    debugPrint('View details of user: ${user.firstName} ${user.lastName}');
+  }
+
+  void _showCreateAdminDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AdminCreationDialog(onCreateAdmin: _createAdminUser);
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
-          : Center(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Container(
-                  width: MediaQuery.of(context).size.width * 2 / 3,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[100],
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Column(
+          : Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          IconButton(
-                            icon: const Icon(Icons.refresh),
-                            onPressed: getUsers,
-                          ),
-                          ElevatedButton(
-                            onPressed: _showCreateAdminDialog,
-                            child: const Text('Create New Admin'),
-                          ),
-                        ],
+                      IconButton(
+                        icon: const Icon(Icons.refresh),
+                        onPressed: getUsers,
                       ),
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: DataTable(
-                          columnSpacing: 32.0,
-                          dataRowHeight: 70.0, // Add padding to each row
-                          columns: const [
-                            DataColumn(
-                              label: Text("Name"),
-                            ),
-                            DataColumn(
-                              label: Text("Email"),
-                            ),
-                          ],
-                          rows: List.generate(
-                            users.length,
-                            (index) => _userDataRow(users[index]),
+                      const SizedBox(width: 8),
+                      ElevatedButton(
+                        onPressed: _showCreateAdminDialog,
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                          backgroundColor: Colors.blue,
+                          shadowColor: Colors.blue,
+                          foregroundColor: Colors.white,
+                          textStyle: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        child: const Text(
+                          'Create New Admin',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
                     ],
                   ),
-                ),
+                  Expanded(
+                    child: UserList(
+                      users: users,
+                      onDetailsPressed: _handleDetailsPressed,
+                    ),
+                  ),
+                ],
               ),
             ),
     );

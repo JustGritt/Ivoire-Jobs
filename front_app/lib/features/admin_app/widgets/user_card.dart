@@ -4,29 +4,22 @@ import 'package:flutter/material.dart';
 class UserCard extends StatelessWidget {
   final User user;
   final Function(User) onDetailsPressed;
+  final String badgeText;
 
   const UserCard({
     super.key,
     required this.user,
     required this.onDetailsPressed,
+    this.badgeText = 'User',
   });
 
-  Color _getBadgeColor(UserMemberStatusEnum status) {
-    switch (status) {
-      case UserMemberStatusEnum.user:
-        return Colors.blue;
-      case UserMemberStatusEnum.member:
-        return Colors.yellow;
+  Color _getBadgeColor(String role) {
+    switch (role.toLowerCase()) {
+      case 'admin':
+        return Colors.green;
       default:
-        return Colors.grey;
+        return Colors.blue;
     }
-  }
-
-  String _capitalize(String text) {
-    if (text.isEmpty) {
-      return text;
-    }
-    return text[0].toUpperCase() + text.substring(1);
   }
 
   @override
@@ -34,7 +27,7 @@ class UserCard extends StatelessWidget {
     return Card(
       elevation: 4,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      margin: const EdgeInsets.symmetric(vertical: 8),
       color: Colors.grey[200],
       child: ListTile(
         contentPadding: const EdgeInsets.all(16),
@@ -67,13 +60,13 @@ class UserCard extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
               decoration: BoxDecoration(
-                color: _getBadgeColor(user.member),
+                color: _getBadgeColor(badgeText),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Text(
-                _capitalize(user.member.name),
+                badgeText,
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 12,
@@ -82,10 +75,11 @@ class UserCard extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 8),
-            IconButton(
-              icon: const Icon(Icons.remove_red_eye),
-              onPressed: () => onDetailsPressed(user),
-            ),
+            if (badgeText.toLowerCase() != 'admin')
+              IconButton(
+                icon: const Icon(Icons.search),
+                onPressed: () => onDetailsPressed(user),
+              ),
           ],
         ),
       ),

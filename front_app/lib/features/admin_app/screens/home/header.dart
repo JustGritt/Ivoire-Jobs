@@ -110,7 +110,7 @@ class _HeaderState extends State<Header> with SingleTickerProviderStateMixin {
                         );
                       },
                       child: Icon(
-                        Icons.download, // Use the download icon
+                        Icons.download,
                         color: primary,
                         size: 18,
                       ),
@@ -124,9 +124,9 @@ class _HeaderState extends State<Header> with SingleTickerProviderStateMixin {
                     color: secondary,
                     width: 2,
                   ),
-                  foregroundColor: primary, // Text color
+                  foregroundColor: primary,
                   backgroundColor:
-                      Colors.transparent, // Button background color
+                      Colors.transparent,
                   overlayColor: primary,
                 ),
               ),

@@ -56,7 +56,7 @@ class AdminScaffold extends StatelessWidget {
               leading: const Icon(Icons.people),
               title: const Text('Manage Users'),
               onTap: () {
-                Navigator.pop(context); // Close the drawer
+                Navigator.pop(context);
                 context.go('/admin/users');
               },
             ),
@@ -88,7 +88,7 @@ class AdminScaffold extends StatelessWidget {
               leading: const Icon(Icons.people_alt_outlined),
               title: const Text('Manage Teams'),
               onTap: () {
-                Navigator.pop(context); // Close the drawer
+                Navigator.pop(context);
                 context.go('/admin/teams');
               },
             ),

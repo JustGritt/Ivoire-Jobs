@@ -20,7 +20,6 @@ class AdminApp extends RouteManager {
   static const String reports = '/admin/reports';
 
   AdminApp() {
-    //add non authenticated routes
     addRoute(GoRoute(
       path: AdminApp.home,
       pageBuilder: (context, state) {

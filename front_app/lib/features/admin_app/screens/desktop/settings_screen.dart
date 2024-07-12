@@ -189,7 +189,6 @@ class _DashboardSettingsState extends State<DashboardSettings> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Maintenance Mode Card
               Card(
                 elevation: 4,
                 child: Padding(
@@ -212,7 +211,6 @@ class _DashboardSettingsState extends State<DashboardSettings> {
                 ),
               ),
               const SizedBox(height: 16),
-              // Add IP Card
               Card(
                 elevation: 4,
                 child: Padding(
@@ -253,7 +251,6 @@ class _DashboardSettingsState extends State<DashboardSettings> {
                 ),
               ),
               const SizedBox(height: 16),
-              // User IP List Card
               Expanded(
                 child: Card(
                   elevation: 4,

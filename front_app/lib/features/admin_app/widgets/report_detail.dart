@@ -76,11 +76,10 @@ class _ReportDetailsScreenState extends State<ReportDetailsScreen> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 10),
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                         backgroundColor: Colors.redAccent,
                         shadowColor: Colors.redAccent,
-                        foregroundColor: Colors.white, // Ensure text is white
+                        foregroundColor: Colors.white,
                         textStyle: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -91,17 +90,14 @@ class _ReportDetailsScreenState extends State<ReportDetailsScreen> {
                     const SizedBox(width: 8),
                     ElevatedButton(
                       onPressed: () {
-                        // Using Provider to access ReportProvider and validate the report
                         final reportProvider = Provider.of<ReportsProvider>(
                             context,
                             listen: false);
                         reportProvider
                             .updateReportStatus(widget.report)
                             .then((_) {
-                          // After updating the report status, pop the current screen
                           Navigator.of(context).pop();
                         }).catchError((error) {
-                          // Handle error if necessary
                           print('Error validating report: $error');
                         });
                         print('Validating report... ${widget.report.id}');
@@ -110,11 +106,10 @@ class _ReportDetailsScreenState extends State<ReportDetailsScreen> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 10),
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                         backgroundColor: Colors.green,
                         shadowColor: Colors.green,
-                        foregroundColor: Colors.white, // Ensure text is white
+                        foregroundColor: Colors.white,
                         textStyle: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
