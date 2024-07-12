@@ -1,6 +1,5 @@
+import 'package:barassage_app/features/admin_app/screens/desktop/login_desktop_screen.dart';
 import 'package:flutter/material.dart';
-
-import '../screens/desktop/login_desktop_screen.dart';
 
 class LoginDesktopController extends StatelessWidget {
   const LoginDesktopController({super.key});

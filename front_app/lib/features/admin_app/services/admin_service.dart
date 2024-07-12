@@ -1,12 +1,12 @@
+import 'package:barassage_app/features/auth_mod/models/api_response.dart';
+import 'package:barassage_app/features/admin_app/models/admin_user.dart';
 import 'package:barassage_app/features/admin_app/models/service.dart';
-import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:barassage_app/features/auth_mod/models/user.dart';
+import 'package:barassage_app/config/api_endpoints.dart';
+import 'package:barassage_app/config/app_http.dart';
 
-import '../../../config/api_endpoints.dart';
-import '../../../config/app_http.dart';
-import '../../auth_mod/models/api_response.dart';
-import '../../auth_mod/models/user.dart';
-import '../models/admin_user.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:dio/dio.dart';
 
 class AdminService {
   String? token;
@@ -24,10 +24,13 @@ class AdminService {
       if (res.statusCode == 200) {
         debugPrint('services data type: ${res.data.runtimeType}');
         if (res.data is List) {
-          List<Service> services = (res.data as List).map((e) => Service.fromJson(e)).toList();
+          List<Service> services =
+              (res.data as List).map((e) => Service.fromJson(e)).toList();
           return services;
         } else if (res.data['data'] is List) {
-          List<Service> services = (res.data['data'] as List).map((e) => Service.fromJson(e)).toList();
+          List<Service> services = (res.data['data'] as List)
+              .map((e) => Service.fromJson(e))
+              .toList();
           return services;
         }
         throw Exception('Unexpected response format');
@@ -70,7 +73,7 @@ class AdminService {
   }
 
   //ban a user
- Future<void> banUser(String userId, String reason) async {
+  Future<void> banUser(String userId, String reason) async {
     try {
       Response res = await _http.post(ApiEndpoint.banUser, data: {
         'userId': userId,
@@ -85,7 +88,7 @@ class AdminService {
       throw Exception('Failed to ban user');
     }
   }
-  
+
   Future<AdminUser?> createAdminUser(AdminUser user) async {
     try {
       print(user.toJson());
@@ -110,5 +113,4 @@ class AdminService {
       throw Exception('Failed to create admin user: $e');
     }
   }
-  
 }

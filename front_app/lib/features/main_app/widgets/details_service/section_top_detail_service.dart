@@ -1,7 +1,5 @@
-import 'package:barassage_app/config/config.dart';
-import 'package:barassage_app/core/helpers/extentions/string_extension.dart';
 import 'package:barassage_app/features/main_app/models/service_models/service_created_model.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:barassage_app/core/helpers/extentions/string_extension.dart';
 import 'package:flutter/material.dart';
 
 class SectionTopDetailService extends StatefulWidget {
@@ -9,12 +7,10 @@ class SectionTopDetailService extends StatefulWidget {
   const SectionTopDetailService({super.key, required this.service});
 
   @override
-  State<SectionTopDetailService> createState() =>
-      _SectionTopDetailServiceState();
+  State<SectionTopDetailService> createState() => _SectionTopDetailServiceState();
 }
 
 class _SectionTopDetailServiceState extends State<SectionTopDetailService> {
-  
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
@@ -60,9 +56,11 @@ class _SectionTopDetailServiceState extends State<SectionTopDetailService> {
             //     color: Colors.black,
             //   ),
             // ),
-            SizedBox(width: 15,),
+            SizedBox(
+              width: 15,
+            ),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal:  8, vertical: 4),
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: BoxDecoration(
                 color: theme.primaryColor,
                 borderRadius: BorderRadius.circular(10),
@@ -76,7 +74,9 @@ class _SectionTopDetailServiceState extends State<SectionTopDetailService> {
                 ),
               ),
             ),
-            SizedBox(width: 15,),
+            SizedBox(
+              width: 15,
+            ),
             // CupertinoButton(
             //   color: AppColors.primaryBlue,
             //   minSize: 0,

@@ -2,7 +2,6 @@ import 'package:barassage_app/features/admin_app/screens/desktop/banlist_screen.
 import 'package:barassage_app/features/admin_app/widgets/admin_menu.dart';
 import 'package:flutter/material.dart';
 
-
 class BanListController extends StatelessWidget {
   const BanListController({super.key});
 
@@ -17,4 +16,3 @@ class BanListController extends StatelessWidget {
     );
   }
 }
-

@@ -1,12 +1,12 @@
 analyzer:
   errors:
     avoid_catches_without_on_clauses: ignore
+    deprecated_member_use: ignore
     non_constant_identifier_names: ignore
     unnecessary_brace_in_string_interps: ignore
     unused_element: ignore
     unused_field: ignore
     unused_local_variable: ignore
-i ignorenclude: package:flutter_lints/flutter.yaml
 
 linter:
   rules:

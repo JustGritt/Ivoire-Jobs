@@ -1,14 +1,13 @@
-import 'dart:convert';
-
 import 'package:barassage_app/features/auth_mod/models/api_response.dart';
-import 'package:barassage_app/features/auth_mod/models/user.dart';
-import 'package:barassage_app/features/auth_mod/models/user_login.dart';
 import 'package:barassage_app/features/auth_mod/models/user_update.dart';
-import 'package:dio/dio.dart';
+import 'package:barassage_app/features/auth_mod/models/user_signup.dart';
+import 'package:barassage_app/features/auth_mod/models/user_login.dart';
+import 'package:barassage_app/features/auth_mod/models/user.dart';
+import 'package:barassage_app/config/api_endpoints.dart';
+import 'package:barassage_app/config/app_http.dart';
 
-import '../../../config/api_endpoints.dart';
-import '../../../config/app_http.dart';
-import '../models/user_signup.dart';
+import 'package:dio/dio.dart';
+import 'dart:convert';
 
 class UserService {
   String? token;
@@ -89,13 +88,13 @@ class UserService {
     if (res.statusCode == 200) {
       ApiResponse apiResponse = ApiResponse.fromJson(res.data);
       UserLoginResponse userLogin =
-      UserLoginResponse.fromJson(apiResponse.body);
+          UserLoginResponse.fromJson(apiResponse.body);
       return userLogin;
     }
     throw res.data['message'];
   }
-  
-   Future<User?> update(UserUpdate user) async {
+
+  Future<User?> update(UserUpdate user) async {
     Response res = await _http.put(
       ApiEndpoint.updateProfile,
       data: user.toJson(),
@@ -107,8 +106,7 @@ class UserService {
     return null;
   }
 
-
-    Future<bool> verifyEmailToken(String token) async {
+  Future<bool> verifyEmailToken(String token) async {
     Response res = await _http.get(
       '${ApiEndpoint.appEmailValidationUrl}?token=$token',
     );

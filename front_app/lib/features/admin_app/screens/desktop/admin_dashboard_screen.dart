@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
+import 'package:barassage_app/features/admin_app/widgets/admin_menu.dart';
+import 'package:barassage_app/features/admin_app/screens/screens.dart';
 import 'package:go_router/go_router.dart';
-import '../screens.dart';
-import '../../widgets/admin_menu.dart'; // Import the common AdminScaffold widget
+import 'package:flutter/material.dart';
 
 class AdminDashboardScreen extends StatefulWidget {
   const AdminDashboardScreen({super.key});

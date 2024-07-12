@@ -29,7 +29,6 @@ class AuthenticationFailureState extends AuthenticationState {
   List<Object> get props => [errorMessage];
 }
 
-
 /// events update profile
 class UpdateProfileLoadingState extends AuthenticationState {
   UpdateProfileLoadingState();

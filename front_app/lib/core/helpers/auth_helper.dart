@@ -1,20 +1,19 @@
-import 'package:barassage_app/core/classes/app_context.dart';
+import 'package:barassage_app/features/auth_mod/services/user_service.dart';
+import 'package:barassage_app/features/auth_mod/models/user_signup.dart';
+import 'package:barassage_app/features/auth_mod/models/user_login.dart';
 import 'package:barassage_app/core/exceptions/dio_exceptions.dart';
-import 'package:barassage_app/core/init_dependencies.dart';
+import 'package:barassage_app/features/auth_mod/models/user.dart';
 import 'package:barassage_app/features/admin_app/admin_app.dart';
 import 'package:barassage_app/features/auth_mod/auth_app.dart';
-import 'package:barassage_app/features/auth_mod/models/user.dart';
-import 'package:barassage_app/features/auth_mod/models/user_login.dart';
-import 'package:barassage_app/features/auth_mod/models/user_signup.dart';
-import 'package:barassage_app/features/auth_mod/services/user_service.dart';
+import 'package:barassage_app/core/classes/app_context.dart';
+import 'package:barassage_app/core/init_dependencies.dart';
 import 'package:barassage_app/features/main_app/app.dart';
-import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
+import 'package:barassage_app/config/config.dart';
+import 'package:barassage_app/core/core.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
-
-import '../../config/config.dart';
-import '../core.dart';
+import 'package:dio/dio.dart';
 
 BuildContext context = serviceLocator<AppContext>().navigatorContext;
 var logger = Logger();
@@ -23,8 +22,7 @@ doAuth(String email, String password) async {
   AppCache ac = AppCache();
   UserService us = UserService();
   try {
-    UserLoginResponse userLoginResponse =
-        await us.login(UserLogin(email: email, password: password));
+    UserLoginResponse userLoginResponse = await us.login(UserLogin(email: email, password: password));
     ac.doLogin(userLoginResponse.user, userLoginResponse.accessToken);
     SchedulerBinding.instance.addPostFrameCallback((_) {
       Nav.to(context, App.home);
@@ -51,10 +49,9 @@ doAdminAuth(String email, String password) async {
   } on DioException catch (e) {
     logger.e(DioExceptionHandler(e).error.message);
     showError(context, DioExceptionHandler(e).title);
-    rethrow;  // Propagate the error to be handled by the caller
+    rethrow; // Propagate the error to be handled by the caller
   }
 }
-
 
 doRegister(UserSignup userSignup) async {
   UserService us = serviceLocator<UserService>();

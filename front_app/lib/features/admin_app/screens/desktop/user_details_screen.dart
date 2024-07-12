@@ -1,6 +1,6 @@
+import 'package:barassage_app/features/admin_app/services/admin_service.dart';
+import 'package:barassage_app/features/auth_mod/models/user.dart';
 import 'package:flutter/material.dart';
-import '../../../auth_mod/models/user.dart';
-import '../../services/admin_service.dart';
 
 class UserDetailsScreen extends StatelessWidget {
   final User user;
@@ -11,14 +11,19 @@ class UserDetailsScreen extends StatelessWidget {
     AdminService as = AdminService();
     try {
       await as.banUser(user.id, reason);
-      _showSnackBar(context, '${user.firstName} ${user.lastName} has been banned for: $reason.', Colors.green);
+      _showSnackBar(
+          context,
+          '${user.firstName} ${user.lastName} has been banned for: $reason.',
+          Colors.green);
       Navigator.pop(context);
     } catch (e) {
-      _showSnackBar(context, 'Failed to ban ${user.firstName} ${user.lastName}.', Colors.red);
+      _showSnackBar(context,
+          'Failed to ban ${user.firstName} ${user.lastName}.', Colors.red);
     }
   }
 
-  void _showSnackBar(BuildContext context, String message, Color backgroundColor) {
+  void _showSnackBar(
+      BuildContext context, String message, Color backgroundColor) {
     final snackBar = SnackBar(
       content: Text(
         message,
@@ -45,7 +50,10 @@ class UserDetailsScreen extends StatelessWidget {
         return AlertDialog(
           title: const Text('Ban User'),
           content: Container(
-            width: MediaQuery.of(context).size.width * 0.7 * 2 / 3, // 70% of 2/3 screen width
+            width: MediaQuery.of(context).size.width *
+                0.7 *
+                2 /
+                3, // 70% of 2/3 screen width
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -74,7 +82,8 @@ class UserDetailsScreen extends StatelessWidget {
                 final String reason = reasonController.text.trim();
                 if (reason.isNotEmpty) {
                   Navigator.pop(context); // Close the dialog
-                  _banUser(context, reason); // Ban the user with the provided reason
+                  _banUser(
+                      context, reason); // Ban the user with the provided reason
                 }
               },
               style: ElevatedButton.styleFrom(
@@ -96,8 +105,10 @@ class UserDetailsScreen extends StatelessWidget {
       ),
       body: Center(
         child: Container(
-          padding: const EdgeInsets.only(top: 48.0), // Adding top padding of 3rem (48px)
-          constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 2 / 3),
+          padding: const EdgeInsets.only(
+              top: 48.0), // Adding top padding of 3rem (48px)
+          constraints: BoxConstraints(
+              maxWidth: MediaQuery.of(context).size.width * 2 / 3),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -106,21 +117,21 @@ class UserDetailsScreen extends StatelessWidget {
                 children: [
                   user.profilePicture.isNotEmpty
                       ? CircleAvatar(
-                    radius: 40,
-                    backgroundImage: NetworkImage(user.profilePicture),
-                  )
+                          radius: 40,
+                          backgroundImage: NetworkImage(user.profilePicture),
+                        )
                       : CircleAvatar(
-                    radius: 40,
-                    backgroundColor: Colors.grey[300],
-                    child: Text(
-                      '${user.lastName[0]}${user.firstName[0]}',
-                      style: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
+                          radius: 40,
+                          backgroundColor: Colors.grey[300],
+                          child: Text(
+                            '${user.lastName[0]}${user.firstName[0]}',
+                            style: const TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
                   const SizedBox(width: 16),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -136,7 +147,8 @@ class UserDetailsScreen extends StatelessWidget {
                           ),
                           const SizedBox(width: 24),
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 4),
                             decoration: BoxDecoration(
                               color: _getBadgeColor(user.member),
                               borderRadius: BorderRadius.circular(12),

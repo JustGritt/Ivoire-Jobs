@@ -1,10 +1,10 @@
-import 'package:barassage_app/features/main_app/app.dart';
-import 'package:barassage_app/features/main_app/models/service_models/service_created_model.dart';
 import 'package:barassage_app/features/main_app/widgets/details_service/section_client_detail_service.dart';
 import 'package:barassage_app/features/main_app/widgets/details_service/section_top_detail_service.dart';
+import 'package:barassage_app/features/main_app/models/service_models/service_created_model.dart';
+import 'package:barassage_app/features/main_app/app.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 class ServiceDetailPage extends StatelessWidget {
   final ServiceCreatedModel service;
@@ -174,7 +174,6 @@ class ServiceDetailPage extends StatelessWidget {
                         top: BorderSide(
                           //                    <--- top side
                           color: theme.colorScheme.surface,
-                          width: 1.0,
                         ),
                       ),
                       borderRadius: BorderRadius.only(

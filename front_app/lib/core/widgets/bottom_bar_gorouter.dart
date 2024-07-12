@@ -1,11 +1,11 @@
 import 'package:barassage_app/core/blocs/authentication/authentication_bloc.dart';
 import 'package:barassage_app/features/auth_mod/models/user.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flashy_tab_bar2/flashy_tab_bar2.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ionicons/ionicons.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
 class BottomBarGoRouter extends StatelessWidget {
@@ -23,7 +23,6 @@ class BottomBarGoRouter extends StatelessWidget {
       '/app/profile/becomeWorker',
       '/app/home/detailService',
       '/app/home/bookingService',
-   
     ];
 
     final currentPath = navigationShell.shellRouteContext.routerState.uri;
@@ -40,8 +39,7 @@ class BottomBarGoRouter extends StatelessWidget {
           backgroundColor: theme.scaffoldBackgroundColor,
           selectedIndex: navigationShell.currentIndex,
           onItemSelected: (value) {
-            navigationShell.goBranch(value,
-                initialLocation: value == navigationShell.currentIndex);
+            navigationShell.goBranch(value, initialLocation: value == navigationShell.currentIndex);
           },
           iconSize: 23.0,
           height: 55.0,
@@ -57,8 +55,7 @@ class BottomBarGoRouter extends StatelessWidget {
               activeColor: theme.primaryColor,
               title: Text(appLocalizations.tab_1),
             ),
-            (state is AuthenticationSuccessState &&
-                    (state).user.member == UserMemberStatusEnum.member)
+            (state is AuthenticationSuccessState && (state).user.member == UserMemberStatusEnum.member)
                 ? FlashyTabBarItem(
                     icon: const Icon(Ionicons.star_outline),
                     activeColor: theme.primaryColor,

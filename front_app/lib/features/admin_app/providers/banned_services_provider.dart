@@ -1,8 +1,8 @@
-import 'package:flutter/foundation.dart';
-import 'package:dio/dio.dart';
+import 'package:barassage_app/features/admin_app/models/service.dart';
 import 'package:barassage_app/config/api_endpoints.dart';
 import 'package:barassage_app/config/app_http.dart';
-import 'package:barassage_app/features/admin_app/models/service.dart';
+import 'package:flutter/foundation.dart';
+import 'package:dio/dio.dart';
 
 class BannedServicesProvider extends ChangeNotifier {
   List<Service> _services = [];
@@ -19,7 +19,6 @@ class BannedServicesProvider extends ChangeNotifier {
     try {
       Response res = await _http.get('${ApiEndpoint.services}/bans');
       if (res.statusCode == 200 && res.data is List) {
-        print(res.data);
         _services = List<Service>.from(res.data.map((item) => Service.fromJson(item)));
       } else {
         errorMessage = "Unexpected response format";

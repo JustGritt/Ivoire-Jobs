@@ -1,7 +1,5 @@
-// lib/features/auth_mod/controllers/email_validation_controller_mobile.dart
 import 'package:flutter/material.dart';
 
-// Placeholder for mobile where this functionality is not needed or provide an alternative implementation if required.
 class EmailValidationController extends StatelessWidget {
   const EmailValidationController({super.key});
 

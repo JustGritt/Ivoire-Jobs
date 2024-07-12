@@ -58,7 +58,9 @@ class Service {
       postalCode: json['postalCode'] ?? '',
       country: json['country'] ?? '',
       images: json['images'] != null ? List<String>.from(json['images']) : [],
-      createdAt: json['createdAt'] != null ? DateTime.parse(json['createdAt']) : DateTime.now(),
+      createdAt: json['createdAt'] != null
+          ? DateTime.parse(json['createdAt'])
+          : DateTime.now(),
       category: json['category'] != null ? List<String>.from(json['category']) : [],
       user: User.fromJson(json['user']),
     );

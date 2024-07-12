@@ -1,8 +1,7 @@
-import 'package:flutter/material.dart';
-import 'home_screen_content.dart';
 import 'package:barassage_app/features/admin_app/utils/responsive_utils.dart';
 import 'package:barassage_app/features/admin_app/utils/home_colors.dart';
-
+import 'package:flutter/material.dart';
+import 'home_screen_content.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -37,7 +36,8 @@ class HomeScreen extends StatelessWidget {
           _buildDrawerItem(context, 'Apps', contentState?.appsKey),
           _buildDrawerItem(context, 'FAQ', contentState?.faqKey),
           ListTile(
-            title: const Text('Dashboard', style: TextStyle(color: Colors.white)),
+            title:
+                const Text('Dashboard', style: TextStyle(color: Colors.white)),
             onTap: () {},
           ),
         ],
@@ -45,7 +45,8 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  static ListTile _buildDrawerItem(BuildContext context, String title, GlobalKey? key) {
+  static ListTile _buildDrawerItem(
+      BuildContext context, String title, GlobalKey? key) {
     return ListTile(
       title: Text(title, style: TextStyle(color: Colors.white)),
       onTap: () {

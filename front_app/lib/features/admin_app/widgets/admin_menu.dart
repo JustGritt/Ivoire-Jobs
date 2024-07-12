@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
+import 'package:barassage_app/core/blocs/authentication/authentication_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:barassage_app/core/blocs/authentication/authentication_bloc.dart';
+import 'package:flutter/material.dart';
 
 class AdminScaffold extends StatelessWidget {
   final Widget body;
@@ -105,7 +105,8 @@ class AdminScaffold extends StatelessWidget {
               leading: const Icon(Icons.logout),
               title: const Text('Logout'),
               onTap: () {
-                BlocProvider.of<AuthenticationBloc>(context).add(AdminSignOut());
+                BlocProvider.of<AuthenticationBloc>(context)
+                    .add(AdminSignOut());
               },
             ),
           ],
@@ -115,4 +116,3 @@ class AdminScaffold extends StatelessWidget {
     );
   }
 }
-

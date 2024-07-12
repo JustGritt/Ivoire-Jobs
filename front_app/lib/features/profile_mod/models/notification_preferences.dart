@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class NotificationPreferences {
   String bookingNotification;
   String messageNotification;
@@ -13,7 +11,8 @@ class NotificationPreferences {
     required this.serviceNotification,
   });
 
-  factory NotificationPreferences.fromJson(Map<String, dynamic> json) => NotificationPreferences(
+  factory NotificationPreferences.fromJson(Map<String, dynamic> json) =>
+  NotificationPreferences(
     bookingNotification: json["booking_notification"],
     messageNotification: json["message_notification"],
     pushNotification: json["push_notification"],
@@ -27,20 +26,15 @@ class NotificationPreferences {
     "service_notification": serviceNotification,
   };
 
-
   NotificationPreferences copyWith({
     String? bookingNotification,
     String? messageNotification,
     String? pushNotification,
     String? serviceNotification,
-  }) =>
-    NotificationPreferences(
-      bookingNotification: bookingNotification ?? this.bookingNotification,
-      messageNotification: messageNotification ?? this.messageNotification,
-      pushNotification: pushNotification ?? this.pushNotification,
-      serviceNotification: serviceNotification ?? this.serviceNotification,
-    );
-
-
-
+  }) => NotificationPreferences(
+    bookingNotification: bookingNotification ?? this.bookingNotification,
+    messageNotification: messageNotification ?? this.messageNotification,
+    pushNotification: pushNotification ?? this.pushNotification,
+    serviceNotification: serviceNotification ?? this.serviceNotification,
+  );
 }

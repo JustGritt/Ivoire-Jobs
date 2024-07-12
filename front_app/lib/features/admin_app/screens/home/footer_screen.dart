@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:barassage_app/features/admin_app/utils/home_colors.dart';
-
+import 'package:flutter/material.dart';
 
 class FooterScreen extends StatelessWidget {
   @override
@@ -48,61 +47,90 @@ class FooterScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Notre mission', style: TextStyle(color: tertiary, fontWeight: FontWeight.bold)),
+                          Text('Notre mission',
+                              style: TextStyle(
+                                  color: tertiary,
+                                  fontWeight: FontWeight.bold)),
                           SizedBox(height: 10),
                           TextButton(
                             onPressed: () {},
-                            child: Text('Fonctionnalités', style: TextStyle(color: tertiary.withOpacity(0.8))),
+                            child: Text('Fonctionnalités',
+                                style: TextStyle(
+                                    color: tertiary.withOpacity(0.8))),
                           ),
                           TextButton(
                             onPressed: () {},
-                            child: Text('Blog', style: TextStyle(color: tertiary.withOpacity(0.8))),
+                            child: Text('Blog',
+                                style: TextStyle(
+                                    color: tertiary.withOpacity(0.8))),
                           ),
                           TextButton(
                             onPressed: () {},
-                            child: Text('Sécurité', style: TextStyle(color: tertiary.withOpacity(0.8))),
+                            child: Text('Sécurité',
+                                style: TextStyle(
+                                    color: tertiary.withOpacity(0.8))),
                           ),
                           TextButton(
                             onPressed: () {},
-                            child: Text('Pour les entreprises', style: TextStyle(color: tertiary.withOpacity(0.8))),
+                            child: Text('Pour les entreprises',
+                                style: TextStyle(
+                                    color: tertiary.withOpacity(0.8))),
                           ),
                         ],
                       ),
                     ),
                     Expanded(
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start, // Align text to start
+                        crossAxisAlignment:
+                            CrossAxisAlignment.start, // Align text to start
                         children: [
-                          Text('Utiliser Barasseur', style: TextStyle(color: tertiary, fontWeight: FontWeight.bold)),
+                          Text('Utiliser Barasseur',
+                              style: TextStyle(
+                                  color: tertiary,
+                                  fontWeight: FontWeight.bold)),
                           SizedBox(height: 10),
                           TextButton(
                             onPressed: () {},
-                            child: Text('Android', style: TextStyle(color: tertiary.withOpacity(0.8))),
+                            child: Text('Android',
+                                style: TextStyle(
+                                    color: tertiary.withOpacity(0.8))),
                           ),
                           TextButton(
                             onPressed: () {},
-                            child: Text('iPhone', style: TextStyle(color: tertiary.withOpacity(0.8))),
+                            child: Text('iPhone',
+                                style: TextStyle(
+                                    color: tertiary.withOpacity(0.8))),
                           ),
                         ],
                       ),
                     ),
                     Expanded(
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start, // Align text to start
+                        crossAxisAlignment:
+                            CrossAxisAlignment.start, // Align text to start
                         children: [
-                          Text('Besoin d\'aide ?', style: TextStyle(color: tertiary, fontWeight: FontWeight.bold)),
+                          Text('Besoin d\'aide ?',
+                              style: TextStyle(
+                                  color: tertiary,
+                                  fontWeight: FontWeight.bold)),
                           SizedBox(height: 10),
                           TextButton(
                             onPressed: () {},
-                            child: Text('Nous contacter', style: TextStyle(color: tertiary.withOpacity(0.8))),
+                            child: Text('Nous contacter',
+                                style: TextStyle(
+                                    color: tertiary.withOpacity(0.8))),
                           ),
                           TextButton(
                             onPressed: () {},
-                            child: Text('Télécharger', style: TextStyle(color: tertiary.withOpacity(0.8))),
+                            child: Text('Télécharger',
+                                style: TextStyle(
+                                    color: tertiary.withOpacity(0.8))),
                           ),
                           TextButton(
                             onPressed: () {},
-                            child: Text('Avis de sécurité', style: TextStyle(color: tertiary.withOpacity(0.8))),
+                            child: Text('Avis de sécurité',
+                                style: TextStyle(
+                                    color: tertiary.withOpacity(0.8))),
                           ),
                         ],
                       ),
@@ -112,64 +140,95 @@ class FooterScreen extends StatelessWidget {
               else
                 SingleChildScrollView(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start, // Align columns at the start
+                    crossAxisAlignment:
+                        CrossAxisAlignment.start, // Align columns at the start
                     children: [
                       Column(
-                        crossAxisAlignment: CrossAxisAlignment.start, // Align text to start
+                        crossAxisAlignment:
+                            CrossAxisAlignment.start, // Align text to start
                         children: [
-                          Text('Notre mission', style: TextStyle(color: tertiary, fontWeight: FontWeight.bold)),
+                          Text('Notre mission',
+                              style: TextStyle(
+                                  color: tertiary,
+                                  fontWeight: FontWeight.bold)),
                           SizedBox(height: 10),
                           TextButton(
                             onPressed: () {},
-                            child: Text('Fonctionnalités', style: TextStyle(color: tertiary.withOpacity(0.8))),
+                            child: Text('Fonctionnalités',
+                                style: TextStyle(
+                                    color: tertiary.withOpacity(0.8))),
                           ),
                           TextButton(
                             onPressed: () {},
-                            child: Text('Blog', style: TextStyle(color: tertiary.withOpacity(0.8))),
+                            child: Text('Blog',
+                                style: TextStyle(
+                                    color: tertiary.withOpacity(0.8))),
                           ),
                           TextButton(
                             onPressed: () {},
-                            child: Text('Sécurité', style: TextStyle(color: tertiary.withOpacity(0.8))),
+                            child: Text('Sécurité',
+                                style: TextStyle(
+                                    color: tertiary.withOpacity(0.8))),
                           ),
                           TextButton(
                             onPressed: () {},
-                            child: Text('Pour les entreprises', style: TextStyle(color: tertiary.withOpacity(0.8))),
+                            child: Text('Pour les entreprises',
+                                style: TextStyle(
+                                    color: tertiary.withOpacity(0.8))),
                           ),
                         ],
                       ),
                       SizedBox(height: 20),
                       Column(
-                        crossAxisAlignment: CrossAxisAlignment.start, // Align text to start
+                        crossAxisAlignment:
+                            CrossAxisAlignment.start, // Align text to start
                         children: [
-                          Text('Utiliser Barasseur', style: TextStyle(color: tertiary, fontWeight: FontWeight.bold)),
+                          Text('Utiliser Barasseur',
+                              style: TextStyle(
+                                  color: tertiary,
+                                  fontWeight: FontWeight.bold)),
                           SizedBox(height: 10),
                           TextButton(
                             onPressed: () {},
-                            child: Text('Android', style: TextStyle(color: tertiary.withOpacity(0.8))),
+                            child: Text('Android',
+                                style: TextStyle(
+                                    color: tertiary.withOpacity(0.8))),
                           ),
                           TextButton(
                             onPressed: () {},
-                            child: Text('iPhone', style: TextStyle(color: tertiary.withOpacity(0.8))),
+                            child: Text('iPhone',
+                                style: TextStyle(
+                                    color: tertiary.withOpacity(0.8))),
                           ),
                         ],
                       ),
                       SizedBox(height: 20),
                       Column(
-                        crossAxisAlignment: CrossAxisAlignment.start, // Align text to start
+                        crossAxisAlignment:
+                            CrossAxisAlignment.start, // Align text to start
                         children: [
-                          Text('Besoin d\'aide ?', style: TextStyle(color: tertiary, fontWeight: FontWeight.bold)),
+                          Text('Besoin d\'aide ?',
+                              style: TextStyle(
+                                  color: tertiary,
+                                  fontWeight: FontWeight.bold)),
                           SizedBox(height: 10),
                           TextButton(
                             onPressed: () {},
-                            child: Text('Nous contacter', style: TextStyle(color: tertiary.withOpacity(0.8))),
+                            child: Text('Nous contacter',
+                                style: TextStyle(
+                                    color: tertiary.withOpacity(0.8))),
                           ),
                           TextButton(
                             onPressed: () {},
-                            child: Text('Télécharger', style: TextStyle(color: tertiary.withOpacity(0.8))),
+                            child: Text('Télécharger',
+                                style: TextStyle(
+                                    color: tertiary.withOpacity(0.8))),
                           ),
                           TextButton(
                             onPressed: () {},
-                            child: Text('Avis de sécurité', style: TextStyle(color: tertiary.withOpacity(0.8))),
+                            child: Text('Avis de sécurité',
+                                style: TextStyle(
+                                    color: tertiary.withOpacity(0.8))),
                           ),
                         ],
                       ),
@@ -182,16 +241,19 @@ class FooterScreen extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Text('© 2024 Barassage Inc.', style: TextStyle(color: tertiary)),
+                    Text('© 2024 Barassage Inc.',
+                        style: TextStyle(color: tertiary)),
                     Row(
                       children: [
                         IconButton(
                           onPressed: () {},
-                          icon: Icon(Icons.screen_lock_landscape, color: tertiary),
+                          icon: Icon(Icons.screen_lock_landscape,
+                              color: tertiary),
                         ),
                         IconButton(
                           onPressed: () {},
-                          icon: Icon(Icons.screen_lock_landscape, color: tertiary),
+                          icon: Icon(Icons.screen_lock_landscape,
+                              color: tertiary),
                         ),
                         IconButton(
                           onPressed: () {},
@@ -199,7 +261,8 @@ class FooterScreen extends StatelessWidget {
                         ),
                         IconButton(
                           onPressed: () {},
-                          icon: Icon(Icons.screen_lock_landscape, color: tertiary),
+                          icon: Icon(Icons.screen_lock_landscape,
+                              color: tertiary),
                         ),
                       ],
                     ),
@@ -207,7 +270,8 @@ class FooterScreen extends StatelessWidget {
                       value: 'français',
                       dropdownColor: Color(0xFF0F2027),
                       icon: Icon(Icons.arrow_drop_down, color: tertiary),
-                      items: <String>['français', 'english'].map((String value) {
+                      items:
+                          <String>['français', 'english'].map((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
                           child: Text(value, style: TextStyle(color: tertiary)),
@@ -220,18 +284,21 @@ class FooterScreen extends StatelessWidget {
               else
                 Column(
                   children: [
-                    Text('© 2024 Barassage Inc.', style: TextStyle(color: tertiary)),
+                    Text('© 2024 Barassage Inc.',
+                        style: TextStyle(color: tertiary)),
                     const SizedBox(height: 10),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         IconButton(
                           onPressed: () {},
-                          icon: Icon(Icons.screen_lock_landscape, color: tertiary),
+                          icon: Icon(Icons.screen_lock_landscape,
+                              color: tertiary),
                         ),
                         IconButton(
                           onPressed: () {},
-                          icon: Icon(Icons.screen_lock_landscape, color: tertiary),
+                          icon: Icon(Icons.screen_lock_landscape,
+                              color: tertiary),
                         ),
                         IconButton(
                           onPressed: () {},
@@ -239,7 +306,8 @@ class FooterScreen extends StatelessWidget {
                         ),
                         IconButton(
                           onPressed: () {},
-                          icon: Icon(Icons.screen_lock_landscape, color: tertiary),
+                          icon: Icon(Icons.screen_lock_landscape,
+                              color: tertiary),
                         ),
                       ],
                     ),
@@ -248,7 +316,8 @@ class FooterScreen extends StatelessWidget {
                       value: 'français',
                       dropdownColor: Color(0xFF0F2027),
                       icon: Icon(Icons.arrow_drop_down, color: tertiary),
-                      items: <String>['français', 'english'].map((String value) {
+                      items:
+                          <String>['français', 'english'].map((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
                           child: Text(value, style: TextStyle(color: tertiary)),
