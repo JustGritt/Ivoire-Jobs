@@ -75,7 +75,6 @@ class AdminService {
     }
   }
 
-  //ban a user
   Future<void> banUser(String userId, String reason) async {
     try {
       Response res = await _http.post(ApiEndpoint.banUser, data: {

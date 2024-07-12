@@ -131,20 +131,16 @@ class _HomeScreenContentState extends State<HomeScreenContent> {
             SliverList(
               delegate: SliverChildListDelegate(
                 [
-                  // Main Content
                   HeroScreen(aboutUsKey: _aboutUsKey, columns: columns),
-                  // Additional Content
                   AdditionalContent(
                     appsKey: _appsKey,
                     downloadUrl: dotenv.env['FLUTTER_DOWNLOAD_URL'] ?? '',
                   ),
-                  // FAQ Section
                   FAQScreen(
                     faqKey: _faqKey,
                     expanded: _expanded,
                     onExpansionChanged: _onExpansionChanged,
                   ),
-                  // Footer
                   FooterScreen(),
                 ],
               ),

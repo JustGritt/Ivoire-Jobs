@@ -18,7 +18,6 @@ class DashboardSettingsService {
       debugPrint('Maintenance mode status: ${res.data}');
       if (res.statusCode == 200 && res.data != null) {
         final value = res.data['body']['value'][0];
-        // Cast the value to bool if it's a String
         if (value is String) {
           return value.toLowerCase() == 'true';
         }

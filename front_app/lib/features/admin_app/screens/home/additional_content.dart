@@ -43,7 +43,6 @@ class AdditionalContent extends StatelessWidget {
           ? Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // Left Side: QR Code
                 Expanded(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -118,7 +117,6 @@ class AdditionalContent extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 20),
-                // Right Side: Text and Download Button
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -169,7 +167,6 @@ class AdditionalContent extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 60),
-                // Top: QR Code
                 QrImageView(
                   data: downloadUrl,
                   backgroundColor: tertiary,

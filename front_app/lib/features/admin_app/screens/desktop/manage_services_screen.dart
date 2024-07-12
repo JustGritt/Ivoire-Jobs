@@ -1,4 +1,5 @@
 import 'package:barassage_app/features/admin_app/services/admin_service.dart';
+import 'package:barassage_app/features/admin_app/widgets/service_card.dart';
 import 'package:barassage_app/features/admin_app/models/service.dart';
 import 'package:flutter/material.dart';
 
@@ -10,89 +11,74 @@ class ManageServicesScreen extends StatefulWidget {
 }
 
 class _ManageServicesScreenState extends State<ManageServicesScreen> {
-  List<Service> services = [];
-  bool isLoading = true;
+  late Future<List<Service>> futureServices;
 
   @override
   void initState() {
     super.initState();
-    getServices();
+    futureServices = getServices();
   }
 
-  void getServices() async {
+  Future<List<Service>> getServices() async {
     AdminService as = AdminService();
     try {
-      var values = await as.getAllServices();
-      setState(() {
-        services = values;
-        isLoading = false;
-      });
+      return await as.getAllServices();
     } catch (e) {
       debugPrint('Error: $e');
-      setState(() {
-        services = [];
-        isLoading = false;
-      });
+      return [];
     }
+  }
+
+  void _handleEditService(Service service) {
+    debugPrint('Edit service: ${service.name}');
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Manage Services',
-          style: TextStyle(
-            color: Colors.black,
-          ),
-        ),
-      ),
-      body: Center(
-        child: FractionallySizedBox(
-          widthFactor: 0.66,
-          child: isLoading
-              ? const Center(child: CircularProgressIndicator())
-              : services.isEmpty
-                  ? const Center(child: Text('No services available'))
-                  : ListView.builder(
+      body: FutureBuilder<List<Service>>(
+        future: futureServices,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (snapshot.hasData && snapshot.data!.isEmpty) {
+            return const Center(child: Text('No services available.'));
+          } else if (snapshot.hasData) {
+            List<Service> services = snapshot.data!;
+            return Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    'Total Services: ${services.length}',
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: ListView.builder(
                       itemCount: services.length,
                       itemBuilder: (context, index) {
                         final service = services[index];
-                        return Card(
-                          elevation: 3,
-                          margin: const EdgeInsets.symmetric(vertical: 10),
-                          child: ListTile(
-                            contentPadding: const EdgeInsets.all(10),
-                            leading: service.images.isNotEmpty
-                                ? Image.network(
-                                    service.images.first,
-                                    width: 50,
-                                    height: 50,
-                                    fit: BoxFit.cover,
-                                  )
-                                : const Icon(
-                                    Icons.image,
-                                    size: 50,
-                                  ),
-                            title: Text(service.name),
-                            subtitle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(service.description),
-                                const SizedBox(height: 5),
-                                Text('Price: \$${service.price.toString()}'),
-                                Text('Duration: ${service.duration} minutes'),
-                              ],
-                            ),
-                            trailing: const Icon(Icons.edit),
-                            onTap: () {
-                              // Handle tap to edit service
-                            },
-                          ),
+                        return ServiceCard(
+                          service: service,
+                          onEdit: () => _handleEditService(service),
                         );
                       },
                     ),
-        ),
+                  ),
+                ),
+              ],
+            );
+          }
+          return const Center(child: Text('No services available.'));
+        },
       ),
     );
   }

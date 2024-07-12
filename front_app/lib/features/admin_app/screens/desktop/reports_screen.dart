@@ -3,7 +3,6 @@ import 'package:barassage_app/features/admin_app/widgets/report_card.dart';
 import 'package:barassage_app/features/admin_app/models/report.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class ReportScreen extends StatefulWidget {
   const ReportScreen({Key? key});
@@ -26,15 +25,6 @@ class _ReportScreenState extends State<ReportScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Reports'),
-        // leading: IconButton(
-        //   onPressed: () {
-        //     Navigator.of(context).pop();
-        //   },
-        //   icon: const Icon(Icons.arrow_back),
-        // ),
-      ),
       body: FutureBuilder<List<Report>>(
         future: futureReports,
         builder: (context, snapshot) {
@@ -51,7 +41,7 @@ class _ReportScreenState extends State<ReportScreen> {
                 Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Text(
-                    'Total Reports: ${reports.length}',
+                    'Number of reports: ${reports.length}',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -75,41 +65,4 @@ class _ReportScreenState extends State<ReportScreen> {
       ),
     );
   }
-}
-
-class ReportDetailScreen extends StatelessWidget {
-  final Report report;
-
-  const ReportDetailScreen({super.key, required this.report});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 8.0),
-            Text('Reported on ${DateFormat.yMMMd().format(report.createdAt)}'),
-            const SizedBox(height: 16.0),
-            Text(report.reason),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-void main() {
-  runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => ReportsProvider()),
-      ],
-      child: const MaterialApp(
-        home: ReportScreen(),
-      ),
-    ),
-  );
 }
