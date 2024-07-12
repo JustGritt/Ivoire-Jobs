@@ -4,29 +4,22 @@ import 'package:flutter/material.dart';
 class UserCard extends StatelessWidget {
   final User user;
   final Function(User) onDetailsPressed;
+  final String badgeText;
 
   const UserCard({
     super.key,
     required this.user,
     required this.onDetailsPressed,
+    this.badgeText = 'User',
   });
 
-  Color _getBadgeColor(UserMemberStatusEnum status) {
-    switch (status) {
-      case UserMemberStatusEnum.user:
+  Color _getBadgeColor(String role) {
+    switch (role.toLowerCase()) {
+      case 'admin':
         return Colors.blue;
-      case UserMemberStatusEnum.member:
-        return Colors.yellow;
       default:
         return Colors.grey;
     }
-  }
-
-  String _capitalize(String text) {
-    if (text.isEmpty) {
-      return text;
-    }
-    return text[0].toUpperCase() + text.substring(1);
   }
 
   @override
@@ -34,7 +27,7 @@ class UserCard extends StatelessWidget {
     return Card(
       elevation: 4,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      margin: const EdgeInsets.symmetric(vertical: 8),
       color: Colors.grey[200],
       child: ListTile(
         contentPadding: const EdgeInsets.all(16),
@@ -69,11 +62,11 @@ class UserCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: BoxDecoration(
-                color: _getBadgeColor(user.member),
+                color: _getBadgeColor(badgeText),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Text(
-                _capitalize(user.member.name),
+                badgeText,
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 12,
