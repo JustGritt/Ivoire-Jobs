@@ -200,7 +200,8 @@ func CreateBooking(c *fiber.Ctx) error {
 		)
 		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
 	}
-	return c.Status(http.StatusOK).JSON(fiber.Map{
+
+	return c.Status(http.StatusCreated).JSON(fiber.Map{
 		"booking":       bookingOutputFromModel(bookingModel),
 		"paymentIntent": &pi.ClientSecret,
 	})

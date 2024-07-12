@@ -27,7 +27,6 @@ func SetupRoutes(app *fiber.App) {
 
 	// Stripe Webhook
 	v1.Post("/stripe/webhook", ctl.HandleWebhook)
-	v1.Get("/stripe/create-payment-intent", ctl.HandleCreatePaymentIntent) // TODO remove after hadnling properly in booking.go
 
 	v1.Get("/home", ctl.HomeController)
 

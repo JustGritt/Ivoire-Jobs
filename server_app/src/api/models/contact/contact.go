@@ -7,7 +7,7 @@ import (
 type Contact struct {
 	gorm.Model
 	ID         string  `gorm:"type:uuid;default:gen_random_uuid();unique"`
-	Phone      string  `gorm:"unique;not null;size:66"`
+	Phone      string  `gorm:"not null;size:66"`
 	Address    string  `gorm:"not null;"`
 	City       string  `gorm:"not null;"`
 	Country    string  `gorm:"not null;"`
