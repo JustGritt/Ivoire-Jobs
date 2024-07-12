@@ -13,12 +13,9 @@ import (
 func HandleWebhook(c *fiber.Ctx) error {
 	// Limit the request body size
 	cfg.GetStripeConfig()
-	//endpointSecret := cfg.GetStripeConfig().WebhookKey
+	endpointSecret := cfg.GetStripeConfig().WebhookKey
 
 	payload := c.Body()
-
-	// This is your Stripe CLI webhook secret for testing your endpoint locally.
-	endpointSecret := "whsec_v5yv9qtQNyQWfH8aatIQW7AdmcwXvRzj"
 
 	// Pass the request body and Stripe-Signature header to ConstructEvent, along
 	// with the webhook signing key.
