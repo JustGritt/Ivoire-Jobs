@@ -30,7 +30,7 @@ type ServiceObject struct {
 	UserID      string                  `json:"-"`
 	Name        string                  `json:"name" validate:"required,min=2,max=30"`
 	Description string                  `json:"description" validate:"required,min=2,max=30"`
-	Price       float64                 `json:"price" validate:"required,min=5,max=1000000"`
+	Price       float64                 `json:"price" validate:"required,min=1000,max=1000000"`
 	Status      bool                    `json:"status" default:"false"`
 	Duration    int                     `json:"duration" validate:"required,min=30,max=1440,step=30" message:"Duration must be a multiple of 30 and it should be beetween 30 and 1440"`
 	IsBanned    bool                    `json:"-"`
