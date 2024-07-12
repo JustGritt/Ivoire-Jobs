@@ -130,6 +130,7 @@ func CreateMember(c *fiber.Ctx) error {
 // @Description Get all pending requests
 // @Tags Member
 // @Produce json
+// @Param status query string false "Status of the requests" Enums(processing, member, rejected, all)
 // @Success 200 {object} Response
 // @Failure 400 {array} ErrorResponse
 // @Failure 401 {array} ErrorResponse
@@ -146,12 +147,12 @@ func GetAllRequests(c *fiber.Ctx) error {
 	}
 
 	// Validate status
-	if status != "processing" && status != "accepted" && status != "rejected" && status != "all" {
+	if status != "processing" && status != "member" && status != "rejected" && status != "all" {
 		errorList = append(
 			errorList,
 			&fiber.Error{
 				Code:    fiber.StatusBadRequest,
-				Message: "status must be 'processing', 'accepted', 'rejected', or 'all'",
+				Message: "status must be 'processing', 'member', 'rejected', or 'all'",
 			},
 		)
 		return c.Status(fiber.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
