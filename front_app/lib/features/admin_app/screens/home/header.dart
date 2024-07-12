@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:barassage_app/features/admin_app/utils/responsive_utils.dart';
-import 'package:barassage_app/features/admin_app/utils/home_colors.dart'; // Import the custom colors
+import 'package:barassage_app/features/admin_app/utils/home_colors.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter/material.dart';
 
 class Header extends StatefulWidget {
   final Function(GlobalKey?) scrollToSection;
@@ -118,13 +118,15 @@ class _HeaderState extends State<Header> with SingleTickerProviderStateMixin {
                   ],
                 ),
                 style: OutlinedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 14.0),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 14.0, vertical: 14.0),
                   side: BorderSide(
                     color: secondary,
                     width: 2,
                   ),
                   foregroundColor: primary, // Text color
-                  backgroundColor: Colors.transparent, // Button background color
+                  backgroundColor:
+                      Colors.transparent, // Button background color
                   overlayColor: primary,
                 ),
               ),
@@ -189,7 +191,8 @@ class _HeaderState extends State<Header> with SingleTickerProviderStateMixin {
                     ],
                   ),
                   style: OutlinedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 18.0),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16.0, vertical: 18.0),
                     side: BorderSide(
                       color: secondary,
                       width: 2,

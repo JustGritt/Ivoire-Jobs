@@ -79,7 +79,8 @@ class BanCard extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   backgroundColor: Colors.redAccent,
                   shadowColor: Colors.redAccent,
                   foregroundColor: Colors.white, // Ensure text is white

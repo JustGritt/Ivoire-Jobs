@@ -1,11 +1,10 @@
+import 'package:barassage_app/features/admin_app/screens/desktop/splash_screen.dart';
+import 'package:barassage_app/core/blocs/authentication/authentication_bloc.dart';
 import 'package:barassage_app/features/admin_app/controllers/controllers.dart';
-import 'package:barassage_app/features/admin_app/controllers/reports_controller.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:go_router/go_router.dart';
 import 'package:barassage_app/core/classes/route_manager.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:barassage_app/core/blocs/authentication/authentication_bloc.dart';
-import 'package:barassage_app/features/admin_app/screens/desktop/splash_screen.dart';
+import 'package:go_router/go_router.dart';
+import 'package:flutter/cupertino.dart';
 
 class AdminApp extends RouteManager {
   static const String home = '/';
@@ -26,8 +25,9 @@ class AdminApp extends RouteManager {
       path: AdminApp.home,
       pageBuilder: (context, state) {
         return const CupertinoPage(child: HomeController());
-        },
+      },
     ));
+
     addRoute(GoRoute(
       path: AdminApp.adminLogin,
       pageBuilder: (context, state) {

@@ -7,7 +7,8 @@ class ApiEndpoint {
   // News Server
 
   // Server Links
-  static const baseUrl = 'https://api.barassage.com';
+  static const baseUrl = 'http://localhost:8000';
+  // static const baseUrl = 'https://api.barassage.com';
   //static const baseUrl = 'https://fantastic-space-doodle-w59vv7w5w7pfp9j-8000.app.github.dev';
   static const api = '${baseUrl}/api/v1';
 
@@ -25,7 +26,7 @@ class ApiEndpoint {
   // Admin App Links
   static const adminUsers = '${api}/auth/users';
   static const serviceCollection = '${api}/service/collection';
-  static const dashboardSettings =  '${api}/configuration';
+  static const dashboardSettings = '${api}/configuration';
   static const banUser = '${api}/ban';
   static const adminLogin = '${api}/auth/admin-login';
   static const adminUser = '${api}/auth/admin';

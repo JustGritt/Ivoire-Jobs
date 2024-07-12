@@ -1,8 +1,6 @@
-import 'package:barassage_app/features/main_app/app.dart';
 import 'package:barassage_app/features/main_app/models/service_models/service_created_model.dart';
 import 'package:barassage_app/features/main_app/services/service_services.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'trending_service.dart';
 
 class TrendingServicesList extends StatefulWidget {
@@ -39,7 +37,7 @@ class _TrendingServicesListState extends State<TrendingServicesList> {
               child: Text('No data found'),
             );
           }
-          
+
           return Container(
             child: ListView.builder(
               scrollDirection: Axis.horizontal,

@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:barassage_app/features/admin_app/services/dashboard_settings_service.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter/material.dart';
 import 'dart:convert';
 
 class DashboardSettings extends StatefulWidget {
@@ -92,7 +92,8 @@ class _DashboardSettingsState extends State<DashboardSettings> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: const Text('Confirm Maintenance Mode'),
-            content: const Text('Are you sure you want to enable maintenance mode with an empty or single IP whitelist?'),
+            content: const Text(
+                'Are you sure you want to enable maintenance mode with an empty or single IP whitelist?'),
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(context).pop(false),
@@ -198,7 +199,8 @@ class _DashboardSettingsState extends State<DashboardSettings> {
                     children: [
                       const Text(
                         'Maintenance Mode',
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 10),
                       Switch(
@@ -220,7 +222,8 @@ class _DashboardSettingsState extends State<DashboardSettings> {
                     children: [
                       const Text(
                         'Add User IP to List',
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 10),
                       Row(
@@ -261,7 +264,8 @@ class _DashboardSettingsState extends State<DashboardSettings> {
                       children: [
                         const Text(
                           'User IP List',
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 10),
                         Expanded(
@@ -272,7 +276,8 @@ class _DashboardSettingsState extends State<DashboardSettings> {
                                 title: Text(ipList[index]),
                                 trailing: IconButton(
                                   icon: const Icon(Icons.delete),
-                                  onPressed: () => removeIpFromList(ipList[index]),
+                                  onPressed: () =>
+                                      removeIpFromList(ipList[index]),
                                 ),
                               );
                             },

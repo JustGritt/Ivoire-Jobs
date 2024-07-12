@@ -1,16 +1,14 @@
-import 'package:barassage_app/config/app_colors.dart';
 import 'package:barassage_app/core/blocs/authentication/authentication_bloc.dart';
-import 'package:barassage_app/core/init_dependencies.dart';
-import 'package:barassage_app/features/auth_mod/models/models.dart';
 import 'package:barassage_app/features/auth_mod/models/user_update.dart';
 import 'package:barassage_app/features/auth_mod/widgets/app_button.dart';
+import 'package:barassage_app/core/init_dependencies.dart';
+import 'package:barassage_app/config/app_colors.dart';
+
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ez_validator/ez_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:skeletonizer/skeletonizer.dart';
-import 'package:super_cupertino_navigation_bar/super_cupertino_navigation_bar.dart';
 
 AuthenticationBloc authenticationBloc = serviceLocator<AuthenticationBloc>();
 
@@ -136,7 +134,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     child: Column(
                       children: [
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const Icon(CupertinoIcons.person),
@@ -207,8 +204,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           margin: EdgeInsets.symmetric(vertical: 10),
                         ),
                         Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               const Icon(CupertinoIcons.mail),
                               const SizedBox(width: 10),
@@ -248,7 +243,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           margin: EdgeInsets.symmetric(vertical: 10),
                         ),
                         Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const Icon(CupertinoIcons.text_alignleft),
@@ -260,7 +254,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                   minLines: 5,
                                   maxLines: 10,
                                   padding: EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 0),
+                                      horizontal: 10),
                                   decoration: BoxDecoration(
                                     border: Border.all(
                                       color: Colors.transparent,

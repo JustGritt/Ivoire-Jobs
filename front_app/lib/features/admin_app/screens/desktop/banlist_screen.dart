@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:barassage_app/features/admin_app/providers/banned_services_provider.dart';
 import 'package:barassage_app/features/admin_app/providers/banned_users_provider.dart';
 import 'package:barassage_app/features/admin_app/widgets/banned_service_card.dart';
 import 'package:barassage_app/features/admin_app/widgets/banned_user_card.dart';
-import 'package:barassage_app/features/admin_app/models/service.dart';
 import 'package:barassage_app/features/admin_app/models/banned_user.dart';
+import 'package:barassage_app/features/admin_app/models/service.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter/material.dart';
 
 class BanListScreen extends StatefulWidget {
   const BanListScreen({super.key});
@@ -14,7 +14,8 @@ class BanListScreen extends StatefulWidget {
   _BanListScreenState createState() => _BanListScreenState();
 }
 
-class _BanListScreenState extends State<BanListScreen> with SingleTickerProviderStateMixin {
+class _BanListScreenState extends State<BanListScreen>
+  with SingleTickerProviderStateMixin {
   late Future<List<Service>> futureBannedService;
   late Future<List<BannedUser>> futureBannedUsers;
   late TabController _tabController;
@@ -24,10 +25,12 @@ class _BanListScreenState extends State<BanListScreen> with SingleTickerProvider
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
     Future.microtask(() {
-      final bannedServicesProvider = Provider.of<BannedServicesProvider>(context, listen: false);
+      final bannedServicesProvider =
+          Provider.of<BannedServicesProvider>(context, listen: false);
       futureBannedService = bannedServicesProvider.getAllBannedServices();
 
-      final bannedUsersProvider = Provider.of<BannedUsersProvider>(context, listen: false);
+      final bannedUsersProvider =
+          Provider.of<BannedUsersProvider>(context, listen: false);
       futureBannedUsers = bannedUsersProvider.getAllBannedUsers();
     });
   }
@@ -43,9 +46,9 @@ class _BanListScreenState extends State<BanListScreen> with SingleTickerProvider
               Tab(text: 'Banned Services'),
               Tab(text: 'Banned Users'),
             ],
+            unselectedLabelColor: Colors.grey, // Adjust the color as needed
             indicatorColor: Colors.blue, // Adjust the color as needed
             labelColor: Colors.blue, // Adjust the color as needed
-            unselectedLabelColor: Colors.grey, // Adjust the color as needed
           ),
           Expanded(
             child: TabBarView(

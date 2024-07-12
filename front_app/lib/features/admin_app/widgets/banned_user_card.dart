@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:barassage_app/features/admin_app/models/banned_user.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class BannedUserCard extends StatelessWidget {
@@ -64,7 +64,8 @@ class BannedUserCard extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   backgroundColor: Colors.redAccent,
                   shadowColor: Colors.redAccent,
                   foregroundColor: Colors.white, // Ensure text is white

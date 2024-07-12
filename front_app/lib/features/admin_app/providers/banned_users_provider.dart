@@ -1,8 +1,8 @@
-import 'package:flutter/foundation.dart';
-import 'package:dio/dio.dart';
+import 'package:barassage_app/features/admin_app/models/banned_user.dart';
 import 'package:barassage_app/config/api_endpoints.dart';
 import 'package:barassage_app/config/app_http.dart';
-import 'package:barassage_app/features/admin_app/models/banned_user.dart';
+import 'package:flutter/foundation.dart';
+import 'package:dio/dio.dart';
 
 class BannedUsersProvider extends ChangeNotifier {
   List<BannedUser> _users = [];

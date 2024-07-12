@@ -1,12 +1,11 @@
-import 'package:barassage_app/core/blocs/authentication/authentication_bloc.dart';
-import 'package:barassage_app/core/classes/app_context.dart';
 import 'package:barassage_app/core/helpers/utils_helper.dart';
+import 'package:barassage_app/core/classes/app_context.dart';
 import 'package:barassage_app/core/init_dependencies.dart';
-import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
+import 'package:barassage_app/config/api_endpoints.dart';
+import 'package:barassage_app/config/app_http.dart';
 import 'package:go_router/go_router.dart';
-import '../../../config/api_endpoints.dart';
-import '../../../config/app_http.dart';
+import 'package:flutter/material.dart';
+import 'package:dio/dio.dart';
 
 BuildContext context = serviceLocator<AppContext>().navigatorContext;
 
@@ -16,8 +15,7 @@ class BecomeBarasseurService {
 
   Future<void> sendRequest(String reason) async {
     try {
-      Response res = await _http
-          .post(ApiEndpoint.becomeBarasseur, data: {"reason": reason});
+      Response res = await _http.post(ApiEndpoint.becomeBarasseur, data: {"reason": reason});
       if (res.statusCode == 201) {
         showMyDialog(context,
             title: 'Success',

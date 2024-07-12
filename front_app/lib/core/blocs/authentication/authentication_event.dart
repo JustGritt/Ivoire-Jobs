@@ -46,7 +46,6 @@ class UpdateUserEvent extends AuthenticationEvent {
   List<Object> get props => [user];
 }
 
-
 class SignOut extends AuthenticationEvent {}
 
 class AdminSignOut extends AuthenticationEvent {}

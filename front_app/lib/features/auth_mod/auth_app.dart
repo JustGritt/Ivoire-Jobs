@@ -1,13 +1,10 @@
 import 'package:barassage_app/features/auth_mod/screens/mobile/splash_mobile_screen.dart';
+import 'package:barassage_app/features/auth_mod/controllers/controllers_cond.dart' as web;
 import 'package:barassage_app/features/auth_mod/screens/mobile/welcome_mail_screen.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:barassage_app/features/auth_mod/controllers/controllers.dart';
+import 'package:barassage_app/core/classes/route_manager.dart';
 import 'package:go_router/go_router.dart';
-
-
-import '../../core/classes/route_manager.dart';
-import 'controllers/controllers.dart';
-// Conditionally import the web-specific controller if running on the web
-import 'controllers/controllers_cond.dart' as web; // Conditional import for email validation controller
+import 'package:flutter/cupertino.dart';
 
 class AuthApp extends RouteManager {
   static const String login = '/auth/login';
@@ -49,10 +46,10 @@ class AuthApp extends RouteManager {
           return const CupertinoPage(child: RegisterController());
         }));
 
-      addRoute(GoRoute(
-          path: AuthApp.emailValidation,
-          pageBuilder: (context, state) {
-            return const CupertinoPage(child: web.EmailValidationController());
-          }));
+    addRoute(GoRoute(
+        path: AuthApp.emailValidation,
+        pageBuilder: (context, state) {
+          return const CupertinoPage(child: web.EmailValidationController());
+        }));
   }
 }

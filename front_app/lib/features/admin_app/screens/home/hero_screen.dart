@@ -1,5 +1,5 @@
+import 'package:barassage_app/features/admin_app/utils/home_colors.dart';
 import 'package:flutter/material.dart';
-import 'package:barassage_app/features/admin_app/utils/home_colors.dart'; // Import the custom colors
 
 class HeroScreen extends StatelessWidget {
   final GlobalKey aboutUsKey;
@@ -17,7 +17,7 @@ class HeroScreen extends StatelessWidget {
 
     return Container(
       key: aboutUsKey,
-      padding:  EdgeInsets.symmetric(
+      padding: EdgeInsets.symmetric(
         horizontal: 20,
         vertical: isDesktop ? 110 : 40,
       ),
@@ -26,8 +26,7 @@ class HeroScreen extends StatelessWidget {
       width: double.infinity,
       child: Column(
         children: [
-          if (isDesktop)
-            const SizedBox(height: 10),
+          if (isDesktop) const SizedBox(height: 10),
           Text(
             'ABOUT US',
             style: TextStyle(
@@ -49,7 +48,7 @@ class HeroScreen extends StatelessWidget {
           const SizedBox(height: 20),
           Text(
             'Easily find the best service providers near you. '
-                'We have a wide range of services to choose from. ',
+            'We have a wide range of services to choose from. ',
             style: TextStyle(
               fontSize: isDesktop ? 18 : 16,
               color: primary,
@@ -66,8 +65,7 @@ class HeroScreen extends StatelessWidget {
                   '235+', 'Monthly user that using our app!', columns),
               _buildStatisticCard(
                   '100+', 'More than 100 services available', columns),
-              _buildStatisticCard(
-                  '10+', 'Available in 10 countries', columns),
+              _buildStatisticCard('10+', 'Available in 10 countries', columns),
             ],
           ),
         ],
