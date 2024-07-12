@@ -1,11 +1,13 @@
 import 'package:barassage_app/features/admin_app/models/category.dart';
+import 'package:barassage_app/features/auth_mod/models/api_response.dart';
+import 'package:barassage_app/features/admin_app/models/admin_user.dart';
 import 'package:barassage_app/features/admin_app/models/service.dart';
-import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:barassage_app/features/auth_mod/models/user.dart';
+import 'package:barassage_app/config/api_endpoints.dart';
+import 'package:barassage_app/config/app_http.dart';
 
-import '../../../config/api_endpoints.dart';
-import '../../../config/app_http.dart';
-import '../../auth_mod/models/user.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:dio/dio.dart';
 
 class AdminService {
   String? token;
@@ -43,7 +45,23 @@ class AdminService {
 
   Future<List<User>?> getAllUsers() async {
     try {
-      Response res = await _http.get(ApiEndpoint.adminUsers);
+      Response res = await _http.get(ApiEndpoint.adminUsers + '?type=users');
+      if (res.statusCode == 200) {
+        debugPrint('users: ${res.data}');
+        List<User> users =
+            (res.data as List).map((e) => User.fromJson(e)).toList();
+        return users;
+      }
+      throw Exception('Unexpected response format');
+    } catch (e) {
+      debugPrint('Error: $e');
+      throw Exception('Failed to load users');
+    }
+  }
+
+  Future<List<User>?> getAllAdminUsers() async {
+    try {
+      Response res = await _http.get(ApiEndpoint.adminUsers + '?type=admin');
       if (res.statusCode == 200) {
         debugPrint('users: ${res.data}');
         List<User> users =
@@ -74,37 +92,58 @@ class AdminService {
     }
   }
 
+  Future<AdminUser?> createAdminUser(AdminUser user) async {
+    try {
+      print(user.toJson());
+      Response res = await _http.post(
+        ApiEndpoint.addAdmin,
+        data: user.toJson(),
+      );
+      if (res.statusCode == 200 || res.statusCode == 201) {
+        ApiResponse apiResponse = ApiResponse.fromJson(res.data);
+        return AdminUser.fromJson(apiResponse.body);
+      } else {
+        throw Exception('Failed to create admin user: ${res.data}');
+      }
+    } on DioError catch (e) {
+      if (e.response != null) {
+        throw Exception(
+            'Failed to create admin user: ${e.response?.data['message'] ?? e.response?.statusMessage}');
+      } else {
+        throw Exception('Failed to create admin user: ${e.message}');
+      }
+    } catch (e) {
+      debugPrint('Error: $e');
+      throw Exception('Failed to create admin user: $e');
+    }
+  }
+
   // get list of categories
-  Future<List<Category>?> getCategories() async {
+  Future<void> addCategory(String name) async {
+    try {
+      Response res = await _http
+          .post(ApiEndpoint.categories, data: {'name': name});
+      if (res.statusCode != 200) {
+        throw Exception('Failed to add category');
+      }
+    } catch (e) {
+      debugPrint('Error: $e');
+      throw Exception('Failed to add category');
+    }
+  }
+
+  Future<List<Category>> getCategories() async {
     try {
       Response res = await _http.get(ApiEndpoint.categoriesCollection);
       if (res.statusCode == 200) {
-        debugPrint('categories: ${res.data}');
-        List<Category> categories = categoryFromJson(res.data);
+        List<Category> categories =
+            (res.data as List).map((json) => Category.fromJson(json)).toList();
         return categories;
       }
       throw Exception('Unexpected response format');
     } catch (e) {
       debugPrint('Error: $e');
       throw Exception('Failed to load categories');
-    }
-  }
-
-  // add a new category
-  Future<Category> addCategory(String name) async {
-    try {
-      Response res = await _http.post(ApiEndpoint.categories, data: {
-        'name': name,
-        'status': true,
-      });
-      if (res.statusCode == 201) {
-        debugPrint('category: ${res.data}');
-        return Category.fromJson(res.data);
-      }
-      throw Exception('Failed to add category');
-    } catch (e) {
-      debugPrint('Error: $e');
-      throw Exception('Failed to add category');
     }
   }
 }

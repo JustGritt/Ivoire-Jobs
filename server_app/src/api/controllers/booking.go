@@ -31,7 +31,7 @@ type BookingObject struct {
 }
 
 type Contact struct {
-	Phone      string  `json:"phone" validate:"required"`
+	Phone      string  `json:"phone" validate:"required,phone"`
 	Address    string  `json:"address" validate:"required"`
 	City       string  `json:"city" validate:"required"`
 	Country    string  `json:"country" validate:"required"`
@@ -52,6 +52,16 @@ type BookingOutput struct {
 	Status    string    `json:"status"`
 	StartTime time.Time `json:"startTime"`
 	EndTime   time.Time `json:"endTime"`
+}
+
+type ServiceBookingOutput struct {
+	BookingID string    `json:"ID"`
+	UserID    string    `json:"userID"`
+	ServiceID string    `json:"serviceID"`
+	Status    string    `json:"status"`
+	StartTime time.Time `json:"startTime"`
+	EndTime   time.Time `json:"endTime"`
+	Contact   Contact   `json:"contact"`
 }
 
 // CreateBooking Godoc
@@ -92,9 +102,13 @@ func CreateBooking(c *fiber.Ctx) error {
 	// Retrieve the service
 	service, err := serviceRepo.GetByID(bookingObj.ServiceID.String())
 	if err != nil {
-		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
-			"error": err.Error(),
-		})
+		errorList = append(errorList,
+			&fiber.Error{
+				Code:    fiber.StatusBadRequest,
+				Message: "Error while fetching service",
+			},
+		)
+		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
 	// Convert datatypes.Date to time.Time for calculation
@@ -116,11 +130,11 @@ func CreateBooking(c *fiber.Ctx) error {
 		errorList = append(
 			errorList,
 			&fiber.Error{
-				Code:    fiber.StatusInternalServerError,
+				Code:    fiber.StatusBadRequest,
 				Message: "Error while checking booking overlap",
 			},
 		)
-		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
+		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
 	}
 	if overlap {
 		errorList = append(
@@ -177,14 +191,111 @@ func CreateBooking(c *fiber.Ctx) error {
 	// create the stripe intent
 	pi, err := stripe.CreatePaymentIntent(bookingModel)
 	if err != nil {
-		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
-			"error": err.Error(),
-		})
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusInternalServerError,
+				Message: "Error while creating payment intent",
+			},
+		)
+		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
 	}
-	return c.Status(http.StatusOK).JSON(fiber.Map{
+
+	return c.Status(http.StatusCreated).JSON(fiber.Map{
 		"booking":       bookingOutputFromModel(bookingModel),
 		"paymentIntent": &pi.ClientSecret,
 	})
+}
+
+// GetBookingService Godoc
+// @Summary GetBookingService
+// @Description Get all bookings for a service
+// @Tags Booking
+// @Produce json
+// @Param serviceID path string true "Service ID"
+// @Success 200 {array} BookingOutput
+// @Failure 400 {array} ErrorResponse
+// @Failure 401 {array} ErrorResponse
+// @Failure 500 {array} ErrorResponse
+// @Router /service/{serviceID}/booking [get]
+func GetBookingService(c *fiber.Ctx) error {
+	var errorList []*fiber.Error
+
+	serviceID := c.Params("id")
+	if serviceID == "" {
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusBadRequest,
+				Message: "Service ID is required",
+			},
+		)
+		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
+	}
+	//get the service
+	service, err := serviceRepo.GetByID(serviceID)
+	if err != nil {
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusBadRequest,
+				Message: "Error while fetching service",
+			},
+		)
+		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
+	//check if the service is for the current user
+	user := c.Locals("user").(*jwt.Token)
+	claims := user.Claims.(jwt.MapClaims)
+	userID := claims["userID"]
+	if userID == nil {
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusInternalServerError,
+				Message: "An error occurred while extracting user info from request",
+			},
+		)
+		return c.Status(fiber.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
+	if service.UserID != userID {
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusBadRequest,
+				Message: "Unauthorized",
+			},
+		)
+		return c.Status(fiber.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
+	// get the bookings
+	bookings, err := bookingRepo.GetBookingsByServiceID(serviceID)
+	if err != nil {
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusBadRequest,
+				Message: "Error while fetching bookings",
+			},
+		)
+		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
+	//map the bookings to the output
+	var bookingsOutput []ServiceBookingOutput
+	for _, booking := range bookings {
+		bookingsOutput = append(bookingsOutput, *serviceBookingOuputFromModel(&booking))
+	}
+
+	if len(bookingsOutput) == 0 {
+		return c.Status(http.StatusOK).JSON([]ServiceBookingOutput{})
+	}
+
+	// Return the bookings
+	return c.Status(http.StatusOK).JSON(bookingsOutput)
 }
 
 // GetBookings Godoc
@@ -361,6 +472,26 @@ func bookingModelFromObject(u *BookingObject) *booking.Booking {
 		Status:    u.Status,
 		StartTime: u.StartTime,
 		EndTime:   u.EndTime,
+	}
+}
+
+func serviceBookingOuputFromModel(u *booking.Booking) *ServiceBookingOutput {
+	return &ServiceBookingOutput{
+		BookingID: u.ID,
+		UserID:    u.UserID,
+		ServiceID: u.ServiceID,
+		Status:    u.Status,
+		StartTime: u.StartTime,
+		EndTime:   u.EndTime,
+		Contact: Contact{
+			Phone:      u.Contact.Phone,
+			Address:    u.Contact.Address,
+			City:       u.Contact.City,
+			Country:    u.Contact.Country,
+			PostalCode: u.Contact.PostalCode,
+			Latitude:   u.Contact.Latitude,
+			Longitude:  u.Contact.Longitude,
+		},
 	}
 }
 

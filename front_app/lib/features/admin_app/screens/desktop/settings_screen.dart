@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:barassage_app/features/admin_app/services/dashboard_settings_service.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter/material.dart';
 import 'dart:convert';
 
 class DashboardSettings extends StatefulWidget {
@@ -15,14 +15,15 @@ class _DashboardSettingsState extends State<DashboardSettings> {
   final TextEditingController ipController = TextEditingController();
   List<String> ipList = [];
   final DashboardSettingsService _dashboardSettingsService = DashboardSettingsService();
-  String? currentUserIp;
+  String? currentUserIpV4;
+  String? currentUserIpV6;
 
   @override
   void initState() {
     super.initState();
     fetchMaintenanceMode();
     fetchWhitelistIps();
-    fetchClientIp();
+    fetchClientIps();
   }
 
   void fetchMaintenanceMode() async {
@@ -47,12 +48,18 @@ class _DashboardSettingsState extends State<DashboardSettings> {
     }
   }
 
-  Future<void> fetchClientIp() async {
-    currentUserIp = await getClientIp();
-    setState(() {});
+  Future<void> fetchClientIps() async {
+    final ipV4Future = getClientIpV4();
+    final ipV6Future = getClientIpV6();
+
+    final ips = await Future.wait([ipV4Future, ipV6Future]);
+    setState(() {
+      currentUserIpV4 = ips[0];
+      currentUserIpV6 = ips[1];
+    });
   }
 
-  Future<String?> getClientIp() async {
+  Future<String?> getClientIpV4() async {
     try {
       final response = await http.get(Uri.parse('https://api.ipify.org?format=json'));
       if (response.statusCode == 200) {
@@ -60,7 +67,20 @@ class _DashboardSettingsState extends State<DashboardSettings> {
         return data['ip'];
       }
     } catch (e) {
-      print('Error fetching IP: $e');
+      debugPrint('Error fetching IPv4: $e');
+    }
+    return null;
+  }
+
+  Future<String?> getClientIpV6() async {
+    try {
+      final response = await http.get(Uri.parse('https://api64.ipify.org?format=json'));
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        return data['ip'];
+      }
+    } catch (e) {
+      debugPrint('Error fetching IPv6: $e');
     }
     return null;
   }
@@ -72,7 +92,8 @@ class _DashboardSettingsState extends State<DashboardSettings> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: const Text('Confirm Maintenance Mode'),
-            content: const Text('Are you sure you want to enable maintenance mode with an empty or single IP whitelist?'),
+            content: const Text(
+                'Are you sure you want to enable maintenance mode with an empty or single IP whitelist?'),
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(context).pop(false),
@@ -102,8 +123,35 @@ class _DashboardSettingsState extends State<DashboardSettings> {
     }
   }
 
-  void addIpToList(String ip) async {
-    if (ip.isNotEmpty) {
+  Future<void> addIpsToList() async {
+    final ipV4Future = getClientIpV4();
+    final ipV6Future = getClientIpV6();
+
+    final ips = await Future.wait([ipV4Future, ipV6Future]);
+    String? ipV4 = ips[0];
+    String? ipV6 = ips[1];
+
+    final updatedIpList = List<String>.from(ipList);
+    if (ipV4 != null && ipV4.isNotEmpty && !updatedIpList.contains(ipV4)) {
+      updatedIpList.add(ipV4);
+    }
+    if (ipV6 != null && ipV6.isNotEmpty && !updatedIpList.contains(ipV6)) {
+      updatedIpList.add(ipV6);
+    }
+
+    try {
+      await _dashboardSettingsService.setWhitelistIps(updatedIpList);
+      setState(() {
+        ipList = updatedIpList;
+      });
+    } catch (e) {
+      debugPrint('Error adding IPs to whitelist: $e');
+    }
+  }
+
+  void addIpFromController() async {
+    String ip = ipController.text;
+    if (ip.isNotEmpty && !ipList.contains(ip)) {
       final updatedIpList = List<String>.from(ipList)..add(ip);
       try {
         await _dashboardSettingsService.setWhitelistIps(updatedIpList);
@@ -151,7 +199,8 @@ class _DashboardSettingsState extends State<DashboardSettings> {
                     children: [
                       const Text(
                         'Maintenance Mode',
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 10),
                       Switch(
@@ -173,7 +222,8 @@ class _DashboardSettingsState extends State<DashboardSettings> {
                     children: [
                       const Text(
                         'Add User IP to List',
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 10),
                       Row(
@@ -190,13 +240,11 @@ class _DashboardSettingsState extends State<DashboardSettings> {
                           const SizedBox(width: 10),
                           IconButton(
                             icon: const Icon(Icons.add),
-                            onPressed: () => addIpToList(ipController.text),
+                            onPressed: addIpFromController,
                           ),
                           IconButton(
                             icon: const Icon(Icons.person_add),
-                            onPressed: currentUserIp != null
-                                ? () => addIpToList(currentUserIp!)
-                                : null,
+                            onPressed: addIpsToList,
                           ),
                         ],
                       ),
@@ -216,7 +264,8 @@ class _DashboardSettingsState extends State<DashboardSettings> {
                       children: [
                         const Text(
                           'User IP List',
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 10),
                         Expanded(
@@ -227,7 +276,8 @@ class _DashboardSettingsState extends State<DashboardSettings> {
                                 title: Text(ipList[index]),
                                 trailing: IconButton(
                                   icon: const Icon(Icons.delete),
-                                  onPressed: () => removeIpFromList(ipList[index]),
+                                  onPressed: () =>
+                                      removeIpFromList(ipList[index]),
                                 ),
                               );
                             },

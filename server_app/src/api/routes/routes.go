@@ -27,13 +27,13 @@ func SetupRoutes(app *fiber.App) {
 
 	// Stripe Webhook
 	v1.Post("/stripe/webhook", ctl.HandleWebhook)
-	v1.Get("/stripe/create-payment-intent", ctl.HandleCreatePaymentIntent) // TODO remove after hadnling properly in booking.go
 
 	v1.Get("/home", ctl.HomeController)
 
 	// Auth Group
 	auth := v1.Group("/auth")
 	auth.Post("/register", ctl.Register)
+	auth.Post("/register-admin", middlewares.RequireAdmin(), ctl.RegisterAdmin)
 	auth.Post("/login", ctl.Login)
 	auth.Post("/admin-login", ctl.AdminLogin)
 	auth.Post("/logout", ctl.Logout)
@@ -43,7 +43,6 @@ func SetupRoutes(app *fiber.App) {
 	auth.Put("/update-profile", middlewares.RequireLoggedIn(), ctl.UpdateProfile)
 	auth.Patch("/update-token", middlewares.RequireLoggedIn(), ctl.PatchToken)
 	auth.Get("/users", middlewares.RequireAdmin(), ctl.GetAllUsers)
-	auth.Get("/admin", middlewares.RequireAdmin(), ctl.GetAllUsers)
 
 	// Contact Group
 	contact := v1.Group("/contact")
@@ -56,6 +55,7 @@ func SetupRoutes(app *fiber.App) {
 	service.Get("/collection", ctl.GetAll)
 	service.Get("/bans", ctl.GetAllBannedServices)
 	service.Get("/:id/rating", ctl.GetAllRatingsFromService)
+	service.Get("/:id/booking", middlewares.RequireLoggedIn(), ctl.GetBookingService)
 	service.Get("/:id", ctl.GetServiceById)
 	service.Get("/:id/room", middlewares.RequireLoggedIn(), ctl.CreateOrGetRoom)
 	service.Post("/", middlewares.RequireLoggedIn(), ctl.CreateService)
@@ -70,9 +70,9 @@ func SetupRoutes(app *fiber.App) {
 
 	// Report Group
 	report := v1.Group("/report")
-	report.Get("/collection", ctl.GetAllReports)
-	report.Get("/pending", ctl.GetAllPendingReports)
-	report.Put("/:id", ctl.ValidateReport)
+	report.Get("/collection", middlewares.RequireAdmin(), ctl.GetAllReports)
+	report.Get("/pending", middlewares.RequireAdmin(), ctl.GetAllPendingReports)
+	report.Put("/:id", middlewares.RequireAdmin(), ctl.ValidateReport)
 	report.Post("/", middlewares.RequireLoggedIn(), ctl.CreateReport)
 
 	// Category Group

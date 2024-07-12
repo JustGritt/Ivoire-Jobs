@@ -26,18 +26,13 @@ class _ManageCategoriesScreenState extends State<ManageCategoriesScreen> {
 
   Future<void> fetchCategories() async {
     final categoriesProvider =
-        Provider.of<CategoriesProvider>(context, listen: false);
+    Provider.of<CategoriesProvider>(context, listen: false);
     await categoriesProvider.getAllCategories();
   }
 
   Future<void> showAddCategoryDialog(BuildContext context) async {
     final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
     String name = '';
-    String description = '';
-    int duration = 0;
-    bool isActive = false;
-    DateTime createdAt = DateTime.now();
-    DateTime updatedAt = DateTime.now();
 
     await showDialog(
       context: context,
@@ -45,8 +40,7 @@ class _ManageCategoriesScreenState extends State<ManageCategoriesScreen> {
         return AlertDialog(
           title: const Text('Add Category'),
           content: Container(
-            width: MediaQuery.of(context).size.width *
-                0.8, // Set the width to 80% of the screen width
+            width: MediaQuery.of(context).size.width * 0.8,
             child: Form(
               key: _formKey,
               child: SingleChildScrollView(
@@ -55,7 +49,7 @@ class _ManageCategoriesScreenState extends State<ManageCategoriesScreen> {
                   children: [
                     TextFormField(
                       decoration:
-                          const InputDecoration(labelText: 'Category Name'),
+                      const InputDecoration(labelText: 'Category Name'),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter a category name';
@@ -86,7 +80,7 @@ class _ManageCategoriesScreenState extends State<ManageCategoriesScreen> {
                     name: name,
                   );
                   final categoriesProvider =
-                      Provider.of<CategoriesProvider>(context, listen: false);
+                  Provider.of<CategoriesProvider>(context, listen: false);
                   await categoriesProvider.addCategory(newCategory.name);
                   Navigator.of(context).pop();
                 }
@@ -137,18 +131,63 @@ class _ManageCategoriesScreenState extends State<ManageCategoriesScreen> {
                 } else if (categoriesProvider.categories.isEmpty) {
                   return Center(child: Text('No categories available'));
                 } else {
-                  return ListView.builder(
-                    itemCount: categoriesProvider.categories.length,
-                    itemBuilder: (context, index) {
-                      final category = categoriesProvider.categories[index];
-                      return ListTile(
-                        title: Text(category.name),
-                        subtitle: Text(category.description),
-                        onTap: () {
-                          //
-                        },
-                      );
-                    },
+                  return Padding(
+                    padding: const EdgeInsets.all(10.0), // Added padding to the outer container
+                    child: GridView.builder(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 5,
+                        childAspectRatio: 2 / 1,
+                        crossAxisSpacing: 10,
+                        mainAxisSpacing: 10,
+                      ),
+                      itemCount: categoriesProvider.categories.length,
+                      itemBuilder: (context, index) {
+                        final category = categoriesProvider.categories[index];
+                        return Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(color: Colors.grey.shade300),
+                            borderRadius: BorderRadius.circular(10),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 2,
+                                blurRadius: 5,
+                                offset: Offset(0, 3),
+                              ),
+                            ],
+                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.category,
+                                    color: theme.primaryColor,
+                                    size: 20,
+                                  ),
+                                  SizedBox(width: 8),
+                                  Expanded(
+                                    child: Text(
+                                      category.name,
+                                      style: theme.textTheme.bodyLarge?.copyWith(fontSize: 24),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Spacer(),
+                              Text(
+                                category.status ? 'Active' : 'Inactive',
+                                style: theme.textTheme.bodyMedium?.copyWith(fontSize: 18),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
                   );
                 }
               },

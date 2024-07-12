@@ -1,22 +1,22 @@
-import 'package:barassage_app/config/app_colors.dart';
+import 'package:barassage_app/features/profile_mod/widgets/section_notification_profile.dart';
+import 'package:barassage_app/features/profile_mod/widgets/section_information_profile.dart';
+import 'package:barassage_app/features/profile_mod/widgets/section_information_app.dart';
 import 'package:barassage_app/core/blocs/authentication/authentication_bloc.dart';
+import 'package:barassage_app/features/profile_mod/widgets/avatar_profile.dart';
 import 'package:barassage_app/core/classes/language_provider.dart';
 import 'package:barassage_app/core/helpers/constants_helper.dart';
 import 'package:barassage_app/features/auth_mod/models/user.dart';
 import 'package:barassage_app/features/main_app/app.dart';
-import 'package:barassage_app/features/profile_mod/widgets/avatar_profile.dart';
-import 'package:barassage_app/features/profile_mod/widgets/section_information_app.dart';
-import 'package:barassage_app/features/profile_mod/widgets/section_information_profile.dart';
-import 'package:barassage_app/features/profile_mod/widgets/section_notification_profile.dart';
-import 'package:flutter/widgets.dart';
+import 'package:barassage_app/config/app_colors.dart';
+
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
-import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
+import 'package:ionicons/ionicons.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class ProfilePageScreen extends StatefulWidget {
   const ProfilePageScreen({super.key});
@@ -116,7 +116,6 @@ Widget getStatusUser(BuildContext context, User user) {
     return const Text('Worker');
   } else if (user.member == UserMemberStatusEnum.processing) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Text('Status: ',
             style:
@@ -144,8 +143,7 @@ Widget getStatusUser(BuildContext context, User user) {
               colors: [IVORYCOAST_COLORS[0], IVORYCOAST_COLORS[2]],
               begin: FractionalOffset(0.0, 0.0),
               end: FractionalOffset(0.5, 0.0),
-              stops: [0.0, 1.0],
-              tileMode: TileMode.clamp),
+              stops: [0.0, 1.0]),
         ),
         child: CupertinoButton(
           color: Colors.transparent,

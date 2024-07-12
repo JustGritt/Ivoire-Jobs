@@ -1,9 +1,8 @@
-import 'dart:developer';
 
-import 'package:barassage_app/features/main_app/app.dart';
 import 'package:barassage_app/features/main_app/models/service_models/service_created_model.dart';
-import 'package:flutter/material.dart';
+import 'package:barassage_app/features/main_app/app.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter/material.dart';
 
 class TrendingService extends StatelessWidget {
   final ServiceCreatedModel service;
@@ -17,8 +16,7 @@ class TrendingService extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        context.push('${App.home}/${App.detailService}',
-            extra: service);
+        context.push('${App.home}/${App.detailService}', extra: service);
       },
       child: Container(
         width: 200,

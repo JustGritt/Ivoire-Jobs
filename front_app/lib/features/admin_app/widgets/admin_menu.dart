@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
+import 'package:barassage_app/core/blocs/authentication/authentication_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:barassage_app/core/blocs/authentication/authentication_bloc.dart';
+import 'package:flutter/material.dart';
 
 class AdminScaffold extends StatelessWidget {
   final Widget body;
@@ -81,7 +81,15 @@ class AdminScaffold extends StatelessWidget {
               title: const Text('Ban List'),
               onTap: () {
                 Navigator.pop(context);
-                context.go('/admin/ban-list');
+                context.go('/admin/banlist');
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.people_alt_outlined),
+              title: const Text('Manage Teams'),
+              onTap: () {
+                Navigator.pop(context); // Close the drawer
+                context.go('/admin/teams');
               },
             ),
             ListTile(

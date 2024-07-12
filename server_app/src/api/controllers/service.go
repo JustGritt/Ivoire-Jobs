@@ -38,7 +38,7 @@ type ServiceObject struct {
 	Longitude   float64                 `json:"longitude" validate:"required"`
 	Address     string                  `json:"address" validate:"required"`
 	City        string                  `json:"city" validate:"required"`
-	PostalCode  string                  `json:"postalCode" validate:"required"`
+	PostalCode  string                  `json:"postalCode"`
 	Country     string                  `json:"country" validate:"required"`
 	Images      []*multipart.FileHeader `json:"images" form:"images" swaggertype:"string"`
 	CategoryIDs []string                `json:"categoryIds" validate:"required"`
@@ -144,6 +144,7 @@ func CreateService(c *fiber.Ctx) error {
 		)
 		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
 	}
+	fmt.Println(dbUser.Member)
 
 	if dbUser.Member == nil || len(dbUser.Member) == 0 {
 		errorList = append(
@@ -157,7 +158,7 @@ func CreateService(c *fiber.Ctx) error {
 	}
 
 	Member := dbUser.Member[len(dbUser.Member)-1]
-	if Member.ID != "" || Member.Status == "processing" {
+	if Member.ID == "" || Member.Status == "processing" {
 		errorList = append(
 			errorList,
 			&fiber.Error{
@@ -187,8 +188,14 @@ func CreateService(c *fiber.Ctx) error {
 	}
 
 	if _, err := serviceRepo.GetServiceByNameForUser(s.Name, s.UserID); err == nil {
-		response := HTTPResponse(http.StatusForbidden, "Service Already Exist", nil)
-		return c.Status(http.StatusForbidden).JSON(response)
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusForbidden,
+				Message: "Service Already Exist",
+			},
+		)
+		return c.Status(http.StatusForbidden).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
 	// Handle images upload
@@ -952,26 +959,19 @@ func GetTrendingServices(c *fiber.Ctx) error {
 // @Failure 500 {array} ErrorResponse
 // @Router /service/bans [get]
 func GetAllBannedServices(c *fiber.Ctx) error {
-	var errorList []*fiber.Error
 	services, err := serviceRepo.GetAllBannedServices()
 	if err != nil {
-		errorList = append(
-			errorList,
-			&fiber.Error{
-				Code:    fiber.StatusInternalServerError,
-				Message: "error getting banned services",
-			},
-		)
-		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Error fetching banned services",
+		})
 	}
 
-	// Map services to ServiceOutput
-	var ouput []ServiceOutput
+	var serviceOutputs []ServiceOutput
 	for _, s := range services {
-		ouput = append(ouput, *mapServiceToOutPut(&s))
+		serviceOutputs = append(serviceOutputs, *mapServiceToOutPut(&s))
 	}
 
-	return c.Status(http.StatusOK).JSON(ouput)
+	return c.Status(http.StatusOK).JSON(serviceOutputs)
 }
 
 // ============================================================

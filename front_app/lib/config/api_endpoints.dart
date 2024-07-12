@@ -1,6 +1,5 @@
-import 'package:barassage_app/features/admin_app/admin_app.dart';
-
-import '../features/features.dart';
+// import 'package:barassage_app/features/admin_app/admin_app.dart';
+import 'package:barassage_app/features/features.dart';
 
 /// In this file we will be writing all API Endpoints using this application
 
@@ -8,7 +7,8 @@ class ApiEndpoint {
   // News Server
 
   // Server Links
-  static const baseUrl = 'https://api.barassage.com';
+  static const baseUrl = 'http://localhost:8000';
+  // static const baseUrl = 'https://api.barassage.com';
   //static const baseUrl = 'https://fantastic-space-doodle-w59vv7w5w7pfp9j-8000.app.github.dev';
   static const api = '${baseUrl}/api/v1';
 
@@ -26,9 +26,11 @@ class ApiEndpoint {
   // Admin App Links
   static const adminUsers = '${api}/auth/users';
   static const serviceCollection = '${api}/service/collection';
-  static const dashboardSettings =  '${api}/configuration';
+  static const dashboardSettings = '${api}/configuration';
   static const banUser = '${api}/ban';
   static const adminLogin = '${api}/auth/admin-login';
+  static const adminUser = '${api}/auth/admin';
+  static const addAdmin = '${api}/auth/register-admin';
 
   static const updateProfile = '/auth/update-profile';
 
@@ -51,6 +53,8 @@ class ApiEndpoint {
   // Reports Endpoints
   static const reports = '${api}/report/pending';
   static const reportsDetails = '${api}/report/:id';
+  // Ban Endpoints
+  static const bannedUsers = '${api}/ban/collection';
 
   // categories Endpoints
   static const categories = '${api}/category';

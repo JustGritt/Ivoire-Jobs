@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:barassage_app/features/admin_app/utils/home_colors.dart';
+import 'package:flutter/material.dart';
 
 class FAQScreen extends StatelessWidget {
   final List<bool> expanded;
@@ -30,14 +30,17 @@ class FAQScreen extends StatelessWidget {
               const Center(
                 child: Text(
                   'FAQ',
-                  style: TextStyle(fontSize: 36, color: primary, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      fontSize: 36,
+                      color: primary,
+                      fontWeight: FontWeight.bold),
                 ),
               ),
               const SizedBox(height: 40),
               _buildExpansionTile(
                 title: 'How can I reset my password?',
                 content:
-                'To reset your password, go to the login page and click on "Forgot Password". You will receive an email with instructions to reset your password.',
+                    'To reset your password, go to the login page and click on "Forgot Password". You will receive an email with instructions to reset your password.',
                 isExpanded: expanded[0],
                 onExpansionChanged: (expanded) {
                   onExpansionChanged(0, expanded);
@@ -46,7 +49,7 @@ class FAQScreen extends StatelessWidget {
               _buildExpansionTile(
                 title: 'How do I contact customer support?',
                 content:
-                'You can contact our customer support team via the "Contact Us" page on our website. We are available 24/7 to assist you with any issues.',
+                    'You can contact our customer support team via the "Contact Us" page on our website. We are available 24/7 to assist you with any issues.',
                 isExpanded: expanded[1],
                 onExpansionChanged: (expanded) {
                   onExpansionChanged(1, expanded);
@@ -55,7 +58,7 @@ class FAQScreen extends StatelessWidget {
               _buildExpansionTile(
                 title: 'Where can I find the user manual?',
                 content:
-                'The user manual can be found in the "Help" section of our website. It contains detailed information on how to use our application.',
+                    'The user manual can be found in the "Help" section of our website. It contains detailed information on how to use our application.',
                 isExpanded: expanded[2],
                 onExpansionChanged: (expanded) {
                   onExpansionChanged(2, expanded);

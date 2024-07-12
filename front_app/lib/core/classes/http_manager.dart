@@ -36,7 +36,6 @@ class HttpManager {
       _dio.options.headers['content-Type'] = 'application/json';
       _dio.options.headers['Access-Control-Allow-Origin'] = '*';
       _dio.options.headers['Access-Control-Allow-Methods'] = '*';
-      _dio.options.headers['Access-Control-Allow-Headers'] = '*';
     }
 
     if (!kIsWeb) {

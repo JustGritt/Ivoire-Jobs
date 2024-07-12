@@ -1,12 +1,9 @@
 import 'package:barassage_app/core/blocs/authentication/authentication_bloc.dart';
-import 'package:barassage_app/features/auth_mod/auth_app.dart';
-import 'package:barassage_app/features/admin_app/admin_app.dart';
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-
-import '../../../../core/init_dependencies.dart';
-// import '../../../main_app/app.dart';
+import 'package:barassage_app/features/admin_app/admin_app.dart';
+import 'package:barassage_app/core/init_dependencies.dart';
+import 'package:go_router/go_router.dart';
+import 'package:flutter/material.dart';
 
 class SplashDesktopScreen extends StatefulWidget {
   const SplashDesktopScreen({super.key});
@@ -39,8 +36,8 @@ class _SplashDesktopScreenState extends State<SplashDesktopScreen>
     return Scaffold(
         body: Center(
             child: LoadingAnimationWidget.prograssiveDots(
-              color: theme.primaryColor,
-              size: 70,
-            )));
+      color: theme.primaryColor,
+      size: 70,
+    )));
   }
 }

@@ -1,26 +1,24 @@
-import 'package:barassage_app/config/app_config.dart';
+import 'package:barassage_app/features/main_app/models/service_models/service_created_model.dart';
+import 'package:barassage_app/features/profile_mod/screens/mobile/become_barasseur_screen.dart';
+import 'package:barassage_app/features/profile_mod/controllers/main/profile_controller.dart';
+import 'package:barassage_app/features/profile_mod/screens/mobile/edit_profile_screen.dart';
+import 'package:barassage_app/features/main_app/controllers/main/services_controller.dart';
+import 'package:barassage_app/features/auth_mod/screens/mobile/splash_mobile_screen.dart';
+import 'package:barassage_app/features/main_app/Screens/mobile/services_details.dart';
+import 'package:barassage_app/features/main_app/Screens/mobile/service_booking.dart';
+import 'package:barassage_app/features/auth_mod/screens/mobile/main_wrapper.dart';
+import 'package:barassage_app/features/main_app/Screens/mobile/new_service.dart';
+import 'package:barassage_app/features/main_app/widgets/transition_page.dart';
+import 'package:barassage_app/features/main_app/controllers/controller.dart';
+import 'package:barassage_app/core/classes/route_manager.dart';
 import 'package:barassage_app/core/classes/app_context.dart';
 import 'package:barassage_app/core/init_dependencies.dart';
-import 'package:barassage_app/features/auth_mod/screens/mobile/main_wrapper.dart';
-import 'package:barassage_app/features/auth_mod/screens/mobile/splash_mobile_screen.dart';
-import 'package:barassage_app/features/main_app/Screens/mobile/new_service.dart';
-import 'package:barassage_app/features/main_app/Screens/mobile/service_booking.dart';
-import 'package:barassage_app/features/main_app/Screens/mobile/services_details.dart';
-import 'package:barassage_app/features/main_app/controllers/controller.dart';
-import 'package:barassage_app/features/main_app/controllers/main/services_controller.dart';
-import 'package:barassage_app/features/main_app/models/service_models/service_create_model.dart';
-import 'package:barassage_app/features/main_app/models/service_models/service_created_model.dart';
-import 'package:barassage_app/features/main_app/widgets/transition_page.dart';
-import 'package:barassage_app/features/profile_mod/controllers/main/profile_controller.dart';
-import 'package:barassage_app/features/profile_mod/screens/mobile/become_barasseur_screen.dart';
-import 'package:barassage_app/features/profile_mod/screens/mobile/edit_profile_screen.dart';
-// import 'package:barassage_app/features/main_app/controllers/main/home_controller.dart';
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:barassage_app/config/app_config.dart';
+
 import 'package:place_picker/entities/localization_item.dart';
 import 'package:place_picker/place_picker.dart';
-import '../../core/classes/route_manager.dart';
-// import 'controllers/controller.dart';
+import 'package:go_router/go_router.dart';
+import 'package:flutter/material.dart';
 
 class App extends RouteManager {
   static const String name = '/app';
@@ -59,7 +57,9 @@ class App extends RouteManager {
                 routes: [
                   GoRoute(
                     path: App.detailService,
-                    builder: (context, state) => ServiceDetailPage(service: state.extra as ServiceCreatedModel,),
+                    builder: (context, state) => ServiceDetailPage(
+                      service: state.extra as ServiceCreatedModel,
+                    ),
                   ),
                   GoRoute(
                     name: App.bookingService,

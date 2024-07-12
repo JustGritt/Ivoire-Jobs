@@ -1,7 +1,6 @@
-import 'package:barassage_app/features/admin_app/models/category.dart';
 import 'package:flutter/material.dart';
-import '../models/service.dart';
-import '../services/admin_service.dart';
+import 'package:barassage_app/features/admin_app/models/category.dart';
+import 'package:barassage_app/features/admin_app/services/admin_service.dart';
 
 class CategoriesProvider with ChangeNotifier {
   final AdminService _adminService = AdminService();
@@ -17,6 +16,7 @@ class CategoriesProvider with ChangeNotifier {
     notifyListeners();
     try {
       _categories = (await _adminService.getCategories())!;
+      debugPrint('categories: $_categories');
     } catch (e) {
       _categories = [];
     } finally {
@@ -28,9 +28,10 @@ class CategoriesProvider with ChangeNotifier {
   Future<void> addCategory(String name) async {
     try {
       await _adminService.addCategory(name);
-      notifyListeners();
+      await getAllCategories(); // Fetch the updated list of categories
     } catch (e) {
-      print('Error: $e');
+      // Handle any errors that might occur
+      debugPrint('Error adding category: $e');
     }
   }
 }

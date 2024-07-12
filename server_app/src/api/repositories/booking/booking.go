@@ -47,6 +47,14 @@ func GetBookingsByUserID(userID string) ([]booking.Booking, error) {
 	return bookings, nil
 }
 
+func GetBookingsByServiceID(serviceID string) ([]booking.Booking, error) {
+	var bookings []booking.Booking
+	if err := db.PgDB.Where("service_id = ?", serviceID).Preload("Contact").Find(&bookings).Error; err != nil {
+		return nil, err
+	}
+	return bookings, nil
+}
+
 func Update(booking *booking.Booking) error {
 	return db.PgDB.Save(booking).Error
 }
@@ -60,8 +68,8 @@ func CheckBookingOverlap(userID string, startTime time.Time, endTime time.Time) 
 	var count int64
 	// Check if the user has a booking that overlaps with the new booking time
 	query := db.PgDB.Model(&booking.Booking{}).Where(
-		"user_id = ? AND ((start_time < ? AND end_time > ?) OR (start_time < ? AND end_time > ?) OR (start_time >= ? AND end_time <= ?))",
-		userID, endTime, startTime, endTime, startTime, startTime, endTime,
+		"user_id = ? AND status != ? AND ((start_time < ? AND end_time > ?) OR (start_time < ? AND end_time > ?) OR (start_time >= ? AND end_time <= ?))",
+		userID, "cancelled", endTime, startTime, endTime, startTime, startTime, endTime,
 	)
 
 	if err := query.Count(&count).Error; err != nil {

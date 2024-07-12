@@ -163,7 +163,96 @@ func Register(c *fiber.Ctx) error {
 	userOutput := mapUserToOutPut(&u)
 	response := HTTPResponse(http.StatusCreated, "User Registered", userOutput)
 	return c.Status(http.StatusCreated).JSON(response)
+}
 
+// Register Admin Godoc
+// @Summary Register
+// @Description Registers an admin
+// @Tags Auth
+// @Produce json
+// @Param payload body UserObject true "Register Body"
+// @Success 201 {object} Response
+// @Failure 400 {array} ErrorResponse
+// @Failure 401 {array} ErrorResponse
+// @Failure 500 {array} ErrorResponse
+// @Router /auth/register-admin [post]
+func RegisterAdmin(c *fiber.Ctx) error {
+	var userInput UserObject
+	var errorList []*fiber.Error
+
+	// Validate Input
+	if err := validator.ParseBodyAndValidate(c, &userInput); err != nil {
+		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(err))
+	}
+
+	u := mapInputToUser(userInput)
+
+	// Hash Password
+	hashedPass, _ := passwordUtil.HashPassword(userInput.Password)
+	u.Password = hashedPass
+	u.Role = "admin"
+
+	user, _ := userRepo.GetByEmail(userInput.Email)
+	if user != nil {
+		errorList = nil
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    http.StatusConflict,
+				Message: "User Already Exist",
+			},
+		)
+		return c.Status(http.StatusConflict).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
+	// Save User To DB
+	if err := userRepo.Create(&u); err != nil {
+		errorList = nil
+		// Check if the error is a validation error
+		if err == gorm.ErrInvalidField {
+			// Print a custom error message for the validation error
+			fmt.Println("Validation error:", err.Error())
+		} else {
+			// Print other types of errors
+			fmt.Println("Database error:", err.Error())
+		}
+
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    http.StatusConflict,
+				Message: "User Already Exist",
+			},
+		)
+		return c.Status(http.StatusConflict).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
+	// Generate email verification token
+	expireTime := time.Now().Add(1 * time.Hour) // Token expires in 1 hour
+	verificationToken := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"user_id": u.ID,
+		"exp":     expireTime.Unix(),
+	})
+	tokenString, err := verificationToken.SignedString([]byte(cfg.GetConfig().JWTAccessSecret))
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{"error": "Could not generate verification token"})
+	}
+
+	// Send verification email
+	verificationLink := fmt.Sprintf("%s/#/auth/verify-email?token=%s", cfg.GetConfig().FrontendURL, tokenString)
+	emailData := map[string]interface{}{
+		"action_url": verificationLink,
+		"email":      u.Email,
+	}
+
+	_, err = mailer.SendEmail("welcome", u.Email, "Email Verification", emailData)
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{"error": "Could not send verification email"})
+	}
+
+	userOutput := mapUserToOutPut(&u)
+	response := HTTPResponse(http.StatusCreated, "User Registered", userOutput)
+	return c.Status(http.StatusCreated).JSON(response)
 }
 
 // Login Godoc
@@ -510,7 +599,26 @@ func AdminLogin(c *fiber.Ctx) error {
 func GetAllUsers(c *fiber.Ctx) error {
 	var users []user.User
 	var errorList []*fiber.Error
-	users, err := userRepo.GetAllUsers()
+
+	// get the query param name type and check if empty
+	userType := c.Query("type")
+	if userType == "" {
+		userType = "users"
+	}
+	fmt.Println(userType)
+	//check if the type is users or admin
+	if userType != "users" && userType != "admin" {
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusBadRequest,
+				Message: "Invalid user type",
+			},
+		)
+		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
+	users, err := userRepo.GetAllUsers(userType)
 	if err != nil {
 		errorList = append(
 			errorList,

@@ -1,20 +1,17 @@
-import 'package:barassage_app/config/config.dart';
 import 'package:barassage_app/features/main_app/models/service_models/service_created_model.dart';
+import 'package:barassage_app/config/config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:ionicons/ionicons.dart';
 
 class SectionBarasseurDetailService extends StatefulWidget {
   final ServiceCreatedModel service;
   const SectionBarasseurDetailService({super.key, required this.service});
 
   @override
-  State<SectionBarasseurDetailService> createState() =>
-      _SectionBarasseurDetailServiceState();
+  State<SectionBarasseurDetailService> createState() => _SectionBarasseurDetailServiceState();
 }
 
-class _SectionBarasseurDetailServiceState
-    extends State<SectionBarasseurDetailService> {
+class _SectionBarasseurDetailServiceState extends State<SectionBarasseurDetailService> {
   int hours = 0;
 
   @override
@@ -78,10 +75,8 @@ class _SectionBarasseurDetailServiceState
               minSize: 0,
               borderRadius: BorderRadius.circular(90),
               padding: EdgeInsets.all(8),
-              onPressed: () {
-
-              },
-              child:  Icon(
+              onPressed: () {},
+              child: Icon(
                 CupertinoIcons.mail_solid,
                 color: theme.primaryColor,
               ),
