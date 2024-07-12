@@ -1,7 +1,6 @@
 package middlewares
 
 import (
-	"fmt"
 	"net/http"
 
 	cfg "barassage/api/configs"
@@ -18,9 +17,11 @@ func CheckAppStatus() fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		var errorList []*fiber.Error
 		modeMaintenance, err := configRepo.GetByKey("mode_maintenance")
-		c.Request().Header.VisitAll(func(key, value []byte) {
-			fmt.Printf("%s: %s\n", key, value)
-		})
+		/*
+			c.Request().Header.VisitAll(func(key, value []byte) {
+				fmt.Printf("%s: %s\n", key, value)
+			})
+		*/
 		if err != nil {
 			errorList = append(
 				errorList,
@@ -57,10 +58,6 @@ func CheckAppStatus() fiber.Handler {
 				//get form request header the IP address
 				requestIP := c.Get("X-Original-Forwarded-For")
 				cloudFlareRealIP := c.Get("CF-Connecting-IP")
-				fmt.Println("requestIP", requestIP)
-				fmt.Println("cloudFlareRealIP", cloudFlareRealIP)
-				fmt.Println("ip", ip)
-				fmt.Println("requestIP == ip", c.IP())
 				//get the all request hed
 				if requestIP == "" {
 					requestIP = c.IP()
