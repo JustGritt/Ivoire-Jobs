@@ -16,9 +16,9 @@ class UserCard extends StatelessWidget {
   Color _getBadgeColor(String role) {
     switch (role.toLowerCase()) {
       case 'admin':
-        return Colors.blue;
+        return Colors.green;
       default:
-        return Colors.grey;
+        return Colors.blue;
     }
   }
 
@@ -60,7 +60,7 @@ class UserCard extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
               decoration: BoxDecoration(
                 color: _getBadgeColor(badgeText),
                 borderRadius: BorderRadius.circular(12),
@@ -75,10 +75,11 @@ class UserCard extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 8),
-            IconButton(
-              icon: const Icon(Icons.remove_red_eye),
-              onPressed: () => onDetailsPressed(user),
-            ),
+            if (badgeText.toLowerCase() != 'admin')
+              IconButton(
+                icon: const Icon(Icons.search),
+                onPressed: () => onDetailsPressed(user),
+              ),
           ],
         ),
       ),
