@@ -104,7 +104,7 @@ func SetupRoutes(app *fiber.App) {
 	member := v1.Group("/member", middlewares.RequireLoggedIn())
 	member.Post("/", ctl.CreateMember)
 	member.Put("/:id/validate", middlewares.RequireAdmin(), ctl.ValidateMember)
-	member.Get("/pending", middlewares.RequireAdmin(), ctl.GetAllPendingRequests)
+	member.Get("/", middlewares.RequireAdmin(), ctl.GetAllRequests)
 
 	// Configuration Group ONLY FOR ADMIN
 	configuration := v1.Group("/configuration", middlewares.RequireAdmin())

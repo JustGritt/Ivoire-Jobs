@@ -51,15 +51,20 @@ func GetPendingRequest(userID string) (*member.Member, error) {
 	return &ban, nil
 }
 
-func GetAllPendingRequests() ([]member.Member, error) {
+func GetAllRequests(status string) ([]member.Member, error) {
 	var bans []member.Member
-	//find all bans
-	if err := db.PgDB.Where("status = ?", "processing").Find(&bans).Error; err != nil {
+	query := db.PgDB.Model(&member.Member{})
+
+	if status != "all" {
+		query = query.Where("status = ?", status)
+	}
+
+	err := query.Find(&bans).Error
+	if err != nil {
 		return nil, err
 	}
 	return bans, nil
 }
-
 
 // GetAllMembers gets all members
 func GetAllMembers() ([]member.Member, error) {

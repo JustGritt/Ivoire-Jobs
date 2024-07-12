@@ -134,13 +134,31 @@ func CreateMember(c *fiber.Ctx) error {
 // @Failure 400 {array} ErrorResponse
 // @Failure 401 {array} ErrorResponse
 // @Failure 500 {array} ErrorResponse
-// @Router /member/pending [get]
+// @Router /member [get]
 // @Security Bearer
-func GetAllPendingRequests(c *fiber.Ctx) error {
+func GetAllRequests(c *fiber.Ctx) error {
 	var errorList []*fiber.Error
 
+	//get query params
+	status := c.Query("status")
+	if status == "" {
+		status = "processing"
+	}
+
+	// Validate status
+	if status != "processing" && status != "accepted" && status != "rejected" && status != "all" {
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusBadRequest,
+				Message: "status must be 'processing', 'accepted', 'rejected', or 'all'",
+			},
+		)
+		return c.Status(fiber.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
 	// Get all pending requests
-	members, err := memberRepo.GetAllPendingRequests()
+	members, err := memberRepo.GetAllRequests(status)
 	if err != nil {
 		errorList = append(errorList, &fiber.Error{
 			Code:    http.StatusInternalServerError,
@@ -153,6 +171,10 @@ func GetAllPendingRequests(c *fiber.Ctx) error {
 	var memberOutputs []*MemberOutput
 	for _, member := range members {
 		memberOutputs = append(memberOutputs, mapMemberToOutput(&member))
+	}
+	if len(memberOutputs) == 0 {
+		//return empty array
+		return c.Status(http.StatusOK).JSON([]MemberOutput{})
 	}
 
 	return c.Status(http.StatusOK).JSON(memberOutputs)
