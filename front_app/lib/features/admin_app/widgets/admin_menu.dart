@@ -85,6 +85,14 @@ class AdminScaffold extends StatelessWidget {
               },
             ),
             ListTile(
+              leading: const Icon(Icons.people),
+              title: const Text('Manage members'),
+              onTap: () {
+                Navigator.pop(context);
+                context.go('/admin/members');
+              },
+            ),
+            ListTile(
               leading: const Icon(Icons.people_alt_outlined),
               title: const Text('Manage Teams'),
               onTap: () {

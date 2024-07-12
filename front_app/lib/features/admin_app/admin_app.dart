@@ -6,6 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/cupertino.dart';
 
+import 'controllers/manage_members_controller.dart';
+
 class AdminApp extends RouteManager {
   static const String home = '/';
   static const String users = '/admin/users';
@@ -17,6 +19,7 @@ class AdminApp extends RouteManager {
   static const String teams = '/admin/teams';
   static const String settings = '/admin/settings';
   static const String banlist = '/admin/banlist';
+  static const String members = '/admin/members';
   static const String reports = '/admin/reports';
 
   AdminApp() {
@@ -87,6 +90,13 @@ class AdminApp extends RouteManager {
           return AdminApp.adminLogin;
         }
         return null;
+      },
+    ));
+
+    addRoute(GoRoute(
+      path: AdminApp.members,
+      pageBuilder: (context, state) {
+        return const CupertinoPage(child: MembersController());
       },
     ));
 
