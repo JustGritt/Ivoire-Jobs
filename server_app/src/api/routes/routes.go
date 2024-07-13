@@ -115,10 +115,11 @@ func SetupRoutes(app *fiber.App) {
 	//notification-preferences
 	notification := v1.Group("/notification-preference", middlewares.RequireLoggedIn())
 	notification.Put("/", ctl.CreateOrUpdateNotificationPreference)
+	notification.Get("/", ctl.GetNotificationPreference)
 
 	// Room Group
 	room := v1.Group("/room")
-	room.Get("/:id/ws", websocket.New(ctl.HandleWebSocket)) // Add this line
+	room.Get("/:id/ws", websocket.New(ctl.HandleWebSocket))
 
 	// Serve the embedded HTML file at /test
 	app.Get("/test", func(c *fiber.Ctx) error {
