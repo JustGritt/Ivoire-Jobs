@@ -272,7 +272,6 @@ func ValidateMember(c *fiber.Ctx) error {
 	)
 	if err != nil {
 		log.Printf("error sending message: %v", err)
-		return c.Status(http.StatusInternalServerError).JSON(HTTPResponse(http.StatusInternalServerError, "Error", err.Error()))
 	}
 	log.Printf("%d messages were sent successfully\n", resp.SuccessCount)
 

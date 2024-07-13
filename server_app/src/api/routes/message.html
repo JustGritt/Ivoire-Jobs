@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Notification Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        #messages {
+            border: 1px solid #ddd;
+            padding: 10px;
+            height: 300px;
+            overflow-y: scroll;
+            margin-top: 10px;
+        }
+        .message {
+            padding: 5px;
+            border-bottom: 1px solid #eee;
+        }
+    </style>
+</head>
+<body>
+    <h1>WebSocket Notification Demo</h1>
+    <div id="status">Connecting...</div>
+    <div id="messages"></div>
+    <div>
+        <button id="clientCountButton">Get Client Count</button>
+        <div id="clientCount">Clients Connected: 0</div>
+    </div>
+
+    <script>
+        // Replace with your actual WebSocket URL
+        const socketUrl = 'wss://fantastic-space-doodle-w59vv7w5w7pfp9j-8000.app.github.dev/api/v1/ws/notifications';
+
+        // Create a new WebSocket connection
+        const socket = new WebSocket(socketUrl);
+
+        // Connection opened
+        socket.addEventListener('open', function (event) {
+            document.getElementById('status').innerText = 'Connected to the WebSocket server';
+        });
+
+        // Listen for messages
+        socket.addEventListener('message', function (event) {
+            const messagesDiv = document.getElementById('messages');
+            const message = document.createElement('div');
+            message.className = 'message';
+            message.innerText = event.data;
+            messagesDiv.appendChild(message);
+        });
+
+        // Connection closed
+        socket.addEventListener('close', function (event) {
+            document.getElementById('status').innerText = 'Disconnected from the WebSocket server';
+        });
+
+        // Listen for errors
+        socket.addEventListener('error', function (event) {
+            console.error('WebSocket error: ', event);
+            document.getElementById('status').innerText = 'Error connecting to the WebSocket server';
+        });
+
+        // Function to get client count
+        document.getElementById('clientCountButton').addEventListener('click', function () {
+            fetch('/api/v1/ws/notifications/client-count')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('clientCount').innerText = 'Clients Connected: ' + data.client_count;
+                })
+                .catch(error => console.error('Error fetching client count:', error));
+        });
+    </script>
+</body>
+</html>
