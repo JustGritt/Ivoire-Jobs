@@ -1,8 +1,8 @@
 class NotificationPreferences {
-  String bookingNotification;
-  String messageNotification;
-  String pushNotification;
-  String serviceNotification;
+  bool bookingNotification;
+  bool messageNotification;
+  bool pushNotification;
+  bool serviceNotification;
 
   NotificationPreferences({
     required this.bookingNotification,
@@ -12,29 +12,30 @@ class NotificationPreferences {
   });
 
   factory NotificationPreferences.fromJson(Map<String, dynamic> json) =>
-  NotificationPreferences(
-    bookingNotification: json["booking_notification"],
-    messageNotification: json["message_notification"],
-    pushNotification: json["push_notification"],
-    serviceNotification: json["service_notification"],
-  );
+      NotificationPreferences(
+        bookingNotification: json["bookingNotification"] ?? false,
+        messageNotification: json["messageNotification"] ?? false,
+        pushNotification: json["pushNotification"] ?? false,
+        serviceNotification: json["serviceNotification"] ?? false,
+      );
 
   Map<String, dynamic> toJson() => {
-    "booking_notification": bookingNotification,
-    "message_notification": messageNotification,
-    "push_notification": pushNotification,
-    "service_notification": serviceNotification,
+    "bookingNotification": bookingNotification,
+    "messageNotification": messageNotification,
+    "pushNotification": pushNotification,
+    "serviceNotification": serviceNotification,
   };
 
   NotificationPreferences copyWith({
-    String? bookingNotification,
-    String? messageNotification,
-    String? pushNotification,
-    String? serviceNotification,
-  }) => NotificationPreferences(
-    bookingNotification: bookingNotification ?? this.bookingNotification,
-    messageNotification: messageNotification ?? this.messageNotification,
-    pushNotification: pushNotification ?? this.pushNotification,
-    serviceNotification: serviceNotification ?? this.serviceNotification,
-  );
+    bool? bookingNotification,
+    bool? messageNotification,
+    bool? pushNotification,
+    bool? serviceNotification,
+  }) =>
+      NotificationPreferences(
+        bookingNotification: bookingNotification ?? this.bookingNotification,
+        messageNotification: messageNotification ?? this.messageNotification,
+        pushNotification: pushNotification ?? this.pushNotification,
+        serviceNotification: serviceNotification ?? this.serviceNotification,
+      );
 }
