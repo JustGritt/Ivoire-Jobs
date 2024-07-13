@@ -6,3 +6,4 @@ export './desktop/team_manager_screen.dart';
 export './desktop/settings_screen.dart';
 export './desktop/banlist_screen.dart';
 export './desktop/splash_screen.dart';
+export './desktop/admin_stats_screen.dart';

@@ -31,6 +31,7 @@ class ApiEndpoint {
   static const adminLogin = '${api}/auth/admin-login';
   static const adminUser = '${api}/auth/admin';
   static const addAdmin = '${api}/auth/register-admin';
+  static const adminDashboardStats = '${api}/dashboard/stats';
 
   static const updateProfile = '/auth/update-profile';
 
