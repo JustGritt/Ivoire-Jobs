@@ -4,12 +4,12 @@ import 'package:barassage_app/core/blocs/authentication/authentication_bloc.dart
 import 'package:barassage_app/core/classes/app_context.dart';
 import 'package:barassage_app/core/init_dependencies.dart';
 import 'package:barassage_app/features/auth_mod/models/user.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flashy_tab_bar2/flashy_tab_bar2.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ionicons/ionicons.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter/material.dart';
 
 AuthenticationBloc _authenticationBloc = serviceLocator<AuthenticationBloc>();
 BuildContext _context = serviceLocator<AppContext>().navigatorContext;

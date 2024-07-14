@@ -1,5 +1,5 @@
+import 'package:barassage_app/features/admin_app/screens/desktop/admin_dashboard_screen.dart';
 import 'package:flutter/material.dart';
-import '../screens/desktop/admin_dashboard_screen.dart';
 
 class AdminDashboardController extends StatelessWidget {
   const AdminDashboardController({super.key});

@@ -19,19 +19,61 @@ class ReportCard extends StatelessWidget {
       },
       child: Card(
         color: Colors.grey[200],
+        elevation: 3,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Reason: ${report.reason} - ${DateFormat.yMMMd().format(report.createdAt)}',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                'Reason: ${report.reason}',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
               ),
-              SizedBox(height: 4),
-              Text('User ID: ${report.userId}'),
-              SizedBox(height: 4),
-              Text('Service ID: ${report.serviceId}'),
+              const SizedBox(height: 8),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'User ID: ${report.userId}',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.black54,
+                    ),
+                  ),
+                  Text(
+                    'Service ID: ${report.serviceId}',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.black54,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Date: ${DateFormat.yMMMd().format(report.createdAt)}',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.black45,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Align(
+                alignment: Alignment.centerRight,
+                child: Icon(
+                  Icons.arrow_forward_ios,
+                  size: 16,
+                  color: Colors.black45,
+                ),
+              ),
             ],
           ),
         ),

@@ -1,13 +1,10 @@
-import 'dart:developer';
-
-import 'package:barassage_app/features/main_app/models/api_base_model.dart';
-import 'package:barassage_app/features/main_app/models/service_models/service_category_model.dart';
-import 'package:barassage_app/features/main_app/models/service_models/service_create_model.dart';
 import 'package:barassage_app/features/main_app/models/service_models/service_created_model.dart';
+import 'package:barassage_app/features/main_app/models/service_models/service_create_model.dart';
+import 'package:barassage_app/features/main_app/models/api_base_model.dart';
+import 'package:barassage_app/config/api_endpoints.dart';
+import 'package:barassage_app/config/app_http.dart';
 import 'package:dio/dio.dart';
 
-import '../../../config/api_endpoints.dart';
-import '../../../config/app_http.dart';
 
 class ServiceServices {
   AppHttp http = AppHttp(headers: {

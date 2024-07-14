@@ -11,17 +11,18 @@ class NotificationPreferences {
     required this.bookingNotification,
   });
 
-  factory NotificationPreferences.fromJson(Map<String, dynamic> json) => NotificationPreferences(
-        pushNotification: json["pushNotification"],
-        messageNotification: json["messageNotification"],
-        serviceNotification: json["serviceNotification"],
-        bookingNotification: json["bookingNotification"],
-      );
+  factory NotificationPreferences.fromJson(Map<String, dynamic> json) =>
+  NotificationPreferences(
+    pushNotification: json["pushNotification"],
+    messageNotification: json["messageNotification"],
+    serviceNotification: json["serviceNotification"],
+    bookingNotification: json["bookingNotification"],
+  );
 
   Map<String, dynamic> toJson() => {
-        "pushNotification": pushNotification,
-        "messageNotification": messageNotification,
-        "serviceNotification": serviceNotification,
-        "bookingNotification": bookingNotification,
-      };
+    "pushNotification": pushNotification,
+    "messageNotification": messageNotification,
+    "serviceNotification": serviceNotification,
+    "bookingNotification": bookingNotification,
+  };
 }

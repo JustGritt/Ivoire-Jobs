@@ -30,7 +30,7 @@ type ServiceObject struct {
 	UserID      string                  `json:"-"`
 	Name        string                  `json:"name" validate:"required,min=2,max=30"`
 	Description string                  `json:"description" validate:"required,min=2,max=30"`
-	Price       float64                 `json:"price" validate:"required,min=5,max=1000000"`
+	Price       float64                 `json:"price" validate:"required,min=1000,max=1000000"`
 	Status      bool                    `json:"status" default:"false"`
 	Duration    int                     `json:"duration" validate:"required,min=30,max=1440,step=30" message:"Duration must be a multiple of 30 and it should be beetween 30 and 1440"`
 	IsBanned    bool                    `json:"-"`
@@ -38,7 +38,7 @@ type ServiceObject struct {
 	Longitude   float64                 `json:"longitude" validate:"required"`
 	Address     string                  `json:"address" validate:"required"`
 	City        string                  `json:"city" validate:"required"`
-	PostalCode  string                  `json:"postalCode" validate:"required"`
+	PostalCode  string                  `json:"postalCode"`
 	Country     string                  `json:"country" validate:"required"`
 	Images      []*multipart.FileHeader `json:"images" form:"images" swaggertype:"string"`
 	CategoryIDs []string                `json:"categoryIds" validate:"required"`
@@ -62,24 +62,31 @@ type ServiceUpdateObject struct {
 }
 
 type ServiceOutput struct {
-	ServiceID   string     `json:"id"`
-	UserID      string     `json:"userId"`
-	Name        string     `json:"name"`
-	Description string     `json:"description"`
-	Price       float64    `json:"price"`
-	Status      bool       `json:"status"`
-	Duration    int        `json:"duration"`
-	IsBanned    bool       `json:"isBanned"`
-	Latitude    float64    `json:"latitude"`
-	Longitude   float64    `json:"longitude"`
-	Address     string     `json:"address"`
-	City        string     `json:"city"`
-	PostalCode  string     `json:"postalCode"`
-	Country     string     `json:"country"`
-	Images      []string   `json:"images"`
-	CreatedAt   string     `json:"createdAt"`
-	Category    []string   `json:"category"`
-	User        CustomUser `json:"user"`
+	ServiceID   string          `json:"id"`
+	UserID      string          `json:"userId"`
+	Name        string          `json:"name"`
+	Description string          `json:"description"`
+	Price       float64         `json:"price"`
+	Status      bool            `json:"status"`
+	Duration    int             `json:"duration"`
+	IsBanned    bool            `json:"isBanned"`
+	Latitude    float64         `json:"latitude"`
+	Longitude   float64         `json:"longitude"`
+	Address     string          `json:"address"`
+	City        string          `json:"city"`
+	PostalCode  string          `json:"postalCode"`
+	Country     string          `json:"country"`
+	Images      []string        `json:"images"`
+	CreatedAt   string          `json:"createdAt"`
+	Category    []string        `json:"category"`
+	User        CustomUser      `json:"user"`
+	Bookings    []CustomBooking `json:"bookings"`
+}
+
+type CustomBooking struct {
+	BookingID string `json:"id"`
+	StartAt   string `json:"startAt"`
+	EndAt     string `json:"endAt"`
 }
 
 type CustomUser struct {
@@ -89,6 +96,7 @@ type CustomUser struct {
 	LastName  string `json:"lastname"`
 	Bio       string `json:"bio"`
 	Member    string `json:"member"`
+	CreateAt  string `json:"createdAt"`
 }
 
 // CreateService Godoc
@@ -136,6 +144,7 @@ func CreateService(c *fiber.Ctx) error {
 		)
 		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
 	}
+	fmt.Println(dbUser.Member)
 
 	if dbUser.Member == nil || len(dbUser.Member) == 0 {
 		errorList = append(
@@ -149,7 +158,7 @@ func CreateService(c *fiber.Ctx) error {
 	}
 
 	Member := dbUser.Member[len(dbUser.Member)-1]
-	if Member.ID != "" || Member.Status == "processing" {
+	if Member.ID == "" || Member.Status == "processing" {
 		errorList = append(
 			errorList,
 			&fiber.Error{
@@ -179,8 +188,14 @@ func CreateService(c *fiber.Ctx) error {
 	}
 
 	if _, err := serviceRepo.GetServiceByNameForUser(s.Name, s.UserID); err == nil {
-		response := HTTPResponse(http.StatusForbidden, "Service Already Exist", nil)
-		return c.Status(http.StatusForbidden).JSON(response)
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusForbidden,
+				Message: "Service Already Exist",
+			},
+		)
+		return c.Status(http.StatusForbidden).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
 	// Handle images upload
@@ -358,6 +373,8 @@ func GetServiceByUserId(c *fiber.Ctx) error {
 		)
 		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
 	}
+
+	//for each service create the customBooking
 
 	// Map services to ServiceOutput
 	var ouput []ServiceOutput
@@ -942,26 +959,19 @@ func GetTrendingServices(c *fiber.Ctx) error {
 // @Failure 500 {array} ErrorResponse
 // @Router /service/bans [get]
 func GetAllBannedServices(c *fiber.Ctx) error {
-	var errorList []*fiber.Error
 	services, err := serviceRepo.GetAllBannedServices()
 	if err != nil {
-		errorList = append(
-			errorList,
-			&fiber.Error{
-				Code:    fiber.StatusInternalServerError,
-				Message: "error getting banned services",
-			},
-		)
-		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Error fetching banned services",
+		})
 	}
 
-	// Map services to ServiceOutput
-	var ouput []ServiceOutput
+	var serviceOutputs []ServiceOutput
 	for _, s := range services {
-		ouput = append(ouput, *mapServiceToOutPut(&s))
+		serviceOutputs = append(serviceOutputs, *mapServiceToOutPut(&s))
 	}
 
-	return c.Status(http.StatusOK).JSON(ouput)
+	return c.Status(http.StatusOK).JSON(serviceOutputs)
 }
 
 // ============================================================
@@ -988,7 +998,23 @@ func mapServiceToOutPut(u *service.Service) *ServiceOutput {
 		LastName:  user.Lastname,
 		Bio:       user.Bio,
 		Member:    user.Member[len(user.Member)-1].Status,
+		CreateAt:  user.CreatedAt.Format("2006-01-02"),
 	}
+
+	//trim the object booking
+	var customBooking []CustomBooking
+	for _, booking := range u.Bookings {
+		customBooking = append(customBooking, CustomBooking{
+			BookingID: booking.ID,
+			StartAt:   booking.StartTime.Format("2006-01-02"),
+			EndAt:     booking.EndTime.Format("2006-01-02"),
+		})
+	}
+	//if empty return []
+	if len(customBooking) == 0 {
+		customBooking = []CustomBooking{}
+	}
+
 	return &ServiceOutput{
 		ServiceID:   u.ID,
 		UserID:      u.UserID,
@@ -1007,6 +1033,7 @@ func mapServiceToOutPut(u *service.Service) *ServiceOutput {
 		Images:      imageUrls,
 		Category:    categoriesNames,
 		User:        CustomUser,
+		Bookings:    customBooking,
 		CreatedAt:   u.CreatedAt.Format("2006-01-02"),
 	}
 }

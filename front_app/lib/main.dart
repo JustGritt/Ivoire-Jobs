@@ -7,19 +7,19 @@ import 'package:barassage_app/core/classes/router/go_router.dart';
 import 'package:barassage_app/core/init_dependencies.dart';
 import 'package:barassage_app/firebase_options.dart';
 import 'package:barassage_app/l10n/l10n.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:flutter_image_compress/flutter_image_compress.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
-import 'dart:io' as io;
-
+import 'package:flutter/material.dart';
 import 'config/config.dart';
+import 'dart:io' as io;
 
 void main() async {
   
@@ -33,7 +33,6 @@ void main() async {
   var envFile = ".env";
   try {
     if (io.File(".env").existsSync()) envFile = ".env";
-    // ignore: empty_catches
   } catch (e) {}
   await dotenv.load(fileName: envFile);
 
@@ -51,7 +50,9 @@ void main() async {
       child: MultiProvider(
         providers: appProviders,
         child: const BarassageApp(),
-      )));
+      )
+    )
+  );
 }
 
 class BarassageApp extends StatelessWidget {
@@ -62,21 +63,21 @@ class BarassageApp extends StatelessWidget {
   Widget build(BuildContext context) {
     var tm = context.watch<ThemeProvider>();
     var lp = context.watch<LanguageProvider>();
-    // print("My App: " + tm.isDarkMode.toString());
     return MaterialApp.router(
-        title: 'Barassage App',
-        supportedLocales: L10n.all,
-        localizationsDelegates: const [
-          AppLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        locale: lp.locale,
-        debugShowCheckedModeBanner: false,
-        theme: MyTheme().lightTheme,
-        darkTheme: MyTheme().darkTheme,
-        themeMode: tm.themeMode,
-        routerConfig: router);
+      title: 'Barassage App',
+      supportedLocales: L10n.all,
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      locale: lp.locale,
+      debugShowCheckedModeBanner: false,
+      theme: MyTheme().lightTheme,
+      darkTheme: MyTheme().darkTheme,
+      themeMode: tm.themeMode,
+      routerConfig: router
+    );
   }
 }

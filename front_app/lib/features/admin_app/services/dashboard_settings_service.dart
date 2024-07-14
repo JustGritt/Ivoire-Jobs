@@ -1,8 +1,7 @@
-import 'package:dio/dio.dart';
+import 'package:barassage_app/config/api_endpoints.dart';
+import 'package:barassage_app/config/app_http.dart';
 import 'package:flutter/cupertino.dart';
-
-import '../../../config/api_endpoints.dart';
-import '../../../config/app_http.dart';
+import 'package:dio/dio.dart';
 
 class DashboardSettingsService {
   String? token;
@@ -19,7 +18,6 @@ class DashboardSettingsService {
       debugPrint('Maintenance mode status: ${res.data}');
       if (res.statusCode == 200 && res.data != null) {
         final value = res.data['body']['value'][0];
-        // Cast the value to bool if it's a String
         if (value is String) {
           return value.toLowerCase() == 'true';
         }
@@ -31,7 +29,6 @@ class DashboardSettingsService {
       throw Exception('Failed to load maintenance mode status');
     }
   }
-
 
   Future<List<String>> getWhitelistIps() async {
     try {
@@ -79,5 +76,4 @@ class DashboardSettingsService {
       throw Exception('Failed to set whitelist IPs');
     }
   }
-
 }

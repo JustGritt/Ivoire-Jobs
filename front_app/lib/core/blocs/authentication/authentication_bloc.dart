@@ -1,25 +1,23 @@
-import 'package:barassage_app/core/helpers/utils_helper.dart';
-import 'package:barassage_app/core/init_dependencies.dart';
-import 'package:barassage_app/features/admin_app/admin_app.dart';
-import 'package:barassage_app/features/auth_mod/auth_app.dart';
+import 'package:barassage_app/features/auth_mod/services/user_service.dart';
 import 'package:barassage_app/features/auth_mod/models/user_signup.dart';
 import 'package:barassage_app/features/auth_mod/models/user_update.dart';
-import 'package:barassage_app/features/auth_mod/services/user_service.dart';
-import 'package:bloc/bloc.dart';
-import 'package:barassage_app/core/helpers/auth_helper.dart';
 import 'package:barassage_app/features/auth_mod/models/user.dart';
+import 'package:barassage_app/features/admin_app/admin_app.dart';
+import 'package:barassage_app/features/auth_mod/auth_app.dart';
+import 'package:barassage_app/core/helpers/utils_helper.dart';
+import 'package:barassage_app/core/helpers/auth_helper.dart';
+import 'package:barassage_app/core/init_dependencies.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter/material.dart';
+import 'package:bloc/bloc.dart';
 
 part 'authentication_event.dart';
 part 'authentication_state.dart';
 
 UserService userService = serviceLocator<UserService>();
 
-
-class AuthenticationBloc
-    extends Bloc<AuthenticationEvent, AuthenticationState> {
+class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> {
   AuthenticationBloc() : super(AuthenticationInitialState()) {
     on<AuthenticationEvent>((event, emit) {});
 
@@ -64,7 +62,6 @@ class AuthenticationBloc
             title: 'Profile',
             content: 'Profile updated successfully',
           );
-        
         } else {
           emit(const AuthenticationFailureState('create user failed'));
         }
@@ -75,8 +72,7 @@ class AuthenticationBloc
     });
 
     on<SignUpUser>((event, emit) async {
-      if (state is AuthenticationLoadingState &&
-          state is AuthenticationSuccessState) {
+      if (state is AuthenticationLoadingState && state is AuthenticationSuccessState) {
         return;
       }
       emit(AuthenticationLoadingState());
@@ -106,7 +102,6 @@ class AuthenticationBloc
         emit(const AuthenticationFailureState('get user failed'));
       }
     });
-
 
     on<SignOut>((event, emit) async {
       try {

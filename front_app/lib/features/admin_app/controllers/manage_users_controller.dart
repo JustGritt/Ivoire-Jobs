@@ -1,4 +1,5 @@
 import 'package:barassage_app/features/admin_app/screens/desktop/manage_users_screen.dart';
+import 'package:barassage_app/features/admin_app/widgets/admin_menu.dart';
 import 'package:flutter/material.dart';
 
 class UsersController extends StatelessWidget {
@@ -7,9 +8,11 @@ class UsersController extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Title(
-      title: 'Manage Users',
       color: Colors.blue,
-      child: const ManageUsersScreen(),
+      child: AdminScaffold(
+        title: 'Manage Users',
+        body: const ManageUsersScreen(),
+      ),
     );
   }
 }

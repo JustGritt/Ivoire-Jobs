@@ -23,14 +23,14 @@ class User {
   });
 
   factory User.fromJson(Map<String, dynamic> json) => User(
-        id: json["id"],
-        firstName: json["firstName"],
-        lastName: json["lastName"],
-        email: json["email"],
+        id: json["id"] ?? '',
+        firstName: json["firstname"] ?? '',
+        lastName: json["lastname"] ?? '',
+        email: json["email"] ?? '',
         bio: json['bio'],
-        profilePicture: '',
-        createdAt:
-            DateTime.parse(json["createdAt"] ?? DateTime.now().toString()),
+        profilePicture: json['profilePicture'] ?? '',
+        createdAt: DateTime.parse(
+            json["createdAt"] ?? DateTime.now().toIso8601String()),
       );
 
   Map<String, dynamic> toJson() => {
@@ -40,10 +40,9 @@ class User {
         "email": email,
         "profilePicture": profilePicture,
         "bio": bio,
-        "createdAt": createdAt,
+        "createdAt": createdAt.toIso8601String(),
       };
 
-  //toJSONEncodable
   Map<String, dynamic> toJsonEncodable() {
     return {
       'firstName': firstName,
@@ -84,18 +83,21 @@ class User {
       'profilePicture': profilePicture,
       'bio': bio,
       'id': id,
+      'createdAt': createdAt.toIso8601String(),
     };
   }
 
   factory User.fromMap(Map<String, dynamic> map) {
     return User(
-      firstName: map['firstName'] ?? '',
-      lastName: map['lastName'] ?? '',
+      firstName: map['firstname'] ?? '',
+      lastName: map['lastname'] ?? '',
       email: map['email'] ?? '',
       profilePicture: map['profilePicture'] ?? '',
       bio: map['bio'] ?? '',
       id: map['id'] ?? '',
-      createdAt: map['createdAt'] ?? DateTime.now(),
+      createdAt: map['createdAt'] != null
+          ? DateTime.parse(map['createdAt'])
+          : DateTime.now(),
     );
   }
 }

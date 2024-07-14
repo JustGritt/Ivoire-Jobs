@@ -1,6 +1,6 @@
+import 'package:barassage_app/features/admin_app/screens/desktop/settings_screen.dart';
+import 'package:barassage_app/features/admin_app/widgets/admin_menu.dart';
 import 'package:flutter/material.dart';
-
-import '../screens/desktop/settings_screen.dart';
 
 class AdminSettingsController extends StatelessWidget {
   const AdminSettingsController({super.key});
@@ -8,9 +8,11 @@ class AdminSettingsController extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Title(
-      title: 'Admin Settings',
       color: Colors.blue,
-      child: const DashboardSettings(),
+      child: AdminScaffold(
+        title: 'Admin Settings',
+        body: const DashboardSettings(),
+      ),
     );
   }
 }

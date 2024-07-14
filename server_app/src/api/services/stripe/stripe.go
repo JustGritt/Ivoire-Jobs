@@ -37,14 +37,21 @@ func CreatePaymentIntent(booking *booking.Booking) (*stripe.PaymentIntent, error
 	stripe.Key = cfg.PrivateKey
 	//from the ServiceId, get the service and get the amount
 	service, err := serviceRepo.GetByID(booking.ServiceID)
-	price := int64(service.Price * 100)
+	price := int64(service.Price)
 	log.Println("Price: ", price)
 	if err != nil {
 		return nil, err
 	}
+	//add the booking ID to the metadata
+	// Create a PaymentIntent
 	params := &stripe.PaymentIntentParams{
 		Amount:   stripe.Int64(price),
-		Currency: stripe.String(string(stripe.CurrencyEUR)),
+		Currency: stripe.String(string(stripe.CurrencyXOF)),
+		Params: stripe.Params{
+			Metadata: map[string]string{
+				"booking_id": booking.ID,
+			},
+		},
 	}
 	pi, err := paymentintent.New(params)
 	if err != nil {

@@ -1,17 +1,17 @@
 import 'dart:ui';
 
+import 'package:barassage_app/core/blocs/authentication/authentication_bloc.dart';
+import 'package:barassage_app/features/auth_mod/widgets/widget_functions.dart';
+import 'package:barassage_app/features/auth_mod/widgets/app_button.dart';
 import 'package:barassage_app/features/admin_app/admin_mod.dart';
-import 'package:flutter/material.dart';
+import 'package:barassage_app/features/auth_mod/auth_app.dart';
+
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:flutter/gestures.dart';
 import 'package:go_router/go_router.dart';
-
-import '../../../../core/blocs/authentication/authentication_bloc.dart';
-import '../../../auth_mod/widgets/widget_functions.dart';
-import '../../../auth_mod/auth_app.dart';
-import '../../../auth_mod/widgets/app_button.dart';
 
 class LoginDesktopScreen extends StatefulWidget {
   const LoginDesktopScreen({
@@ -37,7 +37,7 @@ class _LoginDesktopScreenState extends State<LoginDesktopScreen> {
       body: SafeArea(
         child: BlocConsumer<AuthenticationBloc, AuthenticationState>(
           listener: (context, state) {
-            print (state);
+            print(state);
             if (state is AuthenticationSuccessState) {
               context.go(AdminApp.dashboard);
             }
@@ -105,7 +105,8 @@ class _LoginDesktopScreenState extends State<LoginDesktopScreen> {
                                   textAlign: TextAlign.center,
                                 ),
                                 Text(
-                                  appLocalizations.welcome_back_admin_description,
+                                  appLocalizations
+                                      .welcome_back_admin_description,
                                   style: theme.textTheme.displayMedium,
                                   textAlign: TextAlign.center,
                                 ),
@@ -144,16 +145,16 @@ class _LoginDesktopScreenState extends State<LoginDesktopScreen> {
                             padding: const EdgeInsets.symmetric(horizontal: 1.0),
                             child: ConstrainedBox(
                               constraints: const BoxConstraints(
-                                maxHeight: 64, // ensure button height is adequate
-                                maxWidth: 400, // ensure button width is adequate
+                                maxHeight: 64,
+                                maxWidth: 400,
                               ),
                               child: AppButton(
                                 isLoading: state is AuthenticationLoadingState,
                                 onPressed: () async {
                                   if (_globalKey.currentState!.validate()) {
                                     context.read<AuthenticationBloc>().add(
-                                      AdminSignIn(username!, password!),
-                                    );
+                                          AdminSignIn(username!, password!),
+                                        );
                                   }
                                 },
                                 backgroundColor: theme.primaryColorDark,
@@ -174,7 +175,7 @@ class _LoginDesktopScreenState extends State<LoginDesktopScreen> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                   recognizer: TapGestureRecognizer()
-                                    ..onTap = () => context.push(AuthApp.register),
+                                  ..onTap = () => context.push(AuthApp.register),
                                 )
                               ],
                             ),

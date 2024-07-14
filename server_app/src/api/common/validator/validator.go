@@ -6,6 +6,7 @@ import (
 	"mime/multipart"
 	"path/filepath"
 	"reflect"
+	"regexp"
 	"strconv"
 	"strings"
 	"unicode"
@@ -97,6 +98,13 @@ func ParseBody(c *fiber.Ctx, body interface{}) []*fiber.Error {
 	return nil
 }
 
+func phoneNumberValidator(fl validator.FieldLevel) bool {
+	phone := fl.Field().Interface().(string)
+	// Regular expression to match phone numbers with country code
+	regex := regexp.MustCompile(`^\+\d{1,3}\d{3,}$`)
+	return regex.MatchString(string(phone))
+}
+
 // ParseBodyAndValidate is a helper function for parsing the body.
 // If any error occurs it will return the error list.
 // It's just a helper function to avoid writing if conditions again and again.
@@ -182,6 +190,7 @@ func init() {
 	validate.RegisterValidation("size", fileSizeValidator)
 	validate.RegisterValidation("ext", fileExtensionValidator)
 	validate.RegisterValidation("admin", adminValidator)
+	validate.RegisterValidation("phone", phoneNumberValidator)
 }
 
 // ValidateFile checks the file size and extension
@@ -237,7 +246,7 @@ var _ = validate.RegisterValidation("password", func(fl validator.FieldLevel) bo
 		return false
 	}
 
-	var hasUpper, hasLower, hasSpecial,  hasDigit bool
+	var hasUpper, hasLower, hasSpecial, hasDigit bool
 	for _, char := range password {
 		switch {
 		case unicode.IsUpper(char):
@@ -252,7 +261,7 @@ var _ = validate.RegisterValidation("password", func(fl validator.FieldLevel) bo
 	}
 
 	return hasUpper && hasLower && hasDigit && hasSpecial
-}) 
+})
 
 // take a int and check if it is a multiple of the argument
 var _ = validate.RegisterValidation("step", func(fl validator.FieldLevel) bool {

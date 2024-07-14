@@ -6,6 +6,7 @@ import (
 
 	// Configs
 	cfg "barassage/api/configs"
+	"barassage/api/cron"
 	"barassage/api/services/bucket"
 
 	// Swagger
@@ -28,6 +29,7 @@ import (
 	"barassage/api/models/booking"
 	"barassage/api/models/category"
 	"barassage/api/models/configuration"
+	"barassage/api/models/contact"
 	"barassage/api/models/image"
 	"barassage/api/models/member"
 	"barassage/api/models/message"
@@ -80,6 +82,9 @@ func Run() {
 	// Connect to Postgres
 	db.ConnectPostgres()
 
+	//Drop Booking
+	//db.PgDB.Migrator().DropTable(&booking.Booking{}, &contact.Contact{})
+
 	// Migration
 	db.PgDB.AutoMigrate(
 		&user.User{},
@@ -88,6 +93,7 @@ func Run() {
 		&image.Image{},
 		&report.Report{},
 		&category.Category{},
+		&contact.Contact{},
 		&ban.Ban{},
 		&rating.Rating{},
 		&member.Member{},
@@ -134,6 +140,7 @@ func Run() {
 	*/
 	routes.SetupRoutes(app)
 	app.Use(cors.New())
+
 	/*
 		============ Setup Swagger ===============
 	*/
@@ -144,6 +151,9 @@ func Run() {
 	} else {
 		docs.SwaggerInfo.Host = config.Host
 	}
+
+	// Start the cron jobs
+	cron.StartCronJobs()
 
 	// Run the app and listen on given port
 	port := fmt.Sprintf(":%s", config.Port)

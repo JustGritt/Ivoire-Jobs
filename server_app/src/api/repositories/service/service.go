@@ -51,7 +51,7 @@ func GetServiceByNameForUser(name string, userID string) (*service.Service, erro
 
 func GetServicesByUserID(userID string) ([]service.Service, error) {
 	var services []service.Service
-	if err := db.PgDB.Preload("Images").Preload("Categories").Where("user_id = ?", userID).Find(&services).Error; err != nil {
+	if err := db.PgDB.Preload("Images").Preload("Categories").Preload("Bookings").Where("user_id = ?", userID).Find(&services).Error; err != nil {
 		return nil, err
 	}
 	return services, nil
@@ -60,7 +60,6 @@ func GetServicesByUserID(userID string) ([]service.Service, error) {
 // Get all banned services
 func GetAllBannedServices() ([]service.Service, error) {
 	var services []service.Service
-	//find all banned services
 	if err := db.PgDB.Where("is_banned = ?", true).Find(&services).Error; err != nil {
 		return nil, err
 	}
@@ -184,4 +183,12 @@ func DeleteImage(service *service.Service, imageURL string) error {
 		}
 	}
 	return nil
+}
+
+func CountAll() (int64, error) {
+	//get all services that are active and not banned
+	var count int64
+	query := db.PgDB.Model(&service.Service{}).Where("status = ? AND is_banned = ?", true, false)
+	err := query.Count(&count).Error
+	return count, err
 }

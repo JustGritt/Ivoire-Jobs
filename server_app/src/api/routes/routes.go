@@ -17,6 +17,9 @@ import (
 //go:embed index.html
 var indexHTML string
 
+//go:embed message.html
+var messageHTML string
+
 // SetupRoutes setups router
 func SetupRoutes(app *fiber.App) {
 
@@ -27,13 +30,22 @@ func SetupRoutes(app *fiber.App) {
 
 	// Stripe Webhook
 	v1.Post("/stripe/webhook", ctl.HandleWebhook)
-	v1.Get("/stripe/create-payment-intent", ctl.HandleCreatePaymentIntent) // TODO remove after hadnling properly in booking.go
 
 	v1.Get("/home", ctl.HomeController)
+
+	// New WebSocket route for notifications
+	v1.Get("/ws/notifications", websocket.New(ctl.HandleNotificationsWebSocket))
+
+	// Endpoint to get client count
+	v1.Get("/ws/notifications/client-count", func(c *fiber.Ctx) error {
+		clientCount := ctl.GetClientCount()
+		return c.JSON(fiber.Map{"client_count": clientCount})
+	})
 
 	// Auth Group
 	auth := v1.Group("/auth")
 	auth.Post("/register", ctl.Register)
+	auth.Post("/register-admin", middlewares.RequireAdmin(), ctl.RegisterAdmin)
 	auth.Post("/login", ctl.Login)
 	auth.Post("/admin-login", ctl.AdminLogin)
 	auth.Post("/logout", ctl.Logout)
@@ -55,6 +67,7 @@ func SetupRoutes(app *fiber.App) {
 	service.Get("/collection", ctl.GetAll)
 	service.Get("/bans", ctl.GetAllBannedServices)
 	service.Get("/:id/rating", ctl.GetAllRatingsFromService)
+	service.Get("/:id/booking", middlewares.RequireLoggedIn(), ctl.GetBookingService)
 	service.Get("/:id", ctl.GetServiceById)
 	service.Get("/:id/room", middlewares.RequireLoggedIn(), ctl.CreateOrGetRoom)
 	service.Post("/", middlewares.RequireLoggedIn(), ctl.CreateService)
@@ -63,15 +76,15 @@ func SetupRoutes(app *fiber.App) {
 
 	// Booking Group
 	booking := v1.Group("/booking")
-	booking.Get("/collection", ctl.GetBookings)
+	booking.Get("/collection", middlewares.RequireLoggedIn(), ctl.GetBookings)
 	booking.Post("/", middlewares.RequireLoggedIn(), ctl.CreateBooking)
 	booking.Put("/:id", middlewares.RequireLoggedIn(), ctl.UpdateBooking)
 
 	// Report Group
 	report := v1.Group("/report")
-	report.Get("/collection", ctl.GetAllReports)
-	report.Get("/pending", ctl.GetAllPendingReports)
-	report.Put("/:id", ctl.ValidateReport)
+	report.Get("/collection", middlewares.RequireAdmin(), ctl.GetAllReports)
+	report.Get("/pending", middlewares.RequireAdmin(), ctl.GetAllPendingReports)
+	report.Put("/:id", middlewares.RequireAdmin(), ctl.ValidateReport)
 	report.Post("/", middlewares.RequireLoggedIn(), ctl.CreateReport)
 
 	// Category Group
@@ -103,7 +116,7 @@ func SetupRoutes(app *fiber.App) {
 	member := v1.Group("/member", middlewares.RequireLoggedIn())
 	member.Post("/", ctl.CreateMember)
 	member.Put("/:id/validate", middlewares.RequireAdmin(), ctl.ValidateMember)
-	member.Get("/pending", middlewares.RequireAdmin(), ctl.GetAllPendingRequests)
+	member.Get("/", middlewares.RequireAdmin(), ctl.GetAllRequests)
 
 	// Configuration Group ONLY FOR ADMIN
 	configuration := v1.Group("/configuration", middlewares.RequireAdmin())
@@ -114,13 +127,22 @@ func SetupRoutes(app *fiber.App) {
 	//notification-preferences
 	notification := v1.Group("/notification-preference", middlewares.RequireLoggedIn())
 	notification.Put("/", ctl.CreateOrUpdateNotificationPreference)
+	notification.Get("/", ctl.GetNotificationPreference)
 
 	// Room Group
 	room := v1.Group("/room")
-	room.Get("/:id/ws", websocket.New(ctl.HandleWebSocket)) // Add this line
+	room.Get("/:id/ws", websocket.New(ctl.HandleWebSocket))
+
+	// Dashboard Group
+	dashboard := v1.Group("/dashboard")
+	dashboard.Get("/stats", ctl.GetDashboardStats)
 
 	// Serve the embedded HTML file at /test
 	app.Get("/test", func(c *fiber.Ctx) error {
 		return c.Type("html").SendString(indexHTML)
+	})
+
+	app.Get("/message", func(c *fiber.Ctx) error {
+		return c.Type("html").SendString(messageHTML)
 	})
 }

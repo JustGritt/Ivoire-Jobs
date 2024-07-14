@@ -1,7 +1,9 @@
+import 'package:barassage_app/features/admin_app/models/user.dart';
+
 class Service {
   final String id;
   final String userId;
-  final String title;
+  final String name;
   final String description;
   final double price;
   final bool status;
@@ -16,11 +18,12 @@ class Service {
   final List<String> images;
   final DateTime createdAt;
   final List<String> category;
+  final User user;
 
   Service({
     required this.id,
     required this.userId,
-    required this.title,
+    required this.name,
     required this.description,
     required this.price,
     required this.status,
@@ -35,13 +38,14 @@ class Service {
     required this.images,
     required this.createdAt,
     required this.category,
+    required this.user,
   });
 
   factory Service.fromJson(Map<String, dynamic> json) {
     return Service(
       id: json['id'] ?? '',
       userId: json['userId'] ?? '',
-      title: json['title'] ?? '',
+      name: json['name'] ?? '',
       description: json['description'] ?? '',
       price: (json['price'] ?? 0).toDouble(),
       status: json['status'] ?? false,
@@ -54,8 +58,11 @@ class Service {
       postalCode: json['postalCode'] ?? '',
       country: json['country'] ?? '',
       images: json['images'] != null ? List<String>.from(json['images']) : [],
-      createdAt: json['createdAt'] != null ? DateTime.parse(json['createdAt']) : DateTime.now(),
+      createdAt: json['createdAt'] != null
+          ? DateTime.parse(json['createdAt'])
+          : DateTime.now(),
       category: json['category'] != null ? List<String>.from(json['category']) : [],
+      user: User.fromJson(json['user']),
     );
   }
 }

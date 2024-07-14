@@ -2,6 +2,7 @@ package booking
 
 import (
 	// user model
+
 	"barassage/api/models/booking"
 	"time"
 
@@ -47,6 +48,14 @@ func GetBookingsByUserID(userID string) ([]booking.Booking, error) {
 	return bookings, nil
 }
 
+func GetBookingsByServiceID(serviceID string) ([]booking.Booking, error) {
+	var bookings []booking.Booking
+	if err := db.PgDB.Where("service_id = ?", serviceID).Preload("Contact").Find(&bookings).Error; err != nil {
+		return nil, err
+	}
+	return bookings, nil
+}
+
 func Update(booking *booking.Booking) error {
 	return db.PgDB.Save(booking).Error
 }
@@ -60,8 +69,8 @@ func CheckBookingOverlap(userID string, startTime time.Time, endTime time.Time) 
 	var count int64
 	// Check if the user has a booking that overlaps with the new booking time
 	query := db.PgDB.Model(&booking.Booking{}).Where(
-		"user_id = ? AND ((start_time < ? AND end_time > ?) OR (start_time < ? AND end_time > ?) OR (start_time >= ? AND end_time <= ?))",
-		userID, endTime, startTime, endTime, startTime, startTime, endTime,
+		"user_id = ? AND status != ? AND ((start_time < ? AND end_time > ?) OR (start_time < ? AND end_time > ?) OR (start_time >= ? AND end_time <= ?))",
+		userID, "cancelled", endTime, startTime, endTime, startTime, startTime, endTime,
 	)
 
 	if err := query.Count(&count).Error; err != nil {
@@ -73,4 +82,27 @@ func CheckBookingOverlap(userID string, startTime time.Time, endTime time.Time) 
 // GetErrors gets the errors
 func GetErrors() error {
 	return db.PgDB.Error
+}
+
+func CountAll() (int64, error) {
+	var count int64
+	if err := db.PgDB.Model(&booking.Booking{}).Where("status = ?", "completed").Count(&count).Error; err != nil {
+		return 0, err
+	}
+	return count, nil
+}
+
+func CountBookingsInRange(startDate, endDate time.Time) (int, error) {
+	var count int64
+	err := db.PgDB.Model(&booking.Booking{}).Where("created_at BETWEEN ? AND ? AND status = ?", startDate, endDate, "completed").Count(&count).Error
+	return int(count), err
+}
+
+// Fetch bookings within the 15-minute window that need to be canceled adn offset by 15 minutes
+func GetBookingsOlderThan(offset time.Time) ([]booking.Booking, error) {
+	var bookings []booking.Booking
+	if err := db.PgDB.Where("created_at < ? AND status = ?", offset, "created").Find(&bookings).Error; err != nil {
+		return nil, err
+	}
+	return bookings, nil
 }

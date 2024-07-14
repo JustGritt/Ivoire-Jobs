@@ -6,7 +6,7 @@ import "os"
 type StripeConfig struct {
 	PrivateKey string
 	PublicKey  string
-	WephookKey string
+	WebhookKey string
 }
 
 // GetStripeConfig returns the Stripe configuration
@@ -14,6 +14,6 @@ func GetStripeConfig() StripeConfig {
 	return StripeConfig{
 		PrivateKey: os.Getenv("STRIPE_PRIVATE_KEY"),
 		PublicKey:  os.Getenv("STRIPE_PUBLISHABLE_KEY"),
-		WephookKey: os.Getenv("STRIPE_WEBHOOK_SECRET"),
+		WebhookKey: os.Getenv("STRIPE_WEBHOOK_SECRET"),
 	}
 }
