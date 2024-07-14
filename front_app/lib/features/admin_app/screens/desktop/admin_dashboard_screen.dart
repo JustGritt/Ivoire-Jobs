@@ -19,6 +19,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     '/admin/reports',
     '/admin/banlist',
     '/admin/settings',
+    '/admin/members'
   ];
 
   void _onItemTapped(int index) {
