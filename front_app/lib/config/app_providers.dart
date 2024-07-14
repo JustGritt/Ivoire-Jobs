@@ -1,6 +1,7 @@
 import 'package:barassage_app/features/admin_app/providers/banned_services_provider.dart';
 import 'package:barassage_app/features/admin_app/providers/banned_users_provider.dart';
 import 'package:barassage_app/features/main_app/providers/my_services_provider.dart';
+import 'package:barassage_app/features/profile_mod/providers/bookings_provider.dart';
 import 'package:barassage_app/features/admin_app/providers/reports_provider.dart';
 import 'package:barassage_app/features/main_app/providers/ratings_provider.dart';
 import 'package:barassage_app/core/classes/language_provider.dart';
@@ -42,5 +43,8 @@ List<SingleChildWidget> appProviders = [
   ),
   ChangeNotifierProvider<RatingsProvider>(
     create: (context) => RatingsProvider(),
+  ),
+  ChangeNotifierProvider<BookingsProvider>(
+    create: (context) => BookingsProvider(),
   ),
 ];

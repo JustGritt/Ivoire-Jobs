@@ -46,8 +46,12 @@ class ApiEndpoint {
   // Services Categories Endpoints
   static const serviceCategories = '/category/collection';
   // Ratings Endpoints
-  static const ratings = '${api}/rating';
+  static const ratings = '${api}/rating/collection';
   static const serviceRatings = '${api}/service/:id/rating';
+  // Booking Endpoints
+  static const bookings = '${api}/booking/collection';
+  static const userBookings = '${api}/booking/user/:id';
+  // static const userBookings = '${api}/booking/collection';
   // Push Token
   static const pushTokens = '/auth/update-token';
   // Notifications preferences

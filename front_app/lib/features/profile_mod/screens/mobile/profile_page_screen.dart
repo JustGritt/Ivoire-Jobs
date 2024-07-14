@@ -1,3 +1,4 @@
+import 'package:barassage_app/features/profile_mod/widgets/section_booking_history.dart';
 import 'package:barassage_app/features/profile_mod/widgets/section_notification_profile.dart';
 import 'package:barassage_app/features/profile_mod/widgets/section_information_profile.dart';
 import 'package:barassage_app/features/profile_mod/widgets/section_information_app.dart';
@@ -82,6 +83,8 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
                   SectionInformationProfile(user: state.user),
                   const SizedBox(height: 20),
                   SectionNotificationProfile(user: state.user),
+                  const SizedBox(height: 20),
+                  SectionBookingsHistory(user: state.user),
                   const SizedBox(height: 20),
                   Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
