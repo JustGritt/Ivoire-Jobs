@@ -82,3 +82,17 @@ func CheckBookingOverlap(userID string, startTime time.Time, endTime time.Time) 
 func GetErrors() error {
 	return db.PgDB.Error
 }
+
+func CountAll() (int64, error) {
+	var count int64
+	if err := db.PgDB.Model(&booking.Booking{}).Where("status = ?", "completed").Count(&count).Error; err != nil {
+		return 0, err
+	}
+	return count, nil
+}
+
+func CountBookingsInRange(startDate, endDate time.Time) (int, error) {
+	var count int64
+	err := db.PgDB.Model(&booking.Booking{}).Where("created_at BETWEEN ? AND ? AND status = ?", startDate, endDate, "completed").Count(&count).Error
+	return int(count), err
+}

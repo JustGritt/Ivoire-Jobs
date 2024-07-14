@@ -58,7 +58,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
       case 4:
         return const DashboardSettings();
       default:
-        return const Placeholder();
+        return const DashboardScreen();
     }
   }
 }

@@ -9,6 +9,8 @@ import 'package:barassage_app/config/app_http.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:dio/dio.dart';
 
+import '../models/dashboard_stats.dart';
+
 class AdminService {
   String? token;
 
@@ -144,6 +146,17 @@ class AdminService {
     } catch (e) {
       debugPrint('Error: $e');
       throw Exception('Failed to approve member request');
+    }
+  }
+
+
+  Future<DashboardStats> fetchDashboardStats() async {
+    final response = await _http.get(ApiEndpoint.adminDashboardStats);
+    if (response.statusCode == 200) {
+      final data = response.data;
+      return DashboardStats.fromJson(data);
+    } else {
+      throw Exception('Failed to load dashboard stats');
     }
   }
 }

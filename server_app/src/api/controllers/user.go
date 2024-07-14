@@ -4,10 +4,12 @@ import (
 	passwordUtil "barassage/api/common/passwordutil"
 	validator "barassage/api/common/validator"
 	cfg "barassage/api/configs"
+	notificationPreference "barassage/api/models/notificationPreference"
 	"barassage/api/models/pushToken"
 	refreshtoken "barassage/api/models/refreshToken"
 	"barassage/api/models/user"
 	banRepo "barassage/api/repositories/ban"
+	notificationPreferenceRepo "barassage/api/repositories/notificationPreference"
 	refreshTokenRepo "barassage/api/repositories/refreshToken"
 	userRepo "barassage/api/repositories/user"
 	"barassage/api/services/auth"
@@ -852,6 +854,21 @@ func PatchToken(c *fiber.Ctx) error {
 			},
 		)
 		return c.Status(http.StatusBadRequest).JSON(HTTPErrorResponse(errorList))
+	}
+
+	//create the notification preference
+	if err := notificationPreferenceRepo.Create(&notificationPreference.NotificationPreference{
+		UserID: dbUser.ID,
+	}); err != nil {
+		errorList = append(
+			[]*Response{},
+			&Response{
+				Code:    http.StatusInternalServerError,
+				Message: "Could not create notification preference",
+				Data:    nil,
+			},
+		)
+		return c.Status(http.StatusInternalServerError).JSON(HTTPErrorResponse(errorList))
 	}
 
 	return c.SendStatus(http.StatusOK)

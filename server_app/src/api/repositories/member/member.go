@@ -85,3 +85,11 @@ func ValidateMember(id string, status string) error {
 func GetErrors() error {
 	return db.PgDB.Error
 }
+
+func CountAll() (int64, error) {
+	var count int64
+	if err := db.PgDB.Model(&member.Member{}).Where("status =  ?", "member").Count(&count).Error; err != nil {
+		return 0, err
+	}
+	return count, nil
+}

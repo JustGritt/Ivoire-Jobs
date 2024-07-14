@@ -33,6 +33,7 @@ class ApiEndpoint {
   static const addAdmin = '${api}/auth/register-admin';
   static const memberRequests = '${api}/member';
   static const approveMember = '${api}/member/:id/validate';
+  static const adminDashboardStats = '${api}/dashboard/stats';
 
   static const updateProfile = '/auth/update-profile';
 
@@ -49,7 +50,7 @@ class ApiEndpoint {
   // Push Token
   static const pushTokens = '/auth/update-token';
   // Notifications preferences
-  static const notificationPreferences = '/user/notification-preference';
+  static const notificationPreferences = '/notification-preference';
   // become barasseur
   static const becomeBarasseur = '/member';
   // Reports Endpoints

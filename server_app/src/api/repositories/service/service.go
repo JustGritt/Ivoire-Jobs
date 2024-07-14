@@ -184,3 +184,11 @@ func DeleteImage(service *service.Service, imageURL string) error {
 	}
 	return nil
 }
+
+func CountAll() (int64, error) {
+	//get all services that are active and not banned
+	var count int64
+	query := db.PgDB.Model(&service.Service{}).Where("status = ? AND is_banned = ?", true, false)
+	err := query.Count(&count).Error
+	return count, err
+}
