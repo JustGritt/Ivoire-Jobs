@@ -29,7 +29,8 @@
     "btn_login": "Se connecter",
     "tab_1": "Home",
     "tab_2": "Mes services",
-    "tab_3": "Profil",
+    "tab_3": "Bookings",
+    "tab_4": "Profil",
     "permission_denied_camera": "La camera n'est pas accessible. Veuillez l'activer dans les paramètres de l'appareil.",
     "permission_denied_gallery": "La galerie n'est pas accessible. Veuillez l'activer dans les paramètres de l'appareil.",
 
@@ -70,5 +71,7 @@
     "become_bassage_partner_title": "Devenir barasseur",
     "become_bassage_partner_input_placeholder": "Expliquez en quelques mots pourquoi vous souhaitez devenir barasseur ?",
     "become_bassage_partner_submit": "Envoyer ma demande",
-    "become_bassage_partner_description": "Veuillez remplir le formulaire ci-dessous pour envoyer votre demande."
+    "become_bassage_partner_description": "Veuillez remplir le formulaire ci-dessous pour envoyer votre demande.",
+
+    "book": "Réserver"
 }

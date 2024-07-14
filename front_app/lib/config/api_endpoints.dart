@@ -53,6 +53,8 @@ class ApiEndpoint {
   static const notificationPreferences = '/notification-preference';
   // become barasseur
   static const becomeBarasseur = '/member';
+  // Booking Services
+  static const bookingServices = '/booking';
   // Reports Endpoints
   static const reports = '${api}/report/pending';
   static const reportsDetails = '${api}/report/:id';

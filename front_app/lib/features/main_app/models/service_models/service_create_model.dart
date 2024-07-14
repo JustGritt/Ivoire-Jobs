@@ -4,7 +4,6 @@ import 'package:barassage_app/features/main_app/models/location_service.dart';
 import 'package:barassage_app/features/main_app/models/service_models/service_category_model.dart';
 import 'package:dio/dio.dart';
 
-// ['','']
 List<String> serviceCategoryToJson(List<ServiceCategory> data) {
   return data.map((e) => e.id).toList();
 }

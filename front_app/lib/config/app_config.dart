@@ -8,4 +8,6 @@ class Config {
   // Server Secrate Token
   static String token = 'Bearer ${dotenv.get("API_TOKEN")}';
   static String googleApiMaps = dotenv.get("GOOGLE_API_MAPS");
+  static String stripePublicKey = dotenv.get("STRIPE_PUBLIC_KEY");
+  static String currency = "XOF";
 }

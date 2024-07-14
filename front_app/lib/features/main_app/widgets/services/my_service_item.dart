@@ -149,7 +149,7 @@ class MyServiceItem extends StatelessWidget {
                                               )),
                                           TextSpan(
                                             text:
-                                                '${serviceModel.price.toInt()} F ',
+                                                '${serviceModel.price} F ',
                                             style: theme.textTheme.titleMedium!
                                                 .copyWith(
                                               fontSize: 18.0,

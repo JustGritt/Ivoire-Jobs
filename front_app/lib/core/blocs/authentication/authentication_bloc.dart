@@ -92,6 +92,7 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
       emit(AuthenticationLoadingState());
       try {
         User? user = await getMyProfile();
+
         if (user != null) {
           emit(AuthenticationSuccessState(user));
         } else {

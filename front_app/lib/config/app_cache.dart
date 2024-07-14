@@ -34,6 +34,10 @@ class AppCache {
     return null;
   }
 
+  Future<void> setUser(User user) async {
+    Cache.saveData('user', user.toJsonEncodable());
+  }
+
   Future<String> setToken() async {
     String token = await Cache.readData('token');
     return token;

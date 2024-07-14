@@ -23,15 +23,14 @@ class _ServiceState extends State<Service> {
   @override
   void initState() {
     super.initState();
+    final myServicesProvider =
+        Provider.of<MyServicesProvider>(context, listen: false);
+    myServicesProvider.getAll();
     _name = TextEditingController(text: 'Guest');
   }
 
   @override
   Widget build(BuildContext context) {
-    final myServicesProvider =
-        Provider.of<MyServicesProvider>(context, listen: false);
-    myServicesProvider.getAll();
-
     var theme = Theme.of(context);
     return SuperScaffold(
       appBar: SuperAppBar(
