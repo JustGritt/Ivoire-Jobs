@@ -1,37 +1,43 @@
 class Category {
+  String id;
   String name;
-  String description;
-  int duration;
-  bool isActive = false;
-  DateTime createdAt = DateTime.now();
-  DateTime updatedAt = DateTime.now();
+  bool status;
 
   Category({
+    required this.id,
     required this.name,
-    required this.description,
-    required this.duration,
-    required this.isActive,
-    required this.createdAt,
-    required this.updatedAt,
+    required this.status,
   });
 
   factory Category.fromJson(Map<String, dynamic> json) => Category(
-        name: json['name'],
-        description: json['description'],
-        duration: json['duration'],
-        isActive: json['isActive'],
-        createdAt: json['createdAt'],
-        updatedAt: json['updatedAt'],
-      );
+    id: json['id'],
+    name: json['name'],
+    status: json['status'],
+  );
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['name'] = name;
+    data['status'] = status;
+    return data;
+  }
+}
+
+class CategoryRequest {
+  String name;
+
+  CategoryRequest({
+    required this.name,
+  });
+
+  factory CategoryRequest.fromJson(Map<String, dynamic> json) => CategoryRequest(
+    name: json['name'],
+  );
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['name'] = name;
-    data['description'] = description;
-    data['duration'] = duration;
-    data['isActive'] = isActive;
-    data['createdAt'] = createdAt;
-    data['updatedAt'] = updatedAt;
     return data;
   }
 }
