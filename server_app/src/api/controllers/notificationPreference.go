@@ -29,7 +29,7 @@ type NotificationPrefObject struct {
 // @Param payload body NotificationPrefObject true "Notification Preference Body"
 // @Success 200 {object} NotificationPrefObject
 // @Failure 400 {array} ErrorResponse
-// @Router /user/notification-preference [post]
+// @Router /notification-preference [put]
 // @Security Bearer
 func CreateOrUpdateNotificationPreference(c *fiber.Ctx) error {
 	var notificationPreferenceInput NotificationPrefObject
@@ -95,6 +95,45 @@ func CreateOrUpdateNotificationPreference(c *fiber.Ctx) error {
 	return c.Status(http.StatusOK).JSON(notificationPreferenceInput)
 }
 
+// GetNotificationPreference handles the retrieval of a notification preference.
+// @Summary Get Notification Preference
+// @Description Get a notification preference
+// @Tags NotificationPreference
+// @Produce json
+// @Success 200 {object} NotificationPrefObject
+// @Failure 400 {array} ErrorResponse
+// @Router /user/notification-preference [get]
+// @Security Bearer
+func GetNotificationPreference(c *fiber.Ctx) error {
+	user := c.Locals("user").(*jwt.Token)
+	claims := user.Claims.(jwt.MapClaims)
+	userID := claims["userID"]
+	errorList := []*fiber.Error{}
+	if userID == nil {
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusBadRequest,
+				Message: "User ID is required",
+			},
+		)
+	}
+
+	notificationPreference, err := notificationRepo.GetByUserID(userID.(string))
+	if err != nil {
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusNotFound,
+				Message: "Notification preference not found",
+			},
+		)
+		return c.Status(http.StatusNotFound).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
+	return c.Status(http.StatusOK).JSON(mapPreferenceToOutput(notificationPreference))
+}
+
 // ============================================================
 // =================== Private Methods ========================
 // ============================================================
@@ -106,5 +145,15 @@ func mapInputToPreference(input NotificationPrefObject) *notificationPreference.
 		MessageNotification: input.MessageNotification,
 		ServiceNotification: input.ServiceNotification,
 		UserID:              input.UserID,
+	}
+}
+
+func mapPreferenceToOutput(preference *notificationPreference.NotificationPreference) NotificationPrefObject {
+	return NotificationPrefObject{
+		PushNotification:    preference.PushNotification,
+		BookingNotification: preference.BookingNotification,
+		MessageNotification: preference.MessageNotification,
+		ServiceNotification: preference.ServiceNotification,
+		UserID:              preference.UserID,
 	}
 }

@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"barassage/api/database"
+	"barassage/api/models/ban"
 	"barassage/api/models/report"
 	"barassage/api/models/service" // Import the correct package for Service model
 	"barassage/api/models/user"
@@ -104,4 +105,17 @@ func GetAllUsers(userType string) ([]user.User, error) {
 	// Execute the query
 	err := query.Find(&users).Error
 	return users, err
+}
+
+func CountAll() (int64, error) {
+	//get all user active and not banned, banned is bans table
+	var count int64
+	err := database.PgDB.Model(&user.User{}).
+		Where("active = ?", true).
+		Not("id IN (?)", database.PgDB.Model(&ban.Ban{}).Select("user_id")).
+		Count(&count).Error
+	if err != nil {
+		return 0, err
+	}
+	return count, nil
 }

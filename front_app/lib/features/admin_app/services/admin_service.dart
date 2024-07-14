@@ -1,4 +1,5 @@
 import 'package:barassage_app/features/admin_app/models/category.dart';
+import 'package:barassage_app/features/admin_app/models/member.dart';
 import 'package:barassage_app/features/auth_mod/models/api_response.dart';
 import 'package:barassage_app/features/admin_app/models/admin_user.dart';
 import 'package:barassage_app/features/admin_app/models/service.dart';
@@ -8,6 +9,8 @@ import 'package:barassage_app/config/app_http.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:dio/dio.dart';
+
+import '../models/dashboard_stats.dart';
 
 class AdminService {
   String? token;
@@ -143,6 +146,47 @@ class AdminService {
     } catch (e) {
       debugPrint('Error: $e');
       throw Exception('Failed to load categories');
+    }
+  }
+
+  Future<List<Member>> getMemberRequests() async {
+    try {
+      Response res = await _http.get(ApiEndpoint.memberRequests);
+      if (res.statusCode == 200) {
+        List<Member> members =
+            (res.data as List).map((e) => Member.fromJson(e)).toList();
+        return members;
+      }
+      throw Exception('Failed to load member requests');
+    } catch (e) {
+      debugPrint('Error: $e');
+      throw Exception('Failed to load member requests');
+    }
+  }
+
+  Future<void> approveMemberRequest(String id, String action) async {
+    try {
+      Response res = await _http.put(ApiEndpoint.approveMember.replaceAll(':id', id), data: {
+        'status': action,
+      });
+      if (res.statusCode == 201) {
+        return;
+      }
+      throw Exception('Failed to approve member request');
+    } catch (e) {
+      debugPrint('Error: $e');
+      throw Exception('Failed to approve member request');
+    }
+  }
+
+
+  Future<DashboardStats> fetchDashboardStats() async {
+    final response = await _http.get(ApiEndpoint.adminDashboardStats);
+    if (response.statusCode == 200) {
+      final data = response.data;
+      return DashboardStats.fromJson(data);
+    } else {
+      throw Exception('Failed to load dashboard stats');
     }
   }
 }

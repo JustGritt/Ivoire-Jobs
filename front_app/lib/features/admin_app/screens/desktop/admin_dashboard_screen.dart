@@ -19,6 +19,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     '/admin/reports',
     '/admin/banlist',
     '/admin/settings',
+    '/admin/members'
   ];
 
   void _onItemTapped(int index) {
@@ -57,7 +58,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
       case 4:
         return const DashboardSettings();
       default:
-        return const Placeholder();
+        return const DashboardScreen();
     }
   }
 }

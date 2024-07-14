@@ -8,20 +8,43 @@ class NotificationPreferencesService {
   NotificationPreferencesService();
   final AppHttp _http = AppHttp();
 
-  Future<void> storePreferences(NotificationPreferences preferences) async {
+  Future<NotificationPreferences> storePreferences(NotificationPreferences preferences) async {
     try {
-      Response res = await _http.patch(
+      print("Storing preferences: ${preferences.toJson()}");
+      Response res = await _http.put(
         ApiEndpoint.notificationPreferences,
         data: preferences.toJson(),
       );
-
+      debugPrint("Response: ${res.data}");
       if (res.statusCode == 200) {
-        debugPrint("Preferences stored successfully.");
-        return;
+        debugPrint("Preferences stored successfully. Response: ${res.data}");
+        return NotificationPreferences.fromJson(res.data);
+      } else {
+        throw Exception("Failed to store preferences. Status code: ${res.statusCode}, Message: ${res.data['message']}");
       }
-      throw Exception(res.data['message']);
     } catch (e) {
       debugPrint("Error storing preferences: $e");
+      rethrow;
+    }
+  }
+
+  Future<NotificationPreferences?> fetchPreferences(String userId) async {
+    try {
+      print("Fetching preferences for user: $userId");
+      Response res = await _http.get(ApiEndpoint.notificationPreferences);
+      debugPrint("Response: ${res.data}");
+      if (res.statusCode == 200) {
+        debugPrint("Preferences fetched successfully. Response: ${res.data}");
+        return NotificationPreferences.fromJson(res.data);
+      } else if (res.statusCode == 404) {
+        debugPrint("Preferences not found for user: $userId");
+        return null; // Return null if not found
+      } else {
+        throw Exception("Failed to fetch preferences. Status code: ${res.statusCode}, Message: ${res.data['message']}");
+      }
+    } catch (e) {
+      debugPrint("Error fetching preferences: $e");
+      rethrow;
     }
   }
 }

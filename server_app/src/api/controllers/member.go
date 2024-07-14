@@ -130,17 +130,36 @@ func CreateMember(c *fiber.Ctx) error {
 // @Description Get all pending requests
 // @Tags Member
 // @Produce json
+// @Param status query string false "Status of the requests" Enums(processing, member, rejected, all)
 // @Success 200 {object} Response
 // @Failure 400 {array} ErrorResponse
 // @Failure 401 {array} ErrorResponse
 // @Failure 500 {array} ErrorResponse
-// @Router /member/pending [get]
+// @Router /member [get]
 // @Security Bearer
-func GetAllPendingRequests(c *fiber.Ctx) error {
+func GetAllRequests(c *fiber.Ctx) error {
 	var errorList []*fiber.Error
 
+	//get query params
+	status := c.Query("status")
+	if status == "" {
+		status = "processing"
+	}
+
+	// Validate status
+	if status != "processing" && status != "member" && status != "rejected" && status != "all" {
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusBadRequest,
+				Message: "status must be 'processing', 'member', 'rejected', or 'all'",
+			},
+		)
+		return c.Status(fiber.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
 	// Get all pending requests
-	members, err := memberRepo.GetAllPendingRequests()
+	members, err := memberRepo.GetAllRequests(status)
 	if err != nil {
 		errorList = append(errorList, &fiber.Error{
 			Code:    http.StatusInternalServerError,
@@ -153,6 +172,10 @@ func GetAllPendingRequests(c *fiber.Ctx) error {
 	var memberOutputs []*MemberOutput
 	for _, member := range members {
 		memberOutputs = append(memberOutputs, mapMemberToOutput(&member))
+	}
+	if len(memberOutputs) == 0 {
+		//return empty array
+		return c.Status(http.StatusOK).JSON([]MemberOutput{})
 	}
 
 	return c.Status(http.StatusOK).JSON(memberOutputs)
@@ -249,7 +272,6 @@ func ValidateMember(c *fiber.Ctx) error {
 	)
 	if err != nil {
 		log.Printf("error sending message: %v", err)
-		return c.Status(http.StatusInternalServerError).JSON(HTTPResponse(http.StatusInternalServerError, "Error", err.Error()))
 	}
 	log.Printf("%d messages were sent successfully\n", resp.SuccessCount)
 
