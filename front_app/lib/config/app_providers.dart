@@ -44,7 +44,7 @@ List<SingleChildWidget> appProviders = [
   ),
   ChangeNotifierProvider<CategoriesProvider>(
     create: (context) => CategoriesProvider(),
-  )
+  ),
   ChangeNotifierProvider<MembersProvider>(
     create: (context) => MembersProvider(),
   ),
