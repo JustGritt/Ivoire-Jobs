@@ -307,7 +307,7 @@ func GetBookingService(c *fiber.Ctx) error {
 // @Failure 400 {array} ErrorResponse
 // @Failure 401 {array} ErrorResponse
 // @Failure 500 {array} ErrorResponse
-// @Router /booking [get]
+// @Router /booking/collection [get]
 func GetBookings(c *fiber.Ctx) error {
 	var bookings []booking.Booking
 	var errorList []*fiber.Error
