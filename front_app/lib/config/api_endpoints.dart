@@ -8,8 +8,8 @@ class ApiEndpoint {
 
   // Server Links
   // static const baseUrl = 'http://localhost:8000';
-  static const baseUrl = 'http://10.0.2.2:8000';
-  // static const baseUrl = 'https://api.barassage.com';
+  // static const baseUrl = 'http://10.0.2.2:8000';
+  static const baseUrl = 'https://api.barassage.com';
   //static const baseUrl = 'https://fantastic-space-doodle-w59vv7w5w7pfp9j-8000.app.github.dev';
   static const api = '${baseUrl}/api/v1';
 
@@ -46,7 +46,7 @@ class ApiEndpoint {
   // Services Categories Endpoints
   static const serviceCategories = '/category/collection';
   // Ratings Endpoints
-  static const ratings = '${api}/rating/collection';
+  static const ratings = '${api}/rating';
   static const serviceRatings = '${api}/service/:id/rating';
   // Booking Endpoints
   static const bookings = '${api}/booking/collection';

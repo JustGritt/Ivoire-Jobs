@@ -21,7 +21,7 @@ class RatingsProvider extends ChangeNotifier {
     isLoading = true;
     notifyListeners();
     try {
-      Response res = await _http.get(ApiEndpoint.ratings);
+      Response res = await _http.get('${ApiEndpoint.ratings}/collection');
       if (res.statusCode == 200 && res.data is List) {
         _ratings = List<Rating>.from(res.data.map((item) => Rating.fromJson(item)));
       } else {
@@ -62,5 +62,25 @@ class RatingsProvider extends ChangeNotifier {
       print('Current ratings: $ratings');
     }
     return ratings;
+  }
+
+  Future<void> submitComment(String bookingId, String comment, int rating, String serviceId, String userId) async {
+    try {
+      Response res = await _http.post('${ApiEndpoint.ratings}',
+        data: {
+          'comment': comment,
+          'rating': rating,
+          'serviceId': serviceId,
+          'userId': userId,
+        },
+      );
+      if (res.statusCode == 200) {
+        print("Comment and rating submitted successfully");
+      } else {
+        print("Failed to submit comment and rating: ${res.statusCode}");
+      }
+    } catch (e) {
+      print("Error submitting comment and rating: $e");
+    }
   }
 }
