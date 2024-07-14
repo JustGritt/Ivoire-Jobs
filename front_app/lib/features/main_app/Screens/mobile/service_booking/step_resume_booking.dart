@@ -8,32 +8,40 @@ import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:jiffy/jiffy.dart';
 
 class StepResumeBooking extends StatefulWidget {
+  final PhoneNumber? defaultPhone;
   final ServiceCreatedModel service;
   final LocationService location;
   final DateTime dateTime;
-  final Function(String phone) onEndAddPhone;
+  final Function(PhoneNumber? phone) onEndAddPhone;
 
   const StepResumeBooking(
       {super.key,
       required this.service,
       required this.location,
+      this.defaultPhone,
       required this.dateTime,
-      required this.onEndAddPhone
-      });
+      required this.onEndAddPhone});
 
   @override
   State<StepResumeBooking> createState() => _StepResumeBookingState();
 }
 
 class _StepResumeBookingState extends State<StepResumeBooking> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
   final TextEditingController controller = TextEditingController();
   String initialCountry = 'CI';
   PhoneNumber number = PhoneNumber(isoCode: 'CI');
+
+  @override
+  void initState() {
+    controller.text = widget.defaultPhone?.phoneNumber ?? '';
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -203,7 +211,10 @@ class _StepResumeBookingState extends State<StepResumeBooking> {
                   ),
                   InternationalPhoneNumberInput(
                     onInputChanged: (PhoneNumber number) {
-                      if(number.phoneNumber != null) widget.onEndAddPhone(number.phoneNumber!);
+                      if (number.phoneNumber == number.dialCode) {
+                        return widget.onEndAddPhone(null);
+                      }
+                      widget.onEndAddPhone(number);
                     },
                     autoValidateMode: AutovalidateMode.onUserInteraction,
                     spaceBetweenSelectorAndTextField: 0,
@@ -211,15 +222,10 @@ class _StepResumeBookingState extends State<StepResumeBooking> {
                       borderSide: BorderSide(style: BorderStyle.none, width: 0),
                       borderRadius: BorderRadius.circular(8),
                     ),
-
                     validator: (String? value) {
                       if (value!.isEmpty) {
                         return 'Please enter your phone number';
                       }
-                      // // Ensure it is only digits and optional '+' or '00' for the country code.
-                      // if (!RegExp(r'^(\+|00)?[0-9]+$').hasMatch(value)) {
-                      //   return 'Please enter a valid phone number';
-                      // }
 
                       return null; // Return null when the input is valid
                     },
@@ -251,9 +257,9 @@ class _StepResumeBookingState extends State<StepResumeBooking> {
                               BorderSide(style: BorderStyle.none, width: 0),
                           borderRadius: BorderRadius.circular(8),
                         )),
-                    onSaved: (PhoneNumber number) {
-                      print('On Saved: $number');
-                    },
+                    // onSaved: (PhoneNumber number) {
+                    //   print('On Saved: $number');
+                    // },
                   ),
                 ],
               )),

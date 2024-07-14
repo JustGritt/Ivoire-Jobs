@@ -7,7 +7,9 @@
         android:label="Barassage"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
-        android:requestLegacyExternalStorage="true">
+        android:requestLegacyExternalStorage="true"
+        android:enableOnBackInvokedCallback="true"
+>
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -25,8 +27,6 @@
               android:resource="@style/NormalTheme"
               />
             <meta-data android:name="flutterEmbedding" android:value="2"/>
-            <meta-data android:name="com.google.android.geo.API_KEY"
-               android:value="AIzaSyCjxv1yp4NEU4gMTu6_pbEr6MMVovcI2Lk"/>
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -37,6 +37,8 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <meta-data android:name="com.google.android.geo.API_KEY"
+               android:value="AIzaSyCjxv1yp4NEU4gMTu6_pbEr6MMVovcI2Lk"/>
     </application>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>

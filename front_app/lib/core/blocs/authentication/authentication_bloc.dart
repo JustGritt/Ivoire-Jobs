@@ -96,6 +96,7 @@ class AuthenticationBloc
       emit(AuthenticationLoadingState());
       try {
         User? user = await getMyProfile();
+
         if (user != null) {
           emit(AuthenticationSuccessState(user));
         } else {

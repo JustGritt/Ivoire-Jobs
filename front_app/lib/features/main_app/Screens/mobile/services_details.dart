@@ -5,6 +5,7 @@ import 'package:barassage_app/features/main_app/widgets/details_service/section_
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ServiceDetailPage extends StatelessWidget {
   final ServiceCreatedModel service;
@@ -14,6 +15,8 @@ class ServiceDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
+    AppLocalizations appLocalizations = AppLocalizations.of(context)!;
+    
     return Scaffold(
         extendBodyBehindAppBar: true,
         backgroundColor: theme.scaffoldBackgroundColor,
@@ -137,6 +140,7 @@ class ServiceDetailPage extends StatelessWidget {
                                     ],
                                   ),
                                 ),
+                                SizedBox(height: 156),
                               ],
                             ),
                           ),
@@ -157,7 +161,6 @@ class ServiceDetailPage extends StatelessWidget {
                     ],
                   ),
                 ),
-                
                 Positioned(
                   bottom: 10,
                   left: 0,
@@ -201,22 +204,40 @@ class ServiceDetailPage extends StatelessWidget {
                                 style: theme.textTheme.labelMedium?.copyWith(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
-                                  color: theme.colorScheme.surface,
+                                  color: theme.primaryColorDark,
                                 ),
                               ),
-                              Text(
-                                '${service.price.toInt()} XOF',
-                                style: theme.textTheme.labelMedium?.copyWith(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    service.price,
+                                    style:
+                                        theme.textTheme.labelMedium?.copyWith(
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    'XOF',
+                                    style:
+                                        theme.textTheme.labelMedium?.copyWith(
+                                      fontSize: 14,
+                                      color: theme.colorScheme.surface,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
                           CupertinoButton(
                               color: theme.primaryColor,
+                              minSize: 0,
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 12, horizontal: 20),
                               onPressed: () {
-                                context.pushNamed(App.bookingService, extra: service);
+                                context.pushNamed(App.bookingService,
+                                    extra: service);
                               },
                               child: Row(
                                 children: [
@@ -226,7 +247,7 @@ class ServiceDetailPage extends StatelessWidget {
                                   ),
                                   const SizedBox(width: 10),
                                   Text(
-                                    'Book Now',
+                                    appLocalizations.book,
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 16,
@@ -235,13 +256,11 @@ class ServiceDetailPage extends StatelessWidget {
                                   ),
                                 ],
                               )),
-                        
                         ],
                       ),
                     ),
                   ),
                 ),
-              
               ],
             )));
   }

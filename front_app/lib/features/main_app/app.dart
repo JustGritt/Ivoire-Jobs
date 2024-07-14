@@ -3,22 +3,23 @@ import 'package:barassage_app/core/classes/app_context.dart';
 import 'package:barassage_app/core/init_dependencies.dart';
 import 'package:barassage_app/features/auth_mod/screens/mobile/main_wrapper.dart';
 import 'package:barassage_app/features/auth_mod/screens/mobile/splash_mobile_screen.dart';
+import 'package:barassage_app/features/bookings_mod/controllers/main/bookings_controller.dart';
 import 'package:barassage_app/features/main_app/Screens/mobile/new_service.dart';
 import 'package:barassage_app/features/main_app/Screens/mobile/service_booking/service_booking.dart';
+import 'package:barassage_app/features/main_app/Screens/mobile/service_booking/service_booking_success.dart';
 import 'package:barassage_app/features/main_app/Screens/mobile/services_details.dart';
 import 'package:barassage_app/features/main_app/controllers/controller.dart';
 import 'package:barassage_app/features/main_app/controllers/main/services_controller.dart';
-import 'package:barassage_app/features/main_app/models/service_models/service_create_model.dart';
 import 'package:barassage_app/features/main_app/models/service_models/service_created_model.dart';
 import 'package:barassage_app/features/main_app/widgets/transition_page.dart';
 import 'package:barassage_app/features/profile_mod/controllers/main/profile_controller.dart';
 import 'package:barassage_app/features/profile_mod/screens/mobile/become_barasseur_screen.dart';
 import 'package:barassage_app/features/profile_mod/screens/mobile/edit_profile_screen.dart';
-// import 'package:barassage_app/features/main_app/controllers/main/home_controller.dart';
+// import 'package:location_picker_flutter_map/location_picker_flutter_map.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:place_picker/entities/localization_item.dart';
-import 'package:place_picker/place_picker.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_maps_place_picker_mb/google_maps_place_picker.dart';
 import '../../core/classes/route_manager.dart';
 // import 'controllers/controller.dart';
 
@@ -31,16 +32,19 @@ class App extends RouteManager {
   static const String serviceNew = 'newService';
   static const String serviceNewSuccess = 'newServiceSuccess';
   static const String bookingService = 'bookingService';
+  static const String bookingServices = '/bookingServices';
   static const String splash = '${App.name}/splash';
   static const String contact = '${App.name}/contact';
   static const String news = '${App.name}/news';
   static const String profile = '${App.name}/profile';
   static const String editProfile = 'editProfile';
   static const String becomeWorker = 'becomeWorker';
+  static const String serviceBookingSuccess = 'serviceBookingSuccess';
 
   final _rootKey = serviceLocator<AppContext>().navigatorKey;
   final _shellHomeKey = GlobalKey<NavigatorState>(debugLabel: 'shellHome');
   final _shellMapsKey = GlobalKey<NavigatorState>(debugLabel: 'Maps');
+  final _shellBookingKey = GlobalKey<NavigatorState>(debugLabel: 'Booking');
   final _shellProfileKey = GlobalKey<NavigatorState>(debugLabel: 'Profile');
 
   App() {
@@ -59,12 +63,16 @@ class App extends RouteManager {
                 routes: [
                   GoRoute(
                     path: App.detailService,
-                    builder: (context, state) => ServiceDetailPage(service: state.extra as ServiceCreatedModel,),
+                    builder: (context, state) => ServiceDetailPage(
+                      service: state.extra as ServiceCreatedModel,
+                    ),
                   ),
                   GoRoute(
                     name: App.bookingService,
                     path: App.bookingService,
-                    builder: (context, state) => ServiceBookingScreen(service: state.extra as ServiceCreatedModel,),
+                    builder: (context, state) => ServiceBookingScreen(
+                      service: state.extra as ServiceCreatedModel,
+                    ),
                   ),
                 ],
               ),
@@ -92,14 +100,36 @@ class App extends RouteManager {
                     name: 'placesPicker',
                     path: App.placePicker,
                     builder: (context, state) => PlacePicker(
-                      Config.googleApiMaps,
-                      localizationItem: LocalizationItem(
-                        languageCode: 'en',
-                      ),
+                      apiKey: Config.googleApiMaps,
+                      region: 'CI',
+                      onPlacePicked: (result) {
+                        context.pop(result);
+                      },
+                      usePlaceDetailSearch: true,
+                      initialPosition: LatLng(37.4219999, -122.0862462),
+                      useCurrentLocation: true,
+                      resizeToAvoidBottomInset:
+                          false, // only works in page mode, less flickery, remove if wrong offsets
+                    ),
+                  ),
+                  GoRoute(
+                    name: App.serviceNewSuccess,
+                    path: App.serviceNewSuccess,
+                    builder: (context, state) => ServiceBookingSuccess(
+                      service: (state.extra as ServiceBookingSuccessModel),
                     ),
                   ),
                 ],
               ),
+            ],
+          ),
+          StatefulShellBranch(
+            navigatorKey: _shellBookingKey,
+            routes: [
+              GoRoute(
+                  path: App.bookingServices,
+                  builder: (context, state) => BookingsController(),
+                  routes: []),
             ],
           ),
           StatefulShellBranch(

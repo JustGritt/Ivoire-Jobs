@@ -1,4 +1,3 @@
-import 'package:barassage_app/features/main_app/models/api_base_model.dart';
 import 'package:barassage_app/features/main_app/models/service_models/booking_service_model/booking_service_created_model.dart';
 import 'package:dio/dio.dart';
 
@@ -14,8 +13,7 @@ class BookingServiceServices {
       data: await booking.toJson(),
     );
     if (res.statusCode == 201) {
-      ApiBaseModel apiResponse = ApiBaseModel.fromJson(res.data);
-      return BookingServiceCreatedModel.fromJson(apiResponse.body);
+      return BookingServiceCreatedModel.fromJson(res.data);
     }
     throw res.data['message'];
   }

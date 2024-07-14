@@ -32,22 +32,24 @@ dependencies:
   flutter_local_notifications: ^17.0.1
   flutter_localizations:
     sdk: flutter
-  flutter_map: ^6.1.0
+  flutter_map: ^7.0.0
   flutter_slidable_panel: ^1.1.3
   flutter_spinner_time_picker: ^0.2.1
   flutter_staggered_animations: ^1.1.1
   flutter_stripe: ^10.2.0
-  flutter_svg: ^1.1.6
+  flutter_svg: ^2.0.0+1
   flutter_swipe_action_cell: ^3.1.3
   geolocator: ^12.0.0
   get_it: ^7.7.0
   glassmorphism: ^3.0.0
   go_router: ^14.1.4
   google_maps_flutter: ^2.7.0
+  google_maps_place_picker_mb:
+    git:
+      url: https://github.com/alexdieudonne/google_maps_place_picker_mb.git
   googleapis: ^13.2.0
   googleapis_auth: ^1.6.0
   http: ^1.2.1
-  icon_forest: ^1.1.8
   insta_assets_picker: ^2.3.0
   intl: any
   intl_phone_number_input: ^0.7.4
@@ -57,6 +59,8 @@ dependencies:
   loading_animation_widget: ^1.2.1
   local_auth: ^2.1.7
   logger: ^2.3.0
+  lottie: ^3.1.2
+  map_location_picker: ^1.3.0
   place_picker:
     git:
       url: https://github.com/alexdieudonne/locationpicker.git
@@ -123,3 +127,4 @@ flutter:
     - assets/svg/gift_ico.svg
     - assets/svg/gift.svg
     - assets/svg/test_gift.svg
+    - assets/lotties/success_animation.json

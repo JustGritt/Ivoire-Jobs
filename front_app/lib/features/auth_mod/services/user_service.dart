@@ -11,8 +11,6 @@ import '../../../config/app_http.dart';
 import '../models/user_signup.dart';
 
 class UserService {
-  String? token;
-  UserService({this.token});
   final AppHttp _http = AppHttp();
 
   Future<User?> getAll() async {
@@ -25,7 +23,6 @@ class UserService {
   }
 
   Future<User> getMyProfile() async {
-    print('Token: $token');
     Response res = await _http
         .get(
           ApiEndpoint.appProfileUrl,

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:barassage_app/features/main_app/app.dart';
 import 'package:barassage_app/features/main_app/models/service_models/service_created_model.dart';
 import 'package:flutter/material.dart';
@@ -138,7 +136,7 @@ class TrendingService extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
-                        'XOF ${service.price.toStringAsFixed(2)}',
+                        '${service.price} XOF',
                         style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:barassage_app/core/blocs/authentication/authentication_bloc.dart';
 import 'package:barassage_app/core/blocs/service/service_bloc.dart';
 import 'package:barassage_app/core/classes/language_provider.dart';
@@ -12,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 import 'dart:io' as io;
@@ -19,6 +22,7 @@ import 'dart:io' as io;
 import 'config/config.dart';
 
 void main() async {
+  
   WidgetsFlutterBinding.ensureInitialized();
   FlutterImageCompress.showNativeLog = true;
   Provider.debugCheckInvalidValueType = null;
@@ -33,6 +37,8 @@ void main() async {
   } catch (e) {}
   await dotenv.load(fileName: envFile);
 
+  Stripe.publishableKey = Config.stripePublicKey;
+  await Stripe.instance.applySettings();
   runApp(MultiBlocProvider(
       providers: [
         BlocProvider(

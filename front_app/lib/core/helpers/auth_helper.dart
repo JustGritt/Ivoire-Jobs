@@ -77,6 +77,7 @@ Future<User?> getMyProfile() async {
   UserService us = serviceLocator<UserService>();
   try {
     User user = await us.getMyProfile();
+    await serviceLocator<AppCache>().setUser(user);
     return user;
   } on DioException catch (e) {
     logger.e(DioExceptionHandler(e).error.message);

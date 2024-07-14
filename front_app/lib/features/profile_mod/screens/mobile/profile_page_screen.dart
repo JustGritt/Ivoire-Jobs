@@ -107,7 +107,6 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
 }
 
 Widget getStatusUser(BuildContext context, User user) {
-  print(user.member);
   ThemeData theme = Theme.of(context);
   AppLocalizations appLocalizations = AppLocalizations.of(context)!;
   double width = MediaQuery.of(context).size.width;

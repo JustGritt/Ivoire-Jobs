@@ -1,3 +1,4 @@
+import 'dart:developer';
 
 import 'package:barassage_app/config/api_endpoints.dart';
 import 'package:barassage_app/config/app_cache.dart';
@@ -21,10 +22,16 @@ class MyServicesProvider extends ChangeNotifier {
 
   void getAll() async {
     isLoading = true;
-    final user = await appCache.getUser();
     try {
+      final user = await appCache.getUser();
+      inspect(user);
+      if (user == null) {
+        isLoading = false;
+        notifyListeners();
+        return;
+      }
       Response res = await _http
-          .get(ApiEndpoint.myServices.replaceAll(':id', user!.id.toString()));
+          .get(ApiEndpoint.myServices.replaceAll(':id', user.id.toString()));
       if (res.statusCode == 200) {
         _serviceModel = serviceFromJson(res.data);
         isLoading = false;

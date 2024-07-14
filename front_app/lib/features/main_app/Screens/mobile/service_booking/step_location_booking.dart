@@ -34,7 +34,6 @@ class _StepLocationBookingState extends State<StepLocationBooking> {
         final zod = Zod.validate(
             data: form,
             params: {'location': Zod().type<LocationService>().required()});
-        print(zod.result);
         if (zod.isNotValid) {
           setState(() {
             errors = zod.result;

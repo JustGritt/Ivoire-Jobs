@@ -8,7 +8,6 @@ List<User> userFromJson(String str) =>
 List<String> member = ['member', 'processing', 'user'];
 
 UserMemberStatusEnum userMemberStatusEnumFromJson(String str) {
-  print('str: $str');
   return  member.contains(str)
         ? UserMemberStatusEnum.values[member.indexOf(str)]
         : UserMemberStatusEnum.user;}
@@ -71,6 +70,8 @@ class User {
       'profilePicture': profilePicture,
       'bio': bio,
       'id': id,
+      'member': member.toString(),
+      'notificationPreferences': notificationPreferences.toJson(),
       'createdAt': createdAt.toIso8601String(),
     };
   }

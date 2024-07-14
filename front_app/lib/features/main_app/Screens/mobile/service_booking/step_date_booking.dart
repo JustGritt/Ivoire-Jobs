@@ -38,7 +38,6 @@ class _StepDateBookingTimeState extends State<StepDateTimeBooking> {
       try {
         final zod = Zod.validate(
             data: form, params: {'date': Zod().type<DateTime>().required()});
-        print(zod.result);
         if (zod.isNotValid) {
           setState(() {
             errors = zod.result;
@@ -141,7 +140,13 @@ class _StepDateBookingTimeState extends State<StepDateTimeBooking> {
                         });
 
                     if (pickedTime != null) {
-                      if (pickedTime.hour < DateTime.now().hour) {
+                      DateTime picked = DateTime(
+                          form['date'].year,
+                          form['date'].month,
+                          form['date'].day,
+                          pickedTime.hour,
+                          pickedTime.minute);
+                      if (picked.isBefore(DateTime.now())) {
                         showMyDialog(
                           context,
                           title: 'Erreur',
