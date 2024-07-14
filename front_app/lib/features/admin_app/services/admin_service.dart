@@ -1,3 +1,4 @@
+import 'package:barassage_app/features/admin_app/models/category.dart';
 import 'package:barassage_app/features/admin_app/models/member.dart';
 import 'package:barassage_app/features/auth_mod/models/api_response.dart';
 import 'package:barassage_app/features/admin_app/models/admin_user.dart';
@@ -116,6 +117,35 @@ class AdminService {
     } catch (e) {
       debugPrint('Error: $e');
       throw Exception('Failed to create admin user: $e');
+    }
+  }
+
+  // get list of categories
+  Future<void> addCategory(String name) async {
+    try {
+      Response res = await _http
+          .post(ApiEndpoint.categories, data: {'name': name});
+      if (res.statusCode != 200) {
+        throw Exception('Failed to add category');
+      }
+    } catch (e) {
+      debugPrint('Error: $e');
+      throw Exception('Failed to add category');
+    }
+  }
+
+  Future<List<Category>> getCategories() async {
+    try {
+      Response res = await _http.get(ApiEndpoint.categoriesCollection);
+      if (res.statusCode == 200) {
+        List<Category> categories =
+            (res.data as List).map((json) => Category.fromJson(json)).toList();
+        return categories;
+      }
+      throw Exception('Unexpected response format');
+    } catch (e) {
+      debugPrint('Error: $e');
+      throw Exception('Failed to load categories');
     }
   }
 

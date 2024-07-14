@@ -58,4 +58,9 @@ class ApiEndpoint {
   static const reportsDetails = '${api}/report/:id';
   // Ban Endpoints
   static const bannedUsers = '${api}/ban/collection';
+
+  // categories Endpoints
+  static const categories = '${api}/category';
+  // categories collection
+  static const categoriesCollection = '${api}/category/collection';
 }
