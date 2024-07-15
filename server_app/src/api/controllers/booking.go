@@ -4,6 +4,7 @@ import (
 	validator "barassage/api/common/validator"
 	"barassage/api/models/booking"
 	"barassage/api/models/contact"
+	"barassage/api/models/service"
 	bookingRepo "barassage/api/repositories/booking"
 	contactRepo "barassage/api/repositories/contact"
 	serviceRepo "barassage/api/repositories/service"
@@ -47,13 +48,14 @@ type UpdateBookingObject struct {
 
 // BookingOutput is the output format of the booking
 type BookingOutput struct {
-	BookingID string    `json:"ID"`
-	UserID    string    `json:"userID"`
-	ServiceID string    `json:"serviceID"`
-	Status    string    `json:"status"`
-	StartTime time.Time `json:"startTime"`
-	EndTime   time.Time `json:"endTime"`
-	Contact   Author    `json:"contact"`
+	BookingID string           `json:"ID"`
+	UserID    string           `json:"userID"`
+	ServiceID string           `json:"serviceID"`
+	Status    string           `json:"status"`
+	StartTime time.Time        `json:"startTime"`
+	EndTime   time.Time        `json:"endTime"`
+	Contact   Author           `json:"contact"`
+	Service   *service.Service `json:"service"`
 }
 
 type Author struct {
@@ -484,10 +486,21 @@ func GetBookings(c *fiber.Ctx) error {
 			)
 			return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
 		}
+		service, err := serviceRepo.GetByID(booking.ServiceID)
+		if err != nil {
+			errorList = append(
+				errorList,
+				&fiber.Error{
+					Code:    fiber.StatusBadRequest,
+					Message: "Error while fetching service",
+				},
+			)
+			return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
+		}
 		bookingsOutput = append(bookingsOutput, BookingOutput{
 			BookingID: booking.ID,
 			UserID:    booking.UserID,
-			ServiceID: booking.ServiceID,
+			Service:   service,
 			Status:    booking.Status,
 			StartTime: booking.StartTime,
 			EndTime:   booking.EndTime,
