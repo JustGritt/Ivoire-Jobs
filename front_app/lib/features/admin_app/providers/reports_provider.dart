@@ -1,11 +1,11 @@
+import 'package:barassage_app/features/admin_app/models/report.dart';
+import 'package:barassage_app/core/classes/app_context.dart';
+import 'package:barassage_app/core/init_dependencies.dart';
 import 'package:barassage_app/config/api_endpoints.dart';
 import 'package:barassage_app/config/app_cache.dart';
 import 'package:barassage_app/config/app_http.dart';
-import 'package:barassage_app/core/classes/app_context.dart';
-import 'package:barassage_app/core/init_dependencies.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:barassage_app/features/admin_app/models/report.dart';
+import 'package:dio/dio.dart';
 
 AppCache appCache = serviceLocator<AppCache>();
 AppContext appContext = serviceLocator<AppContext>();
@@ -24,8 +24,7 @@ class ReportsProvider extends ChangeNotifier {
     try {
       Response res = await _http.get(ApiEndpoint.reports);
       if (res.statusCode == 200 && res.data is List) {
-        _reports =
-            List<Report>.from(res.data.map((item) => Report.fromJson(item)));
+        _reports = List<Report>.from(res.data.map((item) => Report.fromJson(item)));
       } else {
         print("Unexpected response format");
       }
