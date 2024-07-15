@@ -10,6 +10,7 @@ import 'package:barassage_app/config/app_http.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:dio/dio.dart';
 
+import '../models/booking.dart';
 import '../models/dashboard_stats.dart';
 
 class AdminService {
@@ -187,6 +188,21 @@ class AdminService {
       return DashboardStats.fromJson(data);
     } else {
       throw Exception('Failed to load dashboard stats');
+    }
+  }
+
+  Future<List<Booking>> getBookings() async {
+    try {
+      Response res = await _http.get(ApiEndpoint.bookingsCollection);
+      if (res.statusCode == 200) {
+        List<Booking> bookings =
+            (res.data as List).map((e) => Booking.fromJson(e)).toList();
+        return bookings;
+      }
+      throw Exception('Failed to load bookings');
+    } catch (e) {
+      debugPrint('Error: $e');
+      throw Exception('Failed to load bookings');
     }
   }
 }

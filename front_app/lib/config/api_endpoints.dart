@@ -65,4 +65,9 @@ class ApiEndpoint {
   static const categories = '${api}/category';
   // categories collection
   static const categoriesCollection = '${api}/category/collection';
+
+  // bookings Endpoints
+  static const bookings = '${api}/booking';
+  // bookings collection
+  static const bookingsCollection = '${api}/booking/collection';
 }

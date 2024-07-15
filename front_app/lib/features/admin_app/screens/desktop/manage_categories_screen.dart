@@ -16,7 +16,7 @@ class ManageCategoriesScreen extends StatefulWidget {
 }
 
 class _ManageCategoriesScreenState extends State<ManageCategoriesScreen> {
-  late Future<void> categoriesFuture;
+  late Future<List<Category>> categoriesFuture;
 
   @override
   void initState() {
@@ -24,10 +24,11 @@ class _ManageCategoriesScreenState extends State<ManageCategoriesScreen> {
     categoriesFuture = fetchCategories();
   }
 
-  Future<void> fetchCategories() async {
+  Future<List<Category>> fetchCategories() async {
     final categoriesProvider =
     Provider.of<CategoriesProvider>(context, listen: false);
     await categoriesProvider.getAllCategories();
+    return categoriesProvider.categories;
   }
 
   Future<void> showAddCategoryDialog(BuildContext context) async {
@@ -116,7 +117,7 @@ class _ManageCategoriesScreenState extends State<ManageCategoriesScreen> {
           ),
         ],
       ),
-      body: FutureBuilder<void>(
+      body: FutureBuilder<List<Category>>(
         future: categoriesFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {

@@ -11,14 +11,16 @@ class CategoriesProvider with ChangeNotifier {
   List<Category> get categories => _categories;
   bool get isLoading => _isLoading;
 
-  Future<void> getAllCategories() async {
+  Future<List<Category>> getAllCategories() async {
     _isLoading = true;
     notifyListeners();
     try {
-      _categories = (await _adminService.getCategories())!;
+      _categories = (await _adminService.getCategories());
       debugPrint('categories: $_categories');
+      return _categories;
     } catch (e) {
       _categories = [];
+      return _categories;
     } finally {
       _isLoading = false;
       notifyListeners();
