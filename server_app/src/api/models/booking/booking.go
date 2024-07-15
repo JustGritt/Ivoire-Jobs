@@ -14,7 +14,7 @@ type Booking struct {
 	UserID    string          `gorm:"type:uuid;NOT NULL"`
 	ServiceID string          `gorm:"type:uuid;NOT NULL"`
 	CreatorID string          `gorm:"type:uuid;NOT NULL"`
-	Status    string          `gorm:"NOT NULL;DEFAULT:'created'"` // created, completed, cancelled
+	Status    string          `gorm:"NOT NULL;DEFAULT:'created'"` // created, fulfilled, cancelled
 	StartTime time.Time       `gorm:"NOT NULL"`
 	EndTime   time.Time       `gorm:"NOT NULL"`
 	ContactID string          `gorm:"type:uuid;not null"` // Foreign key
