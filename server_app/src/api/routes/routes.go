@@ -133,6 +133,10 @@ func SetupRoutes(app *fiber.App) {
 	room := v1.Group("/room")
 	room.Get("/:id/ws", websocket.New(ctl.HandleWebSocket))
 
+	// Log Group
+	log := v1.Group("/log", middlewares.RequireAdmin())
+	log.Get("/collection", ctl.GetLogs)
+
 	// Dashboard Group
 	dashboard := v1.Group("/dashboard")
 	dashboard.Get("/stats", ctl.GetDashboardStats)

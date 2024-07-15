@@ -37,7 +37,7 @@ type LogOutput struct {
 // @Failure 400 {array} ErrorResponse
 // @Failure 401 {array} ErrorResponse
 // @Failure 500 {array} ErrorResponse
-// @Router /log [get]
+// @Router /log/collection [get]
 // @Security Bearer
 func GetLogs(c *fiber.Ctx) error {
 	queryParams := make(map[string]interface{})
