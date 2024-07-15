@@ -30,3 +30,8 @@ echo "Latest release tag: $LATEST_RELEASE"
 # Set up Flutter environment
 export PATH="$PATH:$(pwd)/flutter/bin"
 echo "export LATEST_RELEASE=$LATEST_RELEASE" >> .env
+
+# Build the Flutter web app
+flutter doctor
+flutter pub get
+flutter build web --release --web-renderer html --output build/web
