@@ -4,7 +4,6 @@ import (
 	validator "barassage/api/common/validator"
 	"barassage/api/models/booking"
 	"barassage/api/models/contact"
-	"barassage/api/models/service"
 	bookingRepo "barassage/api/repositories/booking"
 	contactRepo "barassage/api/repositories/contact"
 	serviceRepo "barassage/api/repositories/service"
@@ -48,14 +47,28 @@ type UpdateBookingObject struct {
 
 // BookingOutput is the output format of the booking
 type BookingOutput struct {
-	BookingID string           `json:"ID"`
-	UserID    string           `json:"userID"`
-	ServiceID string           `json:"serviceID"`
-	Status    string           `json:"status"`
-	StartTime time.Time        `json:"startTime"`
-	EndTime   time.Time        `json:"endTime"`
-	Contact   Author           `json:"contact"`
-	Service   *service.Service `json:"service"`
+	BookingID string    `json:"ID"`
+	UserID    string    `json:"userID"`
+	ServiceID string    `json:"serviceID"`
+	Status    string    `json:"status"`
+	StartTime time.Time `json:"startTime"`
+	EndTime   time.Time `json:"endTime"`
+	Contact   Author    `json:"contact"`
+	Service   Service   `json:"service"`
+}
+
+type Service struct {
+	ID          string    `json:"ID"`
+	UserID      string    `json:"userID"`
+	Title       string    `json:"title"`
+	Description string    `json:"description"`
+	Price       float64   `json:"price"`
+	Duration    int       `json:"duration"`
+	Images      []Image   `json:"image"`
+	CreatedAt   time.Time `json:"createdAt"`
+}
+type Image struct {
+	URL string `json:"url"`
 }
 
 type Author struct {
@@ -497,10 +510,29 @@ func GetBookings(c *fiber.Ctx) error {
 			)
 			return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
 		}
+		var images []Image
+		for _, image := range service.Images {
+			images = append(images, Image{
+				URL: image.URL,
+			})
+		}
+		if len(images) == 0 {
+			images = []Image{}
+		}
+
 		bookingsOutput = append(bookingsOutput, BookingOutput{
 			BookingID: booking.ID,
 			UserID:    booking.UserID,
-			Service:   service,
+			Service: Service{
+				ID:          service.ID,
+				UserID:      service.UserID,
+				Title:       service.Name,
+				Description: service.Description,
+				Price:       service.Price,
+				Images:      images,
+				Duration:    service.Duration,
+				CreatedAt:   service.CreatedAt,
+			},
 			Status:    booking.Status,
 			StartTime: booking.StartTime,
 			EndTime:   booking.EndTime,
