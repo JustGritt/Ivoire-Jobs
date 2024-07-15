@@ -173,7 +173,7 @@ class ServiceDetailPage extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          '${service.price.toInt()} XOF',
+                          '${service.price} XOF',
                           style: theme.textTheme.labelMedium?.copyWith(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,

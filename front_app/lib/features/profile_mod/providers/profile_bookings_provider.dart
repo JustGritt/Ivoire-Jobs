@@ -4,7 +4,7 @@ import 'package:barassage_app/config/app_http.dart';
 import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart';
 
-class BookingsProvider extends ChangeNotifier {
+class ProfileBookingsProvider extends ChangeNotifier {
   List<Booking> _bookings = [];
   bool isLoading = false;
   final AppHttp _http = AppHttp();
@@ -15,7 +15,7 @@ class BookingsProvider extends ChangeNotifier {
     isLoading = true;
     notifyListeners();
     try {
-      Response res = await _http.get(ApiEndpoint.bookings); // Adjust this endpoint as necessary
+      Response res = await _http.get('$ApiEndpoint.bookings/collection');
       if (res.statusCode == 200 && res.data is List) {
         _bookings = List<Booking>.from(res.data.map((item) => Booking.fromJson(item)));
       } else {

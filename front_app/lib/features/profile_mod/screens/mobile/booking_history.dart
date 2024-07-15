@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:barassage_app/features/auth_mod/models/user.dart';
-import 'package:barassage_app/features/profile_mod/providers/bookings_provider.dart';
+import 'package:barassage_app/features/profile_mod/providers/profile_bookings_provider.dart';
 import 'package:barassage_app/features/profile_mod/widgets/booking_list_item.dart';
 
 class BookingHistoryScreen extends StatelessWidget {
@@ -11,7 +11,7 @@ class BookingHistoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<BookingsProvider>(context, listen: false).fetchBookingsForCurrentUser();
+      Provider.of<ProfileBookingsProvider>(context, listen: false).fetchBookingsForCurrentUser();
     });
 
     return Scaffold(
@@ -20,7 +20,7 @@ class BookingHistoryScreen extends StatelessWidget {
         titleTextStyle: const TextStyle(color: Colors.black, fontSize: 20),
         iconTheme: const IconThemeData(color: Colors.black),
       ),
-      body: Consumer<BookingsProvider>(
+      body: Consumer<ProfileBookingsProvider>(
         builder: (context, bookingsProvider, child) {
           if (bookingsProvider.isLoading) {
             return Center(child: CircularProgressIndicator());
