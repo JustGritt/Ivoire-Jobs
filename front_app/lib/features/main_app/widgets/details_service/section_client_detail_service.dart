@@ -18,10 +18,10 @@ class _SectionBarasseurDetailServiceState extends State<SectionBarasseurDetailSe
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     return Container(
-      padding: EdgeInsets.all(16.0), // Add padding to the container
+      padding: EdgeInsets.only(bottom: 16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min, // Ensure the Column shrinks to fit its children
+        mainAxisSize: MainAxisSize.min,
         children: [
           Text(
             'Informations sur le barasseur',
