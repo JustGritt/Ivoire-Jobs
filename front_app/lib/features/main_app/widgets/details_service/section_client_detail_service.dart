@@ -17,73 +17,91 @@ class _SectionBarasseurDetailServiceState extends State<SectionBarasseurDetailSe
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Informations sur le barasseur',
-          style: TextStyle(
-            color: theme.primaryColorDark,
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
+    return Container(
+      padding: EdgeInsets.all(16.0), // Add padding to the container
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min, // Ensure the Column shrinks to fit its children
+        children: [
+          Text(
+            'Informations sur le barasseur',
+            style: TextStyle(
+              color: theme.primaryColorDark,
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ),
           ),
-        ),
-        SizedBox(height: 10),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                Container(
-                  clipBehavior: Clip.antiAlias,
-                  margin: const EdgeInsets.only(right: 10),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(90),
-                  ),
-                  child: Image.network(
-                    widget.service.images.first,
-                    width: 70,
-                    height: 70,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      widget.service.name,
-                      style: TextStyle(
-                        color: theme.primaryColorDark,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
+          SizedBox(height: 10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    clipBehavior: Clip.antiAlias,
+                    margin: const EdgeInsets.only(right: 10),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(90),
                     ),
-                    Text(
-                      widget.service.description,
-                      style: TextStyle(
-                        color: theme.colorScheme.surface,
-                        fontSize: 14,
-                      ),
+                    child: Image.network(
+                      widget.service.images.first,
+                      width: 70,
+                      height: 70,
+                      fit: BoxFit.cover,
                     ),
-                  ],
-                ),
-              ],
-            ),
-            CupertinoButton(
-              color: AppColors.greyLight,
-              minSize: 0,
-              borderRadius: BorderRadius.circular(90),
-              padding: EdgeInsets.all(8),
-              onPressed: () {},
-              child: Icon(
-                CupertinoIcons.mail_solid,
-                color: theme.primaryColor,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ConstrainedBox(
+                        constraints: BoxConstraints(
+                          maxWidth: MediaQuery.of(context).size.width * 0.4,
+                        ),
+                        child: Text(
+                          widget.service.name,
+                          style: TextStyle(
+                            color: theme.primaryColorDark,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      SizedBox(height: 4),
+                      ConstrainedBox(
+                        constraints: BoxConstraints(
+                          maxWidth: MediaQuery.of(context).size.width * 0.4,
+                        ),
+                        child: Text(
+                          widget.service.description,
+                          style: TextStyle(
+                            color: theme.colorScheme.surface,
+                            fontSize: 14,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
-            ),
-          ],
-        )
-      ],
+              CupertinoButton(
+                color: AppColors.greyLight,
+                minSize: 0,
+                borderRadius: BorderRadius.circular(90),
+                padding: EdgeInsets.all(8),
+                onPressed: () {},
+                child: Icon(
+                  CupertinoIcons.mail_solid,
+                  color: theme.primaryColor,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
