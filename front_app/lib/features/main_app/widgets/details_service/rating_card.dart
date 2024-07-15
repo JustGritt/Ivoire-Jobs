@@ -26,27 +26,22 @@ class RatingCard extends StatelessWidget {
               }),
             ),
             SizedBox(height: 8.0),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Text(
-                    rating.comment,
-                    style: TextStyle(fontSize: 16.0),
-                    overflow: TextOverflow.visible,
-                  ),
-                ),
-                SizedBox(width: 8.0),
-                Text(
-                  rating.createdAt.toString(),
-                  style: TextStyle(color: Colors.grey),
-                ),
-              ],
+            Text(
+              rating.comment,
+              style: TextStyle(fontSize: 16.0),
+              overflow: TextOverflow.visible,
             ),
             SizedBox(height: 8.0),
             Text(
               rating.firstname,
               style: TextStyle(color: Colors.grey),
+            ),
+            Align(
+              alignment: Alignment.bottomLeft,
+              child: Text(
+                rating.createdAt.toString(),
+                style: TextStyle(color: Colors.grey),
+              ),
             ),
           ],
         ),
