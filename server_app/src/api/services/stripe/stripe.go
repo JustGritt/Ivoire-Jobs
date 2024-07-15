@@ -47,8 +47,6 @@ func CreatePaymentIntent(booking *booking.Booking) (*stripe.PaymentIntent, error
 	if err != nil {
 		return nil, err
 	}
-	//add the booking ID to the metadata
-	applicationFeeAmount := int64(price * 10 / 100) // 10% fee
 
 	// Get the stripe account ID of the member
 	/*
@@ -61,9 +59,8 @@ func CreatePaymentIntent(booking *booking.Booking) (*stripe.PaymentIntent, error
 
 	// Create a PaymentIntent
 	params := &stripe.PaymentIntentParams{
-		Amount:               stripe.Int64(price),
-		Currency:             stripe.String(string(stripe.CurrencyXOF)),
-		ApplicationFeeAmount: stripe.Int64(applicationFeeAmount),
+		Amount:   stripe.Int64(price),
+		Currency: stripe.String(string(stripe.CurrencyXOF)),
 		/*
 			TransferData: &stripe.PaymentIntentTransferDataParams{
 				Destination: stripe.String(stripeAccountID),
