@@ -29,4 +29,9 @@ echo "Latest release tag: $LATEST_RELEASE"
 
 # Set up Flutter environment
 export PATH="$PATH:$(pwd)/flutter/bin"
-echo "export LATEST_RELEASE=$LATEST_RELEASE" >> .env
+echo "DOWNLOAD_URL=https://s3.$CLOUDFLARE_R2_BUCKET_NAME.com/barassage-$LATEST_RELEASE/app-release.apk" >> .env
+
+# Build the Flutter web app
+flutter doctor
+flutter pub get
+flutter build web --release --web-renderer html --output build/web
