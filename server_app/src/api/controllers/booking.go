@@ -10,7 +10,6 @@ import (
 	userRepo "barassage/api/repositories/user"
 	"barassage/api/services/notification"
 	"barassage/api/services/stripe"
-	"fmt"
 	"log"
 	"net/http"
 	"time"
@@ -476,7 +475,6 @@ func GetBookings(c *fiber.Ctx) error {
 		bookings, err = bookingRepo.GetAll()
 	} else {
 		bookings, err = bookingRepo.GetBookingsByUserID(userID.(string))
-		fmt.Println(bookings, userID)
 	}
 	if err != nil {
 		errorList = append(

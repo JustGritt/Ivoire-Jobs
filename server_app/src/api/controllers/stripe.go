@@ -56,15 +56,16 @@ func HandleWebhook(c *fiber.Ctx) error {
 
 		dbUser, err := userRepo.GetById(booking.UserID)
 		if err != nil {
-			log.Printf("error getting user: %v", err)
+			log.Printf("error getting user")
 		}
 
 		domain := notification.BookingDomain
 		resp, err := notification.Send(c.Context(), message, dbUser, domain)
 		if err != nil {
-			log.Printf("error sending message: %v", err)
+			log.Printf("error sending message")
+		} else {
+			log.Printf("%d messages were sent successfully\n", resp.SuccessCount)
 		}
-		log.Printf("%d messages were sent successfully\n", resp.SuccessCount)
 
 		// Then define and call a function to handle the event payment_intent.succeeded
 		fmt.Println("PaymentIntent was successful!")
@@ -92,15 +93,16 @@ func HandleWebhook(c *fiber.Ctx) error {
 
 		dbUser, err := userRepo.GetById(booking.UserID)
 		if err != nil {
-			log.Printf("error getting user: %v", err)
+			log.Printf("error getting user")
 		}
 
 		domain := notification.BookingDomain
 		resp, err := notification.Send(c.Context(), message, dbUser, domain)
 		if err != nil {
 			log.Printf("error sending message: %v", err)
+		} else {
+			log.Printf("%d messages were sent successfully\n", resp.SuccessCount)
 		}
-		log.Printf("%d messages were sent successfully\n", resp.SuccessCount)
 
 	default:
 		fmt.Fprintf(os.Stderr, "Unhandled event type: %s\n", event.Type)
