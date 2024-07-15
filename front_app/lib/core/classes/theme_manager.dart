@@ -78,7 +78,7 @@ class AppTheme {
     dark = dark ??
         defaultTheme.copyWith(
           scaffoldBackgroundColor: Colors.black,
-          brightness: Brightness.dark,
+          brightness: Brightness.light,
           buttonTheme: const ButtonThemeData(
             textTheme: ButtonTextTheme.primary,
             buttonColor: Colors.white,

@@ -1,3 +1,5 @@
+import 'package:barassage_app/core/helpers/services_helper.dart';
+
 List<ServiceCreatedModel> servicesFromJson(List<dynamic> data) {
   return List<ServiceCreatedModel>.from(
       data.map((x) => ServiceCreatedModel.fromJson(x)));
@@ -8,7 +10,7 @@ class ServiceCreatedModel {
   final String userId;
   final String name;
   final String description;
-  final double price;
+  final String price;
   final bool status;
   final int duration;
   final bool isBanned;
@@ -48,7 +50,7 @@ class ServiceCreatedModel {
       userId: json['userId'],
       name: json['name'],
       description: json['description'],
-      price: (json['price'] as int).toDouble(),
+      price: ServicesHelper.getFormattedPrice(json['price']),
       status: json['status'],
       duration: json['duration'],
       isBanned: json['isBanned'],

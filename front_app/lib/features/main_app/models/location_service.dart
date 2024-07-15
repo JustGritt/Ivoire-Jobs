@@ -29,10 +29,10 @@ class LocationService {
         "latitude": latitude,
         "longitude": longitude,
         "city": city,
-        "postCode": postCode,
+        "postalCode": postCode,
         "country": country,
         "address": address,
-      };
+  };
 
   LocationService copyWith({
     double? latitude,

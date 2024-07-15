@@ -58,7 +58,7 @@ class ServiceEntry extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Text(
-                        '${service.price.toStringAsFixed(2)} XOF',
+                        '${service.price} XOF',
                         style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,

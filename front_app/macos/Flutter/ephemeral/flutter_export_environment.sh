@@ -1,7 +1,7 @@
 #!/bin/sh
 # This is a generated file; do not edit or check into version control.
-export "FLUTTER_ROOT=/Users/charlesparameswaralingam/Documents/devel/flutter"
-export "FLUTTER_APPLICATION_PATH=/Users/charlesparameswaralingam/Documents/devel/Ivoire-Jobs/front_app"
+export "FLUTTER_ROOT=/opt/homebrew/Caskroom/flutter/3.3.2/flutter"
+export "FLUTTER_APPLICATION_PATH=/Users/alexdieudonne/Documents/School/New School/ESGI/2023/Stack5eme/Ivoire-Jobs/front_app"
 export "COCOAPODS_PARALLEL_CODE_SIGN=true"
 export "FLUTTER_BUILD_DIR=build"
 export "FLUTTER_BUILD_NAME=0.1.0"

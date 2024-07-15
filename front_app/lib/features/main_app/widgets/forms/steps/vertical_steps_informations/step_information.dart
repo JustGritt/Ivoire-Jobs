@@ -44,7 +44,7 @@ class _StepInformationState extends State<StepInformation> {
       {
         "title": EzValidator<String>(label: "Title").required(),
         "description": EzValidator<String>(label: "Description").required(),
-        "price": EzValidator<double>(label: "Price").required().number().min(1),
+        "price": EzValidator<double>(label: "Price").required().number().min(1000, 'Le prix doit être supérieur à 1000 XOF'),
         "illustrations": EzValidator<List<File?>>(label: "Illustrations")
             .required()
             .arrayOf(EzValidator<File>(label: "Illustration").required())

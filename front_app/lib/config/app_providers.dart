@@ -3,12 +3,11 @@ import 'package:barassage_app/features/admin_app/providers/banned_services_provi
 import 'package:barassage_app/features/admin_app/providers/categories_provider.dart';
 import 'package:barassage_app/features/admin_app/providers/members_provider.dart';
 import 'package:barassage_app/features/main_app/providers/my_services_provider.dart';
-import 'package:barassage_app/features/admin_app/providers/banned_services_provider.dart';
+import 'package:barassage_app/features/main_app/providers/booking_services_provider.dart';
 import 'package:barassage_app/features/admin_app/providers/banned_users_provider.dart';
 import 'package:barassage_app/features/admin_app/providers/reports_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
-
 import '../core/core.dart';
 import '../features/features.dart';
 import '../features/main_app/providers/news_provider.dart';
@@ -29,6 +28,9 @@ List<SingleChildWidget> appProviders = [
   ),
   ChangeNotifierProvider<MyServicesProvider>(
     create: (context) => MyServicesProvider(),
+  ),
+  ChangeNotifierProvider<BookingServicesProvider>(
+    create: (context) => BookingServicesProvider(),
   ),
   ChangeNotifierProvider<EnqueryProvider>(
     create: (context) => EnqueryProvider(),

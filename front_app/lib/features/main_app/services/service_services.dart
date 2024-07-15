@@ -17,6 +17,7 @@ class ServiceServices {
     );
     if (res.statusCode == 201) {
       ApiBaseModel apiResponse = ApiBaseModel.fromJson(res.data);
+      //inspect(apiResponse.body);
       return ServiceCreatedModel.fromJson(apiResponse.body);
     }
     throw res.data['message'];
@@ -26,7 +27,6 @@ class ServiceServices {
     Response res = await AppHttp().get(ApiEndpoint.servicesCollection);
     if (res.statusCode == 200) {
       List<ServiceCreatedModel> services = servicesFromJson(res.data);
-      print(services);
       return services;
     }
     throw res.data['message'];

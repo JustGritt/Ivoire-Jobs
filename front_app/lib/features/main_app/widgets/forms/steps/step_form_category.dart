@@ -189,7 +189,6 @@ Widget buildCategoryService(BuildContext context,
               checkColor: theme.primaryColor,
               onChanged: isInactive
                   ? (value) {
-                      print(value);
                       onSelectedCategory(currentCategoryService);
                     }
                   : null,
