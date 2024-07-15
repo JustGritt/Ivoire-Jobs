@@ -12,4 +12,5 @@ type Message struct {
 	SenderID   string `gorm:"type:uuid;NOT NULL"`
 	ReceiverID string `gorm:"type:uuid;NOT NULL"`
 	Content    string `gorm:"type:text;NOT NULL"`
+
 }

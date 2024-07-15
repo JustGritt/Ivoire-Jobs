@@ -203,32 +203,7 @@ func ValidateMember(c *fiber.Ctx) error {
 		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(err))
 	}
 
-	//the status could be only "accepted" or "rejected"
-	if memberInput.Status != "accepted" && memberInput.Status != "rejected" {
-		errorList = append(
-			errorList,
-			&fiber.Error{
-				Code:    fiber.StatusBadRequest,
-				Message: "status must be 'accepted' or 'rejected'",
-			},
-		)
-		return c.Status(fiber.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
-	}
-
-	if memberInput.Status == "accepted" {
-		memberInput.Status = "member"
-	}
-
-	// Validate the member
-	if err := memberRepo.ValidateMember(memberID, memberInput.Status); err != nil {
-		errorList = append(errorList, &fiber.Error{
-			Code:    http.StatusInternalServerError,
-			Message: err.Error(),
-		})
-		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
-	}
-
-	//get USerid via memberid
+	// Retrieve the member by ID
 	member, err := memberRepo.GetByID(memberID)
 	if err != nil {
 		errorList = append(errorList, &fiber.Error{
@@ -237,7 +212,44 @@ func ValidateMember(c *fiber.Ctx) error {
 		})
 		return c.Status(http.StatusNotFound).JSON(HTTPFiberErrorResponse(errorList))
 	}
-	// get the user
+
+	//check if the member is already a member
+	if member.Status == "member" {
+		errorList = append(errorList, &fiber.Error{
+			Code:    http.StatusBadRequest,
+			Message: "Cannot change the status of a member",
+		})
+		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
+	// Validate the status to be either "accepted" or "rejected"
+	if memberInput.Status != "accepted" && memberInput.Status != "rejected" {
+		errorList = append(errorList, &fiber.Error{
+			Code:    fiber.StatusBadRequest,
+			Message: "status must be 'accepted' or 'rejected'",
+		})
+		return c.Status(fiber.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
+	if memberInput.Status == "accepted" {
+		memberInput.Status = "member"
+	}
+
+	// Create the appropriate message based on the status
+	var message map[string]string
+	if memberInput.Status == "member" {
+		message = map[string]string{
+			"Title": "Membership Update!",
+			"Body":  "Hey! We are happy to announce that you are now a member!",
+		}
+	} else {
+		message = map[string]string{
+			"Title": "Membership Update!",
+			"Body":  "Hey! We are sorry to announce that your membership request has been rejected!",
+		}
+	}
+
+	// Retrieve the user by ID
 	user, err := userRepo.GetById(member.UserID)
 	if err != nil {
 		errorList = append(errorList, &fiber.Error{
@@ -247,32 +259,25 @@ func ValidateMember(c *fiber.Ctx) error {
 		return c.Status(http.StatusNotFound).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
-	//create the accurate message
-	var message map[string]string
-	if memberInput.Status == "member" {
-		message = map[string]string{
-			"Title": "Membership Update !",
-			"Body":  "Hey! We are happy to announce that you are now a member!",
-		}
-	} else {
-		message = map[string]string{
-			"Title": "Membership Update !",
-			"Body":  "Hey! We are sorry to announce that your membership request has been rejected!",
-		}
+	// Validate the member in the repository
+	if err := memberRepo.ValidateMember(memberID, memberInput.Status); err != nil {
+		errorList = append(errorList, &fiber.Error{
+			Code:    http.StatusInternalServerError,
+			Message: err.Error(),
+		})
+		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
+	}
 
+	//check if the user has preferences for notifications
+	if user.NotificationPreference == nil {
+		return c.SendStatus(http.StatusOK)
 	}
 
 	// Send FCM notification
 	domain := notification.ServiceDomain
-	resp, err := notification.Send(
-		c.Context(),
-		message,
-		user,
-		domain,
-	)
+	resp, err := notification.Send(c.Context(), message, user, domain)
 	if err != nil {
 		log.Printf("error sending message: %v", err)
-		return c.Status(http.StatusInternalServerError).JSON(HTTPResponse(http.StatusInternalServerError, "Error", err.Error()))
 	}
 	log.Printf("%d messages were sent successfully\n", resp.SuccessCount)
 

@@ -26,7 +26,7 @@ func GetByID(id string) (*member.Member, error) {
 
 func GetByUserID(userID string) (*member.Member, error) {
 	var ban member.Member
-	//find the ban by id
+	//get the last member record
 	if err := db.PgDB.Where("user_id = ?", userID).First(&ban).Error; err != nil {
 		return nil, err
 	}
@@ -84,4 +84,12 @@ func ValidateMember(id string, status string) error {
 // GetErrors gets the errors
 func GetErrors() error {
 	return db.PgDB.Error
+}
+
+func CountAll() (int64, error) {
+	var count int64
+	if err := db.PgDB.Model(&member.Member{}).Where("status =  ?", "member").Count(&count).Error; err != nil {
+		return 0, err
+	}
+	return count, nil
 }

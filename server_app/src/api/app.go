@@ -6,6 +6,7 @@ import (
 
 	// Configs
 	cfg "barassage/api/configs"
+	"barassage/api/cron"
 	"barassage/api/services/bucket"
 
 	// Swagger
@@ -30,6 +31,7 @@ import (
 	"barassage/api/models/configuration"
 	"barassage/api/models/contact"
 	"barassage/api/models/image"
+	myLog "barassage/api/models/log"
 	"barassage/api/models/member"
 	"barassage/api/models/message"
 	"barassage/api/models/notificationPreference"
@@ -102,6 +104,7 @@ func Run() {
 		&room.Room{},
 		&message.Message{},
 		&refreshtoken.RefreshToken{},
+		&myLog.Log{},
 	)
 
 	/*
@@ -139,6 +142,7 @@ func Run() {
 	*/
 	routes.SetupRoutes(app)
 	app.Use(cors.New())
+
 	/*
 		============ Setup Swagger ===============
 	*/
@@ -149,6 +153,9 @@ func Run() {
 	} else {
 		docs.SwaggerInfo.Host = config.Host
 	}
+
+	// Start the cron jobs
+	cron.StartCronJobs()
 
 	// Run the app and listen on given port
 	port := fmt.Sprintf(":%s", config.Port)

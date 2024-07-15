@@ -74,9 +74,7 @@ class _SectionTopDetailServiceState extends State<SectionTopDetailService> {
                 ),
               ),
             ),
-            SizedBox(
-              width: 15,
-            ),
+            // SizedBox(width: 15,),
             // CupertinoButton(
             //   color: AppColors.primaryBlue,
             //   minSize: 0,

@@ -17,7 +17,7 @@ import (
 // @Success 200 {object} Response
 // @Router /home [get]
 func HomeController(c *fiber.Ctx) error {
-
+	//SendNotificationMessage("service", "created")
 	//get the user from the context
 	user, err := userRepo.GetById("d4e1f48c-8afc-458a-a63b-e08e5ffbae12")
 	if err != nil {

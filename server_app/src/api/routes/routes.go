@@ -17,6 +17,9 @@ import (
 //go:embed index.html
 var indexHTML string
 
+//go:embed message.html
+var messageHTML string
+
 // SetupRoutes setups router
 func SetupRoutes(app *fiber.App) {
 
@@ -29,6 +32,15 @@ func SetupRoutes(app *fiber.App) {
 	v1.Post("/stripe/webhook", ctl.HandleWebhook)
 
 	v1.Get("/home", ctl.HomeController)
+
+	// New WebSocket route for notifications
+	v1.Get("/ws/notifications", websocket.New(ctl.HandleNotificationsWebSocket))
+
+	// Endpoint to get client count
+	v1.Get("/ws/notifications/client-count", func(c *fiber.Ctx) error {
+		clientCount := ctl.GetClientCount()
+		return c.JSON(fiber.Map{"client_count": clientCount})
+	})
 
 	// Auth Group
 	auth := v1.Group("/auth")
@@ -122,8 +134,20 @@ func SetupRoutes(app *fiber.App) {
 	room := v1.Group("/room")
 	room.Get("/:id/ws", websocket.New(ctl.HandleWebSocket))
 
+	// Log Group
+	log := v1.Group("/log", middlewares.RequireAdmin())
+	log.Get("/collection", ctl.GetLogs)
+
+	// Dashboard Group
+	dashboard := v1.Group("/dashboard")
+	dashboard.Get("/stats", ctl.GetDashboardStats)
+
 	// Serve the embedded HTML file at /test
 	app.Get("/test", func(c *fiber.Ctx) error {
 		return c.Type("html").SendString(indexHTML)
+	})
+
+	app.Get("/message", func(c *fiber.Ctx) error {
+		return c.Type("html").SendString(messageHTML)
 	})
 }

@@ -15,7 +15,6 @@ class Firebaseapi {
         final token = await _firebaseMessaging.getToken();
         if (token == null) throw Exception("No token found");
         _pushTokensService.storeToken(token);
-        print(token);
       } on Exception catch (e) {
         print(e);
       }

@@ -32,6 +32,9 @@ class ApiEndpoint {
   static const adminLogin = '${api}/auth/admin-login';
   static const adminUser = '${api}/auth/admin';
   static const addAdmin = '${api}/auth/register-admin';
+  static const memberRequests = '${api}/member';
+  static const approveMember = '${api}/member/:id/validate';
+  static const adminDashboardStats = '${api}/dashboard/stats';
 
   static const updateProfile = '/auth/update-profile';
 
@@ -58,9 +61,21 @@ class ApiEndpoint {
   static const notificationPreferences = '/notification-preference';
   // become barasseur
   static const becomeBarasseur = '/member';
+  // Booking Services
+  static const bookingServices = '/booking';
   // Reports Endpoints
   static const reports = '${api}/report/pending';
   static const reportsDetails = '${api}/report/:id';
   // Ban Endpoints
   static const bannedUsers = '${api}/ban/collection';
+
+  // categories Endpoints
+  static const categories = '${api}/category';
+  // categories collection
+  static const categoriesCollection = '${api}/category/collection';
+
+  // bookings Endpoints
+  static const bookings = '${api}/booking';
+  // bookings collection
+  static const bookingsCollection = '${api}/booking/collection';
 }

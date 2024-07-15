@@ -2,6 +2,7 @@ package booking
 
 import (
 	// user model
+
 	"barassage/api/models/booking"
 	"time"
 
@@ -81,4 +82,27 @@ func CheckBookingOverlap(userID string, startTime time.Time, endTime time.Time) 
 // GetErrors gets the errors
 func GetErrors() error {
 	return db.PgDB.Error
+}
+
+func CountAll() (int64, error) {
+	var count int64
+	if err := db.PgDB.Model(&booking.Booking{}).Where("status = ?", "completed").Count(&count).Error; err != nil {
+		return 0, err
+	}
+	return count, nil
+}
+
+func CountBookingsInRange(startDate, endDate time.Time) (int, error) {
+	var count int64
+	err := db.PgDB.Model(&booking.Booking{}).Where("created_at BETWEEN ? AND ? AND status = ?", startDate, endDate, "completed").Count(&count).Error
+	return int(count), err
+}
+
+// Fetch bookings within the 15-minute window that need to be canceled adn offset by 15 minutes
+func GetBookingsOlderThan(offset time.Time) ([]booking.Booking, error) {
+	var bookings []booking.Booking
+	if err := db.PgDB.Where("created_at < ? AND status = ?", offset, "created").Find(&bookings).Error; err != nil {
+		return nil, err
+	}
+	return bookings, nil
 }
