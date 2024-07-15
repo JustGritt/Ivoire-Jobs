@@ -124,8 +124,8 @@ class AdminService {
   // get list of categories
   Future<void> addCategory(String name) async {
     try {
-      Response res = await _http
-          .post(ApiEndpoint.categories, data: {'name': name});
+      Response res =
+          await _http.post(ApiEndpoint.categories, data: {'name': name});
       if (res.statusCode != 200) {
         throw Exception('Failed to add category');
       }
@@ -167,7 +167,8 @@ class AdminService {
 
   Future<void> approveMemberRequest(String id, String action) async {
     try {
-      Response res = await _http.put(ApiEndpoint.approveMember.replaceAll(':id', id), data: {
+      Response res = await _http
+          .put(ApiEndpoint.approveMember.replaceAll(':id', id), data: {
         'status': action,
       });
       if (res.statusCode == 201) {
@@ -179,7 +180,6 @@ class AdminService {
       throw Exception('Failed to approve member request');
     }
   }
-
 
   Future<DashboardStats> fetchDashboardStats() async {
     final response = await _http.get(ApiEndpoint.adminDashboardStats);
@@ -194,14 +194,16 @@ class AdminService {
   Future<List<Booking>> getBookings() async {
     try {
       Response res = await _http.get(ApiEndpoint.bookingsCollection);
+      debugPrint('res-bookings: ${res.data}');
       if (res.statusCode == 200) {
         List<Booking> bookings =
-            (res.data as List).map((e) => Booking.fromJson(e)).toList();
+        (res.data as List).map((e) => Booking.fromJson(e)).toList();
+        print('AdminService - bookings: $bookings'); // Logging the bookings
         return bookings;
       }
       throw Exception('Failed to load bookings');
     } catch (e) {
-      debugPrint('Error: $e');
+      print('Error in AdminService: $e'); // Logging the error
       throw Exception('Failed to load bookings');
     }
   }

@@ -16,7 +16,6 @@ class CategoriesProvider with ChangeNotifier {
     notifyListeners();
     try {
       _categories = (await _adminService.getCategories());
-      debugPrint('categories: $_categories');
       return _categories;
     } catch (e) {
       _categories = [];

@@ -3,7 +3,6 @@ import 'package:barassage_app/features/admin_app/providers/categories_provider.d
 import 'package:barassage_app/features/admin_app/services/admin_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../../models/category.dart';
 
 AdminService adminService = serviceLocator<AdminService>();
@@ -25,8 +24,7 @@ class _ManageCategoriesScreenState extends State<ManageCategoriesScreen> {
   }
 
   Future<List<Category>> fetchCategories() async {
-    final categoriesProvider =
-    Provider.of<CategoriesProvider>(context, listen: false);
+    final categoriesProvider = Provider.of<CategoriesProvider>(context, listen: false);
     await categoriesProvider.getAllCategories();
     return categoriesProvider.categories;
   }
@@ -49,8 +47,7 @@ class _ManageCategoriesScreenState extends State<ManageCategoriesScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     TextFormField(
-                      decoration:
-                      const InputDecoration(labelText: 'Category Name'),
+                      decoration: const InputDecoration(labelText: 'Category Name'),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter a category name';
@@ -77,13 +74,13 @@ class _ManageCategoriesScreenState extends State<ManageCategoriesScreen> {
               onPressed: () async {
                 if (_formKey.currentState!.validate()) {
                   _formKey.currentState!.save();
-                  final newCategory = CategoryRequest(
-                    name: name,
-                  );
-                  final categoriesProvider =
-                  Provider.of<CategoriesProvider>(context, listen: false);
+                  final newCategory = CategoryRequest(name: name);
+                  final categoriesProvider = Provider.of<CategoriesProvider>(context, listen: false);
                   await categoriesProvider.addCategory(newCategory.name);
                   Navigator.of(context).pop();
+                  setState(() {
+                    categoriesFuture = fetchCategories();
+                  });
                 }
               },
               child: const Text('Add'),
