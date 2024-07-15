@@ -164,6 +164,19 @@ func CreateBooking(c *fiber.Ctx) error {
 	bookingModel.EndTime = serviceEndTime
 	bookingModel.CreatorID = service.UserID
 
+	//check if the user if member
+	dbUser, err := userRepo.GetById(bookingModel.UserID)
+	if err != nil {
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusInternalServerError,
+				Message: "Error while fetching user",
+			},
+		)
+		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
 	// Check for overlapping Booking
 	overlap, err := bookingRepo.CheckBookingOverlap(bookingModel.UserID, startTime, serviceEndTime)
 	if err != nil {
@@ -263,45 +276,27 @@ func CreateBooking(c *fiber.Ctx) error {
 		_ = CreateLog(&LogObject{
 			Level:      "warn",
 			Type:       "Booking",
-			Message:    "Error while creating payment intent" + err.Error(),
+			Message:    "Error while creating payment intent",
 			RequestURI: c.OriginalURL(),
 		})
 		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
-	//create Log
-	_ = CreateLog(&LogObject{
-		Level:      "info",
-		Type:       "Booking",
-		Message:    "Booking created" + bookingModel.ID,
-		RequestURI: c.OriginalURL(),
-	})
-
 	// Send FCM notification
-
 	message := map[string]string{
 		"Title": "Booking created!",
 		"Body":  "Your booking has been created successfully",
 	}
 
-	dbUser, err := userRepo.GetById(bookingModel.UserID)
-	if err != nil {
-		errorList = append(
-			errorList,
-			&fiber.Error{
-				Code:    fiber.StatusInternalServerError,
-				Message: "Error while fetching user",
-			},
-		)
-		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
+	if dbUser.NotificationPreference != nil {
+		domain := notification.BookingDomain
+		resp, err := notification.Send(c.Context(), message, dbUser, domain)
+		if err != nil {
+			log.Printf("error sending message: %v", err)
+		} else {
+			log.Printf("%d messages were sent successfully\n", resp.SuccessCount)
+		}
 	}
-
-	domain := notification.BookingDomain
-	resp, err := notification.Send(c.Context(), message, dbUser, domain)
-	if err != nil {
-		log.Printf("error sending message: %v", err)
-	}
-	log.Printf("%d messages were sent successfully\n", resp.SuccessCount)
 
 	return c.Status(http.StatusCreated).JSON(fiber.Map{
 		"booking":       bookingOutputFromModel(bookingModel),

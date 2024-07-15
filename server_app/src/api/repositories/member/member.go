@@ -26,7 +26,7 @@ func GetByID(id string) (*member.Member, error) {
 
 func GetByUserID(userID string) (*member.Member, error) {
 	var ban member.Member
-	//find the ban by id
+	//get the last member record
 	if err := db.PgDB.Where("user_id = ?", userID).First(&ban).Error; err != nil {
 		return nil, err
 	}
