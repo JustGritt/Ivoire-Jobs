@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"barassage/api/models/ban"
+	"log"
 
 	banRepo "barassage/api/repositories/ban"
 	userRepo "barassage/api/repositories/user"
@@ -85,6 +86,15 @@ func CreateBan(c *fiber.Ctx) error {
 		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
+	// Log the ban
+	if err := CreateLog(&LogObject{
+		Level:   "info",
+		Type:    "User",
+		Message: "User banned with ID: " + newBan.UserID,
+	}); err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(err))
+	}
+
 	banOutput := mapBanToOutput(&newBan)
 	return c.Status(http.StatusCreated).JSON(banOutput)
 }
@@ -138,6 +148,7 @@ func GetAllBans(c *fiber.Ctx) error {
 func DeleteBan(c *fiber.Ctx) error {
 	var errorList []*fiber.Error
 	banID := c.Params("id")
+	log.Println("banID: ", banID)
 
 	//chek if the ban exists
 	isBanned := banRepo.IsAlreadyDeleted(banID)
@@ -155,6 +166,15 @@ func DeleteBan(c *fiber.Ctx) error {
 			Message: "Failed to delete ban",
 		})
 		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
+	// Log the ban deletion
+	if err := CreateLog(&LogObject{
+		Level:   "info",
+		Type:    "User",
+		Message: "Ban deleted with ID: " + banID,
+	}); err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(err))
 	}
 
 	return c.SendStatus(http.StatusNoContent)

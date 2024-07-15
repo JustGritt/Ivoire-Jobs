@@ -7,6 +7,7 @@ import (
 	bookingRepo "barassage/api/repositories/booking"
 	contactRepo "barassage/api/repositories/contact"
 	serviceRepo "barassage/api/repositories/service"
+	userRepo "barassage/api/repositories/user"
 	"barassage/api/services/stripe"
 	"fmt"
 	"log"
@@ -52,6 +53,15 @@ type BookingOutput struct {
 	Status    string    `json:"status"`
 	StartTime time.Time `json:"startTime"`
 	EndTime   time.Time `json:"endTime"`
+	Contact   Author    `json:"contact"`
+}
+
+type Author struct {
+	ID        string    `json:"ID"`
+	FirstName string    `json:"firstName"`
+	LastName  string    `json:"lastName"`
+	Email     string    `json:"email"`
+	CreatedAt time.Time `json:"createdAt"`
 }
 
 type ServiceBookingOutput struct {
@@ -96,6 +106,14 @@ func CreateBooking(c *fiber.Ctx) error {
 				Message: "can't extract user info from request",
 			},
 		)
+		//create log
+		_ = CreateLog(&LogObject{
+			Level:      "warn",
+			Type:       "User",
+			Message:    "Error while extracting user info from request",
+			RequestURI: c.OriginalURL(),
+		})
+
 		return c.Status(fiber.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
@@ -108,6 +126,12 @@ func CreateBooking(c *fiber.Ctx) error {
 				Message: "Error while fetching service",
 			},
 		)
+		_ = CreateLog(&LogObject{
+			Level:      "warn",
+			Type:       "Booking",
+			Message:    "Error while fetching service",
+			RequestURI: c.OriginalURL(),
+		})
 		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
@@ -134,6 +158,12 @@ func CreateBooking(c *fiber.Ctx) error {
 				Message: "Error while checking booking overlap",
 			},
 		)
+		_ = CreateLog(&LogObject{
+			Level:      "warn",
+			Type:       "Booking",
+			Message:    "Error while checking booking overlap",
+			RequestURI: c.OriginalURL(),
+		})
 		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
 	}
 	if overlap {
@@ -144,10 +174,14 @@ func CreateBooking(c *fiber.Ctx) error {
 				Message: "Booking overlap. Please select another time slot.",
 			},
 		)
+		_ = CreateLog(&LogObject{
+			Level:      "info",
+			Type:       "Booking",
+			Message:    "Booking overlap. Please select another time slot.",
+			RequestURI: c.OriginalURL(),
+		})
 		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
 	}
-
-	log.Println("Overlap:", overlap)
 
 	// Create the contact and associate it with the booking
 	contactModel := contact.Contact{
@@ -171,6 +205,12 @@ func CreateBooking(c *fiber.Ctx) error {
 				Message: "Error while creating contact",
 			},
 		)
+		_ = CreateLog(&LogObject{
+			Level:      "warn",
+			Type:       "Booking",
+			Message:    "Error while creating contact",
+			RequestURI: c.OriginalURL(),
+		})
 		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
@@ -185,6 +225,12 @@ func CreateBooking(c *fiber.Ctx) error {
 				Message: "Error while creating booking and contact",
 			},
 		)
+		_ = CreateLog(&LogObject{
+			Level:      "warn",
+			Type:       "Booking",
+			Message:    "Error while creating booking and contact",
+			RequestURI: c.OriginalURL(),
+		})
 		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
@@ -198,8 +244,22 @@ func CreateBooking(c *fiber.Ctx) error {
 				Message: "Error while creating payment intent",
 			},
 		)
+		_ = CreateLog(&LogObject{
+			Level:      "warn",
+			Type:       "Booking",
+			Message:    "Error while creating payment intent" + err.Error(),
+			RequestURI: c.OriginalURL(),
+		})
 		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
 	}
+
+	//create Log
+	_ = CreateLog(&LogObject{
+		Level:      "info",
+		Type:       "Booking",
+		Message:    "Booking created" + bookingModel.ID,
+		RequestURI: c.OriginalURL(),
+	})
 
 	return c.Status(http.StatusCreated).JSON(fiber.Map{
 		"booking":       bookingOutputFromModel(bookingModel),
@@ -230,6 +290,12 @@ func GetBookingService(c *fiber.Ctx) error {
 				Message: "Service ID is required",
 			},
 		)
+		_ = CreateLog(&LogObject{
+			Level:      "warn",
+			Type:       "Booking",
+			Message:    "Service ID is required",
+			RequestURI: c.OriginalURL(),
+		})
 		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
 	}
 	//get the service
@@ -242,6 +308,12 @@ func GetBookingService(c *fiber.Ctx) error {
 				Message: "Error while fetching service",
 			},
 		)
+		_ = CreateLog(&LogObject{
+			Level:      "info",
+			Type:       "Booking",
+			Message:    "Error while fetching service",
+			RequestURI: c.OriginalURL(),
+		})
 		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
@@ -257,6 +329,12 @@ func GetBookingService(c *fiber.Ctx) error {
 				Message: "An error occurred while extracting user info from request",
 			},
 		)
+		_ = CreateLog(&LogObject{
+			Level:      "info",
+			Type:       "Booking",
+			Message:    "Error while extracting user info from request",
+			RequestURI: c.OriginalURL(),
+		})
 		return c.Status(fiber.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
@@ -268,6 +346,13 @@ func GetBookingService(c *fiber.Ctx) error {
 				Message: "Unauthorized",
 			},
 		)
+		_ = CreateLog(&LogObject{
+			Level:      "info",
+			Type:       "Booking",
+			Message:    "Unauthorized access",
+			RequestURI: c.OriginalURL(),
+		})
+
 		return c.Status(fiber.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
@@ -281,11 +366,18 @@ func GetBookingService(c *fiber.Ctx) error {
 				Message: "Error while fetching bookings",
 			},
 		)
+		_ = CreateLog(&LogObject{
+			Level:      "info",
+			Type:       "Booking",
+			Message:    "Error while fetching bookings",
+			RequestURI: c.OriginalURL(),
+		})
 		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
 	//map the bookings to the output
 	var bookingsOutput []ServiceBookingOutput
+
 	for _, booking := range bookings {
 		bookingsOutput = append(bookingsOutput, *serviceBookingOuputFromModel(&booking))
 	}
@@ -293,6 +385,13 @@ func GetBookingService(c *fiber.Ctx) error {
 	if len(bookingsOutput) == 0 {
 		return c.Status(http.StatusOK).JSON([]ServiceBookingOutput{})
 	}
+
+	_ = CreateLog(&LogObject{
+		Level:      "info",
+		Type:       "Booking",
+		Message:    "Bookings fetched",
+		RequestURI: c.OriginalURL(),
+	})
 
 	// Return the bookings
 	return c.Status(http.StatusOK).JSON(bookingsOutput)
@@ -325,6 +424,12 @@ func GetBookings(c *fiber.Ctx) error {
 				Message: "can't extract user info from request",
 			},
 		)
+		_ = CreateLog(&LogObject{
+			Level:      "info",
+			Type:       "User",
+			Message:    "Error while extracting user info from request",
+			RequestURI: c.OriginalURL(),
+		})
 		return c.Status(fiber.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
@@ -344,6 +449,12 @@ func GetBookings(c *fiber.Ctx) error {
 				Message: "Error while fetching bookings",
 			},
 		)
+		_ = CreateLog(&LogObject{
+			Level:      "info",
+			Type:       "Booking",
+			Message:    "Error while fetching bookings",
+			RequestURI: c.OriginalURL(),
+		})
 		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
@@ -352,8 +463,46 @@ func GetBookings(c *fiber.Ctx) error {
 		return c.Status(http.StatusOK).JSON([]BookingOutput{})
 	}
 
+	_ = CreateLog(&LogObject{
+		Level:      "info",
+		Type:       "Booking",
+		Message:    "Bookings fetched",
+		RequestURI: c.OriginalURL(),
+	})
+
+	//map the bookings to the output
+	var bookingsOutput []BookingOutput
+	for _, booking := range bookings {
+		user, err := userRepo.GetById(booking.CreatorID)
+		if err != nil {
+			errorList = append(
+				errorList,
+				&fiber.Error{
+					Code:    fiber.StatusBadRequest,
+					Message: "Error while fetching user",
+				},
+			)
+			return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
+		}
+		bookingsOutput = append(bookingsOutput, BookingOutput{
+			BookingID: booking.ID,
+			UserID:    booking.UserID,
+			ServiceID: booking.ServiceID,
+			Status:    booking.Status,
+			StartTime: booking.StartTime,
+			EndTime:   booking.EndTime,
+			Contact: Author{
+				ID:        user.ID,
+				FirstName: user.Firstname,
+				LastName:  user.Lastname,
+				Email:     user.Email,
+				CreatedAt: user.CreatedAt,
+			},
+		})
+	}
+
 	// Return the bookings
-	return c.Status(http.StatusOK).JSON(bookings)
+	return c.Status(http.StatusOK).JSON(bookingsOutput)
 }
 
 // UpdateBooking Godoc
