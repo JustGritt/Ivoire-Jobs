@@ -8,6 +8,7 @@ import (
 	contactRepo "barassage/api/repositories/contact"
 	serviceRepo "barassage/api/repositories/service"
 	userRepo "barassage/api/repositories/user"
+	"barassage/api/services/notification"
 	"barassage/api/services/stripe"
 	"fmt"
 	"log"
@@ -275,6 +276,32 @@ func CreateBooking(c *fiber.Ctx) error {
 		Message:    "Booking created" + bookingModel.ID,
 		RequestURI: c.OriginalURL(),
 	})
+
+	// Send FCM notification
+
+	message := map[string]string{
+		"Title": "Booking created!",
+		"Body":  "Your booking has been created successfully",
+	}
+
+	dbUser, err := userRepo.GetById(bookingModel.UserID)
+	if err != nil {
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusInternalServerError,
+				Message: "Error while fetching user",
+			},
+		)
+		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
+	domain := notification.BookingDomain
+	resp, err := notification.Send(c.Context(), message, dbUser, domain)
+	if err != nil {
+		log.Printf("error sending message: %v", err)
+	}
+	log.Printf("%d messages were sent successfully\n", resp.SuccessCount)
 
 	return c.Status(http.StatusCreated).JSON(fiber.Map{
 		"booking":       bookingOutputFromModel(bookingModel),

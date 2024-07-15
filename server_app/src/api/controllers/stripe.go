@@ -3,7 +3,10 @@ package controllers
 import (
 	cfg "barassage/api/configs"
 	bookingRepo "barassage/api/repositories/booking"
+	userRepo "barassage/api/repositories/user"
+	"barassage/api/services/notification"
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/gofiber/fiber/v2"
@@ -46,6 +49,23 @@ func HandleWebhook(c *fiber.Ctx) error {
 			return c.Status(fiber.StatusInternalServerError).SendString(err.Error())
 		}
 
+		message := map[string]string{
+			"Title": "Booking fulfilled",
+			"Body":  "Your booking has been fulfilled",
+		}
+
+		dbUser, err := userRepo.GetById(booking.UserID)
+		if err != nil {
+			log.Printf("error getting user: %v", err)
+		}
+
+		domain := notification.BookingDomain
+		resp, err := notification.Send(c.Context(), message, dbUser, domain)
+		if err != nil {
+			log.Printf("error sending message: %v", err)
+		}
+		log.Printf("%d messages were sent successfully\n", resp.SuccessCount)
+
 		// Then define and call a function to handle the event payment_intent.succeeded
 		fmt.Println("PaymentIntent was successful!")
 	case "payment_intent.canceled":
@@ -64,6 +84,23 @@ func HandleWebhook(c *fiber.Ctx) error {
 		if err != nil {
 			return c.Status(fiber.StatusInternalServerError).SendString(err.Error())
 		}
+
+		message := map[string]string{
+			"Title": "Booking has been cancelled",
+			"Body":  "Sorry, your booking has been cancelled please check your payment method and try again",
+		}
+
+		dbUser, err := userRepo.GetById(booking.UserID)
+		if err != nil {
+			log.Printf("error getting user: %v", err)
+		}
+
+		domain := notification.BookingDomain
+		resp, err := notification.Send(c.Context(), message, dbUser, domain)
+		if err != nil {
+			log.Printf("error sending message: %v", err)
+		}
+		log.Printf("%d messages were sent successfully\n", resp.SuccessCount)
 
 	default:
 		fmt.Fprintf(os.Stderr, "Unhandled event type: %s\n", event.Type)
