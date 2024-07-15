@@ -1,4 +1,3 @@
-# setup.sh
 #!/bin/bash
 
 # Ensure required environment variables are set
@@ -20,17 +19,18 @@ else
     echo "GitHub CLI is already installed."
 fi
 
+# Clone or update the Flutter repository
+if cd flutter; then
+    git pull && cd ..
+else
+    git clone https://github.com/flutter/flutter.git
+fi
+
 # Fetch the latest release from your GitHub repository
 echo "Fetching the latest release from GitHub..."
 LATEST_RELEASE=$(gh release view --repo "$REPO_OWNER/$REPO_NAME" --json tagName -q .tagName)
 echo "Latest release tag: $LATEST_RELEASE"
 
-# Set up Flutter environment and run commands
+# Set up Flutter environment
 export PATH="$PATH:$(pwd)/flutter/bin"
 echo "export LATEST_RELEASE=$LATEST_RELEASE" >> .env
-flutter doctor
-flutter pub get
-flutter build web --release --verbose
-
-# Output the latest release version
-echo "The latest release version is $LATEST_RELEASE"
