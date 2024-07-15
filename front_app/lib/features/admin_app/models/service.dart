@@ -65,4 +65,27 @@ class Service {
       user: User.fromJson(json['user']),
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'userId': userId,
+      'name': name,
+      'description': description,
+      'price': price,
+      'status': status,
+      'duration': duration,
+      'isBanned': isBanned,
+      'latitude': latitude,
+      'longitude': longitude,
+      'address': address,
+      'city': city,
+      'postalCode': postalCode,
+      'country': country,
+      'images': images,
+      'createdAt': createdAt.toIso8601String(),
+      'category': category,
+      'user': user.toJson(),
+    };
+  }
 }

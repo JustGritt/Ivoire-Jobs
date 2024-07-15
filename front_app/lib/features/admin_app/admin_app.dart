@@ -1,3 +1,4 @@
+import 'package:barassage_app/features/admin_app/controllers/manage_bookings_controller.dart';
 import 'package:barassage_app/features/admin_app/screens/desktop/splash_screen.dart';
 import 'package:barassage_app/core/blocs/authentication/authentication_bloc.dart';
 import 'package:barassage_app/features/admin_app/controllers/controllers.dart';
@@ -18,6 +19,7 @@ class AdminApp extends RouteManager {
   static const String dashboard = '/admin/dashboard';
   static const String abuseClaims = '/admin/abuse-claims';
   static const String categories = '/admin/categories';
+  static const String bookings = '/admin/booking';
   static const String splash = '/admin/splash';
   static const String teams = '/admin/teams';
   static const String settings = '/admin/settings';
@@ -91,7 +93,8 @@ class AdminApp extends RouteManager {
         return const CupertinoPage(child: TeamManagerController());
       },
       redirect: (context, state) {
-        final authenticationState = BlocProvider.of<AuthenticationBloc>(context).state;
+        final authenticationState =
+            BlocProvider.of<AuthenticationBloc>(context).state;
         if (authenticationState is! AuthenticationSuccessState) {
           return AdminApp.adminLogin;
         }
@@ -151,6 +154,21 @@ class AdminApp extends RouteManager {
     ));
 
     addRoute(GoRoute(
+      path: AdminApp.bookings,
+      pageBuilder: (context, state) {
+        return const CupertinoPage(child: BookingsController());
+      },
+      redirect: (context, state) {
+        final authenticationState =
+            BlocProvider.of<AuthenticationBloc>(context).state;
+        if (authenticationState is! AuthenticationSuccessState) {
+          return AdminApp.adminLogin;
+        }
+        return null;
+      },
+    ));
+
+    addRoute(GoRoute(
       path: AdminApp.settings,
       pageBuilder: (context, state) {
         return const CupertinoPage(child: AdminSettingsController());
@@ -171,7 +189,8 @@ class AdminApp extends RouteManager {
         return const CupertinoPage(child: BanListController());
       },
       redirect: (context, state) {
-        final authenticationState = BlocProvider.of<AuthenticationBloc>(context).state;
+        final authenticationState =
+            BlocProvider.of<AuthenticationBloc>(context).state;
         if (authenticationState is! AuthenticationSuccessState) {
           return AdminApp.banlist;
         }
@@ -185,7 +204,8 @@ class AdminApp extends RouteManager {
         return const CupertinoPage(child: ReportsController());
       },
       redirect: (context, state) {
-        final authenticationState = BlocProvider.of<AuthenticationBloc>(context).state;
+        final authenticationState =
+            BlocProvider.of<AuthenticationBloc>(context).state;
         if (authenticationState is! AuthenticationSuccessState) {
           return AdminApp.reports;
         }
