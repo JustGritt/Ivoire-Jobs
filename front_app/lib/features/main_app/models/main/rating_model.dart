@@ -3,17 +3,17 @@ class Rating {
   final String serviceId;
   final int rating;
   final String comment;
-  final String userId;
+  final String firstname;
   final String createdAt;
   final bool status;
-  final int score;
+  final double score;
 
   Rating({
     required this.id,
     required this.serviceId,
     required this.rating,
     required this.comment,
-    required this.userId,
+    required this.firstname,
     required this.createdAt,
     required this.status,
     required this.score,
@@ -25,7 +25,7 @@ class Rating {
       serviceId: json['serviceId'],
       rating: json['rating'],
       comment: json['comment'],
-      userId: json['userId'],
+      firstname: json['firstname'],
       createdAt: json['createdAt'],
       status: json['status'],
       score: json['score'],

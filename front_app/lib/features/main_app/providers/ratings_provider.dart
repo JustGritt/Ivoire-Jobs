@@ -50,6 +50,9 @@ class RatingsProvider extends ChangeNotifier {
         _ratings = ratings;
         print(_ratings);
         print('Fetched ${_ratings.length} ratings');
+        _ratings.forEach((rating) {
+          print('Rating: ${rating.firstname}');
+        });
       } else {
         print("Unexpected response format: ${res.data}");
       }

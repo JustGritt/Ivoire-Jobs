@@ -22,47 +22,53 @@ Future<void> showRatingDialog(BuildContext context, Booking booking) async {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            content: SingleChildScrollView(
-              child: ListBody(
-                children: <Widget>[
-                  Text(
-                    'Service ID: ${booking.serviceId}',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.blue,
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(5, (index) {
-                      return IconButton(
-                        icon: Icon(
-                          index < _rating ? Icons.star : Icons.star_border,
-                          color: Colors.amber,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            _rating = index + 1;
-                          });
-                        },
-                      );
-                    }),
-                  ),
-                  SizedBox(height: 10),
-                  TextField(
-                    controller: _commentController,
-                    maxLines: 5,
-                    decoration: InputDecoration(
-                      hintText: 'Enter your comment here',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
+            content: Container(
+              width: MediaQuery.of(context).size.width * 0.8,
+              child: SingleChildScrollView(
+                child: ListBody(
+                  children: <Widget>[
+                    Text(
+                      'Service ID: ${booking.serviceId}',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blue,
                       ),
-                      filled: true,
-                      fillColor: Colors.grey[200],
                     ),
-                  ),
-                ],
+                    SizedBox(height: 10),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: List.generate(5, (index) {
+                          return IconButton(
+                            icon: Icon(
+                              index < _rating ? Icons.star : Icons.star_border,
+                              color: Colors.amber,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _rating = index + 1;
+                              });
+                            },
+                          );
+                        }),
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    TextField(
+                      controller: _commentController,
+                      maxLines: 5,
+                      decoration: InputDecoration(
+                        hintText: 'Enter your comment here',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        filled: true,
+                        fillColor: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
             actions: <Widget>[

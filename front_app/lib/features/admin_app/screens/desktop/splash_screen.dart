@@ -5,9 +5,6 @@ import 'package:barassage_app/core/init_dependencies.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 
-// TODO: Remove this screen
-import 'package:barassage_app/features/main_app/app.dart';
-
 class SplashDesktopScreen extends StatefulWidget {
   const SplashDesktopScreen({super.key});
 
@@ -25,13 +22,10 @@ class _SplashDesktopScreenState extends State<SplashDesktopScreen>
     _authenticationBloc = serviceLocator<AuthenticationBloc>();
     _authenticationBloc.add(InitiateAuth());
     _authenticationBloc.stream.listen((state) {
-      // TODO: Replace this with the actual routes
       if (state is AuthenticationSuccessState) {
-        // context.go(AdminApp.dashboard);
-        context.go(App.home);
+        context.go(AdminApp.dashboard);
       } else if (state is AuthenticationFailureState) {
-        // context.go(AdminApp.home);
-        context.go(App.home);
+        context.go(AdminApp.home);
       }
     });
   }

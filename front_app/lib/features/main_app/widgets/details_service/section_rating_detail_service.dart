@@ -1,7 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:barassage_app/features/main_app/providers/ratings_provider.dart';
 import 'package:barassage_app/features/main_app/models/main/rating_model.dart';
+import 'package:barassage_app/features/main_app/widgets/details_service/rating_card.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter/material.dart';
 
 class SectionRatingDetailService extends StatefulWidget {
   final String serviceId;
@@ -42,14 +43,11 @@ class _SectionRatingDetailServiceState extends State<SectionRatingDetailService>
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(
-                  'Ratings',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
+              Text(
+                'Ratings (${ratings.length})',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
               ListView.builder(
@@ -58,20 +56,7 @@ class _SectionRatingDetailServiceState extends State<SectionRatingDetailService>
                 itemCount: ratings.length,
                 itemBuilder: (context, index) {
                   final rating = ratings[index];
-                  return ListTile(
-                    title: Text(rating.comment),
-                    subtitle: Text('User ID: ${rating.userId}'),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: List.generate(5, (starIndex) {
-                        return Icon(
-                          starIndex < rating.rating ? Icons.star : Icons.star_border,
-                          color: Colors.amber,
-                          size: 20,
-                        );
-                      }),
-                    ),
-                  );
+                  return RatingCard(rating: rating);
                 },
               ),
             ],

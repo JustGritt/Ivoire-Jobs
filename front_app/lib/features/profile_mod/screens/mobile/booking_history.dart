@@ -16,7 +16,9 @@ class BookingHistoryScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Booking History'),
+        title: const Text('Booking history'),
+        titleTextStyle: const TextStyle(color: Colors.black, fontSize: 20),
+        iconTheme: const IconThemeData(color: Colors.black),
       ),
       body: Consumer<BookingsProvider>(
         builder: (context, bookingsProvider, child) {
