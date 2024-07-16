@@ -1,3 +1,4 @@
+import 'package:barassage_app/features/admin_app/controllers/logs_controller.dart';
 import 'package:barassage_app/features/admin_app/controllers/manage_bookings_controller.dart';
 import 'package:barassage_app/features/admin_app/screens/desktop/splash_screen.dart';
 import 'package:barassage_app/core/blocs/authentication/authentication_bloc.dart';
@@ -26,6 +27,7 @@ class AdminApp extends RouteManager {
   static const String banlist = '/admin/banlist';
   static const String members = '/admin/members';
   static const String reports = '/admin/reports';
+  static const String logs = '/admin/logs';
 
   AdminApp() {
     addRoute(GoRoute(
@@ -208,6 +210,21 @@ class AdminApp extends RouteManager {
             BlocProvider.of<AuthenticationBloc>(context).state;
         if (authenticationState is! AuthenticationSuccessState) {
           return AdminApp.reports;
+        }
+        return null;
+      },
+    ));
+
+    addRoute(GoRoute(
+      path: AdminApp.logs,
+      pageBuilder: (context, state) {
+        return const CupertinoPage(child: LogsController());
+      },
+      redirect: (context, state) {
+        final authenticationState =
+            BlocProvider.of<AuthenticationBloc>(context).state;
+        if (authenticationState is! AuthenticationSuccessState) {
+          return AdminApp.logs;
         }
         return null;
       },
