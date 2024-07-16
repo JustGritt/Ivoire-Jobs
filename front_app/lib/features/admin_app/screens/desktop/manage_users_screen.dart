@@ -92,8 +92,9 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
                             child: Text(
                               'Number of users: ${filteredUsers.length}',
                               style: const TextStyle(
-                                fontSize: 18,
+                                fontSize: 16,
                                 fontWeight: FontWeight.bold,
+                                color: primary,
                               ),
                             ),
                           ),

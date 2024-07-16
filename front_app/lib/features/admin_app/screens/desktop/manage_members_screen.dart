@@ -33,14 +33,6 @@ class _ManageMembersScreenState extends State<ManageMembersScreen> {
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Manage Members',
-          style: TextStyle(
-            color: Colors.black,
-          ),
-        ),
-      ),
       body: FutureBuilder<void>(
         future: membersFuture,
         builder: (context, snapshot) {

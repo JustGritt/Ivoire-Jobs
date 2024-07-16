@@ -41,14 +41,6 @@ class _ManageBookingsScreenState extends State<ManageBookingsScreen> {
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Manage Bookings',
-          style: TextStyle(
-            color: Colors.black,
-          ),
-        ),
-      ),
       body: Column(
         children: [
           Padding(

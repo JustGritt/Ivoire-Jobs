@@ -80,7 +80,7 @@ class _ManageServicesScreenState extends State<ManageServicesScreen> {
                             child: Text(
                               'Number of services: ${_filteredServices.length}',
                               style: const TextStyle(
-                                fontSize: 18,
+                                fontSize: 16,
                                 fontWeight: FontWeight.bold,
                                 color: primary,
                               ),

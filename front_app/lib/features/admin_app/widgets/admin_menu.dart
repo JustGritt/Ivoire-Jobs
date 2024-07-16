@@ -18,13 +18,17 @@ class AdminScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        titleTextStyle: const TextStyle(color: Colors.white, fontSize: 20),
+        backgroundColor: primary,
         iconTheme: IconThemeData(
-          color: primary,
+          color: Colors.white,
         ),
         title: Text(
           title,
+
           style: const TextStyle(
-            color: Colors.black,
+            color: Colors.white,
+
           ),
         ),
         actions: [

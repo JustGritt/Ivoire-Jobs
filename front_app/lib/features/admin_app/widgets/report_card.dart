@@ -21,9 +21,9 @@ class ReportCard extends StatelessWidget {
         color: Colors.grey[200],
         elevation: 4,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(16),
         ),
-        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+        margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
