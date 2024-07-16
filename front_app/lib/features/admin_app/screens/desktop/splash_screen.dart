@@ -1,7 +1,6 @@
 import 'package:barassage_app/core/blocs/authentication/authentication_bloc.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:barassage_app/features/admin_app/admin_app.dart';
-import 'package:barassage_app/core/init_dependencies.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 
@@ -19,8 +18,7 @@ class _SplashDesktopScreenState extends State<SplashDesktopScreen>
   @override
   void initState() {
     super.initState();
-    _authenticationBloc = serviceLocator<AuthenticationBloc>();
-    _authenticationBloc.add(InitiateAuth());
+    _authenticationBloc = AuthenticationBloc()..add(InitiateAuth());
     _authenticationBloc.stream.listen((state) {
       if (state is AuthenticationSuccessState) {
         context.go(AdminApp.dashboard);
