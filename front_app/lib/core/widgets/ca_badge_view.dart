@@ -15,7 +15,6 @@ class CABadge extends StatelessWidget {
   Widget build(BuildContext context) {
     return Chip(
       elevation: 4,
-      // padding: const EdgeInsets.all(0),
       labelPadding: const EdgeInsets.all(4),
 
       backgroundColor: color ?? Colors.blue,
