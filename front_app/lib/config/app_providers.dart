@@ -62,6 +62,9 @@ List<SingleChildWidget> appProviders = [
   ChangeNotifierProvider<MembersProvider>(
     create: (context) => MembersProvider(),
   ),
+  ChangeNotifierProvider<BookingsProvider>(
+    create: (context) => BookingsProvider(),
+  ),
   ChangeNotifierProvider<bookingsProviderAll.BookingServicesProvider>(
     create: (context) => bookingsProviderAll.BookingServicesProvider(),
   ),
