@@ -98,7 +98,7 @@ func CountBookingsInRange(startDate, endDate time.Time) (int, error) {
 	return int(count), err
 }
 
-// Fetch bookings within the 15-minute window that need to be canceled adn offset by 15 minutes
+// Fetch bookings within the 15-minute window that need to be canceled and offset by 15 minutes
 func GetBookingsOlderThan(offset time.Time) ([]booking.Booking, error) {
 	var bookings []booking.Booking
 	if err := db.PgDB.Where("created_at < ? AND status = ?", offset, "created").Find(&bookings).Error; err != nil {
