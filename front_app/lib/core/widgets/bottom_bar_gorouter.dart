@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:barassage_app/core/blocs/authentication/authentication_bloc.dart';
 import 'package:barassage_app/core/classes/app_context.dart';
 import 'package:barassage_app/core/init_dependencies.dart';
@@ -11,7 +9,6 @@ import 'package:go_router/go_router.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:flutter/material.dart';
 
-AuthenticationBloc _authenticationBloc = serviceLocator<AuthenticationBloc>();
 BuildContext _context = serviceLocator<AppContext>().navigatorContext;
 
 // ignore: must_be_immutable
@@ -25,9 +22,11 @@ class BottomBarGoRouter extends StatefulWidget {
 
 class _BottomBarGoRouterState extends State<BottomBarGoRouter> {
   List<FlashyTabBarItem> bottomBarItems = [];
+  late  AuthenticationBloc _authenticationBloc;
 
   @override
   void initState() {
+    _authenticationBloc = context.read<AuthenticationBloc>()..add(InitiateAuth());
     ThemeData theme = Theme.of(_context);
     AppLocalizations appLocalizations = AppLocalizations.of(_context)!;
     setState(() {
@@ -58,11 +57,12 @@ class _BottomBarGoRouterState extends State<BottomBarGoRouter> {
   void initBottomBarItems(BuildContext context) {
     ThemeData theme = Theme.of(context);
     AppLocalizations appLocalizations = AppLocalizations.of(context)!;
-    _authenticationBloc.add(InitiateAuth());
+  
     if (bottomBarItems.length > 3) return;
     _authenticationBloc.stream.listen((state) {
       if (state is AuthenticationSuccessState &&
           state.user.member == UserMemberStatusEnum.member) {
+          if (bottomBarItems.length > 3) return;
         setState(() {
           bottomBarItems.insert(
             1,
