@@ -89,6 +89,7 @@ class _ManageBookingsScreenState extends State<ManageBookingsScreen> {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(child: CircularProgressIndicator());
                 } else if (snapshot.hasError) {
+                  debugPrint(snapshot.error.toString());
                   return Center(child: Text('Error loading bookings'));
                 } else {
                   return Consumer<BookingsProvider>(
