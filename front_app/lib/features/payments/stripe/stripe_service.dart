@@ -7,6 +7,7 @@ class StripeService {
       PaymentSheetPaymentOption? paymentSheetPaymentOption =
           await Stripe.instance.initPaymentSheet(
               paymentSheetParameters: SetupPaymentSheetParameters(
+                  merchantDisplayName: 'Barassage',
                   paymentIntentClientSecret: paymentIntentClientSecret));
 
       await Stripe.instance.presentPaymentSheet();
