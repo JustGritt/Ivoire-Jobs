@@ -54,7 +54,7 @@ class _ServiceBookingScreenState extends State<ServiceBookingScreen> {
           .createBooking(bookingServiceCreateModel);
       final result =
           await StripeService.presentPaymentSheet(booking.paymentIntent);
-      context.goNamed(App.serviceNewSuccess,
+      context.goNamed(App.serviceBookingSuccess,
           extra: ServiceBookingSuccessModel(
               bookingService: booking, service: widget.service));
     } catch (error) {

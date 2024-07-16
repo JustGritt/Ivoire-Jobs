@@ -1,10 +1,12 @@
 import 'package:barassage_app/config/app_config.dart';
+import 'package:barassage_app/core/blocs/service/service_bloc.dart';
 import 'package:barassage_app/core/classes/app_context.dart';
 import 'package:barassage_app/core/init_dependencies.dart';
 import 'package:barassage_app/features/auth_mod/screens/mobile/main_wrapper.dart';
 import 'package:barassage_app/features/auth_mod/screens/mobile/splash_mobile_screen.dart';
 import 'package:barassage_app/features/bookings_mod/controllers/main/bookings_controller.dart';
 import 'package:barassage_app/features/main_app/Screens/mobile/new_service.dart';
+import 'package:barassage_app/features/main_app/Screens/mobile/new_service_success.dart';
 import 'package:barassage_app/features/main_app/Screens/mobile/service_booking/service_booking.dart';
 import 'package:barassage_app/features/main_app/Screens/mobile/service_booking/service_booking_success.dart';
 import 'package:barassage_app/features/main_app/Screens/mobile/services_details.dart';
@@ -74,6 +76,13 @@ class App extends RouteManager {
                       service: state.extra as ServiceCreatedModel,
                     ),
                   ),
+                  GoRoute(
+                    name: App.serviceBookingSuccess,
+                    path: App.serviceBookingSuccess,
+                    builder: (context, state) => ServiceBookingSuccess(
+                      service: (state.extra as ServiceBookingSuccessModel),
+                    ),
+                  ),
                 ],
               ),
             ],
@@ -115,8 +124,8 @@ class App extends RouteManager {
                   GoRoute(
                     name: App.serviceNewSuccess,
                     path: App.serviceNewSuccess,
-                    builder: (context, state) => ServiceBookingSuccess(
-                      service: (state.extra as ServiceBookingSuccessModel),
+                    builder: (context, state) => NewServiceSuccess(
+                      service: (state.extra as CreateServiceSuccess),
                     ),
                   ),
                 ],

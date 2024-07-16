@@ -25,17 +25,12 @@ if (flutterVersionName == null) {
 
 android {
     namespace "app.barassage.com"
-    ndkVersion "25.1.8937393"  // Correct version
-    compileSdkVersion flutter.compileSdkVersion
+    ndkVersion "25.1.8937393"
 
     compileOptions {
         coreLibraryDesugaringEnabled true
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-
-    kotlinOptions {
-        jvmTarget = '1.8'
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     sourceSets {
@@ -44,8 +39,8 @@ android {
 
     defaultConfig {
         applicationId "app.barassage.com"
-        minSdkVersion flutter.minSdkVersion
-        targetSdkVersion flutter.targetSdkVersion
+        minSdkVersion 23  // You should define minSdkVersion as well
+        targetSdkVersion flutter.targetSdkVersion  // Correct version
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }

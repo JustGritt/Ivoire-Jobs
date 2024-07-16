@@ -38,9 +38,9 @@ class _BottomBarGoRouterState extends State<BottomBarGoRouter> {
           title: Text(appLocalizations.tab_1),
         ),
         FlashyTabBarItem(
-          icon: const Icon(Ionicons.star_outline),
+          icon: const Icon(Ionicons.briefcase_outline),
           activeColor: theme.primaryColor,
-          title: Text(appLocalizations.tab_2),
+          title: Text(appLocalizations.tab_3),
         ),
         FlashyTabBarItem(
           icon: const Icon(Ionicons.person_outline),
@@ -65,16 +65,15 @@ class _BottomBarGoRouterState extends State<BottomBarGoRouter> {
           state.user.member == UserMemberStatusEnum.member) {
         setState(() {
           bottomBarItems.insert(
-              2,
-              FlashyTabBarItem(
-                icon: const Icon(Ionicons.briefcase_outline),
-                activeColor: theme.primaryColor,
-                title: Text(appLocalizations.tab_3),
-              ));
+            1,
+            FlashyTabBarItem(
+              icon: const Icon(Ionicons.star_outline),
+              activeColor: theme.primaryColor,
+              title: Text(appLocalizations.tab_2),
+            ),
+          );
         });
       }
-
-      inspect(bottomBarItems.length);
     });
   }
 
@@ -88,6 +87,7 @@ class _BottomBarGoRouterState extends State<BottomBarGoRouter> {
       '/app/services/placesPicker',
       '/app/profile/becomeWorker',
       '/app/home/detailService',
+      '/app/home/serviceBookingSuccess',
       '/app/home/bookingService',
     ];
 
@@ -104,11 +104,10 @@ class _BottomBarGoRouterState extends State<BottomBarGoRouter> {
       builder: (context, state) {
         return FlashyTabBar(
           backgroundColor: theme.scaffoldBackgroundColor,
-          selectedIndex: widget.navigationShell.currentIndex,
+          selectedIndex: getCorespondingIndexSelected(
+              widget.navigationShell.currentIndex, state),
           onItemSelected: (int value) {
-            int newIndex = bottomBarItems.indexWhere((element) =>
-                element.title.toString() ==
-                bottomBarItems[value].title.toString());
+            int newIndex = getCorrespondingIndex(value, state);
             widget.navigationShell.goBranch(newIndex,
                 initialLocation: value == widget.navigationShell.currentIndex);
           },
@@ -124,5 +123,51 @@ class _BottomBarGoRouterState extends State<BottomBarGoRouter> {
         );
       },
     );
+  }
+}
+
+int getCorrespondingIndex(int index, AuthenticationState state) {
+  switch (index) {
+    case 0:
+      return 0;
+    case 1:
+      if (state is AuthenticationSuccessState &&
+          state.user.member == UserMemberStatusEnum.member) {
+        return 1;
+      }
+      return 2;
+    case 2:
+      if (state is AuthenticationSuccessState &&
+          state.user.member == UserMemberStatusEnum.member) {
+        return 2;
+      }
+      return 3;
+    case 3:
+      return 3;
+    default:
+      return 0;
+  }
+}
+
+int getCorespondingIndexSelected(int index, AuthenticationState state) {
+  switch (index) {
+    case 0:
+      return 0;
+    case 1:
+      return 1;
+    case 2:
+      if (state is AuthenticationSuccessState &&
+          state.user.member == UserMemberStatusEnum.member) {
+        return 2;
+      }
+      return 1;
+    case 3:
+      if (state is AuthenticationSuccessState &&
+          state.user.member == UserMemberStatusEnum.member) {
+        return 3;
+      }
+      return 2;
+    default:
+      return 0;
   }
 }

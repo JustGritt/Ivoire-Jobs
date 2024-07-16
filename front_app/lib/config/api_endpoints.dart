@@ -63,6 +63,7 @@ class ApiEndpoint {
   static const becomeBarasseur = '/member';
   // Booking Services
   static const bookingServices = '/booking';
+  static const bookings = '/booking/collection';
   // Reports Endpoints
   static const reports = '${api}/report/pending';
   static const reportsDetails = '${api}/report/:id';
