@@ -1,5 +1,6 @@
 import 'package:barassage_app/features/admin_app/models/category.dart';
 import 'package:barassage_app/features/admin_app/models/log.dart';
+import 'package:barassage_app/features/admin_app/models/logResponse.dart';
 import 'package:barassage_app/features/admin_app/models/member.dart';
 import 'package:barassage_app/features/auth_mod/models/api_response.dart';
 import 'package:barassage_app/features/admin_app/models/admin_user.dart';
@@ -197,7 +198,7 @@ class AdminService {
       Response res = await _http.get(ApiEndpoint.bookingsCollection);
       if (res.statusCode == 200) {
         List<Booking> bookings =
-        (res.data as List).map((e) => Booking.fromJson(e)).toList();
+            (res.data as List).map((e) => Booking.fromJson(e)).toList();
         return bookings;
       }
       throw Exception('Failed to load bookings');
@@ -207,13 +208,12 @@ class AdminService {
     }
   }
 
-  Future<List<Log>> getLogs({required int page}) async {
+  Future<LogResponse> getLogs({required int page}) async {
     try {
-      Response res = await _http.get(ApiEndpoint.logsCollection);
+      Response res = await _http.get('${ApiEndpoint.logsCollection}?page=$page');
       debugPrint('res-logs: ${res.data}');
       if (res.statusCode == 200) {
-        List<Log> logs =
-        (res.data as List).map((e) => Log.fromJson(e)).toList();
+        LogResponse logs = LogResponse.fromJson(res.data);
         print('AdminService - logs: $logs');
         return logs;
       }

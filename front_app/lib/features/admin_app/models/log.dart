@@ -5,6 +5,8 @@ class Log {
   final String message;
   final String requestURI;
   final String createdAt;
+  final String? updatedAt;
+  // final String? deletedAt;
 
   Log({
     required this.id,
@@ -13,16 +15,20 @@ class Log {
     required this.message,
     required this.requestURI,
     required this.createdAt,
+    this.updatedAt,
+    // this.deletedAt,
   });
 
   factory Log.fromJson(Map<String, dynamic> json) {
     return Log(
-      id: json['id'],
-      level: json['level'],
-      type: json['type'],
-      message: json['message'],
-      requestURI: json['requestURI'],
-      createdAt: json['createdAt'],
+      id: json['ID'] ?? '',
+      level: json['Level'] ?? '',
+      type: json['Type'] ?? '',
+      message: json['Message'] ?? '',
+      requestURI: json['RequestURI'] ?? '',
+      createdAt: json['CreatedAt'] ?? '',
+      updatedAt: json['UpdatedAt'] ?? '',
+      // deletedAt: json['deletedAt'],
     );
   }
 
@@ -34,6 +40,8 @@ class Log {
       'message': message,
       'requestURI': requestURI,
       'createdAt': createdAt,
+      'updatedAt': updatedAt,
+      // 'deletedAt': deletedAt,
     };
   }
 
@@ -44,6 +52,8 @@ class Log {
     String? message,
     String? requestURI,
     String? createdAt,
+    String? updatedAt,
+    // String? deletedAt,
   }) {
     return Log(
       id: id ?? this.id,
@@ -52,6 +62,8 @@ class Log {
       message: message ?? this.message,
       requestURI: requestURI ?? this.requestURI,
       createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      // deletedAt: deletedAt ?? this.deletedAt,
     );
   }
 
@@ -65,7 +77,9 @@ class Log {
         other.type == type &&
         other.message == message &&
         other.requestURI == requestURI &&
-        other.createdAt == createdAt;
+        other.createdAt == createdAt &&
+        other.updatedAt == updatedAt;
+    // other.deletedAt == deletedAt;
   }
 
   @override
@@ -75,5 +89,7 @@ class Log {
       type.hashCode ^
       message.hashCode ^
       requestURI.hashCode ^
-      createdAt.hashCode;
+      createdAt.hashCode ^
+      updatedAt.hashCode;
+  // deletedAt.hashCode;
 }

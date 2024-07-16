@@ -1,7 +1,7 @@
 import 'package:barassage_app/core/init_dependencies.dart';
-import 'package:barassage_app/features/admin_app/models/log.dart';
 import 'package:barassage_app/features/admin_app/services/admin_service.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../../providers/logs_provider.dart';
 
@@ -26,6 +26,10 @@ class _LogsScreenState extends State<LogsScreen> {
   Future<void> fetchLogs() async {
     final logsProvider = Provider.of<LogsProvider>(context, listen: false);
     await logsProvider.getAllLogs();
+  }
+
+  String formatDate(DateTime date) {
+    return DateFormat.yMMMd().add_jm().format(date);
   }
 
   Widget _buildLevelChip(String level) {
@@ -70,6 +74,14 @@ class _LogsScreenState extends State<LogsScreen> {
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
     return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'Logs',
+          style: TextStyle(
+            color: Colors.black,
+          ),
+        ),
+      ),
       body: FutureBuilder<void>(
         future: logsFuture,
         builder: (context, snapshot) {
@@ -82,16 +94,17 @@ class _LogsScreenState extends State<LogsScreen> {
               builder: (context, logsProvider, child) {
                 if (logsProvider.isLoading) {
                   return Center(child: CircularProgressIndicator());
-                } else if (logsProvider.logs.isEmpty) {
+                } else if (logsProvider.logs.items.isEmpty) {
                   return Center(child: Text('No logs available'));
                 } else {
-                  return Container(
-                    child: Column(
-                      children: [
-                        Expanded(
+                  return Column(
+                    children: [
+                      Expanded(
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
                           child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: SingleChildScrollView(
+                            child: Container(
+                              width: MediaQuery.of(context).size.width,
                               child: DataTable(
                                 columnSpacing: 12.0,
                                 headingRowHeight: 56.0,
@@ -122,27 +135,45 @@ class _LogsScreenState extends State<LogsScreen> {
                                       ),
                                     ),
                                   ),
+                                  DataColumn(
+                                    label: Text(
+                                      'Created At',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
                                 ],
-                                rows: logsProvider.logs
+                                rows: logsProvider.logs.items
                                     .map(
                                       (log) => DataRow(
-                                    cells: [
-                                      DataCell(_buildLevelChip(log.level)),
-                                      DataCell(Text(log.type)),
-                                      DataCell(
-                                        Tooltip(
-                                          message: log.message,
-                                          child: Text(
-                                            log.message
+                                        cells: [
+                                          DataCell(_buildLevelChip(log.level)),
+                                          DataCell(Text(log.type)),
+                                          DataCell(
+                                            Tooltip(
+                                              message: log.message,
+                                              child: Text(
+                                                log.message.length > 50
+                                                    ? log.message
+                                                            .substring(0, 50) +
+                                                        '...'
+                                                    : log.message,
+                                              ),
+                                            ),
                                           ),
-                                        ),
+                                          DataCell(
+                                            Text(formatDate(
+                                                DateTime.parse(log.createdAt))),
+                                          ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
-                                )
+                                    )
                                     .toList(),
-                                headingRowColor: MaterialStateProperty.all(theme.primaryColor.withOpacity(0.1)),
-                                dataRowColor: MaterialStateProperty.all(Colors.white),
+                                headingRowColor: MaterialStateProperty.all(
+                                    theme.primaryColor.withOpacity(0.1)),
+                                dataRowColor:
+                                    MaterialStateProperty.all(Colors.white),
                                 horizontalMargin: 12,
                                 headingTextStyle: TextStyle(
                                   fontWeight: FontWeight.bold,
@@ -150,7 +181,8 @@ class _LogsScreenState extends State<LogsScreen> {
                                 ),
                                 border: TableBorder(
                                   horizontalInside: BorderSide(
-                                    color: Colors.grey.shade100,
+                                    color:
+                                        Colors.grey.shade300, // Light gray line
                                     width: 1,
                                   ),
                                 ),
@@ -158,36 +190,51 @@ class _LogsScreenState extends State<LogsScreen> {
                             ),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            if (!logsProvider.logs.first)
                               IconButton(
-                                icon: Icon(Icons.arrow_back),
-                                onPressed: logsProvider.currentPage > 1
-                                    ? () {
+                                icon: Icon(Icons.first_page,
+                                    color: theme.primaryColor),
+                                onPressed: () {
+                                  logsProvider.jumpToPage(1);
+                                },
+                              ),
+                            if (!logsProvider.logs.first)
+                              IconButton(
+                                icon: Icon(Icons.chevron_left,
+                                    color: theme.primaryColor),
+                                onPressed: () {
                                   logsProvider.previousPage();
-                                }
-                                    : null,
+                                },
                               ),
-                              Text(
-                                  '${logsProvider.currentPage} / ${logsProvider.totalPages}'),
+                            Text(
+                                '${logsProvider.logs.currentPage} / ${logsProvider.logs.totalPages}'),
+                            if (!logsProvider.logs.last)
                               IconButton(
-                                icon: Icon(Icons.arrow_forward),
-                                onPressed: logsProvider.currentPage <
-                                    logsProvider.totalPages
-                                    ? () {
+                                icon: Icon(Icons.chevron_right,
+                                    color: theme.primaryColor),
+                                onPressed: () {
                                   logsProvider.nextPage();
-                                }
-                                    : null,
+                                },
                               ),
-                            ],
-                          ),
+                            if (!logsProvider.logs.last)
+                              IconButton(
+                                icon: Icon(Icons.last_page,
+                                    color: theme.primaryColor),
+                                onPressed: () {
+                                  logsProvider
+                                      .jumpToPage(logsProvider.logs.totalPages);
+                                },
+                              ),
+                          ],
                         ),
-                      ],
-                    ),
-
+                      ),
+                    ],
                   );
                 }
               },

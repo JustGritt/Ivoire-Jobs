@@ -1,32 +1,52 @@
+import 'package:barassage_app/features/admin_app/models/logResponse.dart';
 import 'package:flutter/material.dart';
-import '../models/log.dart';
 import '../services/admin_service.dart';
 
 class LogsProvider with ChangeNotifier {
   final AdminService _adminService = AdminService();
-  List<Log> _logs = [];
+  LogResponse _logs = LogResponse(
+    first: false,
+    last: false,
+    max_page: 0,
+    page: 0,
+    size: 0,
+    total: 0,
+    visible: 0,
+    items: [],
+    currentPage: 0,
+    totalPages: 0,
+  );
   bool _isLoading = false;
   int _currentPage = 1;
   int _totalPages = 1;
 
-  List<Log> get logs => _logs;
+  LogResponse get logs => _logs;
   bool get isLoading => _isLoading;
   int get currentPage => _currentPage;
   int get totalPages => _totalPages;
 
-  Future<List<Log>> getAllLogs({int page = 1}) async {
+  Future<void> getAllLogs({int page = 1}) async {
     _isLoading = true;
     notifyListeners();
     try {
-      // var response = await _adminService.getLogs(page: page);
-      /*_logs = response.logs;
-      _currentPage = response.currentPage;
-      _totalPages = response.totalPages;*/
       _logs = await _adminService.getLogs(page: page);
-      return _logs;
+      debugPrint('logs: ${_logs.items.length}');
+      _currentPage = _logs.currentPage;
+      _totalPages = _logs.totalPages;
     } catch (e) {
-      _logs = [];
-      return _logs;
+      print('Error in LogsProvider: $e');
+      _logs = LogResponse(
+        first: false,
+        last: false,
+        max_page: 0,
+        page: 0,
+        size: 0,
+        total: 0,
+        visible: 0,
+        items: [],
+        currentPage: 0,
+        totalPages: 0,
+      );
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -35,15 +55,19 @@ class LogsProvider with ChangeNotifier {
 
   void nextPage() {
     if (_currentPage < _totalPages) {
-      _currentPage++;
-      getAllLogs(page: _currentPage);
+      getAllLogs(page: ++_currentPage);
     }
   }
 
   void previousPage() {
     if (_currentPage > 1) {
-      _currentPage--;
-      getAllLogs(page: _currentPage);
+      getAllLogs(page: --_currentPage);
+    }
+  }
+
+  void jumpToPage(int page) {
+    if (page > 0 && page <= _totalPages) {
+      getAllLogs(page: page);
     }
   }
 }
