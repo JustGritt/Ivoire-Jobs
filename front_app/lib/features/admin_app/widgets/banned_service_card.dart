@@ -1,3 +1,4 @@
+import 'package:barassage_app/features/admin_app/utils/home_colors.dart';
 import 'package:barassage_app/features/admin_app/models/service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -9,12 +10,12 @@ class BanCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.symmetric(vertical: 8.0),
-      color: Colors.grey[200],
+      margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+      color: Colors.grey[100],
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15.0),
       ),
-      elevation: 5,
+      elevation: 4,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Stack(
@@ -27,6 +28,7 @@ class BanCard extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
+                    color: primary,
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -39,7 +41,10 @@ class BanCard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 8),
-                const Divider(),
+                Divider(
+                  color: Colors.grey[300],
+                  thickness: 1,
+                ),
                 const SizedBox(height: 8),
                 Text(
                   'Description: ${service.description}',
@@ -61,9 +66,21 @@ class BanCard extends StatelessWidget {
                   style: const TextStyle(fontSize: 14),
                 ),
                 const SizedBox(height: 8),
-                Text(
-                  'Status: ${service.status ? 'Active' : 'Inactive'}',
-                  style: const TextStyle(fontSize: 14),
+                Row(
+                  children: [
+                    Icon(
+                      service.status ? Icons.check_circle : Icons.cancel,
+                      color: service.status ? Colors.red : Colors.green,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      'Status: ${service.status ? 'Banned' : 'Unbanned'}',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: service.status ? Colors.red : Colors.green,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -79,8 +96,7 @@ class BanCard extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   backgroundColor: Colors.redAccent,
                   shadowColor: Colors.redAccent,
                   foregroundColor: Colors.white,
