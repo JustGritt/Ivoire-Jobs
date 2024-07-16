@@ -1,5 +1,5 @@
-import '../core/classes/theme_manager.dart';
-import '../core/classes/theme_provider.dart';
+import 'package:barassage_app/core/classes/theme_provider.dart';
+import 'package:barassage_app/core/classes/theme_manager.dart';
 
 class ThemeProvider extends BaseThemeProvider {
   int _index = 0;

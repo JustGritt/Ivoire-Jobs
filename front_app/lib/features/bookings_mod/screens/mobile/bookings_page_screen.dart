@@ -1,14 +1,13 @@
-import 'package:barassage_app/config/app_colors.dart';
 import 'package:barassage_app/features/bookings_mod/providers/booking_services_provider.dart';
 import 'package:barassage_app/features/bookings_mod/widgets/booking_service_card.dart';
-import 'package:barassage_app/features/main_app/app.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
-import 'package:go_router/go_router.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:barassage_app/features/main_app/app.dart';
+import 'package:barassage_app/config/app_colors.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/material.dart';
 
 class BookingsPageScreen extends StatefulWidget {
   const BookingsPageScreen({super.key});
@@ -37,7 +36,6 @@ class _BookingsPageScreenState extends State<BookingsPageScreen> {
         20,
         (index) => Align(
               key: ValueKey(index),
-              alignment: Alignment.center,
               child: LoadingAnimationWidget.prograssiveDots(
                 color: theme.primaryColor,
                 size: 70,

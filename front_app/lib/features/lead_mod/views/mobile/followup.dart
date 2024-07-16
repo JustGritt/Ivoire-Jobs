@@ -1,7 +1,6 @@
 import 'package:barassage_app/features/lead_mod/lead_mod.dart';
+import 'package:barassage_app/core/core.dart';
 import 'package:flutter/material.dart';
-
-import '../../../../core/core.dart';
 
 class FollowupForMobile extends StatelessWidget {
   const FollowupForMobile({super.key});

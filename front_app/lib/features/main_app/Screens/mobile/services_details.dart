@@ -1,12 +1,12 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:barassage_app/features/main_app/models/service_models/service_created_model.dart';
-import 'package:barassage_app/features/main_app/widgets/details_service/section_client_detail_service.dart';
 import 'package:barassage_app/features/main_app/widgets/details_service/section_rating_detail_service.dart';
+import 'package:barassage_app/features/main_app/widgets/details_service/section_client_detail_service.dart';
 import 'package:barassage_app/features/main_app/widgets/details_service/section_top_detail_service.dart';
+import 'package:barassage_app/features/main_app/models/service_models/service_created_model.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:barassage_app/features/main_app/app.dart';
+import 'package:go_router/go_router.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class ServiceDetailPage extends StatelessWidget {
   final ServiceCreatedModel service;
@@ -61,7 +61,8 @@ class ServiceDetailPage extends StatelessWidget {
                               bottom: 20,
                               left: 20,
                               child: Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 15, vertical: 8),
                                 decoration: BoxDecoration(
                                   color: Colors.black54,
                                   borderRadius: BorderRadius.circular(8),
@@ -134,100 +135,97 @@ class ServiceDetailPage extends StatelessWidget {
                 ],
               ),
             ),
-          Container(
-                    clipBehavior: Clip.antiAlias,
-                    padding: const EdgeInsets.only(top: 15, bottom: 20),
-                    decoration: BoxDecoration(
-                      color: theme.scaffoldBackgroundColor,
-                      border: Border(
-                        top: BorderSide(
-                          //                    <--- top side
-                          color: theme.colorScheme.surface,
+            Container(
+              clipBehavior: Clip.antiAlias,
+              padding: const EdgeInsets.only(top: 15, bottom: 20),
+              decoration: BoxDecoration(
+                color: theme.scaffoldBackgroundColor,
+                border: Border(
+                  top: BorderSide(
+                    //                    <--- top side
+                    color: theme.colorScheme.surface,
+                  ),
+                ),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(16.0),
+                  topRight: Radius.circular(16.0),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey[200]!,
+                    offset: Offset(0, -2),
+                    blurRadius: 30,
+                    spreadRadius: 2,
+                  ),
+                ],
+              ),
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Total',
+                          style: theme.textTheme.labelMedium?.copyWith(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: theme.primaryColorDark,
+                          ),
                         ),
-                      ),
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(16.0),
-                        topRight: Radius.circular(16.0),
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey[200]!,
-                          offset: Offset(0, -2),
-                          blurRadius: 30,
-                          spreadRadius: 2,
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              service.price,
+                              style: theme.textTheme.labelMedium?.copyWith(
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              'XOF',
+                              style: theme.textTheme.labelMedium?.copyWith(
+                                fontSize: 14,
+                                color: theme.colorScheme.surface,
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 8.0, horizontal: 16.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Total',
-                                style: theme.textTheme.labelMedium?.copyWith(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: theme.primaryColorDark,
-                                ),
+                    CupertinoButton(
+                        color: theme.primaryColor,
+                        minSize: 0,
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 12, horizontal: 20),
+                        onPressed: () {
+                          context.pushNamed(App.bookingService, extra: service);
+                        },
+                        child: Row(
+                          children: [
+                            Icon(
+                              CupertinoIcons.calendar_today,
+                              color: Colors.white,
+                            ),
+                            const SizedBox(width: 10),
+                            Text(
+                              appLocalizations.book,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
                               ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    service.price,
-                                    style:
-                                        theme.textTheme.labelMedium?.copyWith(
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Text(
-                                    'XOF',
-                                    style:
-                                        theme.textTheme.labelMedium?.copyWith(
-                                      fontSize: 14,
-                                      color: theme.colorScheme.surface,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                          CupertinoButton(
-                              color: theme.primaryColor,
-                              minSize: 0,
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 12, horizontal: 20),
-                              onPressed: () {
-                                context.pushNamed(App.bookingService,
-                                    extra: service);
-                              },
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    CupertinoIcons.calendar_today,
-                                    color: Colors.white,
-                                  ),
-                                  const SizedBox(width: 10),
-                                  Text(
-                                    appLocalizations.book,
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              )),
-                        ],
-                      ),
-                    ),
-                  ),
+                            ),
+                          ],
+                        )),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),

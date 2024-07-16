@@ -1,7 +1,6 @@
-import 'package:flutter/material.dart';
+import 'package:barassage_app/config/app_theme.dart';
 import 'package:provider/provider.dart';
-
-import '../../../config/app_theme.dart';
+import 'package:flutter/material.dart';
 
 class DayNightSwitch extends StatefulWidget {
   const DayNightSwitch({super.key});

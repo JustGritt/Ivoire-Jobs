@@ -1,6 +1,5 @@
+import 'package:barassage_app/features/auth_mod/services/api_exceptions.dart';
 import 'package:dio/dio.dart';
-
-import '../../features/auth_mod/services/api_exceptions.dart';
 
 class DioExceptionHandler implements Exception {
   final DioException error;

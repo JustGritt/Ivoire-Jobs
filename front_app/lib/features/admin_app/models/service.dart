@@ -61,7 +61,8 @@ class Service {
       createdAt: json['createdAt'] != null
           ? DateTime.parse(json['createdAt'])
           : DateTime.now(),
-      category: json['category'] != null ? List<String>.from(json['category']) : [],
+      category:
+          json['category'] != null ? List<String>.from(json['category']) : [],
       user: User.fromJson(json['user']),
     );
   }

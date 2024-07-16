@@ -1,7 +1,7 @@
-import 'package:barassage_app/config/config.dart';
-// import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:barassage_app/config/config.dart';
+import 'package:flutter/material.dart';
+// import 'package:flutter/cupertino.dart';
 // import 'package:flutter_animated_button/flutter_animated_button.dart';
 
 // ignore: must_be_immutable

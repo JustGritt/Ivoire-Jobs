@@ -1,10 +1,7 @@
-import 'package:barassage_app/config/app_colors.dart';
-import 'package:barassage_app/config/app_config.dart';
 import 'package:barassage_app/features/bookings_mod/models/booking_appointment.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:barassage_app/config/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
-import 'package:skeletonizer/skeletonizer.dart';
 
 class BookingServiceCard extends StatefulWidget {
   final BookingAppointment appointment;
@@ -58,7 +55,7 @@ class _BookingServiceCardState extends State<BookingServiceCard> {
                     height: double.infinity,
                     width: double.infinity,
                     child: Image.network(
-                      widget.appointment.service.images.first.url ?? imageUrl,
+                      widget.appointment.service.images.first.url,
                       fit: BoxFit.cover,
                     ),
                   ),

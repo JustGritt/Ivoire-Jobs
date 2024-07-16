@@ -4,7 +4,8 @@ class ConversationsPageScreen extends StatefulWidget {
   const ConversationsPageScreen({super.key});
 
   @override
-  State<ConversationsPageScreen> createState() => _ConversationsPageScreenState();
+  State<ConversationsPageScreen> createState() =>
+      _ConversationsPageScreenState();
 }
 
 class _ConversationsPageScreenState extends State<ConversationsPageScreen> {

@@ -1,4 +1,4 @@
-import 'services_model.dart';
+import 'package:barassage_app/features/main_app/models/main/services_model.dart';
 
 class TrendingServices {
   final List<Service> _trendingServices = [

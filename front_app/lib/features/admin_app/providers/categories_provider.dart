@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:barassage_app/features/admin_app/models/category.dart';
 import 'package:barassage_app/features/admin_app/services/admin_service.dart';
+import 'package:barassage_app/features/admin_app/models/category.dart';
+import 'package:flutter/material.dart';
 
 class CategoriesProvider with ChangeNotifier {
   final AdminService _adminService = AdminService();

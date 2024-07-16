@@ -59,7 +59,8 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
   void _handleSearch(String query) {
     setState(() {
       filteredUsers = users.where((user) {
-        final userName = user.firstName.toLowerCase() + ' ' + user.lastName.toLowerCase();
+        final userName =
+            user.firstName.toLowerCase() + ' ' + user.lastName.toLowerCase();
         final searchQuery = query.toLowerCase();
         return userName.contains(searchQuery);
       }).toList();

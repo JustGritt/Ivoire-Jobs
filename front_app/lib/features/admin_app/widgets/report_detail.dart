@@ -77,7 +77,8 @@ class _ReportDetailsScreenState extends State<ReportDetailsScreen> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 10),
                         backgroundColor: Colors.redAccent,
                         shadowColor: Colors.redAccent,
                         foregroundColor: Colors.white,
@@ -107,7 +108,8 @@ class _ReportDetailsScreenState extends State<ReportDetailsScreen> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 10),
                         backgroundColor: Colors.green,
                         shadowColor: Colors.green,
                         foregroundColor: Colors.white,

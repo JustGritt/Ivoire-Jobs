@@ -1,7 +1,7 @@
+import 'package:barassage_app/core/core.dart';
 import 'package:flutter/material.dart';
-
-import '../../../../core/core.dart';
-import '../../screens/screen.dart' as mobile;
+import 'package:barassage_app/features/profile_mod/screens/screen.dart'
+    as mobile;
 
 class ProfileController extends StatelessController {
   const ProfileController({super.key});

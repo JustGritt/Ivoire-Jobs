@@ -1,16 +1,14 @@
-import 'dart:developer';
-
-import 'package:barassage_app/config/app_colors.dart';
-import 'package:barassage_app/core/helpers/extentions/string_extension.dart';
 import 'package:barassage_app/features/main_app/models/location_service.dart';
+import 'package:barassage_app/core/helpers/extentions/string_extension.dart';
+import 'package:google_maps_place_picker_mb/google_maps_place_picker.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:barassage_app/features/main_app/app.dart';
+import 'package:pushable_button/pushable_button.dart';
+import 'package:barassage_app/config/app_colors.dart';
 import 'package:ez_validator/ez_validator.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:google_maps_place_picker_mb/google_maps_place_picker.dart';
-import 'package:pushable_button/pushable_button.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class StepChooseLocation extends StatefulWidget {
   final Function(LocationService data) onEnd;
@@ -109,13 +107,11 @@ Widget buttonSearchInput(
         LocationService locationService = LocationService(
           latitude: pickResult.geometry!.location.lat,
           longitude: pickResult.geometry!.location.lng,
-          postCode: (pickResult.addressComponents != null &&
-                  pickResult.addressComponents![2] != null)
+          postCode: (pickResult.addressComponents != null)
               ? pickResult.addressComponents![2].longName
               : "",
           city: pickResult.vicinity ?? "",
-          country: (pickResult.addressComponents != null &&
-                  pickResult.addressComponents![3] != null)
+          country: (pickResult.addressComponents != null)
               ? pickResult.addressComponents![3].longName
               : "",
           address: pickResult.formattedAddress ?? "",

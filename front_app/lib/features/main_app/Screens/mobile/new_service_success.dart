@@ -1,7 +1,7 @@
 import 'package:barassage_app/core/blocs/service/service_bloc.dart';
 import 'package:barassage_app/features/main_app/app.dart';
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter/material.dart';
 
 class NewServiceSuccess extends StatefulWidget {
   final CreateServiceSuccess service;

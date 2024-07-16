@@ -1,16 +1,13 @@
-import 'dart:developer';
-
-import 'package:barassage_app/config/app_cache.dart';
-import 'package:barassage_app/core/classes/app_context.dart';
-import 'package:barassage_app/core/exceptions/dio_exceptions.dart';
-import 'package:barassage_app/core/init_dependencies.dart';
-import 'package:barassage_app/core/widgets/toast_message.dart';
-import 'package:barassage_app/features/bookings_mod/models/booking_appointment.dart';
-import 'package:barassage_app/features/bookings_mod/services/bookings_services.dart';
 import 'package:barassage_app/features/main_app/models/request_info_base_model.dart';
-import 'package:barassage_app/features/main_app/models/service_models/booking_service_model/booking_service_created_model.dart';
-import 'package:dio/dio.dart';
+import 'package:barassage_app/features/bookings_mod/services/bookings_services.dart';
+import 'package:barassage_app/features/bookings_mod/models/booking_appointment.dart';
+import 'package:barassage_app/core/exceptions/dio_exceptions.dart';
+import 'package:barassage_app/core/widgets/toast_message.dart';
+import 'package:barassage_app/core/classes/app_context.dart';
+import 'package:barassage_app/core/init_dependencies.dart';
+import 'package:barassage_app/config/app_cache.dart';
 import 'package:flutter/foundation.dart';
+import 'package:dio/dio.dart';
 
 AppCache appCache = serviceLocator<AppCache>();
 AppContext appContext = serviceLocator<AppContext>();

@@ -125,8 +125,7 @@ class _HeaderState extends State<Header> with SingleTickerProviderStateMixin {
                     width: 2,
                   ),
                   foregroundColor: primary,
-                  backgroundColor:
-                      Colors.transparent,
+                  backgroundColor: Colors.transparent,
                   overlayColor: primary,
                 ),
               ),

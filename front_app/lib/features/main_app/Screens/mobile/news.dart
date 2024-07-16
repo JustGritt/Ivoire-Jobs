@@ -1,11 +1,9 @@
-import 'dart:developer';
-
-import 'package:flutter/material.dart';
+import 'package:barassage_app/features/main_app/providers/news_provider.dart';
+import 'package:barassage_app/features/main_app/models/model.dart';
+import 'package:barassage_app/core/core.dart';
 import 'package:provider/provider.dart';
-
-import '../../../../core/core.dart';
-import '../../models/model.dart';
-import '../../providers/news_provider.dart';
+import 'package:flutter/material.dart';
+import 'dart:developer';
 
 class News extends StatefulWidget {
   const News({super.key});

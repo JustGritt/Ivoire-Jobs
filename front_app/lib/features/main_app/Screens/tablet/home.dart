@@ -1,8 +1,7 @@
+import 'package:barassage_app/features/main_app/widgets/day_night_switch.dart';
+import 'package:barassage_app/features/main_app/widgets/menu_buttons.dart';
+import 'package:barassage_app/core/classes/classes.dart';
 import 'package:flutter/material.dart';
-
-import '../../../../core/classes/classes.dart';
-import '../../widgets/day_night_switch.dart';
-import '../../widgets/menu_buttons.dart';
 
 class Home extends StatefulWidget {
   final String? title;

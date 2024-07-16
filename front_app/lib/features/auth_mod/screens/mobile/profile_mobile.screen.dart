@@ -1,7 +1,6 @@
+import 'package:barassage_app/features/auth_mod/widgets/auth_button.dart';
+import 'package:barassage_app/core/core.dart';
 import 'package:flutter/material.dart';
-
-import '../../../../core/core.dart';
-import '../../widgets/auth_button.dart';
 
 class ProfileMobileScreen extends StatelessWidget {
   const ProfileMobileScreen({super.key});

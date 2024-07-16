@@ -1,9 +1,8 @@
 import 'package:barassage_app/core/blocs/authentication/authentication_bloc.dart';
-import 'package:barassage_app/features/auth_mod/models/user_update.dart';
 import 'package:barassage_app/features/auth_mod/widgets/app_button.dart';
-import 'package:barassage_app/config/app_colors.dart';
-
+import 'package:barassage_app/features/auth_mod/models/user_update.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:barassage_app/config/app_colors.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ez_validator/ez_validator.dart';
 import 'package:flutter/cupertino.dart';
@@ -70,11 +69,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       });
       if (errors_.entries.every((element) => element.value == null)) {
         context.read<AuthenticationBloc>().add(UpdateUserEvent(UserUpdate(
-          firstName: firstNameController.text,
-          lastName: lastNameController.text,
-          email: emailController.text,
-          bio: bioController.text,
-        )));
+              firstName: firstNameController.text,
+              lastName: lastNameController.text,
+              email: emailController.text,
+              bio: bioController.text,
+            )));
       }
     } catch (e) {
       print(e);
@@ -199,25 +198,24 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           height: 1,
                           margin: EdgeInsets.symmetric(vertical: 10),
                         ),
-                        Row(
-                            children: [
-                              const Icon(CupertinoIcons.mail),
-                              const SizedBox(width: 10),
-                              Flexible(
-                                child: CupertinoTextField(
-                                  placeholder: appLocalizations.email,
-                                  controller: emailController,
-                                  enabled: false,
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 5),
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: Colors.transparent,
-                                    ),
-                                  ),
+                        Row(children: [
+                          const Icon(CupertinoIcons.mail),
+                          const SizedBox(width: 10),
+                          Flexible(
+                            child: CupertinoTextField(
+                              placeholder: appLocalizations.email,
+                              controller: emailController,
+                              enabled: false,
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 5),
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.transparent,
                                 ),
-                              )
-                            ]),
+                              ),
+                            ),
+                          )
+                        ]),
                         errors['email'] != null
                             ? Row(
                                 children: [
@@ -249,8 +247,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                   controller: bioController,
                                   minLines: 5,
                                   maxLines: 10,
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 10),
+                                  padding: EdgeInsets.symmetric(horizontal: 10),
                                   decoration: BoxDecoration(
                                     border: Border.all(
                                       color: Colors.transparent,

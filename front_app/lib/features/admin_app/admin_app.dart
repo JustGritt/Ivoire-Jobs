@@ -1,5 +1,7 @@
-import 'package:barassage_app/features/admin_app/controllers/logs_controller.dart';
+import 'package:barassage_app/features/admin_app/controllers/register_email_validation_controller_import.dart' as web;
+import 'package:barassage_app/features/admin_app/controllers/manage_categories_controller.dart';
 import 'package:barassage_app/features/admin_app/controllers/manage_bookings_controller.dart';
+import 'package:barassage_app/features/admin_app/controllers/manage_members_controller.dart';
 import 'package:barassage_app/features/admin_app/screens/desktop/splash_screen.dart';
 import 'package:barassage_app/core/blocs/authentication/authentication_bloc.dart';
 import 'package:barassage_app/features/admin_app/controllers/controllers.dart';
@@ -7,11 +9,6 @@ import 'package:barassage_app/core/classes/route_manager.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/cupertino.dart';
-
-import 'controllers/manage_categories_controller.dart';
-import 'controllers/register_email_validation_controller_import.dart' as web;
-
-import 'controllers/manage_members_controller.dart';
 
 class AdminApp extends RouteManager {
   static const String home = '/';
@@ -216,20 +213,6 @@ class AdminApp extends RouteManager {
         return null;
       },
     ));
-
-    addRoute(GoRoute(
-        path: AdminApp.logs,
-        pageBuilder: (context, state) {
-          return const CupertinoPage(child: LogsController());
-        },
-        redirect: (context, state) {
-          final authenticationState =
-              BlocProvider.of<AuthenticationBloc>(context).state;
-          if (authenticationState is! AuthenticationSuccessState) {
-            return AdminApp.logs;
-          }
-          return null;
-        }));
 
     addRoute(GoRoute(
         path: AdminApp.emailValidation,

@@ -19,7 +19,8 @@ class BannedUsersProvider extends ChangeNotifier {
     try {
       Response res = await _http.get('${ApiEndpoint.bannedUsers}');
       if (res.statusCode == 200 && res.data is List) {
-        _users = List<BannedUser>.from(res.data.map((item) => BannedUser.fromJson(item)));
+        _users = List<BannedUser>.from(
+            res.data.map((item) => BannedUser.fromJson(item)));
       } else {
         errorMessage = "Unexpected response format";
       }

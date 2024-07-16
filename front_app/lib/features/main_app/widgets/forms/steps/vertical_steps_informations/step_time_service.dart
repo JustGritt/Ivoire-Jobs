@@ -1,12 +1,12 @@
-import 'package:barassage_app/config/app_colors.dart';
-import 'package:barassage_app/core/classes/app_context.dart';
 import 'package:barassage_app/core/helpers/extentions/string_extension.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:barassage_app/core/classes/app_context.dart';
 import 'package:barassage_app/core/init_dependencies.dart';
+import 'package:pushable_button/pushable_button.dart';
+import 'package:barassage_app/config/app_colors.dart';
 import 'package:ez_validator/ez_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:pushable_button/pushable_button.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class StepTimeService extends StatefulWidget {
   final Function(int timeService) onEnd;

@@ -1,8 +1,7 @@
+import 'package:barassage_app/features/lead_mod/lead_mod.dart';
+import 'package:barassage_app/core/widgets/bottom_bar.dart';
+import 'package:barassage_app/core/utils/button_data.dart';
 import 'package:flutter/material.dart';
-
-import '../../../core/utils/button_data.dart';
-import '../../../core/widgets/bottom_bar.dart';
-import '../lead_mod.dart';
 
 // ignore: must_be_immutable
 class LeadAppBottomBar extends BottomBar {

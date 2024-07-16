@@ -1,7 +1,6 @@
+import 'package:barassage_app/config/config.dart';
+import 'package:barassage_app/core/core.dart';
 import 'package:flutter/material.dart';
-
-import '../../config/config.dart';
-import '../core.dart';
 
 // ignore: must_be_immutable
 abstract class StatelessController extends StatelessWidget {

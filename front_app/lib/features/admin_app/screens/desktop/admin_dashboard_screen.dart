@@ -35,7 +35,6 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
       _selectedIndex = index;
     });
 
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.go(_routes[index]);
 

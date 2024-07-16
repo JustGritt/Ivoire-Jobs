@@ -1,7 +1,7 @@
-import 'package:barassage_app/core/init_dependencies.dart';
-import 'package:barassage_app/features/main_app/models/service_models/service_create_model.dart';
 import 'package:barassage_app/features/main_app/models/service_models/service_created_model.dart';
+import 'package:barassage_app/features/main_app/models/service_models/service_create_model.dart';
 import 'package:barassage_app/features/main_app/services/service_services.dart';
+import 'package:barassage_app/core/init_dependencies.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 

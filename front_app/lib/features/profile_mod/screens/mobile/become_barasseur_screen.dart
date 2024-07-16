@@ -1,8 +1,8 @@
-import 'package:barassage_app/core/helpers/constants_helper.dart';
 import 'package:barassage_app/features/profile_mod/widgets/become_barasseur_info.dart';
+import 'package:barassage_app/core/helpers/constants_helper.dart';
+import 'package:animate_gradient/animate_gradient.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:animate_gradient/animate_gradient.dart';
 
 class BecomeBarasseurScreen extends StatefulWidget {
   const BecomeBarasseurScreen({super.key});

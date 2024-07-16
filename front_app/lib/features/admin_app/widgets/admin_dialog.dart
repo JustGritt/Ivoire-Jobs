@@ -12,7 +12,8 @@ class AdminCreationDialog extends StatefulWidget {
 class _AdminCreationDialogState extends State<AdminCreationDialog> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController repeatPasswordController = TextEditingController();
+  final TextEditingController repeatPasswordController =
+      TextEditingController();
 
   String firstName = '';
   String lastName = '';
@@ -106,7 +107,9 @@ class _AdminCreationDialogState extends State<AdminCreationDialog> {
                     padding: const EdgeInsets.only(right: 12.0),
                     child: IconButton(
                       icon: Icon(
-                        _obscurePassword ? Icons.visibility : Icons.visibility_off,
+                        _obscurePassword
+                            ? Icons.visibility
+                            : Icons.visibility_off,
                       ),
                       onPressed: () {
                         setState(() {
@@ -120,7 +123,8 @@ class _AdminCreationDialogState extends State<AdminCreationDialog> {
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter password';
-                  } else if (!RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$')
+                  } else if (!RegExp(
+                          r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$')
                       .hasMatch(value)) {
                     return 'Password must be at least 8 characters long, include an uppercase letter, a lowercase letter, a number, and a special character';
                   }
@@ -140,7 +144,9 @@ class _AdminCreationDialogState extends State<AdminCreationDialog> {
                     padding: const EdgeInsets.only(right: 12.0),
                     child: IconButton(
                       icon: Icon(
-                        _obscureRepeatPassword ? Icons.visibility : Icons.visibility_off,
+                        _obscureRepeatPassword
+                            ? Icons.visibility
+                            : Icons.visibility_off,
                       ),
                       onPressed: () {
                         setState(() {
@@ -190,7 +196,8 @@ class _AdminCreationDialogState extends State<AdminCreationDialog> {
           onPressed: () {
             if (_formKey.currentState!.validate()) {
               _formKey.currentState!.save();
-              widget.onCreateAdmin(firstName, lastName, email, passwordController.text);
+              widget.onCreateAdmin(
+                  firstName, lastName, email, passwordController.text);
               Navigator.of(context).pop();
             }
           },

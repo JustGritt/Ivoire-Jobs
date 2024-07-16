@@ -1,7 +1,6 @@
+import 'package:barassage_app/features/lead_mod/views/mobile/followup.dart';
+import 'package:barassage_app/core/core.dart';
 import 'package:flutter/material.dart';
-
-import '../../../core/core.dart';
-import '../views/mobile/followup.dart';
 
 class FollowupController extends StatelessController {
   const FollowupController({super.key});

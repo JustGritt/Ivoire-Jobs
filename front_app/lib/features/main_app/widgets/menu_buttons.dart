@@ -1,6 +1,5 @@
+import 'package:barassage_app/core/classes/classes.dart';
 import 'package:flutter/material.dart';
-
-import '../../../core/classes/classes.dart';
 
 class MenuButtons extends StatelessWidget {
   const MenuButtons({

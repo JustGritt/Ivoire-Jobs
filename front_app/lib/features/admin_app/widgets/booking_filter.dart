@@ -37,7 +37,8 @@ class BookingFilterSection extends StatelessWidget {
           Row(
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(8),
@@ -74,7 +75,8 @@ class BookingFilterSection extends StatelessWidget {
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: primary,
-                  padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 24.0),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 32.0, vertical: 24.0),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
