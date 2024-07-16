@@ -54,6 +54,7 @@ jobs:
           echo "MAPBOX_SEARCH_URL=${{ secrets.MAPBOX_SEARCH_URL }}" >> ./front_app/.env
           echo "MAPBOX_ACCESS_TOKEN=${{ secrets.MAPBOX_ACCESS_TOKEN }}" >> ./front_app/.env
           echo "STRIPE_PUBLIC_KEY=${{ secrets.STRIPE_PUBLIC_KEY }}" >> ./front_app/.env
+          echo "GOOGLE_API_MAPS=${{ secrets.GOOGLE_API_MAPS }}" >> ./front_app/.env
 
       - run: flutter pub get
         working-directory: ./front_app
