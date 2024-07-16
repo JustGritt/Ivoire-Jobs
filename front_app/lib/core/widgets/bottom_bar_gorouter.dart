@@ -22,9 +22,11 @@ class BottomBarGoRouter extends StatefulWidget {
 
 class _BottomBarGoRouterState extends State<BottomBarGoRouter> {
   List<FlashyTabBarItem> bottomBarItems = [];
+  late  AuthenticationBloc _authenticationBloc;
 
   @override
   void initState() {
+    _authenticationBloc = context.read<AuthenticationBloc>()..add(InitiateAuth());
     ThemeData theme = Theme.of(_context);
     AppLocalizations appLocalizations = AppLocalizations.of(_context)!;
     setState(() {
@@ -55,7 +57,7 @@ class _BottomBarGoRouterState extends State<BottomBarGoRouter> {
   void initBottomBarItems(BuildContext context) {
     ThemeData theme = Theme.of(context);
     AppLocalizations appLocalizations = AppLocalizations.of(context)!;
-    final _authenticationBloc = context.read<AuthenticationBloc>()..add(InitiateAuth());
+  
     if (bottomBarItems.length > 3) return;
     _authenticationBloc.stream.listen((state) {
       if (state is AuthenticationSuccessState &&

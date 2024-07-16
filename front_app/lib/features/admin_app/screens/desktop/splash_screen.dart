@@ -29,6 +29,13 @@ class _SplashDesktopScreenState extends State<SplashDesktopScreen>
   }
 
   @override
+  void dispose() {
+    _authenticationBloc.close();
+    super.dispose();
+  }
+
+
+  @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     return Scaffold(
