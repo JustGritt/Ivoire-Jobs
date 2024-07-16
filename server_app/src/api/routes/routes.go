@@ -79,6 +79,7 @@ func SetupRoutes(app *fiber.App) {
 	booking.Get("/collection", middlewares.RequireLoggedIn(), ctl.GetBookings)
 	booking.Post("/", middlewares.RequireLoggedIn(), ctl.CreateBooking)
 	booking.Put("/:id", middlewares.RequireLoggedIn(), ctl.UpdateBooking)
+	booking.Get("/user/:id", middlewares.RequireLoggedIn(), ctl.GetAllBookingsForUser)
 
 	// Report Group
 	report := v1.Group("/report")
@@ -132,6 +133,10 @@ func SetupRoutes(app *fiber.App) {
 	// Room Group
 	room := v1.Group("/room")
 	room.Get("/:id/ws", websocket.New(ctl.HandleWebSocket))
+
+	// Log Group
+	log := v1.Group("/log", middlewares.RequireAdmin())
+	log.Get("/collection", ctl.GetLogs)
 
 	// Dashboard Group
 	dashboard := v1.Group("/dashboard")

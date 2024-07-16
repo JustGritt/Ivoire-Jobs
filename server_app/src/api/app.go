@@ -31,6 +31,7 @@ import (
 	"barassage/api/models/configuration"
 	"barassage/api/models/contact"
 	"barassage/api/models/image"
+	myLog "barassage/api/models/log"
 	"barassage/api/models/member"
 	"barassage/api/models/message"
 	"barassage/api/models/notificationPreference"
@@ -103,6 +104,7 @@ func Run() {
 		&room.Room{},
 		&message.Message{},
 		&refreshtoken.RefreshToken{},
+		&myLog.Log{},
 	)
 
 	/*

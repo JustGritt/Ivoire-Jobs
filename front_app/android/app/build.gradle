@@ -24,7 +24,6 @@ if (flutterVersionName == null) {
 }
 
 android {
-    compileSdkVersion 34  // Correct version, only one should be defined
     namespace "app.barassage.com"
     ndkVersion "25.1.8937393"
 
@@ -44,7 +43,6 @@ android {
         targetSdkVersion flutter.targetSdkVersion  // Correct version
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
-        multiDexEnabled true
     }
 
     buildTypes {
