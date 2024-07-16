@@ -27,8 +27,7 @@ class _ManageBookingsScreenState extends State<ManageBookingsScreen> {
   }
 
   Future<List<Booking>> fetchBookings() async {
-    final bookingsProvider =
-    Provider.of<BookingsProvider>(context, listen: false);
+    final bookingsProvider = Provider.of<BookingsProvider>(context, listen: false);
     await bookingsProvider.getBookings();
     return bookingsProvider.bookings;
   }
@@ -102,100 +101,178 @@ class _ManageBookingsScreenState extends State<ManageBookingsScreen> {
                         List<Booking> filteredBookings = selectedStatus == 'All'
                             ? bookingsProvider.bookings
                             : bookingsProvider.bookings
-                            .where((booking) =>
-                        booking.status == selectedStatus)
+                            .where((booking) => booking.status == selectedStatus)
                             .toList();
-                        return Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: GridView.builder(
-                            gridDelegate:
-                            SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              crossAxisSpacing: 10,
-                              mainAxisSpacing: 10,
-                              childAspectRatio: 3,
-                            ),
-                            itemCount: filteredBookings.length,
-                            itemBuilder: (context, index) {
-                              final booking = filteredBookings[index];
-                              return Card(
-                                color: Colors.white,
-                                margin:
-                                const EdgeInsets.symmetric(vertical: 8.0),
-                                elevation: 4,
-                                shadowColor: Colors.grey.withOpacity(0.4),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(12.0),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Row(
+                        return LayoutBuilder(
+                          builder: (context, constraints) {
+                            if (constraints.maxWidth < 1280) {
+                              // Use ListView for smaller screens
+                              return ListView.builder(
+                                padding: const EdgeInsets.all(10.0),
+                                itemCount: filteredBookings.length,
+                                itemBuilder: (context, index) {
+                                  final booking = filteredBookings[index];
+                                  return Card(
+                                    color: Colors.white,
+                                    margin: const EdgeInsets.symmetric(vertical: 8.0),
+                                    elevation: 4,
+                                    shadowColor: Colors.grey.withOpacity(0.4),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(12.0),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.min,
                                         children: [
-                                          Container(
-                                            padding: const EdgeInsets.all(8.0),
-                                            decoration: BoxDecoration(
-                                              color: theme.primaryColor
-                                                  .withOpacity(0.1),
-                                              borderRadius:
-                                              BorderRadius.circular(5),
-                                            ),
-                                            child: Icon(
-                                              Icons.calendar_month,
-                                              color: theme.primaryColor,
-                                              size: 20,
-                                            ),
+                                          Row(
+                                            children: [
+                                              Container(
+                                                padding: const EdgeInsets.all(8.0),
+                                                decoration: BoxDecoration(
+                                                  color: theme.primaryColor.withOpacity(0.1),
+                                                  borderRadius: BorderRadius.circular(5),
+                                                ),
+                                                child: Icon(
+                                                  Icons.calendar_month,
+                                                  color: theme.primaryColor,
+                                                  size: 20,
+                                                ),
+                                              ),
+                                              SizedBox(width: 8),
+                                              Expanded(
+                                                child: Text(
+                                                  formatDate(booking.startTime),
+                                                  style: theme.textTheme.bodyLarge?.copyWith(fontSize: 16),
+                                                  overflow: TextOverflow.ellipsis,
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                          SizedBox(width: 8),
-                                          Expanded(
+                                          const SizedBox(height: 8),
+                                          Text(
+                                            'End: ${formatDate(booking.endTime)}',
+                                            style: theme.textTheme.bodyMedium?.copyWith(fontSize: 14),
+                                          ),
+                                          const SizedBox(height: 8),
+                                          Text(
+                                            'Contact: ${booking.contact.firstName} ${booking.contact.lastName}',
+                                            style: theme.textTheme.bodyMedium?.copyWith(fontSize: 14),
+                                          ),
+                                          Text(
+                                            'Service: ${booking.service.title}',
+                                            style: theme.textTheme.bodyMedium?.copyWith(fontSize: 14),
+                                          ),
+                                          const SizedBox(height: 8),
+                                          Align(
+                                            alignment: Alignment.centerRight,
                                             child: Text(
-                                              formatDate(booking.startTime),
-                                              style: theme.textTheme.bodyLarge
-                                                  ?.copyWith(fontSize: 16),
-                                              overflow: TextOverflow.ellipsis,
+                                              'Status: ${booking.status}',
+                                              style: theme.textTheme.bodyMedium?.copyWith(
+                                                fontSize: 14,
+                                                color: booking.status == 'fulfilled'
+                                                    ? Colors.green
+                                                    : booking.status == 'cancelled'
+                                                    ? Colors.red
+                                                    : Colors.black,
+                                              ),
                                             ),
                                           ),
                                         ],
                                       ),
-                                      const SizedBox(height: 8),
-                                      Text(
-                                        'End: ${formatDate(booking.endTime)}',
-                                        style: theme.textTheme.bodyMedium
-                                            ?.copyWith(fontSize: 14),
-                                      ),
-                                      const SizedBox(height: 8),
-                                      Text(
-                                        'Contact: ${booking.contact.firstName} ${booking.contact.lastName}',
-                                        style: theme.textTheme.bodyMedium
-                                            ?.copyWith(fontSize: 14),
-                                      ),
-                                      Text(
-                                        'Service: ${booking.service.title}',
-                                        style: theme.textTheme.bodyMedium
-                                            ?.copyWith(fontSize: 14),
-                                      ),
-                                      const Spacer(),
-                                      Text(
-                                        'Status: ${booking.status}',
-                                        style: theme.textTheme.bodyMedium?.copyWith(
-                                          fontSize: 14,
-                                          color: booking.status == 'fulfilled'
-                                              ? Colors.green
-                                              : booking.status == 'cancelled'
-                                              ? Colors.red
-                                              : Colors.black,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                                    ),
+                                  );
+                                },
                               );
-                            },
-                          ),
+                            } else {
+                              // Use GridView for larger screens
+                              return GridView.builder(
+                                padding: const EdgeInsets.all(10.0),
+                                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  crossAxisSpacing: 10,
+                                  mainAxisSpacing: 10,
+                                  childAspectRatio: 3,
+                                ),
+                                itemCount: filteredBookings.length,
+                                itemBuilder: (context, index) {
+                                  final booking = filteredBookings[index];
+                                  return Card(
+                                    color: Colors.white,
+                                    margin: const EdgeInsets.symmetric(vertical: 8.0),
+                                    elevation: 4,
+                                    shadowColor: Colors.grey.withOpacity(0.4),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(12.0),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Container(
+                                                padding: const EdgeInsets.all(8.0),
+                                                decoration: BoxDecoration(
+                                                  color: theme.primaryColor.withOpacity(0.1),
+                                                  borderRadius: BorderRadius.circular(5),
+                                                ),
+                                                child: Icon(
+                                                  Icons.calendar_month,
+                                                  color: theme.primaryColor,
+                                                  size: 20,
+                                                ),
+                                              ),
+                                              SizedBox(width: 8),
+                                              Expanded(
+                                                child: Text(
+                                                  formatDate(booking.startTime),
+                                                  style: theme.textTheme.bodyLarge?.copyWith(fontSize: 16),
+                                                  overflow: TextOverflow.ellipsis,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(height: 8),
+                                          Text(
+                                            'End: ${formatDate(booking.endTime)}',
+                                            style: theme.textTheme.bodyMedium?.copyWith(fontSize: 14),
+                                          ),
+                                          const SizedBox(height: 8),
+                                          Text(
+                                            'Contact: ${booking.contact.firstName} ${booking.contact.lastName}',
+                                            style: theme.textTheme.bodyMedium?.copyWith(fontSize: 14),
+                                          ),
+                                          Text(
+                                            'Service: ${booking.service.title}',
+                                            style: theme.textTheme.bodyMedium?.copyWith(fontSize: 14),
+                                          ),
+                                          const SizedBox(height: 8),
+                                          Align(
+                                            alignment: Alignment.centerRight,
+                                            child: Text(
+                                              'Status: ${booking.status}',
+                                              style: theme.textTheme.bodyMedium?.copyWith(
+                                                fontSize: 14,
+                                                color: booking.status == 'fulfilled'
+                                                    ? Colors.green
+                                                    : booking.status == 'cancelled'
+                                                    ? Colors.red
+                                                    : Colors.black,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                              );
+                            }
+                          },
                         );
                       }
                     },
