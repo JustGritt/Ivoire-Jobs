@@ -52,6 +52,19 @@ func CreateOrGetRoom(u room.Room) (*room.Room, error) {
 	return room, nil
 }
 
+func GetRoomsForUser(userID string) ([]room.Room, error) {
+	var rooms []room.Room
+	// Find the unique rooms by user ID where at least one message has been seen
+	if err := db.PgDB.Preload("Messages").
+		Joins("JOIN messages ON messages.room_id = rooms.id").
+		Where("(rooms.creator_id = ? OR rooms.client_id = ?) AND messages.seen = ?", userID, userID, false).
+		Group("rooms.id").
+		Find(&rooms).Error; err != nil {
+		return nil, err
+	}
+	return rooms, nil
+}
+
 func GetErrors() error {
 	return db.PgDB.Error
 }

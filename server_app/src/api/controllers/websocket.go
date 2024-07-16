@@ -203,16 +203,20 @@ func broadcastToRoom(room *Room, senderID string, messageType int, message []byt
 }
 
 func saveMessage(roomID string, senderID string, receiverID string, content []byte) error {
+	room := getRoom(roomID)
+	room.mu.Lock()
+	defer room.mu.Unlock()
+
 	msg := message.Message{
 		RoomID:     roomID,
 		SenderID:   senderID,
 		ReceiverID: receiverID,
 		Content:    string(content),
+		Seen:       len(room.Participants) >= 2,
 	}
 
 	return messageRepo.Create(&msg)
 }
-
 func sendError(c *websocket.Conn, errorMsg string) {
 	errMsg := ErrorMessage{Error: errorMsg}
 	errMsgJSON, _ := json.Marshal(errMsg)
