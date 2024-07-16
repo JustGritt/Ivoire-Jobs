@@ -14,7 +14,7 @@ class BanCard extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15.0),
       ),
-      elevation: 5,
+      elevation: 4,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Stack(

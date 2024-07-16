@@ -72,7 +72,7 @@ class _StepChooseLocationState extends State<StepChooseLocation> {
           const Spacer(),
           PushableButton(
             height: 40,
-            elevation: 3,
+            elevation: 4,
             hslColor: HSLColor.fromColor(theme.primaryColor),
             shadow: BoxShadow(
               color: Colors.grey.withOpacity(0.5),

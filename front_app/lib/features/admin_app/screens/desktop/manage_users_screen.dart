@@ -69,7 +69,7 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
                 getUsers();
               },
               child: ListView.builder(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
+                padding: const EdgeInsets.all(8.0),
                 itemCount: users.length,
                 itemBuilder: (context, index) {
                   return UserCard(

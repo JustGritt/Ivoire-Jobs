@@ -1,4 +1,5 @@
 import 'package:barassage_app/features/admin_app/models/service.dart';
+import 'package:barassage_app/features/admin_app/utils/home_colors.dart';
 import 'package:flutter/material.dart';
 
 class ServiceCard extends StatelessWidget {
@@ -14,11 +15,10 @@ class ServiceCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 3,
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      color: Colors.grey[200],
+      elevation: 4,
+      color: Colors.grey[100],
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: BorderRadius.circular(16),
       ),
       child: ListTile(
         contentPadding: const EdgeInsets.all(16),
@@ -41,6 +41,7 @@ class ServiceCard extends StatelessWidget {
           style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
+            color: primary,
           ),
         ),
         subtitle: Column(
@@ -48,7 +49,7 @@ class ServiceCard extends StatelessWidget {
           children: [
             Text(service.description),
             const SizedBox(height: 5),
-            Text('Price: \$${service.price.toString()}'),
+            Text('Price: ${service.price.toString()} XOF'),
             Text('Duration: ${service.duration} minutes'),
           ],
         ),
@@ -57,6 +58,7 @@ class ServiceCard extends StatelessWidget {
           child: IconButton(
             icon: const Icon(Icons.edit),
             onPressed: onEdit,
+            color: primary,
           ),
         ),
         onTap: onEdit,
