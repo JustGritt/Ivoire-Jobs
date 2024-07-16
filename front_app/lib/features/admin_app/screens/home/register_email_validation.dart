@@ -20,10 +20,7 @@ class _RegisterEmailValidationState extends State<RegisterEmailValidation> {
   @override
   void initState() {
     super.initState();
-    if (kIsWeb) {
-      token = web.window.location.href.split('token=')[1];
-    }
-    token = '';
+    token = web.window.location.href.split('token=')[1];
 
     if (token.isEmpty) {
       setState(() {
