@@ -63,6 +63,12 @@ func CreateMember(c *fiber.Ctx) error {
 				Message: "can't extract user info from request",
 			},
 		)
+		_ = CreateLog(&LogObject{
+			Level:      "warn",
+			Type:       "Member",
+			Message:    "Error creating member",
+			RequestURI: c.OriginalURL(),
+		})
 		return c.Status(fiber.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
@@ -74,6 +80,12 @@ func CreateMember(c *fiber.Ctx) error {
 				Message: "Admins can't be members",
 			},
 		)
+		_ = CreateLog(&LogObject{
+			Level:      "warn",
+			Type:       "Member",
+			Message:    "Admins can't be members",
+			RequestURI: c.OriginalURL(),
+		})
 		return c.Status(fiber.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
@@ -89,6 +101,12 @@ func CreateMember(c *fiber.Ctx) error {
 			Code:    http.StatusNotFound,
 			Message: "User not found",
 		})
+		_ = CreateLog(&LogObject{
+			Level:      "warn",
+			Type:       "Member",
+			Message:    "User not found with ID: " + newMember.UserID,
+			RequestURI: c.OriginalURL(),
+		})
 		return c.Status(http.StatusNotFound).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
@@ -97,6 +115,12 @@ func CreateMember(c *fiber.Ctx) error {
 		errorList = append(errorList, &fiber.Error{
 			Code:    http.StatusBadRequest,
 			Message: "User is already a member",
+		})
+		_ = CreateLog(&LogObject{
+			Level:      "warn",
+			Type:       "Member",
+			Message:    "User is already a member with ID: " + newMember.UserID,
+			RequestURI: c.OriginalURL(),
 		})
 		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
 	}
@@ -107,6 +131,12 @@ func CreateMember(c *fiber.Ctx) error {
 			Code:    http.StatusBadRequest,
 			Message: "User has a pending request",
 		})
+		_ = CreateLog(&LogObject{
+			Level:      "warn",
+			Type:       "Member",
+			Message:    "User has a pending request with ID: " + newMember.UserID,
+			RequestURI: c.OriginalURL(),
+		})
 		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
@@ -116,6 +146,13 @@ func CreateMember(c *fiber.Ctx) error {
 			Code:    http.StatusInternalServerError,
 			Message: "Error creating member",
 		})
+		_ = CreateLog(&LogObject{
+			Level:      "warn",
+			Type:       "Member",
+			Message:    "Error creating member",
+			RequestURI: c.OriginalURL(),
+		})
+
 		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
@@ -155,6 +192,12 @@ func GetAllRequests(c *fiber.Ctx) error {
 				Message: "status must be 'processing', 'member', 'rejected', or 'all'",
 			},
 		)
+		_ = CreateLog(&LogObject{
+			Level:      "warn",
+			Type:       "Member",
+			Message:    "Invalid status",
+			RequestURI: c.OriginalURL(),
+		})
 		return c.Status(fiber.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
@@ -164,6 +207,12 @@ func GetAllRequests(c *fiber.Ctx) error {
 		errorList = append(errorList, &fiber.Error{
 			Code:    http.StatusInternalServerError,
 			Message: "Error getting pending requests",
+		})
+		_ = CreateLog(&LogObject{
+			Level:      "warn",
+			Type:       "Member",
+			Message:    "Error getting pending requests",
+			RequestURI: c.OriginalURL(),
 		})
 		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
 	}
@@ -177,6 +226,13 @@ func GetAllRequests(c *fiber.Ctx) error {
 		//return empty array
 		return c.Status(http.StatusOK).JSON([]MemberOutput{})
 	}
+
+	_ = CreateLog(&LogObject{
+		Level:      "info",
+		Type:       "Member",
+		Message:    "Pending requests retrieved",
+		RequestURI: c.OriginalURL(),
+	})
 
 	return c.Status(http.StatusOK).JSON(memberOutputs)
 }
@@ -210,6 +266,12 @@ func ValidateMember(c *fiber.Ctx) error {
 			Code:    http.StatusNotFound,
 			Message: "Member not found",
 		})
+		_ = CreateLog(&LogObject{
+			Level:      "warn",
+			Type:       "Member",
+			Message:    "Member not found with ID: " + memberID,
+			RequestURI: c.OriginalURL(),
+		})
 		return c.Status(http.StatusNotFound).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
@@ -219,6 +281,12 @@ func ValidateMember(c *fiber.Ctx) error {
 			Code:    http.StatusBadRequest,
 			Message: "Cannot change the status of a member",
 		})
+		_ = CreateLog(&LogObject{
+			Level:      "warn",
+			Type:       "Member",
+			Message:    "Cannot change the status of a member with ID: " + memberID,
+			RequestURI: c.OriginalURL(),
+		})
 		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
@@ -227,6 +295,12 @@ func ValidateMember(c *fiber.Ctx) error {
 		errorList = append(errorList, &fiber.Error{
 			Code:    fiber.StatusBadRequest,
 			Message: "status must be 'accepted' or 'rejected'",
+		})
+		_ = CreateLog(&LogObject{
+			Level:      "warn",
+			Type:       "Member",
+			Message:    "Invalid status",
+			RequestURI: c.OriginalURL(),
 		})
 		return c.Status(fiber.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
 	}
@@ -256,6 +330,12 @@ func ValidateMember(c *fiber.Ctx) error {
 			Code:    http.StatusNotFound,
 			Message: "User not found",
 		})
+		_ = CreateLog(&LogObject{
+			Level:      "warn",
+			Type:       "Member",
+			Message:    "User not found with ID: " + member.UserID,
+			RequestURI: c.OriginalURL(),
+		})
 		return c.Status(http.StatusNotFound).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
@@ -264,6 +344,12 @@ func ValidateMember(c *fiber.Ctx) error {
 		errorList = append(errorList, &fiber.Error{
 			Code:    http.StatusInternalServerError,
 			Message: err.Error(),
+		})
+		_ = CreateLog(&LogObject{
+			Level:      "warn",
+			Type:       "Member",
+			Message:    "Error validating member",
+			RequestURI: c.OriginalURL(),
 		})
 		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
 	}
@@ -278,8 +364,16 @@ func ValidateMember(c *fiber.Ctx) error {
 	resp, err := notification.Send(c.Context(), message, user, domain)
 	if err != nil {
 		log.Printf("error sending message: %v", err)
+	} else {
+		log.Printf("%d messages were sent successfully\n", resp.SuccessCount)
 	}
-	log.Printf("%d messages were sent successfully\n", resp.SuccessCount)
+
+	_ = CreateLog(&LogObject{
+		Level:      "info",
+		Type:       "Member",
+		Message:    "Member validated",
+		RequestURI: c.OriginalURL(),
+	})
 
 	return c.SendStatus(http.StatusOK)
 }
@@ -321,11 +415,24 @@ func GetUserMemberStatus(c *fiber.Ctx) error {
 			Code:    http.StatusNotFound,
 			Message: "Member not found",
 		})
+		_ = CreateLog(&LogObject{
+			Level:      "warn",
+			Type:       "Member",
+			Message:    "Member not found with ID: " + userID.(string),
+			RequestURI: c.OriginalURL(),
+		})
 		return c.Status(http.StatusNotFound).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
 	//map the member to output
 	memberOutput := mapMemberToOutput(member)
+
+	_ = CreateLog(&LogObject{
+		Level:      "info",
+		Type:       "Member",
+		Message:    "Member status retrieved",
+		RequestURI: c.OriginalURL(),
+	})
 
 	return c.Status(http.StatusOK).JSON(memberOutput)
 }

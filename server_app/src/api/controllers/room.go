@@ -106,7 +106,11 @@ func CreateOrGetRoom(c *fiber.Ctx) error {
 		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
-	fmt.Println(room)
+	_ = CreateLog(&LogObject{
+		Level:      "info",
+		Type:       "Room",
+		Message:    fmt.Sprintf("Room created with ID: %s", room.ID),
+	})
 
 	roomOutput := mapRoomToOutput(*room)
 	return c.Status(http.StatusCreated).JSON(HTTPResponse(http.StatusCreated, "Room", roomOutput))
