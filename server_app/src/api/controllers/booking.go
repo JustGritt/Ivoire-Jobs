@@ -49,7 +49,6 @@ type UpdateBookingObject struct {
 type BookingOutput struct {
 	BookingID string    `json:"ID"`
 	UserID    string    `json:"userID"`
-	ServiceID string    `json:"serviceID"`
 	Status    string    `json:"status"`
 	StartTime time.Time `json:"startTime"`
 	EndTime   time.Time `json:"endTime"`
@@ -76,6 +75,8 @@ type Author struct {
 	FirstName string    `json:"firstName"`
 	LastName  string    `json:"lastName"`
 	Email     string    `json:"email"`
+	Address   string    `json:"address"`
+	City      string    `json:"city"`
 	CreatedAt time.Time `json:"createdAt"`
 }
 
@@ -145,6 +146,24 @@ func CreateBooking(c *fiber.Ctx) error {
 			Level:      "warn",
 			Type:       "Booking",
 			Message:    "Error while fetching service",
+			RequestURI: c.OriginalURL(),
+		})
+		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
+	//check if the user is booking is own service
+	if service.UserID == userID {
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusBadRequest,
+				Message: "You can't book your own service",
+			},
+		)
+		_ = CreateLog(&LogObject{
+			Level:      "info",
+			Type:       "Booking",
+			Message:    "You can't book your own service",
 			RequestURI: c.OriginalURL(),
 		})
 		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
@@ -508,17 +527,6 @@ func GetBookings(c *fiber.Ctx) error {
 	//map the bookings to the output
 	var bookingsOutput []BookingOutput
 	for _, booking := range bookings {
-		user, err := userRepo.GetById(booking.CreatorID)
-		if err != nil {
-			errorList = append(
-				errorList,
-				&fiber.Error{
-					Code:    fiber.StatusBadRequest,
-					Message: "Error while fetching user",
-				},
-			)
-			return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
-		}
 		service, err := serviceRepo.GetByID(booking.ServiceID)
 		if err != nil {
 			errorList = append(
@@ -526,6 +534,17 @@ func GetBookings(c *fiber.Ctx) error {
 				&fiber.Error{
 					Code:    fiber.StatusBadRequest,
 					Message: "Error while fetching service",
+				},
+			)
+			return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
+		}
+		user, err := userRepo.GetById(booking.UserID)
+		if err != nil {
+			errorList = append(
+				errorList,
+				&fiber.Error{
+					Code:    fiber.StatusBadRequest,
+					Message: "Error while fetching contact user",
 				},
 			)
 			return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
@@ -538,6 +557,18 @@ func GetBookings(c *fiber.Ctx) error {
 		}
 		if len(images) == 0 {
 			images = []Image{}
+		}
+
+		contactUser, err := contactRepo.GetByID(booking.ContactID)
+		if err != nil {
+			errorList = append(
+				errorList,
+				&fiber.Error{
+					Code:    fiber.StatusBadRequest,
+					Message: "Error while fetching contact user",
+				},
+			)
+			return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
 		}
 
 		bookingsOutput = append(bookingsOutput, BookingOutput{
@@ -561,6 +592,8 @@ func GetBookings(c *fiber.Ctx) error {
 				FirstName: user.Firstname,
 				LastName:  user.Lastname,
 				Email:     user.Email,
+				Address:   contactUser.Address,
+				City:      contactUser.City,
 				CreatedAt: user.CreatedAt,
 			},
 		})
@@ -760,7 +793,6 @@ func bookingOutputFromModel(u *booking.Booking) *BookingOutput {
 	return &BookingOutput{
 		BookingID: u.ID,
 		UserID:    u.UserID,
-		ServiceID: u.ServiceID,
 		Status:    u.Status,
 		StartTime: u.StartTime,
 		EndTime:   u.EndTime,
