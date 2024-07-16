@@ -39,7 +39,10 @@ class BannedUserCard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 8),
-                const Divider(),
+                Divider(
+                  color: Colors.grey[300],
+                  thickness: 1,
+                ),
                 const SizedBox(height: 8),
                 Text(
                   'Reason: ${bannedUser.reason}',
