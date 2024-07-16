@@ -34,16 +34,14 @@ class _SplashDesktopScreenState extends State<SplashDesktopScreen>
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     return Scaffold(
-      body: Center(
-        child: LoadingAnimationWidget.prograssiveDots(
-        color: theme.primaryColor,
-        size: 70,
-      ))
-    );
+        body: Center(
+            child: LoadingAnimationWidget.prograssiveDots(
+      color: theme.primaryColor,
+      size: 70,
+    )));
   }
 }

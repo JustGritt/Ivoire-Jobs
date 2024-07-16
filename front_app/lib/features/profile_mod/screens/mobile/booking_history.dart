@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:barassage_app/features/auth_mod/models/user.dart';
 import 'package:barassage_app/features/profile_mod/providers/profile_bookings_provider.dart';
 import 'package:barassage_app/features/profile_mod/widgets/booking_list_item.dart';
+import 'package:barassage_app/features/auth_mod/models/user.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter/material.dart';
 
 class BookingHistoryScreen extends StatelessWidget {
   final User user;
@@ -11,7 +11,8 @@ class BookingHistoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<ProfileBookingsProvider>(context, listen: false).fetchBookingsForCurrentUser();
+      Provider.of<ProfileBookingsProvider>(context, listen: false)
+          .fetchBookingsForCurrentUser();
     });
 
     return Scaffold(

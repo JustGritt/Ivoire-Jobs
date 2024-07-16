@@ -1,5 +1,5 @@
-import 'package:barassage_app/core/helpers/extentions/string_extension.dart';
 import 'package:barassage_app/features/main_app/models/service_models/service_created_model.dart';
+import 'package:barassage_app/core/helpers/extentions/string_extension.dart';
 import 'package:flutter/material.dart';
 
 class ServiceEntry extends StatelessWidget {

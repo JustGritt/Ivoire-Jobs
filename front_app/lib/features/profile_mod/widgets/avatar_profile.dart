@@ -1,8 +1,8 @@
+import 'package:flutter_advanced_avatar/flutter_advanced_avatar.dart';
 import 'package:barassage_app/features/auth_mod/models/user.dart';
+import 'package:ionicons/ionicons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_advanced_avatar/flutter_advanced_avatar.dart';
-import 'package:ionicons/ionicons.dart';
 
 class ProfileAvatar extends StatefulWidget {
   final User user;

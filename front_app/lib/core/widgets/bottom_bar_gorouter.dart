@@ -1,8 +1,8 @@
 import 'package:barassage_app/core/blocs/authentication/authentication_bloc.dart';
-import 'package:barassage_app/core/classes/app_context.dart';
-import 'package:barassage_app/core/init_dependencies.dart';
 import 'package:barassage_app/features/auth_mod/models/user.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:barassage_app/core/classes/app_context.dart';
+import 'package:barassage_app/core/init_dependencies.dart';
 import 'package:flashy_tab_bar2/flashy_tab_bar2.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -22,11 +22,12 @@ class BottomBarGoRouter extends StatefulWidget {
 
 class _BottomBarGoRouterState extends State<BottomBarGoRouter> {
   List<FlashyTabBarItem> bottomBarItems = [];
-  late  AuthenticationBloc _authenticationBloc;
+  late AuthenticationBloc _authenticationBloc;
 
   @override
   void initState() {
-    _authenticationBloc = context.read<AuthenticationBloc>()..add(InitiateAuth());
+    _authenticationBloc = context.read<AuthenticationBloc>()
+      ..add(InitiateAuth());
     ThemeData theme = Theme.of(_context);
     AppLocalizations appLocalizations = AppLocalizations.of(_context)!;
     setState(() {
@@ -57,12 +58,12 @@ class _BottomBarGoRouterState extends State<BottomBarGoRouter> {
   void initBottomBarItems(BuildContext context) {
     ThemeData theme = Theme.of(context);
     AppLocalizations appLocalizations = AppLocalizations.of(context)!;
-  
+
     if (bottomBarItems.length > 3) return;
     _authenticationBloc.stream.listen((state) {
       if (state is AuthenticationSuccessState &&
           state.user.member == UserMemberStatusEnum.member) {
-          if (bottomBarItems.length > 3) return;
+        if (bottomBarItems.length > 3) return;
         setState(() {
           bottomBarItems.insert(
             1,

@@ -15,7 +15,8 @@ class BecomeBarasseurService {
 
   Future<void> sendRequest(String reason) async {
     try {
-      Response res = await _http.post(ApiEndpoint.becomeBarasseur, data: {"reason": reason});
+      Response res = await _http
+          .post(ApiEndpoint.becomeBarasseur, data: {"reason": reason});
       if (res.statusCode == 201) {
         showMyDialog(context,
             title: 'Success',

@@ -5,7 +5,6 @@ import 'package:barassage_app/features/auth_mod/models/user_login.dart';
 import 'package:barassage_app/features/auth_mod/models/user.dart';
 import 'package:barassage_app/config/api_endpoints.dart';
 import 'package:barassage_app/config/app_http.dart';
-
 import 'package:dio/dio.dart';
 import 'dart:convert';
 

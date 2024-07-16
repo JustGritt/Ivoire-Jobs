@@ -10,10 +10,10 @@ class Category {
   });
 
   factory Category.fromJson(Map<String, dynamic> json) => Category(
-    id: json['id'],
-    name: json['name'],
-    status: json['status'],
-  );
+        id: json['id'],
+        name: json['name'],
+        status: json['status'],
+      );
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -31,9 +31,10 @@ class CategoryRequest {
     required this.name,
   });
 
-  factory CategoryRequest.fromJson(Map<String, dynamic> json) => CategoryRequest(
-    name: json['name'],
-  );
+  factory CategoryRequest.fromJson(Map<String, dynamic> json) =>
+      CategoryRequest(
+        name: json['name'],
+      );
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};

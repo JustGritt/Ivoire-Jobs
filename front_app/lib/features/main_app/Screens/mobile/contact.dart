@@ -1,6 +1,5 @@
+import 'package:barassage_app/core/core.dart';
 import 'package:flutter/material.dart';
-
-import '../../../../core/core.dart';
 
 // ignore: must_be_immutable
 class Contact extends StatelessWidget {

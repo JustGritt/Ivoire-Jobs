@@ -19,7 +19,8 @@ class Contact {
       firstName: json['firstName'] ?? '',
       lastName: json['lastName'] ?? '',
       email: json['email'] ?? '',
-      createdAt: DateTime.parse(json['createdAt'] ?? DateTime.now().toIso8601String()),
+      createdAt:
+          DateTime.parse(json['createdAt'] ?? DateTime.now().toIso8601String()),
     );
   }
 
@@ -63,9 +64,9 @@ class Contact {
   @override
   int get hashCode {
     return id.hashCode ^
-    firstName.hashCode ^
-    lastName.hashCode ^
-    email.hashCode ^
-    createdAt.hashCode;
+        firstName.hashCode ^
+        lastName.hashCode ^
+        email.hashCode ^
+        createdAt.hashCode;
   }
 }

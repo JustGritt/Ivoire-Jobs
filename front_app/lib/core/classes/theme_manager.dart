@@ -1,7 +1,6 @@
-import '../../architect.dart';
+import 'package:barassage_app/config/config.dart';
+import 'package:barassage_app/architect.dart';
 import 'package:flutter/material.dart';
-
-import '../../config/config.dart';
 
 ThemeData defaultTheme = ThemeData(
   fontFamily: 'Okta',

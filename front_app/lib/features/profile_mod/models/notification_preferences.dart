@@ -20,11 +20,11 @@ class NotificationPreferences {
       );
 
   Map<String, dynamic> toJson() => {
-    "bookingNotification": bookingNotification,
-    "messageNotification": messageNotification,
-    "pushNotification": pushNotification,
-    "serviceNotification": serviceNotification,
-  };
+        "bookingNotification": bookingNotification,
+        "messageNotification": messageNotification,
+        "pushNotification": pushNotification,
+        "serviceNotification": serviceNotification,
+      };
 
   NotificationPreferences copyWith({
     bool? bookingNotification,

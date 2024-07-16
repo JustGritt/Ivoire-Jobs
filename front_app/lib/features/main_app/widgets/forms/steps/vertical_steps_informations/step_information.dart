@@ -1,15 +1,14 @@
-import 'dart:io';
-
-import 'package:barassage_app/config/app_colors.dart';
 import 'package:barassage_app/core/exceptions/file_exception.dart';
-import 'package:barassage_app/core/helpers/files_helper.dart';
+import 'package:insta_assets_picker/insta_assets_picker.dart';
 import 'package:barassage_app/core/helpers/utils_helper.dart';
+import 'package:barassage_app/core/helpers/files_helper.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:pushable_button/pushable_button.dart';
+import 'package:barassage_app/config/app_colors.dart';
 import 'package:ez_validator/ez_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:insta_assets_picker/insta_assets_picker.dart';
-import 'package:pushable_button/pushable_button.dart';
+import 'dart:io';
 
 class StepInformation extends StatefulWidget {
   final Function(StepInformationData data) onEnd;
@@ -44,7 +43,10 @@ class _StepInformationState extends State<StepInformation> {
       {
         "title": EzValidator<String>(label: "Title").required(),
         "description": EzValidator<String>(label: "Description").required(),
-        "price": EzValidator<double>(label: "Price").required().number().min(1000, 'Le prix doit être supérieur à 1000 XOF'),
+        "price": EzValidator<double>(label: "Price")
+            .required()
+            .number()
+            .min(1000, 'Le prix doit être supérieur à 1000 XOF'),
         "illustrations": EzValidator<List<File?>>(label: "Illustrations")
             .required()
             .arrayOf(EzValidator<File>(label: "Illustration").required())

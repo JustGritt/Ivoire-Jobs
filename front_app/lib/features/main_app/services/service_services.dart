@@ -5,7 +5,6 @@ import 'package:barassage_app/config/api_endpoints.dart';
 import 'package:barassage_app/config/app_http.dart';
 import 'package:dio/dio.dart';
 
-
 class ServiceServices {
   AppHttp http = AppHttp(headers: {
     'Content-Type': 'multipart/form-data',

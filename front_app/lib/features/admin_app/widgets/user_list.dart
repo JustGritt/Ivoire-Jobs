@@ -6,7 +6,8 @@ class UserList extends StatelessWidget {
   final List<User> users;
   final Function(User) onDetailsPressed;
 
-  const UserList({super.key, required this.users, required this.onDetailsPressed});
+  const UserList(
+      {super.key, required this.users, required this.onDetailsPressed});
 
   @override
   Widget build(BuildContext context) {

@@ -43,6 +43,5 @@ class AuthApp extends RouteManager {
         pageBuilder: (context, state) {
           return const CupertinoPage(child: RegisterController());
         }));
-
   }
 }

@@ -78,7 +78,8 @@ Future<void> showRatingDialog(BuildContext context, Booking booking) async {
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.red,
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
@@ -94,7 +95,8 @@ Future<void> showRatingDialog(BuildContext context, Booking booking) async {
               ElevatedButton(
                 onPressed: () {
                   final comment = _commentController.text;
-                  Provider.of<RatingsProvider>(context, listen: false).submitComment(
+                  Provider.of<RatingsProvider>(context, listen: false)
+                      .submitComment(
                     booking.id,
                     comment,
                     _rating,
@@ -105,7 +107,8 @@ Future<void> showRatingDialog(BuildContext context, Booking booking) async {
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green,
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),

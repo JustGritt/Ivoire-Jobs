@@ -1,9 +1,9 @@
-import 'package:barassage_app/config/app_colors.dart';
+import 'package:barassage_app/features/auth_mod/widgets/auth_button.dart';
 import 'package:barassage_app/features/auth_mod/auth_app.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import '../../../core/core.dart';
-import 'auth_button.dart';
+import 'package:barassage_app/config/app_colors.dart';
+import 'package:barassage_app/core/core.dart';
+import 'package:flutter/material.dart';
 
 TextFormField passwordField({
   String? Function(String?)? onValid,

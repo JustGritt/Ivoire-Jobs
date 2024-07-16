@@ -1,11 +1,11 @@
-import 'package:barassage_app/core/classes/app_context.dart';
-import 'package:barassage_app/core/helpers/utils_helper.dart';
-import 'package:barassage_app/core/init_dependencies.dart';
 import 'package:barassage_app/features/bookings_mod/models/booking_appointment.dart';
-import 'package:dio/dio.dart';
+import 'package:barassage_app/core/helpers/utils_helper.dart';
+import 'package:barassage_app/core/classes/app_context.dart';
+import 'package:barassage_app/core/init_dependencies.dart';
+import 'package:barassage_app/config/api_endpoints.dart';
+import 'package:barassage_app/config/app_http.dart';
 import 'package:flutter/material.dart';
-import '../../../config/api_endpoints.dart';
-import '../../../config/app_http.dart';
+import 'package:dio/dio.dart';
 
 BuildContext context = serviceLocator<AppContext>().navigatorContext;
 

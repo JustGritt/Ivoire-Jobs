@@ -1,8 +1,6 @@
-// ignore_for_file: deprecated_member_use
-
+import 'package:barassage_app/core/core.dart';
 import 'package:flutter/material.dart';
-
-import '../../../../core/core.dart';
+// ignore_for_file: deprecated_member_use
 
 class About extends StatefulWidget {
   final String? title;

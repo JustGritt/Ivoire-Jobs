@@ -1,9 +1,11 @@
+import 'package:barassage_app/core/core.dart';
 import 'package:flutter/material.dart';
-
-import '../../../../core/core.dart';
-import '../../Screens/desktop/news.dart' as desktop;
-import '../../Screens/mobile/news.dart' as mobile;
-import '../../Screens/tablet/news.dart' as tablet;
+import 'package:barassage_app/features/main_app/Screens/mobile/news.dart'
+    as mobile;
+import 'package:barassage_app/features/main_app/Screens/tablet/news.dart'
+    as tablet;
+import 'package:barassage_app/features/main_app/Screens/desktop/news.dart'
+    as desktop;
 
 class NewsController extends StatelessController {
   const NewsController({super.key});

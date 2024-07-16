@@ -1,12 +1,12 @@
 import 'package:barassage_app/features/admin_app/providers/bookings_provider.dart';
-import 'package:barassage_app/features/admin_app/services/admin_service.dart';
 import 'package:barassage_app/features/admin_app/widgets/booking_filter.dart';
+import 'package:barassage_app/features/admin_app/services/admin_service.dart';
 import 'package:barassage_app/features/admin_app/widgets/booking_card.dart';
 import 'package:barassage_app/features/admin_app/utils/home_colors.dart';
 import 'package:barassage_app/features/admin_app/models/booking.dart';
 import 'package:barassage_app/core/init_dependencies.dart';
-import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/material.dart';
 
 AdminService adminService = serviceLocator<AdminService>();
 
@@ -30,7 +30,8 @@ class _ManageBookingsScreenState extends State<ManageBookingsScreen> {
   }
 
   Future<List<Booking>> fetchBookings() async {
-    final bookingsProvider = Provider.of<BookingsProvider>(context, listen: false);
+    final bookingsProvider =
+        Provider.of<BookingsProvider>(context, listen: false);
     await bookingsProvider.getBookings();
     return bookingsProvider.bookings;
   }
@@ -58,7 +59,11 @@ class _ManageBookingsScreenState extends State<ManageBookingsScreen> {
         );
       },
     );
-    if (picked != null && picked != DateTimeRange(start: startDate ?? DateTime.now(), end: endDate ?? DateTime.now())) {
+    if (picked != null &&
+        picked !=
+            DateTimeRange(
+                start: startDate ?? DateTime.now(),
+                end: endDate ?? DateTime.now())) {
       setState(() {
         startDate = picked.start;
         endDate = picked.end;
@@ -98,20 +103,25 @@ class _ManageBookingsScreenState extends State<ManageBookingsScreen> {
                       if (bookingsProvider.isLoading) {
                         return const Center(child: CircularProgressIndicator());
                       } else if (bookingsProvider.bookings.isEmpty) {
-                        return const Center(child: Text('No bookings available'));
+                        return const Center(
+                            child: Text('No bookings available'));
                       } else {
-                        List<Booking> filteredBookings = bookingsProvider.bookings.where((booking) {
-                          bool statusMatch = selectedStatus == 'All' || booking.status == selectedStatus;
+                        List<Booking> filteredBookings =
+                            bookingsProvider.bookings.where((booking) {
+                          bool statusMatch = selectedStatus == 'All' ||
+                              booking.status == selectedStatus;
                           bool dateMatch = true;
                           if (startDate != null && endDate != null) {
-                            dateMatch = booking.startTime.isAfter(startDate!) && booking.endTime.isBefore(endDate!);
+                            dateMatch = booking.startTime.isAfter(startDate!) &&
+                                booking.endTime.isBefore(endDate!);
                           }
                           return statusMatch && dateMatch;
                         }).toList();
                         return Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16.0),
                           child: GridView.builder(
-                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 3,
                               crossAxisSpacing: 8,
                               mainAxisSpacing: 8,

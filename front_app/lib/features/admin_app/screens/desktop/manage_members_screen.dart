@@ -23,7 +23,8 @@ class _ManageMembersScreenState extends State<ManageMembersScreen> {
   }
 
   Future<void> fetchMembers() async {
-    final membersProvider = Provider.of<MembersProvider>(context, listen: false);
+    final membersProvider =
+        Provider.of<MembersProvider>(context, listen: false);
     await membersProvider.getMemberRequests();
   }
 
@@ -44,12 +45,14 @@ class _ManageMembersScreenState extends State<ManageMembersScreen> {
                 if (membersProvider.isLoading) {
                   return const Center(child: CircularProgressIndicator());
                 } else if (membersProvider.members.isEmpty) {
-                  return const Center(child: Text('No Members requests available'));
+                  return const Center(
+                      child: Text('No Members requests available'));
                 } else {
                   return Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: GridView.builder(
-                      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                      gridDelegate:
+                          const SliverGridDelegateWithMaxCrossAxisExtent(
                         maxCrossAxisExtent: 400,
                         childAspectRatio: 3 / 2,
                         crossAxisSpacing: 16,
@@ -87,7 +90,8 @@ class _ManageMembersScreenState extends State<ManageMembersScreen> {
                                   Expanded(
                                     child: Text(
                                       member.id,
-                                      style: theme.textTheme.bodyLarge?.copyWith(fontSize: 18),
+                                      style: theme.textTheme.bodyLarge
+                                          ?.copyWith(fontSize: 18),
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
@@ -96,7 +100,8 @@ class _ManageMembersScreenState extends State<ManageMembersScreen> {
                               const SizedBox(height: 8),
                               if (member.status == 'processing')
                                 Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0, vertical: 4.0),
                                   decoration: BoxDecoration(
                                     color: Colors.orange.withOpacity(0.1),
                                     borderRadius: BorderRadius.circular(8.0),
@@ -118,13 +123,15 @@ class _ManageMembersScreenState extends State<ManageMembersScreen> {
                                   if (member.status == 'processing') ...[
                                     ElevatedButton(
                                       onPressed: () {
-                                        membersProvider.approveMemberRequest(member.id, 'accepted');
+                                        membersProvider.approveMemberRequest(
+                                            member.id, 'accepted');
                                       },
                                       style: ElevatedButton.styleFrom(
                                         foregroundColor: Colors.white,
                                         backgroundColor: Colors.green,
                                         shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(8.0),
+                                          borderRadius:
+                                              BorderRadius.circular(8.0),
                                         ),
                                       ),
                                       child: const Icon(Icons.check),
@@ -133,13 +140,15 @@ class _ManageMembersScreenState extends State<ManageMembersScreen> {
                                   ],
                                   ElevatedButton(
                                     onPressed: () {
-                                      membersProvider.approveMemberRequest(member.id, 'rejected');
+                                      membersProvider.approveMemberRequest(
+                                          member.id, 'rejected');
                                     },
                                     style: ElevatedButton.styleFrom(
                                       foregroundColor: Colors.white,
                                       backgroundColor: Colors.red,
                                       shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(8.0),
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
                                       ),
                                     ),
                                     child: const Icon(Icons.close),

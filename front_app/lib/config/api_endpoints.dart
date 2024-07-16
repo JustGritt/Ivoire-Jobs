@@ -1,5 +1,5 @@
-// import 'package:barassage_app/features/admin_app/admin_app.dart';
 import 'package:barassage_app/features/features.dart';
+// import 'package:barassage_app/features/admin_app/admin_app.dart';
 
 /// In this file we will be writing all API Endpoints using this application
 
@@ -7,9 +7,9 @@ class ApiEndpoint {
   // News Server
 
   // Server Links
-  static const baseUrl = 'http://localhost:8000';
+  // static const baseUrl = 'http://localhost:8000';
   // static const baseUrl = 'http://10.0.2.2:8000';
-  // static const baseUrl = 'https://api.barassage.com';
+  static const baseUrl = 'https://api.barassage.com';
   //static const baseUrl = 'https://fantastic-space-doodle-w59vv7w5w7pfp9j-8000.app.github.dev';
   static const api = '${baseUrl}/api/v1';
 
@@ -76,4 +76,8 @@ class ApiEndpoint {
 
   // bookings collection
   static const bookingsCollection = '${api}/booking/collection';
+
+  // Logs Endpoints
+  // logs collection
+  static const logsCollection = '${api}/log/collection';
 }

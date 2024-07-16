@@ -29,8 +29,10 @@ class Booking {
     return Booking(
       id: json['ID'] ?? '',
       createdAt: DateTime.parse(json['CreatedAt'] ?? '0000-00-00T00:00:00Z'),
-      updatedAt: json['UpdatedAt'] != null ? DateTime.parse(json['UpdatedAt']) : null,
-      deletedAt: json['DeletedAt'] != null ? DateTime.parse(json['DeletedAt']) : null,
+      updatedAt:
+          json['UpdatedAt'] != null ? DateTime.parse(json['UpdatedAt']) : null,
+      deletedAt:
+          json['DeletedAt'] != null ? DateTime.parse(json['DeletedAt']) : null,
       userId: json['UserID'] ?? '',
       serviceId: json['ServiceID'] ?? '',
       status: json['Status'] ?? '',

@@ -25,18 +25,17 @@ class SectionBookingsHistory extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Booking History', style: theme.textTheme.displayLarge?.copyWith(fontSize: 20)),
+          Text('Booking History',
+              style: theme.textTheme.displayLarge?.copyWith(fontSize: 20)),
           const SizedBox(height: 25),
           GestureDetector(
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => BookingHistoryScreen(user: user)
-                ),
+                    builder: (context) => BookingHistoryScreen(user: user)),
               );
             },
-
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

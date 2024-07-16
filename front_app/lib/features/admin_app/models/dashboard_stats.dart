@@ -1,4 +1,4 @@
-import 'booking_stats.dart';
+import 'package:barassage_app/features/admin_app/models/booking_stats.dart';
 
 class DashboardStats {
   final int totalUsers;

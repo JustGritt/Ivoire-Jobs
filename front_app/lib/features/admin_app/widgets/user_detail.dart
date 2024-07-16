@@ -26,7 +26,8 @@ class UserDetailsScreen extends StatelessWidget {
     }
   }
 
-  void _showSnackBar(BuildContext context, String message, Color backgroundColor) {
+  void _showSnackBar(
+      BuildContext context, String message, Color backgroundColor) {
     final snackBar = SnackBar(
       content: Text(
         message,
@@ -56,7 +57,8 @@ class UserDetailsScreen extends StatelessWidget {
           ),
           title: const Text(
             'Ban User',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black),
+            style: TextStyle(
+                fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black),
           ),
           content: SizedBox(
             width: MediaQuery.of(context).size.width * 0.9,
@@ -102,7 +104,8 @@ class UserDetailsScreen extends StatelessWidget {
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red,
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
@@ -128,7 +131,8 @@ class UserDetailsScreen extends StatelessWidget {
             Navigator.pop(context);
           },
         ),
-        title: Text('${user.firstName} ${user.lastName} Details',
+        title: Text(
+          '${user.firstName} ${user.lastName} Details',
           style: TextStyle(
             color: Colors.black,
           ),
@@ -159,7 +163,8 @@ class UserDetailsScreen extends StatelessWidget {
                                 user.profilePicture.isNotEmpty
                                     ? CircleAvatar(
                                         radius: 40,
-                                        backgroundImage: NetworkImage(user.profilePicture),
+                                        backgroundImage:
+                                            NetworkImage(user.profilePicture),
                                       )
                                     : CircleAvatar(
                                         radius: 40,
@@ -188,10 +193,12 @@ class UserDetailsScreen extends StatelessWidget {
                                         ),
                                         const SizedBox(width: 16),
                                         Container(
-                                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 16, vertical: 4),
                                           decoration: BoxDecoration(
                                             color: _getBadgeColor(user.member),
-                                            borderRadius: BorderRadius.circular(16),
+                                            borderRadius:
+                                                BorderRadius.circular(16),
                                           ),
                                           child: Text(
                                             user.member.name,
@@ -211,7 +218,8 @@ class UserDetailsScreen extends StatelessWidget {
                             const SizedBox(height: 32),
                             _buildUserInfo('Email:', user.email),
                             const SizedBox(height: 24),
-                            _buildUserInfo('Bio:', user.bio ?? 'No bio available'),
+                            _buildUserInfo(
+                                'Bio:', user.bio ?? 'No bio available'),
                           ],
                         ),
                       ),
@@ -222,7 +230,8 @@ class UserDetailsScreen extends StatelessWidget {
                           onPressed: () => _showBanDialog(context),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.red,
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 8),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),

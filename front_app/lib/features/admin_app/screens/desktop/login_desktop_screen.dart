@@ -1,17 +1,15 @@
-import 'dart:ui';
-
 import 'package:barassage_app/core/blocs/authentication/authentication_bloc.dart';
 import 'package:barassage_app/features/auth_mod/widgets/widget_functions.dart';
 import 'package:barassage_app/features/auth_mod/widgets/app_button.dart';
 import 'package:barassage_app/features/admin_app/admin_mod.dart';
 import 'package:barassage_app/features/auth_mod/auth_app.dart';
-
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:flutter/gestures.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/gestures.dart';
+import 'package:flutter_svg/svg.dart';
+import 'dart:ui';
 
 class LoginDesktopScreen extends StatefulWidget {
   const LoginDesktopScreen({
@@ -47,7 +45,8 @@ class _LoginDesktopScreenState extends State<LoginDesktopScreen> {
               child: Form(
                 key: _globalKey,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 14.0),
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 8.0, horizontal: 14.0),
                   child: Center(
                     child: ConstrainedBox(
                       constraints: const BoxConstraints(maxWidth: 400),
@@ -57,7 +56,8 @@ class _LoginDesktopScreenState extends State<LoginDesktopScreen> {
                           Stack(
                             children: [
                               Container(
-                                padding: const EdgeInsets.symmetric(vertical: 18.0),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 18.0),
                                 child: SvgPicture.asset(
                                   fit: BoxFit.fill,
                                   'assets/images/ill_dx.svg',
@@ -71,7 +71,8 @@ class _LoginDesktopScreenState extends State<LoginDesktopScreen> {
                                 right: 0,
                                 child: ClipRect(
                                   child: BackdropFilter(
-                                    filter: ImageFilter.blur(sigmaX: 2.0, sigmaY: 2.0),
+                                    filter: ImageFilter.blur(
+                                        sigmaX: 2.0, sigmaY: 2.0),
                                     child: Container(
                                       height: 40,
                                       color: Colors.transparent,
@@ -85,7 +86,8 @@ class _LoginDesktopScreenState extends State<LoginDesktopScreen> {
                                 right: 0,
                                 child: ClipRect(
                                   child: BackdropFilter(
-                                    filter: ImageFilter.blur(sigmaX: 2.0, sigmaY: 2.0),
+                                    filter: ImageFilter.blur(
+                                        sigmaX: 2.0, sigmaY: 2.0),
                                     child: Container(
                                       height: 50,
                                       color: Colors.transparent,
@@ -142,7 +144,8 @@ class _LoginDesktopScreenState extends State<LoginDesktopScreen> {
                           ),
                           const SizedBox(height: 15),
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 1.0),
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 1.0),
                             child: ConstrainedBox(
                               constraints: const BoxConstraints(
                                 maxHeight: 64,
@@ -170,12 +173,14 @@ class _LoginDesktopScreenState extends State<LoginDesktopScreen> {
                               children: <InlineSpan>[
                                 TextSpan(
                                   text: appLocalizations.btn_create,
-                                  style: theme.textTheme.displayMedium?.copyWith(
+                                  style:
+                                      theme.textTheme.displayMedium?.copyWith(
                                     color: theme.primaryColorDark,
                                     fontWeight: FontWeight.bold,
                                   ),
                                   recognizer: TapGestureRecognizer()
-                                  ..onTap = () => context.push(AuthApp.register),
+                                    ..onTap =
+                                        () => context.push(AuthApp.register),
                                 )
                               ],
                             ),

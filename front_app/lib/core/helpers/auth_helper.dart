@@ -22,7 +22,8 @@ doAuth(String email, String password) async {
   AppCache ac = AppCache();
   UserService us = UserService();
   try {
-    UserLoginResponse userLoginResponse = await us.login(UserLogin(email: email, password: password));
+    UserLoginResponse userLoginResponse =
+        await us.login(UserLogin(email: email, password: password));
     ac.doLogin(userLoginResponse.user, userLoginResponse.accessToken);
     SchedulerBinding.instance.addPostFrameCallback((_) {
       Nav.to(context, App.home);
@@ -39,7 +40,8 @@ doAdminAuth(String email, String password) async {
   AppCache ac = AppCache();
   UserService us = UserService();
   try {
-    UserLoginResponse userLoginResponse = await us.adminLogin(UserLogin(email: email, password: password));
+    UserLoginResponse userLoginResponse =
+        await us.adminLogin(UserLogin(email: email, password: password));
     ac.doLogin(userLoginResponse.user, userLoginResponse.accessToken);
     SchedulerBinding.instance.addPostFrameCallback((_) {
       Nav.to(context, AdminApp.dashboard);
