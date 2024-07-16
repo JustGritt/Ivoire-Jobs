@@ -160,7 +160,7 @@ class _StepInformationState extends State<StepInformation> {
             const SizedBox(height: 20.0),
             PushableButton(
               height: 40,
-              elevation: 3,
+              elevation: 4,
               hslColor: HSLColor.fromColor(theme.primaryColor),
               shadow: BoxShadow(
                 color: Colors.grey.withOpacity(0.5),

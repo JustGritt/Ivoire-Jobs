@@ -1,4 +1,5 @@
 import 'package:barassage_app/features/admin_app/services/admin_service.dart';
+import 'package:barassage_app/features/admin_app/utils/home_colors.dart';
 import 'package:barassage_app/features/auth_mod/models/user.dart';
 import 'package:flutter/material.dart';
 
@@ -58,7 +59,7 @@ class UserDetailsScreen extends StatelessWidget {
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black),
           ),
           content: SizedBox(
-            width: MediaQuery.of(context).size.width * 0.7,
+            width: MediaQuery.of(context).size.width * 0.9,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -187,10 +188,10 @@ class UserDetailsScreen extends StatelessWidget {
                                         ),
                                         const SizedBox(width: 16),
                                         Container(
-                                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                                           decoration: BoxDecoration(
                                             color: _getBadgeColor(user.member),
-                                            borderRadius: BorderRadius.circular(12),
+                                            borderRadius: BorderRadius.circular(16),
                                           ),
                                           child: Text(
                                             user.member.name,
@@ -221,13 +222,13 @@ class UserDetailsScreen extends StatelessWidget {
                           onPressed: () => _showBanDialog(context),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.red,
-                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),
                           ),
                           child: const Text(
-                            'Ban User',
+                            'Ban user',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 16,
@@ -254,7 +255,7 @@ class UserDetailsScreen extends StatelessWidget {
           title,
           style: const TextStyle(
             fontSize: 16,
-            color: Colors.black,
+            color: primary,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -263,7 +264,7 @@ class UserDetailsScreen extends StatelessWidget {
           info,
           style: const TextStyle(
             fontSize: 16,
-            color: Colors.black54,
+            color: primary,
           ),
         ),
       ],
@@ -273,7 +274,7 @@ class UserDetailsScreen extends StatelessWidget {
   Color _getBadgeColor(UserMemberStatusEnum status) {
     switch (status) {
       case UserMemberStatusEnum.user:
-        return Colors.blue;
+        return primary;
       case UserMemberStatusEnum.member:
         return Colors.yellow;
       default:

@@ -3,6 +3,7 @@ import 'package:barassage_app/features/admin_app/providers/banned_users_provider
 import 'package:barassage_app/features/admin_app/widgets/banned_service_card.dart';
 import 'package:barassage_app/features/admin_app/widgets/banned_user_card.dart';
 import 'package:barassage_app/features/admin_app/models/banned_user.dart';
+import 'package:barassage_app/features/admin_app/utils/home_colors.dart';
 import 'package:barassage_app/features/admin_app/models/service.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
@@ -49,8 +50,9 @@ class _BanListScreenState extends State<BanListScreen>
                 Tab(text: 'Banned Users'),
               ],
               unselectedLabelColor: Colors.grey,
-              indicatorColor: Colors.blue,
-              labelColor: Colors.blue,
+              labelStyle: const TextStyle(fontWeight: FontWeight.bold),
+              indicatorColor: primary,
+              labelColor: primary,
             ),
           ),
           Expanded(
