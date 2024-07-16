@@ -54,6 +54,12 @@ func CreateConfiguration(c *fiber.Ctx) error {
 			Code:    http.StatusBadRequest,
 			Message: "Sorry, this configuration already exists",
 		})
+		_ = CreateLog(&LogObject{
+			Level:      "warn",
+			Type:       "Configuration",
+			Message:    "Error creating configuration",
+			RequestURI: c.OriginalURL(),
+		})
 		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
@@ -62,6 +68,12 @@ func CreateConfiguration(c *fiber.Ctx) error {
 		errorList = append(errorList, &fiber.Error{
 			Code:    http.StatusInternalServerError,
 			Message: "Sorry, we could not create the configuration",
+		})
+		_ = CreateLog(&LogObject{
+			Level:      "warn",
+			Type:       "Configuration",
+			Message:    "Error creating configuration",
+			RequestURI: c.OriginalURL(),
 		})
 
 		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
@@ -91,6 +103,12 @@ func GetConfigurationByKey(c *fiber.Ctx) error {
 		errorList = append(errorList, &fiber.Error{
 			Code:    http.StatusNotFound,
 			Message: "Sorry, this configuration does not exist",
+		})
+		_ = CreateLog(&LogObject{
+			Level:      "warn",
+			Type:       "Configuration",
+			Message:    "Error getting configuration",
+			RequestURI: c.OriginalURL(),
 		})
 
 		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
@@ -125,12 +143,18 @@ func UpdateConfiguration(c *fiber.Ctx) error {
 			Code:    http.StatusNotFound,
 			Message: "Sorry, this configuration does not exist",
 		})
+		_ = CreateLog(&LogObject{
+			Level:      "warn",
+			Type:       "Configuration",
+			Message:    "Error updating configuration",
+			RequestURI: c.OriginalURL(),
+		})
 
 		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
 	//replace the name of key if change
-	if configurationInput.Key !=  configuration.Key {
+	if configurationInput.Key != configuration.Key {
 		configuration.Key = configurationInput.Key
 	}
 
@@ -142,6 +166,12 @@ func UpdateConfiguration(c *fiber.Ctx) error {
 		errorList = append(errorList, &fiber.Error{
 			Code:    http.StatusInternalServerError,
 			Message: "Sorry, we could not update the configuration",
+		})
+		_ = CreateLog(&LogObject{
+			Level:      "warn",
+			Type:       "Configuration",
+			Message:    "Error updating configuration",
+			RequestURI: c.OriginalURL(),
 		})
 
 		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))

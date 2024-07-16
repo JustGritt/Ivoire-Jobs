@@ -144,7 +144,6 @@ func CreateService(c *fiber.Ctx) error {
 		)
 		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
 	}
-	fmt.Println(dbUser.Member)
 
 	if dbUser.Member == nil || len(dbUser.Member) == 0 {
 		errorList = append(
@@ -154,6 +153,12 @@ func CreateService(c *fiber.Ctx) error {
 				Message: "You are not authorized to create a service, you are not a member",
 			},
 		)
+		_ = CreateLog(&LogObject{
+			Level:      "warn",
+			Message:    "User is not a member",
+			RequestURI: c.OriginalURL(),
+		})
+
 		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
@@ -166,6 +171,12 @@ func CreateService(c *fiber.Ctx) error {
 				Message: "You are not authorized to create a service, your membership request is still pending",
 			},
 		)
+		_ = CreateLog(&LogObject{
+			Level:      "warn",
+			Message:    "User membership request is still pending" + dbUser.ID,
+			RequestURI: c.OriginalURL(),
+		})
+
 		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
@@ -195,6 +206,11 @@ func CreateService(c *fiber.Ctx) error {
 				Message: "Service Already Exist",
 			},
 		)
+		_ = CreateLog(&LogObject{
+			Level:      "warn",
+			Message:    "Service Already Exist",
+			RequestURI: c.OriginalURL(),
+		})
 		return c.Status(http.StatusForbidden).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
@@ -221,6 +237,11 @@ func CreateService(c *fiber.Ctx) error {
 					Message: "total size of images should not exceed 15MB",
 				},
 			)
+			_ = CreateLog(&LogObject{
+				Level:      "warn",
+				Message:    "total size of images should not exceed 15MB",
+				RequestURI: c.OriginalURL(),
+			})
 			return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
 		}
 
@@ -232,6 +253,11 @@ func CreateService(c *fiber.Ctx) error {
 					Message: "maximum of 3 images allowed",
 				},
 			)
+			_ = CreateLog(&LogObject{
+				Level:      "warn",
+				Message:    "maximum of 3 images allowed",
+				RequestURI: c.OriginalURL(),
+			})
 			return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
 		}
 
@@ -250,6 +276,11 @@ func CreateService(c *fiber.Ctx) error {
 						Message: "unable to upload images to S3",
 					},
 				)
+				_ = CreateLog(&LogObject{
+					Level:      "warn",
+					Message:    "unable to upload images to S3",
+					RequestURI: c.OriginalURL(),
+				})
 				return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
 			}
 			images = append(images, image.Image{
@@ -271,6 +302,11 @@ func CreateService(c *fiber.Ctx) error {
 					Message: "invalid category id",
 				},
 			)
+			_ = CreateLog(&LogObject{
+				Level:      "warn",
+				Message:    "invalid category id",
+				RequestURI: c.OriginalURL(),
+			})
 			return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
 		}
 		categories = append(categories, *cat)
@@ -298,6 +334,12 @@ func CreateService(c *fiber.Ctx) error {
 				Message: "this service already exist",
 			},
 		)
+
+		_ = CreateLog(&LogObject{
+			Level:      "warn",
+			Message:    "this service already exist",
+			RequestURI: c.OriginalURL(),
+		})
 
 		return c.Status(http.StatusConflict).JSON(HTTPFiberErrorResponse(errorList))
 	}
@@ -329,6 +371,11 @@ func GetAll(c *fiber.Ctx) error {
 				Message: "error getting services",
 			},
 		)
+		_ = CreateLog(&LogObject{
+			Level:      "warn",
+			Message:    "error getting services",
+			RequestURI: c.OriginalURL(),
+		})
 		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
@@ -342,6 +389,12 @@ func GetAll(c *fiber.Ctx) error {
 	if len(ouput) == 0 {
 		return c.Status(http.StatusOK).JSON([]ServiceOutput{})
 	}
+
+	_ = CreateLog(&LogObject{
+		Level:      "info",
+		Message:    "services fetched successfully",
+		RequestURI: c.OriginalURL(),
+	})
 
 	return c.Status(http.StatusOK).JSON(ouput)
 }
@@ -371,6 +424,13 @@ func GetServiceByUserId(c *fiber.Ctx) error {
 				Message: "error getting services",
 			},
 		)
+
+		_ = CreateLog(&LogObject{
+			Level:      "warn",
+			Message:    "error getting services",
+			RequestURI: c.OriginalURL(),
+		})
+
 		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
@@ -381,6 +441,12 @@ func GetServiceByUserId(c *fiber.Ctx) error {
 	for _, s := range services {
 		ouput = append(ouput, *mapServiceToOutPut(&s))
 	}
+
+	_ = CreateLog(&LogObject{
+		Level:      "info",
+		Message:    "services fetched successfully",
+		RequestURI: c.OriginalURL(),
+	})
 
 	return c.Status(http.StatusOK).JSON(ouput)
 }
@@ -408,6 +474,13 @@ func GetServiceById(c *fiber.Ctx) error {
 				Message: "service id is required",
 			},
 		)
+
+		_ = CreateLog(&LogObject{
+			Level:      "warn",
+			Message:    "service id is required",
+			RequestURI: c.OriginalURL(),
+		})
+
 		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
@@ -420,8 +493,20 @@ func GetServiceById(c *fiber.Ctx) error {
 				Message: "error getting service",
 			},
 		)
+
+		_ = CreateLog(&LogObject{
+			Level:      "warn",
+			Message:    "error getting service",
+			RequestURI: c.OriginalURL(),
+		})
 		return c.Status(http.StatusNotFound).JSON(HTTPFiberErrorResponse(errorList))
 	}
+
+	_ = CreateLog(&LogObject{
+		Level:      "info",
+		Message:    "service fetched successfully",
+		RequestURI: c.OriginalURL(),
+	})
 
 	return c.Status(http.StatusOK).JSON(service)
 }
@@ -452,6 +537,13 @@ func UpdateService(c *fiber.Ctx) error {
 				Message: "service id is required",
 			},
 		)
+
+		_ = CreateLog(&LogObject{
+			Level:      "warn",
+			Message:    "service id is required",
+			RequestURI: c.OriginalURL(),
+		})
+
 		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
@@ -473,6 +565,11 @@ func UpdateService(c *fiber.Ctx) error {
 				Message: "An error occurred while extracting user info from request",
 			},
 		)
+		_ = CreateLog(&LogObject{
+			Level:      "warn",
+			Message:    "An error occurred while extracting user info from request",
+			RequestURI: c.OriginalURL(),
+		})
 		return c.Status(fiber.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
@@ -487,6 +584,11 @@ func UpdateService(c *fiber.Ctx) error {
 					Message: "Unable to find service with the given ID",
 				},
 			)
+			_ = CreateLog(&LogObject{
+				Level:      "warn",
+				Message:    "Unable to find service with the given ID",
+				RequestURI: c.OriginalURL(),
+			})
 			return c.Status(http.StatusNotFound).JSON(HTTPFiberErrorResponse(errorList))
 		}
 		errorList = append(
@@ -496,6 +598,11 @@ func UpdateService(c *fiber.Ctx) error {
 				Message: "An error occurred while updating service",
 			},
 		)
+		_ = CreateLog(&LogObject{
+			Level:      "warn",
+			Message:    "An error occurred while updating service",
+			RequestURI: c.OriginalURL(),
+		})
 		return c.Status(http.StatusForbidden).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
@@ -646,6 +753,12 @@ func UpdateService(c *fiber.Ctx) error {
 		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
+	_ = CreateLog(&LogObject{
+		Level:      "info",
+		Message:    "service updated successfully",
+		RequestURI: c.OriginalURL(),
+	})
+
 	return c.SendStatus(http.StatusOK)
 }
 
@@ -674,6 +787,11 @@ func DeleteService(c *fiber.Ctx) error {
 				Message: "service id is required",
 			},
 		)
+		_ = CreateLog(&LogObject{
+			Level:      "warn",
+			Message:    "service id is required",
+			RequestURI: c.OriginalURL(),
+		})
 		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
@@ -751,6 +869,12 @@ func DeleteService(c *fiber.Ctx) error {
 	}
 
 	response := HTTPResponse(http.StatusOK, "Service Deleted", nil)
+
+	_ = CreateLog(&LogObject{
+		Level:      "info",
+		Message:    "service deleted successfully",
+		RequestURI: c.OriginalURL(),
+	})
 	return c.Status(http.StatusOK).JSON(response)
 }
 
@@ -912,6 +1036,12 @@ func SearchService(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusNotFound).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
+	_ = CreateLog(&LogObject{
+		Level:      "info",
+		Message:    "services fetched successfully",
+		RequestURI: c.OriginalURL(),
+	})
+
 	return c.Status(fiber.StatusOK).JSON(serviceOutputs)
 }
 
@@ -945,6 +1075,12 @@ func GetTrendingServices(c *fiber.Ctx) error {
 		ouput = append(ouput, *mapServiceToOutPut(&s))
 	}
 
+	_ = CreateLog(&LogObject{
+		Level:      "info",
+		Message:    "trending services fetched successfully",
+		RequestURI: c.OriginalURL(),
+	})
+
 	return c.Status(http.StatusOK).JSON(ouput)
 }
 
@@ -970,6 +1106,12 @@ func GetAllBannedServices(c *fiber.Ctx) error {
 	for _, s := range services {
 		serviceOutputs = append(serviceOutputs, *mapServiceToOutPut(&s))
 	}
+
+	_ = CreateLog(&LogObject{
+		Level:      "info",
+		Message:    "banned services fetched successfully",
+		RequestURI: c.OriginalURL(),
+	})
 
 	return c.Status(http.StatusOK).JSON(serviceOutputs)
 }

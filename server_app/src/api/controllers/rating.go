@@ -75,6 +75,12 @@ func CreateRating(c *fiber.Ctx) error {
 		})
 	}
 
+	_ = CreateLog(&LogObject{
+		Level:      "info",
+		Type:       "Rating",
+		Message:    "Rating created",
+		RequestURI: c.OriginalURL(),
+	})
 	ratingOutput := mapRatingToOutput(&newRating)
 	return c.Status(http.StatusCreated).JSON(ratingOutput)
 }
@@ -107,6 +113,13 @@ func GetAllRatings(c *fiber.Ctx) error {
 		ratingsOutput = []*RatingOutput{}
 	}
 
+	_ = CreateLog(&LogObject{
+		Level:      "info",
+		Type:       "Rating",
+		Message:    "Ratings retrieved",
+		RequestURI: c.OriginalURL(),
+	})
+
 	return c.Status(http.StatusOK).JSON(ratingsOutput)
 }
 
@@ -138,6 +151,13 @@ func GetPendingRatings(c *fiber.Ctx) error {
 		ratingsOutput = []*RatingOutput{}
 	}
 
+	_ = CreateLog(&LogObject{
+		Level:      "info",
+		Type:       "Rating",
+		Message:    "Pending ratings retrieved",
+		RequestURI: c.OriginalURL(),
+	})
+
 	return c.Status(http.StatusOK).JSON(ratingsOutput)
 }
 
@@ -166,6 +186,13 @@ func ValidateRating(c *fiber.Ctx) error {
 		})
 	}
 
+	_ = CreateLog(&LogObject{
+		Level:      "info",
+		Type:       "Rating",
+		Message:    "Rating validated",
+		RequestURI: c.OriginalURL(),
+	})
+
 	return c.SendStatus(http.StatusOK)
 }
 
@@ -192,12 +219,26 @@ func GetRatingByID(c *fiber.Ctx) error {
 	}
 
 	if rating == nil {
+		_ = CreateLog(&LogObject{
+			Level:      "warn",
+			Type:       "Rating",
+			Message:    "Rating not found",
+			RequestURI: c.OriginalURL(),
+		})
 		return c.Status(http.StatusNotFound).JSON(fiber.Map{
 			"error": "Rating not found",
 		})
 	}
 
 	ratingOutput := mapRatingToOutput(rating)
+
+	_ = CreateLog(&LogObject{
+		Level:      "info",
+		Type:       "Rating",
+		Message:    "Rating retrieved",
+		RequestURI: c.OriginalURL(),
+	})
+
 	return c.Status(http.StatusOK).JSON(ratingOutput)
 }
 
@@ -232,6 +273,13 @@ func DeleteRating(c *fiber.Ctx) error {
 
 	// Delete the rating
 	if err := ratingRepo.DeleteRating(id); err != nil {
+		_ = CreateLog(&LogObject{
+			Level:      "warn",
+			Type:       "Rating",
+			Message:    "Rating not found",
+			RequestURI: c.OriginalURL(),
+		})
+
 		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
 			"error": "Failed to delete rating",
 		})
@@ -291,6 +339,13 @@ func GetAllRatingsFromService(c *fiber.Ctx) error {
 	for _, r := range ratingsOutput {
 		r.Score = ratingScore
 	}
+
+	_ = CreateLog(&LogObject{
+		Level:      "info",
+		Type:       "Rating",
+		Message:    "Ratings retrieved",
+		RequestURI: c.OriginalURL(),
+	})
 
 	return c.Status(http.StatusOK).JSON(ratingsOutput)
 }
