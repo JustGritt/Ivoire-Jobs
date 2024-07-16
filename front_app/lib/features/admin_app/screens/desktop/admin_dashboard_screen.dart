@@ -1,12 +1,11 @@
+import 'package:barassage_app/features/admin_app/screens/desktop/manage_categories_screen.dart';
+import 'package:barassage_app/features/admin_app/screens/desktop/manage_bookings_screen.dart';
+import 'package:barassage_app/features/admin_app/screens/desktop/manage_members_screen.dart';
+import 'package:barassage_app/features/admin_app/screens/desktop/logs_screen.dart';
 import 'package:barassage_app/features/admin_app/widgets/admin_menu.dart';
 import 'package:barassage_app/features/admin_app/screens/screens.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
-
-import 'logs_screen.dart';
-import 'manage_bookings_screen.dart';
-import 'manage_categories_screen.dart';
-import 'manage_members_screen.dart';
 
 class AdminDashboardScreen extends StatefulWidget {
   const AdminDashboardScreen({super.key});

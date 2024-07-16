@@ -8,6 +8,7 @@ import 'package:barassage_app/features/admin_app/providers/bookings_provider.dar
 import 'package:barassage_app/features/admin_app/providers/reports_provider.dart';
 import 'package:barassage_app/features/admin_app/providers/members_provider.dart';
 import 'package:barassage_app/features/main_app/providers/ratings_provider.dart';
+import 'package:barassage_app/features/admin_app/providers/logs_provider.dart';
 import 'package:barassage_app/features/main_app/providers/news_provider.dart';
 import 'package:barassage_app/core/classes/language_provider.dart';
 import 'package:barassage_app/features/features.dart';

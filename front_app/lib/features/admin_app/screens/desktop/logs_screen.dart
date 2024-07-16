@@ -1,9 +1,9 @@
-import 'package:barassage_app/core/init_dependencies.dart';
+import 'package:barassage_app/features/admin_app/providers/logs_provider.dart';
 import 'package:barassage_app/features/admin_app/services/admin_service.dart';
+import 'package:barassage_app/core/init_dependencies.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
-import '../../providers/logs_provider.dart';
 
 AdminService adminService = serviceLocator<AdminService>();
 
@@ -183,7 +183,6 @@ class _LogsScreenState extends State<LogsScreen> {
                                   horizontalInside: BorderSide(
                                     color:
                                         Colors.grey.shade300, // Light gray line
-                                    width: 1,
                                   ),
                                 ),
                               ),
