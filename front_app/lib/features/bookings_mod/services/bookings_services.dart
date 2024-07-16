@@ -1,34 +1,29 @@
-import 'package:barassage_app/core/blocs/authentication/authentication_bloc.dart';
 import 'package:barassage_app/core/classes/app_context.dart';
 import 'package:barassage_app/core/helpers/utils_helper.dart';
 import 'package:barassage_app/core/init_dependencies.dart';
+import 'package:barassage_app/features/bookings_mod/models/booking_appointment.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import '../../../config/api_endpoints.dart';
 import '../../../config/app_http.dart';
 
 BuildContext context = serviceLocator<AppContext>().navigatorContext;
 
-class BookingsService {
+class BookingsServices {
   final AppHttp _http = AppHttp();
 
-  Future<void> getAll(String reason) async {
+  Future<List<BookingAppointment>> getAll() async {
     try {
-      Response res = await _http
-          .get(ApiEndpoint.becomeBarasseur);
-      if (res.statusCode == 201) {
-        showMyDialog(context,
-            title: 'Success',
-            content: 'Your request has been sent successfully');
-        context.pop();
-        return;
+      Response res = await _http.get(ApiEndpoint.bookings);
+      if (res.statusCode == 200) {
+        return BookingAppointment.fromJsonList(res.data);
       }
       throw res.data['message'];
     } catch (e) {
       print(e);
       showMyDialog(context, content: e.toString(), title: 'Error');
       debugPrint(e.toString());
+      rethrow;
     }
   }
 }

@@ -17,7 +17,6 @@ class ServiceServices {
     );
     if (res.statusCode == 201) {
       ApiBaseModel apiResponse = ApiBaseModel.fromJson(res.data);
-      inspect(apiResponse.body);
       return ServiceCreatedModel.fromJson(apiResponse.body);
     }
     throw res.data['message'];
