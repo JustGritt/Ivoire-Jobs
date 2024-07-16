@@ -1,3 +1,4 @@
+import 'package:barassage_app/features/admin_app/controllers/register_email_validation_controller_import.dart' as web;
 import 'package:barassage_app/features/admin_app/controllers/manage_categories_controller.dart';
 import 'package:barassage_app/features/admin_app/controllers/manage_bookings_controller.dart';
 import 'package:barassage_app/features/admin_app/controllers/manage_members_controller.dart';
@@ -8,8 +9,6 @@ import 'package:barassage_app/core/classes/route_manager.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:barassage_app/features/admin_app/controllers/register_email_validation_controller_import.dart'
-    as web;
 
 class AdminApp extends RouteManager {
   static const String home = '/';
@@ -27,6 +26,7 @@ class AdminApp extends RouteManager {
   static const String members = '/admin/members';
   static const String reports = '/admin/reports';
   static const String emailValidation = '/auth/verify-email';
+  static const String logs = '/admin/logs';
 
   AdminApp() {
     addRoute(GoRoute(

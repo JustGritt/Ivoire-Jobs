@@ -126,6 +126,14 @@ class AdminScaffold extends StatelessWidget {
               },
             ),
             ListTile(
+              leading: const Icon(Icons.analytics, color: primary),
+              title: const Text('Logs'),
+              onTap: () {
+                Navigator.pop(context);
+                context.go('/admin/logs');
+              },
+            ),
+            ListTile(
               leading: Icon(Icons.settings, color: primary),
               title: const Text('Settings'),
               onTap: () {

@@ -3,6 +3,11 @@ import 'package:barassage_app/features/admin_app/screens/screens.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 
+import 'logs_screen.dart';
+import 'manage_bookings_screen.dart';
+import 'manage_categories_screen.dart';
+import 'manage_members_screen.dart';
+
 class AdminDashboardScreen extends StatefulWidget {
   const AdminDashboardScreen({super.key});
 
@@ -19,7 +24,10 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     '/admin/reports',
     '/admin/banlist',
     '/admin/settings',
-    '/admin/members'
+    '/admin/members',
+    '/admin/categories',
+    '/admin/bookings',
+    '/admin/logs',
   ];
 
   void _onItemTapped(int index) {
@@ -56,6 +64,14 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
         return const BanListScreen();
       case 4:
         return const DashboardSettings();
+      case 5:
+        return const ManageMembersScreen();
+      case 6:
+        return const ManageCategoriesScreen();
+      case 7:
+        return const ManageBookingsScreen();
+      case 8:
+        return const LogsScreen();
       default:
         return const DashboardScreen();
     }

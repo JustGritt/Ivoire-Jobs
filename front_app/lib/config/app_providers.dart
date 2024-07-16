@@ -1,5 +1,4 @@
-import 'package:barassage_app/features/bookings_mod/providers/booking_services_provider.dart'
-    as bookingsProviderAll;
+import 'package:barassage_app/features/bookings_mod/providers/booking_services_provider.dart' as bookingsProviderAll;
 import 'package:barassage_app/features/main_app/providers/booking_services_provider.dart';
 import 'package:barassage_app/features/admin_app/providers/banned_services_provider.dart';
 import 'package:barassage_app/features/admin_app/providers/banned_users_provider.dart';
@@ -59,6 +58,9 @@ List<SingleChildWidget> appProviders = [
   ),
   ChangeNotifierProvider<BookingsProvider>(
     create: (context) => BookingsProvider(),
+  ),
+  ChangeNotifierProvider<LogsProvider>(
+    create: (context) => LogsProvider(),
   ),
   ChangeNotifierProvider<bookingsProviderAll.BookingServicesProvider>(
     create: (context) => bookingsProviderAll.BookingServicesProvider(),
