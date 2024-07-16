@@ -17,7 +17,8 @@ class ProfileBookingsProvider extends ChangeNotifier {
     try {
       Response res = await _http.get('$ApiEndpoint.bookings/collection');
       if (res.statusCode == 200 && res.data is List) {
-        _bookings = List<Booking>.from(res.data.map((item) => Booking.fromJson(item)));
+        _bookings =
+            List<Booking>.from(res.data.map((item) => Booking.fromJson(item)));
       } else {
         print("Unexpected response format");
       }
@@ -29,7 +30,8 @@ class ProfileBookingsProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> submitComment(String bookingId, String comment, int rating) async {
+  Future<void> submitComment(
+      String bookingId, String comment, int rating) async {
     try {
       Response res = await _http.post(
         '${ApiEndpoint.bookings}/$bookingId/comments',

@@ -1,8 +1,7 @@
-import 'package:flutter/material.dart';
+import 'package:barassage_app/config/config.dart';
+import 'package:barassage_app/core/core.dart';
 import 'package:provider/provider.dart';
-
-import '../../../config/config.dart';
-import '../../../core/core.dart';
+import 'package:flutter/material.dart';
 
 class BottomBar extends StatefulWidget {
   const BottomBar({

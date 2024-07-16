@@ -1,7 +1,6 @@
+import 'package:barassage_app/features/lead_mod/services/services.dart';
+import 'package:barassage_app/features/lead_mod/models/models.dart';
 import 'package:flutter/material.dart';
-
-import '../models/models.dart';
-import '../services/services.dart';
 
 class EnqueryProvider extends ChangeNotifier {
   List<EnqueryData>? _enqueries;

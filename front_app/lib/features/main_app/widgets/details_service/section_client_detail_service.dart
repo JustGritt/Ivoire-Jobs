@@ -8,10 +8,12 @@ class SectionBarasseurDetailService extends StatefulWidget {
   const SectionBarasseurDetailService({super.key, required this.service});
 
   @override
-  State<SectionBarasseurDetailService> createState() => _SectionBarasseurDetailServiceState();
+  State<SectionBarasseurDetailService> createState() =>
+      _SectionBarasseurDetailServiceState();
 }
 
-class _SectionBarasseurDetailServiceState extends State<SectionBarasseurDetailService> {
+class _SectionBarasseurDetailServiceState
+    extends State<SectionBarasseurDetailService> {
   int hours = 0;
 
   @override

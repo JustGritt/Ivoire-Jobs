@@ -1,7 +1,6 @@
+import 'package:barassage_app/features/main_app/widgets/widget.dart';
+import 'package:barassage_app/core/classes/route_manager.dart';
 import 'package:flutter/material.dart';
-
-import '../../../../core/classes/route_manager.dart';
-import '../../widgets/widget.dart';
 
 class About extends StatefulWidget {
   final String? title;

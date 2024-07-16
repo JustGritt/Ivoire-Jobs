@@ -1,8 +1,7 @@
+import 'package:barassage_app/features/lead_mod/lead_app.dart';
+import 'package:barassage_app/features/main_app/app.dart';
+import 'package:barassage_app/core/core.dart';
 import 'package:flutter/material.dart';
-
-import '../core/core.dart';
-import '../features/lead_mod/lead_app.dart';
-import '../features/main_app/app.dart';
 
 // ignore: must_be_immutable
 class ActionTopButtons extends ActionButtons {

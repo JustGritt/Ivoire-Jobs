@@ -1,16 +1,14 @@
-// ignore_for_file: use_build_context_synchronously
-
-import 'package:flutter/material.dart';
+import 'package:barassage_app/features/lead_mod/models/enquery_get_models.dart';
+import 'package:barassage_app/features/lead_mod/widgets/button_bar.dart';
+import 'package:barassage_app/features/lead_mod/services/services.dart';
+import 'package:barassage_app/features/lead_mod/utils/utils.dart';
+import 'package:barassage_app/features/lead_mod/lead_app.dart';
+import 'package:barassage_app/config/app_theme.dart';
+import 'package:barassage_app/config/config.dart';
+import 'package:barassage_app/core/core.dart';
 import 'package:provider/provider.dart';
-
-import '../../../../config/app_theme.dart';
-import '../../../../config/config.dart';
-import '../../../../core/core.dart';
-import '../../lead_app.dart';
-import '../../models/enquery_get_models.dart';
-import '../../services/services.dart';
-import '../../utils/utils.dart';
-import '../../widgets/button_bar.dart';
+import 'package:flutter/material.dart';
+// ignore_for_file: use_build_context_synchronously
 
 class ViewEnqueryForMobile extends StatefulWidget {
   const ViewEnqueryForMobile({super.key});

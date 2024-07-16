@@ -33,7 +33,8 @@ class _ManageCategoriesScreenState extends State<ManageCategoriesScreen> {
   }
 
   Future<List<Category>> fetchCategories() async {
-    final categoriesProvider = Provider.of<CategoriesProvider>(context, listen: false);
+    final categoriesProvider =
+        Provider.of<CategoriesProvider>(context, listen: false);
     await categoriesProvider.getAllCategories();
     return categoriesProvider.categories;
   }
@@ -56,7 +57,8 @@ class _ManageCategoriesScreenState extends State<ManageCategoriesScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     TextFormField(
-                      decoration: const InputDecoration(labelText: 'Category Name'),
+                      decoration:
+                          const InputDecoration(labelText: 'Category Name'),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter a category name';
@@ -84,7 +86,8 @@ class _ManageCategoriesScreenState extends State<ManageCategoriesScreen> {
                 if (_formKey.currentState!.validate()) {
                   _formKey.currentState!.save();
                   final newCategory = CategoryRequest(name: name);
-                  final categoriesProvider = Provider.of<CategoriesProvider>(context, listen: false);
+                  final categoriesProvider =
+                      Provider.of<CategoriesProvider>(context, listen: false);
                   await categoriesProvider.addCategory(newCategory.name);
                   Navigator.of(context).pop();
                   setState(() {
@@ -101,7 +104,8 @@ class _ManageCategoriesScreenState extends State<ManageCategoriesScreen> {
   }
 
   void _handleSearch(String query) {
-    final categoriesProvider = Provider.of<CategoriesProvider>(context, listen: false);
+    final categoriesProvider =
+        Provider.of<CategoriesProvider>(context, listen: false);
     final filtered = categoriesProvider.categories.where((category) {
       final categoryName = category.name.toLowerCase();
       final searchQuery = query.toLowerCase();
@@ -137,7 +141,8 @@ class _ManageCategoriesScreenState extends State<ManageCategoriesScreen> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
                     ),
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16.0, vertical: 8.0),
                   ),
                   onPressed: () {
                     showAddCategoryDialog(context);
@@ -176,12 +181,14 @@ class _ManageCategoriesScreenState extends State<ManageCategoriesScreen> {
                       if (categoriesProvider.isLoading) {
                         return const Center(child: CircularProgressIndicator());
                       } else if (_filteredCategories.isEmpty) {
-                        return const Center(child: Text('No categories available'));
+                        return const Center(
+                            child: Text('No categories available'));
                       } else {
                         return Padding(
                           padding: const EdgeInsets.all(10.0),
                           child: GridView.builder(
-                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 4,
                               crossAxisSpacing: 10,
                               mainAxisSpacing: 10,
@@ -192,7 +199,8 @@ class _ManageCategoriesScreenState extends State<ManageCategoriesScreen> {
                               final category = _filteredCategories[index];
                               return Card(
                                 color: Colors.grey[100],
-                                margin: const EdgeInsets.symmetric(vertical: 8.0),
+                                margin:
+                                    const EdgeInsets.symmetric(vertical: 8.0),
                                 elevation: 4,
                                 shadowColor: Colors.grey.withOpacity(0.4),
                                 shape: RoundedRectangleBorder(
@@ -201,7 +209,8 @@ class _ManageCategoriesScreenState extends State<ManageCategoriesScreen> {
                                 child: Padding(
                                   padding: const EdgeInsets.all(12.0),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Row(
@@ -209,8 +218,10 @@ class _ManageCategoriesScreenState extends State<ManageCategoriesScreen> {
                                           Container(
                                             padding: const EdgeInsets.all(8.0),
                                             decoration: BoxDecoration(
-                                              color: theme.primaryColor.withOpacity(0.1),
-                                              borderRadius: BorderRadius.circular(5),
+                                              color: theme.primaryColor
+                                                  .withOpacity(0.1),
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
                                             ),
                                             child: Icon(
                                               Icons.category,
@@ -236,16 +247,25 @@ class _ManageCategoriesScreenState extends State<ManageCategoriesScreen> {
                                       Row(
                                         children: [
                                           Icon(
-                                            category.status ? Icons.check_circle : Icons.cancel,
-                                            color: category.status ? Colors.green : Colors.red,
+                                            category.status
+                                                ? Icons.check_circle
+                                                : Icons.cancel,
+                                            color: category.status
+                                                ? Colors.green
+                                                : Colors.red,
                                             size: 16,
                                           ),
                                           const SizedBox(width: 4),
                                           Text(
-                                            category.status ? 'Active' : 'Inactive',
-                                            style: theme.textTheme.bodyMedium?.copyWith(
+                                            category.status
+                                                ? 'Active'
+                                                : 'Inactive',
+                                            style: theme.textTheme.bodyMedium
+                                                ?.copyWith(
                                               fontSize: 14,
-                                              color: category.status ? Colors.green : Colors.red,
+                                              color: category.status
+                                                  ? Colors.green
+                                                  : Colors.red,
                                             ),
                                           ),
                                         ],

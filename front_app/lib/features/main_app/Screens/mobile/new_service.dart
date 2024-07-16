@@ -1,15 +1,14 @@
-import 'package:barassage_app/config/app_colors.dart';
-import 'package:barassage_app/core/blocs/service/service_bloc.dart';
-import 'package:barassage_app/features/main_app/models/service_models/service_create_model.dart';
-import 'package:barassage_app/features/main_app/widgets/forms/step_progress.dart';
-import 'package:barassage_app/features/main_app/widgets/forms/steps/step_form_category.dart';
+import 'package:barassage_app/features/main_app/widgets/forms/steps/vertical_step_location/step_choose_location.dart';
 import 'package:barassage_app/features/main_app/widgets/forms/steps/vertical_steps_informations/vertical_steps.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:barassage_app/features/main_app/models/service_models/service_create_model.dart';
+import 'package:barassage_app/features/main_app/widgets/forms/steps/step_form_category.dart';
 import 'package:super_cupertino_navigation_bar/super_cupertino_navigation_bar.dart';
-
-import '../../widgets/forms/steps/vertical_step_location/step_choose_location.dart';
+import 'package:barassage_app/features/main_app/widgets/forms/step_progress.dart';
+import 'package:barassage_app/core/blocs/service/service_bloc.dart';
+import 'package:barassage_app/config/app_colors.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter/material.dart';
 
 class NewServicePage extends StatefulWidget {
   const NewServicePage({super.key});

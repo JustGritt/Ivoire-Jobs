@@ -51,7 +51,8 @@ class _TeamManagerScreenState extends State<TeamManagerScreen> {
     }
   }
 
-  void _createAdminUser(String firstName, String lastName, String email, String password) async {
+  void _createAdminUser(
+      String firstName, String lastName, String email, String password) async {
     AdminUser newUser = AdminUser(
       firstName: firstName,
       lastName: lastName,
@@ -128,7 +129,8 @@ class _TeamManagerScreenState extends State<TeamManagerScreen> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),
-                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 10),
                           backgroundColor: Colors.blue,
                           shadowColor: Colors.blue,
                           foregroundColor: Colors.white,

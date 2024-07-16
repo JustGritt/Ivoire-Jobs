@@ -1,10 +1,9 @@
-import 'package:flutter/material.dart';
+import 'package:barassage_app/core/utils/button_data.dart';
+import 'package:barassage_app/core/utils/bottom_util.dart';
+import 'package:barassage_app/config/app_theme.dart';
 import 'package:go_router/go_router.dart';
-import '../utils/button_data.dart';
 import 'package:provider/provider.dart';
-
-import '../../config/app_theme.dart';
-import '../utils/bottom_util.dart';
+import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
 class BottomBar extends StatelessWidget {

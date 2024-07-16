@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 List<ServiceModel> serviceFromJson(List<dynamic> data) {
   return List<ServiceModel>.from(data.map((x) => ServiceModel.fromJson(x)));
 }
+
 class ServiceModel {
   String address;
   List<String> category;
@@ -58,7 +59,7 @@ class ServiceModel {
         longitude = json['longitude'],
         name = json['name'],
         postalCode = json['postalCode'],
-        price = ServicesHelper.getFormattedPrice(json['price']) ,
+        price = ServicesHelper.getFormattedPrice(json['price']),
         status = json['status'],
         userId = json['userId'];
 

@@ -32,7 +32,8 @@ class ReportSearchInput extends StatelessWidget {
           fillColor: Colors.white,
           hintText: hintText,
           hintStyle: const TextStyle(color: Colors.grey),
-          contentPadding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+          contentPadding:
+              const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
           border: OutlineInputBorder(
             borderRadius: const BorderRadius.all(Radius.circular(16.0)),
             borderSide: BorderSide(color: primary),

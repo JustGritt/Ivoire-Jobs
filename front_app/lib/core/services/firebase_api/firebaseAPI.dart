@@ -1,6 +1,6 @@
-import 'package:barassage_app/core/init_dependencies.dart';
 import 'package:barassage_app/features/profile_mod/services/push_tokens_services.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:barassage_app/core/init_dependencies.dart';
 
 class Firebaseapi {
   final _firebaseMessaging = FirebaseMessaging.instance;

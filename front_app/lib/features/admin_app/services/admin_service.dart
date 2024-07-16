@@ -1,17 +1,15 @@
-import 'package:barassage_app/features/admin_app/models/category.dart';
-import 'package:barassage_app/features/admin_app/models/member.dart';
+import 'package:barassage_app/features/admin_app/models/dashboard_stats.dart';
 import 'package:barassage_app/features/auth_mod/models/api_response.dart';
 import 'package:barassage_app/features/admin_app/models/admin_user.dart';
+import 'package:barassage_app/features/admin_app/models/category.dart';
 import 'package:barassage_app/features/admin_app/models/service.dart';
+import 'package:barassage_app/features/admin_app/models/booking.dart';
+import 'package:barassage_app/features/admin_app/models/member.dart';
 import 'package:barassage_app/features/auth_mod/models/user.dart';
 import 'package:barassage_app/config/api_endpoints.dart';
 import 'package:barassage_app/config/app_http.dart';
-
 import 'package:flutter/cupertino.dart';
 import 'package:dio/dio.dart';
-
-import '../models/booking.dart';
-import '../models/dashboard_stats.dart';
 
 class AdminService {
   String? token;
@@ -196,7 +194,7 @@ class AdminService {
       Response res = await _http.get(ApiEndpoint.bookingsCollection);
       if (res.statusCode == 200) {
         List<Booking> bookings =
-        (res.data as List).map((e) => Booking.fromJson(e)).toList();
+            (res.data as List).map((e) => Booking.fromJson(e)).toList();
         return bookings;
       }
       throw Exception('Failed to load bookings');

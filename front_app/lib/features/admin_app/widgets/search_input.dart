@@ -20,7 +20,6 @@ class SearchInput extends StatelessWidget {
         BoxShadow(
           offset: const Offset(12, 26),
           blurRadius: 50,
-          spreadRadius: 0,
           color: Colors.grey.withOpacity(.1),
         ),
       ]),
@@ -33,7 +32,8 @@ class SearchInput extends StatelessWidget {
           fillColor: Colors.white,
           hintText: hintText,
           hintStyle: const TextStyle(color: Colors.grey),
-          contentPadding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+          contentPadding:
+              const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
           border: OutlineInputBorder(
             borderRadius: const BorderRadius.all(Radius.circular(16.0)),
             borderSide: BorderSide(color: primary),

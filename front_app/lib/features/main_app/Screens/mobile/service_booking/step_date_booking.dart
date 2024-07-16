@@ -1,10 +1,10 @@
-import 'package:barassage_app/core/classes/app_context.dart';
-import 'package:barassage_app/core/helpers/utils_helper.dart';
-import 'package:barassage_app/core/init_dependencies.dart';
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
+import 'package:barassage_app/core/helpers/utils_helper.dart';
+import 'package:barassage_app/core/classes/app_context.dart';
+import 'package:barassage_app/core/init_dependencies.dart';
+import 'package:zod_validation/zod_validation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:zod_validation/zod_validation.dart';
 
 class StepDateTimeBooking extends StatefulWidget {
   final DateTime? dateTime;
@@ -131,7 +131,6 @@ class _StepDateBookingTimeState extends State<StepDateTimeBooking> {
                             data: ThemeData.light().copyWith(
                               colorScheme: ColorScheme.light(
                                 primary: theme.primaryColor,
-                                onPrimary: Colors.white,
                               ),
                               dialogBackgroundColor: Colors.white,
                             ),

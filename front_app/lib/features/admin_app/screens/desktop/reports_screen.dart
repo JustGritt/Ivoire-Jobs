@@ -1,14 +1,13 @@
+import 'package:barassage_app/features/admin_app/widgets/report_search_input.dart';
 import 'package:barassage_app/features/admin_app/providers/reports_provider.dart';
 import 'package:barassage_app/features/admin_app/widgets/report_card.dart';
+import 'package:barassage_app/features/admin_app/utils/home_colors.dart';
 import 'package:barassage_app/features/admin_app/models/report.dart';
-import 'package:barassage_app/features/admin_app/widgets/report_search_input.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
-import 'package:barassage_app/features/admin_app/utils/home_colors.dart';
-
 
 class ReportScreen extends StatefulWidget {
-  const ReportScreen({Key? key}) : super(key: key);
+  const ReportScreen({super.key});
 
   @override
   _ReportScreenState createState() => _ReportScreenState();
@@ -22,7 +21,8 @@ class _ReportScreenState extends State<ReportScreen> {
   @override
   void initState() {
     super.initState();
-    final reportsProvider = Provider.of<ReportsProvider>(context, listen: false);
+    final reportsProvider =
+        Provider.of<ReportsProvider>(context, listen: false);
     futureReports = reportsProvider.getAllReports();
     futureReports.then((reports) {
       setState(() {
@@ -80,7 +80,10 @@ class _ReportScreenState extends State<ReportScreen> {
                           IconButton(
                             icon: Icon(Icons.refresh, color: primary),
                             onPressed: () {
-                              futureReports = Provider.of<ReportsProvider>(context, listen: false).getAllReports();
+                              futureReports = Provider.of<ReportsProvider>(
+                                      context,
+                                      listen: false)
+                                  .getAllReports();
                               futureReports.then((reports) {
                                 setState(() {
                                   _filteredReports = reports;

@@ -25,10 +25,8 @@ class AdminScaffold extends StatelessWidget {
         ),
         title: Text(
           title,
-
           style: const TextStyle(
             color: Colors.white,
-
           ),
         ),
         actions: [

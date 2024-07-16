@@ -1,6 +1,5 @@
+import 'package:barassage_app/features/auth_mod/screens/mobile/register_mobile_screen.dart';
 import 'package:flutter/material.dart';
-
-import '../screens/mobile/register_mobile_screen.dart';
 
 class RegisterController extends StatelessWidget {
   const RegisterController({super.key});

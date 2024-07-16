@@ -1,14 +1,15 @@
-import 'package:dio/dio.dart';
+import 'package:barassage_app/features/profile_mod/models/notification_preferences.dart';
+import 'package:barassage_app/config/api_endpoints.dart';
+import 'package:barassage_app/config/app_http.dart';
 import 'package:flutter/material.dart';
-import '../../../config/api_endpoints.dart';
-import '../../../config/app_http.dart';
-import '../models/notification_preferences.dart';
+import 'package:dio/dio.dart';
 
 class NotificationPreferencesService {
   NotificationPreferencesService();
   final AppHttp _http = AppHttp();
 
-  Future<NotificationPreferences> storePreferences(NotificationPreferences preferences) async {
+  Future<NotificationPreferences> storePreferences(
+      NotificationPreferences preferences) async {
     try {
       print("Storing preferences: ${preferences.toJson()}");
       Response res = await _http.put(
@@ -20,7 +21,8 @@ class NotificationPreferencesService {
         debugPrint("Preferences stored successfully. Response: ${res.data}");
         return NotificationPreferences.fromJson(res.data);
       } else {
-        throw Exception("Failed to store preferences. Status code: ${res.statusCode}, Message: ${res.data['message']}");
+        throw Exception(
+            "Failed to store preferences. Status code: ${res.statusCode}, Message: ${res.data['message']}");
       }
     } catch (e) {
       debugPrint("Error storing preferences: $e");
@@ -40,7 +42,8 @@ class NotificationPreferencesService {
         debugPrint("Preferences not found for user: $userId");
         return null; // Return null if not found
       } else {
-        throw Exception("Failed to fetch preferences. Status code: ${res.statusCode}, Message: ${res.data['message']}");
+        throw Exception(
+            "Failed to fetch preferences. Status code: ${res.statusCode}, Message: ${res.data['message']}");
       }
     } catch (e) {
       debugPrint("Error fetching preferences: $e");

@@ -1,4 +1,3 @@
-import 'package:barassage_app/architect.dart';
 import 'package:barassage_app/features/profile_mod/services/notification_preferences.dart';
 import 'package:barassage_app/features/profile_mod/models/notification_preferences.dart';
 import 'package:barassage_app/features/auth_mod/models/user.dart';
@@ -29,7 +28,8 @@ class _SectionNotificationProfileState
 
   Future<void> _loadPreferences() async {
     try {
-      _preferences = await _notificationPreferencesService.fetchPreferences(widget.user.id);
+      _preferences = await _notificationPreferencesService
+          .fetchPreferences(widget.user.id);
       if (_preferences == null) {
         _preferences = NotificationPreferences(
           bookingNotification: false,
@@ -104,7 +104,8 @@ class _SectionNotificationProfileState
                   activeColor: theme.primaryColor,
                   onChanged: (value) {
                     setState(() {
-                      _preferences = _preferences?.copyWith(pushNotification: value);
+                      _preferences =
+                          _preferences?.copyWith(pushNotification: value);
                     });
                     _updatePreferences();
                   })
@@ -132,7 +133,8 @@ class _SectionNotificationProfileState
                   activeColor: theme.primaryColor,
                   onChanged: (value) {
                     setState(() {
-                      _preferences = _preferences?.copyWith(messageNotification: value);
+                      _preferences =
+                          _preferences?.copyWith(messageNotification: value);
                     });
                     _updatePreferences();
                   })
@@ -160,7 +162,8 @@ class _SectionNotificationProfileState
                   activeColor: theme.primaryColor,
                   onChanged: (value) {
                     setState(() {
-                      _preferences = _preferences?.copyWith(bookingNotification: value);
+                      _preferences =
+                          _preferences?.copyWith(bookingNotification: value);
                     });
                     _updatePreferences();
                   })
@@ -194,8 +197,6 @@ class _SectionNotificationProfileState
           //         })
           //   ],
           // ),
-        
-        
         ],
       ),
     );

@@ -1,8 +1,7 @@
 import 'package:barassage_app/features/main_app/models/service_models/service_category_model.dart';
+import 'package:barassage_app/config/api_endpoints.dart';
+import 'package:barassage_app/config/app_http.dart';
 import 'package:dio/dio.dart';
-
-import '../../../config/api_endpoints.dart';
-import '../../../config/app_http.dart';
 
 class ServiceCategoryService {
   String? token;

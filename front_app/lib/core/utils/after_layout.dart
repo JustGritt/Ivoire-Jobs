@@ -1,6 +1,5 @@
-import 'dart:async';
-
 import 'package:flutter/widgets.dart';
+import 'dart:async';
 
 mixin AfterLayoutMixin<T extends StatefulWidget> on State<T> {
   @override

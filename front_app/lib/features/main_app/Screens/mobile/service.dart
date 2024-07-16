@@ -1,14 +1,13 @@
-// ignore_for_file: deprecated_member_use
-
-import 'package:barassage_app/features/main_app/app.dart';
-import 'package:barassage_app/features/main_app/providers/my_services_provider.dart';
-import 'package:barassage_app/features/main_app/widgets/services/my_service_item.dart';
 import 'package:barassage_app/features/main_app/widgets/services/my_service_slidable_item.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:barassage_app/features/main_app/widgets/services/my_service_item.dart';
+import 'package:barassage_app/features/main_app/providers/my_services_provider.dart';
+import 'package:super_cupertino_navigation_bar/super_cupertino_navigation_bar.dart';
+import 'package:barassage_app/features/main_app/app.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:super_cupertino_navigation_bar/super_cupertino_navigation_bar.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+// ignore_for_file: deprecated_member_use
 
 class Service extends StatefulWidget {
   final String? title;

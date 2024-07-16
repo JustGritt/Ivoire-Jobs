@@ -1,6 +1,6 @@
+import 'package:barassage_app/features/main_app/widgets/details_service/rating_card.dart';
 import 'package:barassage_app/features/main_app/providers/ratings_provider.dart';
 import 'package:barassage_app/features/main_app/models/main/rating_model.dart';
-import 'package:barassage_app/features/main_app/widgets/details_service/rating_card.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
@@ -10,17 +10,20 @@ class SectionRatingDetailService extends StatefulWidget {
   SectionRatingDetailService({required this.serviceId});
 
   @override
-  _SectionRatingDetailServiceState createState() => _SectionRatingDetailServiceState();
+  _SectionRatingDetailServiceState createState() =>
+      _SectionRatingDetailServiceState();
 }
 
-class _SectionRatingDetailServiceState extends State<SectionRatingDetailService> {
+class _SectionRatingDetailServiceState
+    extends State<SectionRatingDetailService> {
   Future<List<Rating>>? futureRatings;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final ratingsProvider = Provider.of<RatingsProvider>(context, listen: false);
+      final ratingsProvider =
+          Provider.of<RatingsProvider>(context, listen: false);
       setState(() {
         futureRatings = ratingsProvider.getServiceRatings(widget.serviceId);
       });

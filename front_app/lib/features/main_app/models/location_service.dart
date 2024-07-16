@@ -32,7 +32,7 @@ class LocationService {
         "postalCode": postCode,
         "country": country,
         "address": address,
-  };
+      };
 
   LocationService copyWith({
     double? latitude,

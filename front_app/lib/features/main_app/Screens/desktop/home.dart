@@ -1,7 +1,6 @@
+import 'package:barassage_app/features/main_app/widgets/widget.dart';
+import 'package:barassage_app/core/classes/classes.dart';
 import 'package:flutter/material.dart';
-
-import '../../../../core/classes/classes.dart';
-import '../../widgets/widget.dart';
 
 class Home extends StatefulWidget {
   final String? title;

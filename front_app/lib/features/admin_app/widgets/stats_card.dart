@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:barassage_app/features/admin_app/utils/home_colors.dart';
+import 'package:flutter/material.dart';
 
 class StatsCard extends StatelessWidget {
   final String title;
@@ -59,8 +59,8 @@ class StatsCard extends StatelessWidget {
               Text(
                 info,
                 style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+                      fontWeight: FontWeight.bold,
+                    ),
               ),
             ],
           ),

@@ -23,7 +23,8 @@ class RatingsProvider extends ChangeNotifier {
     try {
       Response res = await _http.get('${ApiEndpoint.ratings}/collection');
       if (res.statusCode == 200 && res.data is List) {
-        _ratings = List<Rating>.from(res.data.map((item) => Rating.fromJson(item)));
+        _ratings =
+            List<Rating>.from(res.data.map((item) => Rating.fromJson(item)));
       } else {
         print("Unexpected response format");
       }
@@ -42,11 +43,13 @@ class RatingsProvider extends ChangeNotifier {
     notifyListeners();
     List<Rating> ratings = [];
     try {
-      Response res = await _http.get(ApiEndpoint.serviceRatings.replaceAll(':id', serviceId));
+      Response res = await _http
+          .get(ApiEndpoint.serviceRatings.replaceAll(':id', serviceId));
       print('URL: ${ApiEndpoint.serviceRatings.replaceAll(':id', serviceId)}');
       print('Response status: ${res.data}');
       if (res.statusCode == 200 && res.data is List) {
-        ratings = List<Rating>.from(res.data.map((item) => Rating.fromJson(item)));
+        ratings =
+            List<Rating>.from(res.data.map((item) => Rating.fromJson(item)));
         _ratings = ratings;
         print(_ratings);
         print('Fetched ${_ratings.length} ratings');
@@ -67,9 +70,11 @@ class RatingsProvider extends ChangeNotifier {
     return ratings;
   }
 
-  Future<void> submitComment(String bookingId, String comment, int rating, String serviceId, String userId) async {
+  Future<void> submitComment(String bookingId, String comment, int rating,
+      String serviceId, String userId) async {
     try {
-      Response res = await _http.post('${ApiEndpoint.ratings}',
+      Response res = await _http.post(
+        '${ApiEndpoint.ratings}',
         data: {
           'comment': comment,
           'rating': rating,

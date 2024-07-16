@@ -7,6 +7,7 @@ analyzer:
     unused_element: ignore
     unused_field: ignore
     unused_local_variable: ignore
+    undefined_getter: ignore
 
 linter:
   rules:
@@ -22,3 +23,5 @@ linter:
     leading_newlines_in_multiline_strings: true
     curly_braces_in_flow_control_structures: true
     slash_for_doc_comments: true
+    always_use_package_imports: true
+

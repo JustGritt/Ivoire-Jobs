@@ -9,7 +9,30 @@ DIR=${1:-$(pwd)}
 # Change to the specified directory.
 cd "$DIR"
 
-# Format all Dart files.
+# Function to sort package imports by length in descending order
+sort_imports() {
+    local file=$1
+    # Separate imports from the rest of the code
+    local imports=$(grep -E '^import.*;' "$file")
+    local rest=$(grep -Ev '^import.*;' "$file")
+
+    # Sort imports by length in descending order and merge with the rest of the code
+    {
+        echo "$imports" | awk '{ print length, $0 }' | sort -nr | cut -d" " -f2-
+        echo "$rest"
+    } > "$file.sorted"
+
+    # Replace the original file with the sorted one
+    mv "$file.sorted" "$file"
+}
+
+# Find all Dart files and sort their imports
+find . -name "*.dart" -print0 | while IFS= read -r -d '' file; do
+    echo "Sorting imports in $file..."
+    sort_imports "$file"
+done
+
+# Format all Dart files
 echo "Formatting Dart files..."
 find . -name "*.dart" -print0 | xargs -0 dart format
 
@@ -28,7 +51,8 @@ dart fix --apply --code=unused_import \
                   --code=prefer_const_constructors \
                   --code=avoid_redundant_argument_values \
                   --code=unnecessary_string_interpolations \
-                  --code=sort_child_properties_last
+                  --code=sort_child_properties_last \
+                  --code=always_use_package_imports
 
 # Check for remaining issues.
 echo "Analyzing remaining issues..."

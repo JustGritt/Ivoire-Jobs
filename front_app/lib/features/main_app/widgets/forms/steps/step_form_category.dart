@@ -1,18 +1,18 @@
-import 'package:barassage_app/config/app_colors.dart';
-import 'package:barassage_app/core/blocs/service/service_bloc.dart';
-import 'package:barassage_app/core/helpers/extentions/string_extension.dart';
-import 'package:barassage_app/core/helpers/utils_helper.dart';
-import 'package:barassage_app/core/init_dependencies.dart';
-import 'package:barassage_app/features/auth_mod/widgets/app_button.dart';
-import 'package:barassage_app/features/main_app/app.dart';
 import 'package:barassage_app/features/main_app/models/service_models/service_category_model.dart';
 import 'package:barassage_app/features/main_app/services/service_category_services.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:barassage_app/core/helpers/extentions/string_extension.dart';
+import 'package:barassage_app/features/auth_mod/widgets/app_button.dart';
+import 'package:barassage_app/core/blocs/service/service_bloc.dart';
+import 'package:barassage_app/core/helpers/utils_helper.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:barassage_app/core/init_dependencies.dart';
+import 'package:barassage_app/features/main_app/app.dart';
+import 'package:barassage_app/config/app_colors.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:go_router/go_router.dart';
 
 ServiceCategoryService serviceCategoryService =
     serviceLocator<ServiceCategoryService>();

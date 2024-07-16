@@ -1,5 +1,5 @@
-import 'package:barassage_app/features/admin_app/models/service.dart';
 import 'package:barassage_app/features/admin_app/utils/home_colors.dart';
+import 'package:barassage_app/features/admin_app/models/service.dart';
 import 'package:flutter/material.dart';
 
 class ServiceCard extends StatelessWidget {

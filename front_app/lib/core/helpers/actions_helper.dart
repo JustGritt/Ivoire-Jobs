@@ -1,7 +1,6 @@
+import 'package:barassage_app/config/config.dart';
+import 'package:barassage_app/core/core.dart';
 import 'package:flutter/material.dart';
-
-import '../../config/config.dart';
-import '../core.dart';
 
 List<Widget> actionsMenu(BuildContext context) {
   return [

@@ -1,9 +1,8 @@
-import 'package:flutter/cupertino.dart';
+import 'package:barassage_app/features/lead_mod/controllers/controllers.dart';
+import 'package:barassage_app/core/classes/route_manager.dart';
+import 'package:barassage_app/features/features.dart';
 import 'package:go_router/go_router.dart';
-
-import '../../core/classes/route_manager.dart';
-import '../features.dart';
-import 'controllers/controllers.dart';
+import 'package:flutter/cupertino.dart';
 
 class LeadApp extends RouteManager {
   static const String name = '/lead';

@@ -61,15 +61,21 @@ class BookingListItem extends StatelessWidget {
               Row(
                 children: [
                   Icon(
-                    booking.status == 'completed' ? Icons.check_circle : Icons.error,
-                    color: booking.status == 'completed' ? Colors.green : Colors.red,
+                    booking.status == 'completed'
+                        ? Icons.check_circle
+                        : Icons.error,
+                    color: booking.status == 'completed'
+                        ? Colors.green
+                        : Colors.red,
                     size: 16,
                   ),
                   SizedBox(width: 4),
                   Text(
                     'Status: ${booking.status}',
                     style: TextStyle(
-                      color: booking.status == 'completed' ? Colors.green : Colors.red,
+                      color: booking.status == 'completed'
+                          ? Colors.green
+                          : Colors.red,
                     ),
                   ),
                 ],

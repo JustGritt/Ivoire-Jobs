@@ -7,7 +7,8 @@ class SectionTopDetailService extends StatefulWidget {
   const SectionTopDetailService({super.key, required this.service});
 
   @override
-  State<SectionTopDetailService> createState() => _SectionTopDetailServiceState();
+  State<SectionTopDetailService> createState() =>
+      _SectionTopDetailServiceState();
 }
 
 class _SectionTopDetailServiceState extends State<SectionTopDetailService> {

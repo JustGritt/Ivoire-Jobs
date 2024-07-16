@@ -1,9 +1,11 @@
+import 'package:barassage_app/core/core.dart';
 import 'package:flutter/material.dart';
-
-import '../../../../core/core.dart';
-import '../../Screens/mobile/contact.dart' as mobile;
-import '../../Screens/desktop/contact.dart' as desktop;
-import '../../Screens/tablet/contact.dart' as tablet;
+import 'package:barassage_app/features/main_app/Screens/mobile/contact.dart'
+    as mobile;
+import 'package:barassage_app/features/main_app/Screens/tablet/contact.dart'
+    as tablet;
+import 'package:barassage_app/features/main_app/Screens/desktop/contact.dart'
+    as desktop;
 
 class ContactController extends StatelessController {
   final String _title = 'Contact Page';

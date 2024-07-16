@@ -1,4 +1,4 @@
-import '../core/classes/http_manager.dart';
+import 'package:barassage_app/core/classes/http_manager.dart';
 
 class AppHttp extends HttpManager {
   AppHttp({String? baseUrl, Map<String, dynamic>? headers})

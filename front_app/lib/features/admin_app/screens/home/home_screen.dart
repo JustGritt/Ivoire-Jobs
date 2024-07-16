@@ -1,7 +1,7 @@
+import 'package:barassage_app/features/admin_app/screens/home/home_screen_content.dart';
 import 'package:barassage_app/features/admin_app/utils/responsive_utils.dart';
 import 'package:barassage_app/features/admin_app/utils/home_colors.dart';
 import 'package:flutter/material.dart';
-import 'home_screen_content.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});

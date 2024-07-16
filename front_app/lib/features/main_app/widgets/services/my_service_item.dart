@@ -1,11 +1,10 @@
-// import 'package:barassage_app/config/app_colors.dart';
-
-import 'package:barassage_app/core/helpers/constants_helper.dart';
-import 'package:barassage_app/core/helpers/extentions/string_extension.dart';
-import 'package:barassage_app/core/helpers/services_helper.dart';
 import 'package:barassage_app/features/main_app/models/service_models/service_model.dart';
+import 'package:barassage_app/core/helpers/extentions/string_extension.dart';
+import 'package:barassage_app/core/helpers/constants_helper.dart';
+import 'package:barassage_app/core/helpers/services_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+// import 'package:barassage_app/config/app_colors.dart';
 
 class MyServiceItem extends StatelessWidget {
   final ServiceModel serviceModel;
@@ -148,8 +147,7 @@ class MyServiceItem extends StatelessWidget {
                                                 fontWeight: FontWeight.w500,
                                               )),
                                           TextSpan(
-                                            text:
-                                                '${serviceModel.price} F ',
+                                            text: '${serviceModel.price} F ',
                                             style: theme.textTheme.titleMedium!
                                                 .copyWith(
                                               fontSize: 18.0,

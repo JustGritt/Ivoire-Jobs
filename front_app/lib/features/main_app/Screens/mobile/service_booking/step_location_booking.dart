@@ -1,7 +1,7 @@
-import 'package:barassage_app/features/main_app/models/location_service.dart';
 import 'package:barassage_app/features/main_app/widgets/forms/steps/vertical_step_location/step_choose_location.dart';
-import 'package:flutter/material.dart';
+import 'package:barassage_app/features/main_app/models/location_service.dart';
 import 'package:zod_validation/zod_validation.dart';
+import 'package:flutter/material.dart';
 
 class StepLocationBooking extends StatefulWidget {
   final LocationService? location;
