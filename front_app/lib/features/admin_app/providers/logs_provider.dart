@@ -1,6 +1,6 @@
 import 'package:barassage_app/features/admin_app/models/logResponse.dart';
 import 'package:flutter/material.dart';
-import '../services/admin_service.dart';
+import 'package:barassage_app/features/admin_app/services/admin_service.dart';
 
 class LogsProvider with ChangeNotifier {
   final AdminService _adminService = AdminService();

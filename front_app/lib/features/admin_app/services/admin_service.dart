@@ -1,6 +1,5 @@
 import 'package:barassage_app/features/admin_app/models/dashboard_stats.dart';
 import 'package:barassage_app/features/admin_app/models/category.dart';
-import 'package:barassage_app/features/admin_app/models/log.dart';
 import 'package:barassage_app/features/admin_app/models/logResponse.dart';
 import 'package:barassage_app/features/admin_app/models/member.dart';
 import 'package:barassage_app/features/auth_mod/models/api_response.dart';
