@@ -1,11 +1,12 @@
-import 'package:barassage_app/core/init_dependencies.dart';
 import 'package:barassage_app/features/admin_app/providers/bookings_provider.dart';
 import 'package:barassage_app/features/admin_app/services/admin_service.dart';
+import 'package:barassage_app/features/admin_app/widgets/booking_filter.dart';
+import 'package:barassage_app/features/admin_app/widgets/booking_card.dart';
+import 'package:barassage_app/features/admin_app/utils/home_colors.dart';
+import 'package:barassage_app/features/admin_app/models/booking.dart';
+import 'package:barassage_app/core/init_dependencies.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:intl/intl.dart';
-
-import '../../models/booking.dart';
 
 AdminService adminService = serviceLocator<AdminService>();
 
@@ -19,6 +20,8 @@ class ManageBookingsScreen extends StatefulWidget {
 class _ManageBookingsScreenState extends State<ManageBookingsScreen> {
   late Future<List<Booking>> bookingsFuture;
   String selectedStatus = 'All';
+  DateTime? startDate;
+  DateTime? endDate;
 
   @override
   void initState() {
@@ -27,14 +30,40 @@ class _ManageBookingsScreenState extends State<ManageBookingsScreen> {
   }
 
   Future<List<Booking>> fetchBookings() async {
-    final bookingsProvider =
-    Provider.of<BookingsProvider>(context, listen: false);
+    final bookingsProvider = Provider.of<BookingsProvider>(context, listen: false);
     await bookingsProvider.getBookings();
     return bookingsProvider.bookings;
   }
 
-  String formatDate(DateTime date) {
-    return DateFormat.yMMMd().add_jm().format(date);
+  void _selectDateRange(BuildContext context) async {
+    final DateTimeRange? picked = await showDateRangePicker(
+      context: context,
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2030),
+      builder: (context, child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            colorScheme: ColorScheme.light(
+              primary: primary,
+              onSurface: primary,
+            ),
+            dialogBackgroundColor: Colors.white,
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                backgroundColor: primary,
+              ),
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+    if (picked != null && picked != DateTimeRange(start: startDate ?? DateTime.now(), end: endDate ?? DateTime.now())) {
+      setState(() {
+        startDate = picked.start;
+        endDate = picked.end;
+      });
+    }
   }
 
   @override
@@ -43,148 +72,54 @@ class _ManageBookingsScreenState extends State<ManageBookingsScreen> {
     return Scaffold(
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12.0),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text('Filter by status: '),
-                  DropdownButton<String>(
-                    value: selectedStatus,
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        selectedStatus = newValue!;
-                      });
-                    },
-                    items: <String>['All', 'created', 'fulfilled', 'cancelled']
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                  ),
-                ],
-              ),
-            ),
+          BookingFilterSection(
+            selectedStatus: selectedStatus,
+            startDate: startDate,
+            endDate: endDate,
+            onStatusChanged: (String? newValue) {
+              setState(() {
+                selectedStatus = newValue!;
+              });
+            },
+            onDateRangeSelected: () => _selectDateRange(context),
           ),
           Expanded(
             child: FutureBuilder<List<Booking>>(
               future: bookingsFuture,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 } else if (snapshot.hasError) {
-                  return Center(child: Text('Error loading bookings'));
+                  return const Center(child: Text('Error loading bookings'));
                 } else {
                   return Consumer<BookingsProvider>(
                     builder: (context, bookingsProvider, child) {
                       if (bookingsProvider.isLoading) {
-                        return Center(child: CircularProgressIndicator());
+                        return const Center(child: CircularProgressIndicator());
                       } else if (bookingsProvider.bookings.isEmpty) {
-                        return Center(child: Text('No bookings available'));
+                        return const Center(child: Text('No bookings available'));
                       } else {
-                        List<Booking> filteredBookings = selectedStatus == 'All'
-                            ? bookingsProvider.bookings
-                            : bookingsProvider.bookings
-                            .where((booking) =>
-                        booking.status == selectedStatus)
-                            .toList();
+                        List<Booking> filteredBookings = bookingsProvider.bookings.where((booking) {
+                          bool statusMatch = selectedStatus == 'All' || booking.status == selectedStatus;
+                          bool dateMatch = true;
+                          if (startDate != null && endDate != null) {
+                            dateMatch = booking.startTime.isAfter(startDate!) && booking.endTime.isBefore(endDate!);
+                          }
+                          return statusMatch && dateMatch;
+                        }).toList();
                         return Padding(
-                          padding: const EdgeInsets.all(10.0),
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
                           child: GridView.builder(
-                            gridDelegate:
-                            SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              crossAxisSpacing: 10,
-                              mainAxisSpacing: 10,
-                              childAspectRatio: 3,
+                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 3,
+                              crossAxisSpacing: 8,
+                              mainAxisSpacing: 8,
+                              childAspectRatio: 2 / 1,
                             ),
                             itemCount: filteredBookings.length,
                             itemBuilder: (context, index) {
                               final booking = filteredBookings[index];
-                              return Card(
-                                color: Colors.white,
-                                margin:
-                                const EdgeInsets.symmetric(vertical: 8.0),
-                                elevation: 4,
-                                shadowColor: Colors.grey.withOpacity(0.4),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(12.0),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Container(
-                                            padding: const EdgeInsets.all(8.0),
-                                            decoration: BoxDecoration(
-                                              color: theme.primaryColor
-                                                  .withOpacity(0.1),
-                                              borderRadius:
-                                              BorderRadius.circular(5),
-                                            ),
-                                            child: Icon(
-                                              Icons.calendar_month,
-                                              color: theme.primaryColor,
-                                              size: 20,
-                                            ),
-                                          ),
-                                          SizedBox(width: 8),
-                                          Expanded(
-                                            child: Text(
-                                              formatDate(booking.startTime),
-                                              style: theme.textTheme.bodyLarge
-                                                  ?.copyWith(fontSize: 16),
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(height: 8),
-                                      Text(
-                                        'End: ${formatDate(booking.endTime)}',
-                                        style: theme.textTheme.bodyMedium
-                                            ?.copyWith(fontSize: 14),
-                                      ),
-                                      const SizedBox(height: 8),
-                                      Text(
-                                        'Contact: ${booking.contact.firstName} ${booking.contact.lastName}',
-                                        style: theme.textTheme.bodyMedium
-                                            ?.copyWith(fontSize: 14),
-                                      ),
-                                      Text(
-                                        'Service: ${booking.service.title}',
-                                        style: theme.textTheme.bodyMedium
-                                            ?.copyWith(fontSize: 14),
-                                      ),
-                                      const Spacer(),
-                                      Text(
-                                        'Status: ${booking.status}',
-                                        style: theme.textTheme.bodyMedium?.copyWith(
-                                          fontSize: 14,
-                                          color: booking.status == 'fulfilled'
-                                              ? Colors.green
-                                              : booking.status == 'cancelled'
-                                              ? Colors.red
-                                              : Colors.black,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
+                              return BookingCard(booking: booking);
                             },
                           ),
                         );
