@@ -7,7 +7,7 @@ class AdminDashboardController extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Title(
-      title: 'Admin Dashboard',
+      title: 'Dashboard',
       color: Colors.blue,
       child: AdminDashboardScreen(),
     );

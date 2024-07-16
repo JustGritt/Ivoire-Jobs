@@ -10,7 +10,7 @@ class TeamManagerController extends StatelessWidget {
     return Title(
       color: Colors.blue,
       child: AdminScaffold(
-        title: 'Manage Teams',
+        title: 'Admins',
         body: const TeamManagerScreen(),
       ),
     );

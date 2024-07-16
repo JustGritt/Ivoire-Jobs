@@ -1,8 +1,6 @@
-import 'package:barassage_app/features/admin_app/screens/desktop/manage_services_screen.dart';
+import 'package:barassage_app/features/admin_app/screens/desktop/manage_members_screen.dart';
 import 'package:barassage_app/features/admin_app/widgets/admin_menu.dart';
 import 'package:flutter/material.dart';
-
-import '../screens/desktop/manage_members_screen.dart';
 
 class MembersController extends StatelessWidget {
   const MembersController({super.key});
@@ -12,7 +10,7 @@ class MembersController extends StatelessWidget {
     return Title(
       color: Colors.blue,
       child: AdminScaffold(
-        title: 'Manage Services',
+        title: 'Members',
         body: const ManageMembersScreen(),
       ),
     );

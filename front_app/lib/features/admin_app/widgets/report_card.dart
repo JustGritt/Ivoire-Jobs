@@ -1,4 +1,5 @@
 import 'package:barassage_app/features/admin_app/models/report.dart';
+import 'package:barassage_app/features/admin_app/utils/home_colors.dart';
 import 'package:barassage_app/features/admin_app/widgets/report_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -18,12 +19,12 @@ class ReportCard extends StatelessWidget {
         );
       },
       child: Card(
-        color: Colors.grey[200],
+        color: Colors.grey[100],
         elevation: 4,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(16),
         ),
-        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+        margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -32,9 +33,9 @@ class ReportCard extends StatelessWidget {
               Text(
                 'Reason: ${report.reason}',
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black87,
+                  color: primary,
                 ),
               ),
               const SizedBox(height: 8),
