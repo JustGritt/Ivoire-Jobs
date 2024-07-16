@@ -1,5 +1,6 @@
 import 'package:barassage_app/features/admin_app/services/admin_service.dart';
 import 'package:barassage_app/features/admin_app/widgets/service_card.dart';
+import 'package:barassage_app/features/admin_app/widgets/search_input.dart';
 import 'package:barassage_app/features/admin_app/utils/home_colors.dart';
 import 'package:barassage_app/features/admin_app/models/service.dart';
 import 'package:flutter/material.dart';
@@ -103,6 +104,7 @@ class _ManageServicesScreenState extends State<ManageServicesScreen> {
                       SearchInput(
                         textController: _searchController,
                         hintText: 'Search Services',
+                        onChanged: _handleSearch,
                       ),
                     ],
                   ),
@@ -130,54 +132,6 @@ class _ManageServicesScreenState extends State<ManageServicesScreen> {
           }
           return const Center(child: Text('No services available.'));
         },
-      ),
-    );
-  }
-}
-
-class SearchInput extends StatelessWidget {
-  final TextEditingController textController;
-  final String hintText;
-  const SearchInput({required this.textController, required this.hintText, super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(boxShadow: [
-        BoxShadow(
-          offset: const Offset(12, 26),
-          blurRadius: 50,
-          spreadRadius: 0,
-          color: Colors.grey.withOpacity(.1),
-        ),
-      ]),
-      child: TextField(
-        controller: textController,
-        onChanged: (value) {
-          if (context.findAncestorStateOfType<_ManageServicesScreenState>() != null) {
-            context.findAncestorStateOfType<_ManageServicesScreenState>()!._handleSearch(value);
-          }
-        },
-        decoration: InputDecoration(
-          prefixIcon: Icon(Icons.search, color: primary),
-          filled: true,
-          fillColor: Colors.white,
-          hintText: hintText,
-          hintStyle: const TextStyle(color: Colors.grey),
-          contentPadding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-          border: OutlineInputBorder(
-            borderRadius: const BorderRadius.all(Radius.circular(16.0)),
-            borderSide: BorderSide(color: primary),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: primary, width: 2.0),
-            borderRadius: const BorderRadius.all(Radius.circular(16.0)),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: primary, width: 2.0),
-            borderRadius: const BorderRadius.all(Radius.circular(16.0)),
-          ),
-        ),
       ),
     );
   }

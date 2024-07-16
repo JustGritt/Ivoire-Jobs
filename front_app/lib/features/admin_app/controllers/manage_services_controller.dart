@@ -10,7 +10,7 @@ class ServicesController extends StatelessWidget {
     return Title(
       color: Colors.blue,
       child: AdminScaffold(
-        title: 'Manage Services',
+        title: 'Services',
         body: const ManageServicesScreen(),
       ),
     );

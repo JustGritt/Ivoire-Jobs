@@ -1,9 +1,8 @@
-import 'package:barassage_app/core/init_dependencies.dart';
+import 'package:barassage_app/features/admin_app/providers/members_provider.dart';
 import 'package:barassage_app/features/admin_app/services/admin_service.dart';
-import 'package:flutter/material.dart';
+import 'package:barassage_app/core/init_dependencies.dart';
 import 'package:provider/provider.dart';
-
-import '../../providers/members_provider.dart';
+import 'package:flutter/material.dart';
 
 AdminService adminService = serviceLocator<AdminService>();
 
@@ -24,8 +23,7 @@ class _ManageMembersScreenState extends State<ManageMembersScreen> {
   }
 
   Future<void> fetchMembers() async {
-    final membersProvider =
-    Provider.of<MembersProvider>(context, listen: false);
+    final membersProvider = Provider.of<MembersProvider>(context, listen: false);
     await membersProvider.getMemberRequests();
   }
 
@@ -37,26 +35,25 @@ class _ManageMembersScreenState extends State<ManageMembersScreen> {
         future: membersFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return Center(child: Text('Error loading Member requests'));
+            return const Center(child: Text('Error loading Member requests'));
           } else {
             return Consumer<MembersProvider>(
               builder: (context, membersProvider, child) {
                 if (membersProvider.isLoading) {
-                  return Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 } else if (membersProvider.members.isEmpty) {
-                  return Center(child: Text('No Members requests available'));
+                  return const Center(child: Text('No Members requests available'));
                 } else {
                   return Padding(
-                    padding: const EdgeInsets.all(
-                        10.0), // Added padding to the outer container
+                    padding: const EdgeInsets.all(16.0),
                     child: GridView.builder(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 5,
-                        childAspectRatio: 2 / 1,
-                        crossAxisSpacing: 10,
-                        mainAxisSpacing: 10,
+                      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                        maxCrossAxisExtent: 400,
+                        childAspectRatio: 3 / 2,
+                        crossAxisSpacing: 16,
+                        mainAxisSpacing: 16,
                       ),
                       itemCount: membersProvider.members.length,
                       itemBuilder: (context, index) {
@@ -65,18 +62,17 @@ class _ManageMembersScreenState extends State<ManageMembersScreen> {
                           decoration: BoxDecoration(
                             color: Colors.white,
                             border: Border.all(color: Colors.grey.shade300),
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(15),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
+                                color: Colors.grey.withOpacity(0.3),
                                 spreadRadius: 2,
-                                blurRadius: 5,
-                                offset: Offset(0, 3),
+                                blurRadius: 6,
+                                offset: const Offset(0, 3),
                               ),
                             ],
                           ),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8.0, vertical: 4.0),
+                          padding: const EdgeInsets.all(16.0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -87,79 +83,67 @@ class _ManageMembersScreenState extends State<ManageMembersScreen> {
                                     color: theme.primaryColor,
                                     size: 20,
                                   ),
-                                  SizedBox(width: 8),
+                                  const SizedBox(width: 8),
                                   Expanded(
                                     child: Text(
                                       member.id,
-                                      style: theme.textTheme.bodyLarge
-                                          ?.copyWith(fontSize: 24),
+                                      style: theme.textTheme.bodyLarge?.copyWith(fontSize: 18),
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
                                 ],
                               ),
-                              Spacer(),
-                              Row(
-                                mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    member.status,
-                                    style: theme.textTheme.bodyMedium
-                                        ?.copyWith(fontSize: 18),
+                              const SizedBox(height: 8),
+                              if (member.status == 'processing')
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                                  decoration: BoxDecoration(
+                                    color: Colors.orange.withOpacity(0.1),
+                                    borderRadius: BorderRadius.circular(8.0),
+                                    border: Border.all(color: Colors.orange),
                                   ),
+                                  child: Text(
+                                    'Processing',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.orange,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              const Spacer(),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
                                   if (member.status == 'processing') ...[
                                     ElevatedButton(
                                       onPressed: () {
-                                        membersProvider.approveMemberRequest(
-                                            member.id, 'accepted');
+                                        membersProvider.approveMemberRequest(member.id, 'accepted');
                                       },
                                       style: ElevatedButton.styleFrom(
                                         foregroundColor: Colors.white,
-                                        backgroundColor:
-                                        Colors.black, // button color
+                                        backgroundColor: Colors.green,
                                         shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                          BorderRadius.circular(8.0),
+                                          borderRadius: BorderRadius.circular(8.0),
                                         ),
                                       ),
-                                      child: Icon(Icons.check),
+                                      child: const Icon(Icons.check),
                                     ),
-                                    SizedBox(width: 8),
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        membersProvider.approveMemberRequest(
-                                            member.id, 'rejected');
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                        foregroundColor: Colors.white,
-                                        backgroundColor:
-                                        Colors.red, // button color
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                          BorderRadius.circular(8.0),
-                                        ),
-                                      ),
-                                      child: Icon(Icons.close),
-                                    ),
-                                  ] else ...[
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        membersProvider.approveMemberRequest(
-                                            member.id, 'rejected');
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                        foregroundColor: Colors.white,
-                                        backgroundColor:
-                                        Colors.red, // button color
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                          BorderRadius.circular(8.0),
-                                        ),
-                                      ),
-                                      child: Icon(Icons.close),
-                                    ),
+                                    const SizedBox(width: 8),
                                   ],
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      membersProvider.approveMemberRequest(member.id, 'rejected');
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      foregroundColor: Colors.white,
+                                      backgroundColor: Colors.red,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(8.0),
+                                      ),
+                                    ),
+                                    child: const Icon(Icons.close),
+                                  ),
                                 ],
                               ),
                             ],
