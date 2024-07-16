@@ -218,10 +218,23 @@ class AdminApp extends RouteManager {
     ));
 
     addRoute(GoRoute(
+        path: AdminApp.logs,
+        pageBuilder: (context, state) {
+          return const CupertinoPage(child: LogsController());
+        },
+        redirect: (context, state) {
+          final authenticationState =
+              BlocProvider.of<AuthenticationBloc>(context).state;
+          if (authenticationState is! AuthenticationSuccessState) {
+            return AdminApp.logs;
+          }
+          return null;
+        }));
+
+    addRoute(GoRoute(
         path: AdminApp.emailValidation,
         pageBuilder: (context, state) {
           return const CupertinoPage(child: web.EmailValidationController());
         }));
-
   }
 }
