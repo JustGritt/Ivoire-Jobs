@@ -16,6 +16,8 @@ class LogsScreen extends StatefulWidget {
 
 class _LogsScreenState extends State<LogsScreen> {
   late Future<void> logsFuture;
+  String selectedLevel = 'All';
+
 
   @override
   void initState() {
@@ -74,14 +76,6 @@ class _LogsScreenState extends State<LogsScreen> {
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Logs',
-          style: TextStyle(
-            color: Colors.black,
-          ),
-        ),
-      ),
       body: FutureBuilder<void>(
         future: logsFuture,
         builder: (context, snapshot) {
