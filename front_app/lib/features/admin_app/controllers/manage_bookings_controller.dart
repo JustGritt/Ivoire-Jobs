@@ -11,7 +11,7 @@ class BookingsController extends StatelessWidget {
     return Title(
       color: Colors.blue,
       child: AdminScaffold(
-        title: 'Manage Bookings',
+        title: 'Bookings',
         body: const ManageBookingsScreen(),
       ),
     );

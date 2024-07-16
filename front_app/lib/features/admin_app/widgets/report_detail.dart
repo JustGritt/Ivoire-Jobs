@@ -1,7 +1,8 @@
-import 'package:flutter/material.dart';
+import 'package:barassage_app/features/admin_app/providers/reports_provider.dart';
+import 'package:barassage_app/features/admin_app/utils/home_colors.dart';
 import 'package:barassage_app/features/admin_app/models/report.dart';
 import 'package:provider/provider.dart';
-import 'package:barassage_app/features/admin_app/providers/reports_provider.dart';
+import 'package:flutter/material.dart';
 
 class ReportDetailsScreen extends StatefulWidget {
   final Report report;
@@ -17,9 +18,9 @@ class _ReportDetailsScreenState extends State<ReportDetailsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Report Details'),
-        titleTextStyle: const TextStyle(color: Colors.black, fontSize: 20),
-        backgroundColor: Colors.white,
-        iconTheme: const IconThemeData(color: Colors.black),
+        titleTextStyle: const TextStyle(color: Colors.white, fontSize: 20),
+        iconTheme: const IconThemeData(color: Colors.white),
+        backgroundColor: primary,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

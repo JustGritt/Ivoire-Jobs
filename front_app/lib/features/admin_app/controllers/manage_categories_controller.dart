@@ -11,7 +11,7 @@ class CategoriesController extends StatelessWidget {
     return Title(
       color: Colors.blue,
       child: AdminScaffold(
-        title: 'Manage Categories',
+        title: 'Categories',
         body: const ManageCategoriesScreen(),
       ),
     );

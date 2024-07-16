@@ -18,13 +18,17 @@ class AdminScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        titleTextStyle: const TextStyle(color: Colors.white, fontSize: 20),
+        backgroundColor: primary,
         iconTheme: IconThemeData(
-          color: primary,
+          color: Colors.white,
         ),
         title: Text(
           title,
+
           style: const TextStyle(
-            color: Colors.black,
+            color: Colors.white,
+
           ),
         ),
         actions: [
@@ -93,7 +97,7 @@ class AdminScaffold extends StatelessWidget {
             ),
             ListTile(
               leading: Icon(Icons.people, color: primary),
-              title: const Text('Manage members'),
+              title: const Text('Manage Members'),
               onTap: () {
                 Navigator.pop(context);
                 context.go('/admin/members');
