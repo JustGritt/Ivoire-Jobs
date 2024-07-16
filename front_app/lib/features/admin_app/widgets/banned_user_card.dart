@@ -10,11 +10,11 @@ class BannedUserCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 8.0),
-      color: Colors.grey[200],
+      color: Colors.grey[100],
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15.0),
       ),
-      elevation: 5,
+      elevation: 4,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Stack(
@@ -39,7 +39,10 @@ class BannedUserCard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 8),
-                const Divider(),
+                Divider(
+                  color: Colors.grey[300],
+                  thickness: 1,
+                ),
                 const SizedBox(height: 8),
                 Text(
                   'Reason: ${bannedUser.reason}',

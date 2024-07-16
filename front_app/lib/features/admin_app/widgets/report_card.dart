@@ -19,7 +19,7 @@ class ReportCard extends StatelessWidget {
       },
       child: Card(
         color: Colors.grey[200],
-        elevation: 3,
+        elevation: 4,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),

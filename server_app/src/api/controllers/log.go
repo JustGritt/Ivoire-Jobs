@@ -41,7 +41,7 @@ type LogOutput struct {
 // @Security Bearer
 func GetLogs(c *fiber.Ctx) error {
 	queryParams := make(map[string]interface{})
-	var errorList []*fiber.Error
+	//var errorList []*fiber.Error
 
 	if level := c.Query("level"); level != "" {
 		queryParams["level"] = level
@@ -53,26 +53,8 @@ func GetLogs(c *fiber.Ctx) error {
 		queryParams["message"] = message
 	}
 
-	logs, err := myLogRepo.GetByQueryParams(queryParams)
-	if err != nil {
-		errorList = append(errorList, &fiber.Error{
-			Code:    http.StatusInternalServerError,
-			Message: "Failed to get logs",
-		})
-		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
-	}
-
-	// map logs to output
-	var logOutputs []LogOutput
-	for _, log := range logs {
-		logOutputs = append(logOutputs, *mapLogToOutput(&log))
-	}
-
-	if len(logOutputs) == 0 {
-		logOutputs = []LogOutput{}
-	}
-
-	return c.Status(http.StatusOK).JSON(logOutputs)
+	logs := myLogRepo.GetByQueryParams(queryParams, c)
+	return c.JSON(logs)
 
 }
 

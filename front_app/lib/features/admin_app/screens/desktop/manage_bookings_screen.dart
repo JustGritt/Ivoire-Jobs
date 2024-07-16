@@ -122,7 +122,7 @@ class _ManageBookingsScreenState extends State<ManageBookingsScreen> {
                                 color: Colors.white,
                                 margin:
                                 const EdgeInsets.symmetric(vertical: 8.0),
-                                elevation: 6,
+                                elevation: 4,
                                 shadowColor: Colors.grey.withOpacity(0.4),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
