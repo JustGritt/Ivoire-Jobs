@@ -205,4 +205,14 @@ class AdminService {
       throw Exception('Failed to load bookings');
     }
   }
+
+  Future<bool> verifyEmailToken(String token) async {
+    Response res = await _http.get(
+      '${ApiEndpoint.appEmailValidationUrl}?token=$token',
+    );
+    if (res.statusCode == 200) {
+      return true;
+    }
+    return false;
+  }
 }

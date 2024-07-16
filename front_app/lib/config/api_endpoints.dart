@@ -22,7 +22,7 @@ class ApiEndpoint {
   static const appRegisterUrl = AuthApp.register;
   static const appForgetUrl = AuthApp.forget;
   static const appProfileUrl = AuthApp.profile;
-  static const appEmailValidationUrl = AuthApp.emailValidation;
+  static const appEmailValidationUrl = '${api}/auth/verify-email';
 
   // Admin App Links
   static const adminUsers = '${api}/auth/users';

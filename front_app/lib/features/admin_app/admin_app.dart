@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'controllers/manage_categories_controller.dart';
+import 'controllers/register_email_validation_controller_import.dart' as web;
 
 import 'controllers/manage_members_controller.dart';
 
@@ -218,7 +219,8 @@ class AdminApp extends RouteManager {
     addRoute(GoRoute(
         path: AdminApp.emailValidation,
         pageBuilder: (context, state) {
-          return const CupertinoPage(child: EmailValidationController());
+          return const CupertinoPage(child: web.EmailValidationController());
         }));
+
   }
 }

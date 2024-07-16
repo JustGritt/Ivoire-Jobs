@@ -1,9 +1,9 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:web/web.dart' as web;
 
-import '../../../../core/helpers/auth_helper.dart';
-import 'package:barassage_app/features/auth_mod/services/user_service.dart';
+import 'package:barassage_app/features/admin_app/services/admin_service.dart';
 
 class RegisterEmailValidation extends StatefulWidget {
   const RegisterEmailValidation({super.key});
@@ -21,7 +21,11 @@ class _RegisterEmailValidationState extends State<RegisterEmailValidation> {
   @override
   void initState() {
     super.initState();
-    token = web.window.location.href.split('token=')[1] ?? '';
+    if (kIsWeb) {
+      token = web.window.location.href.split('token=')[1] ?? '';
+    }
+    token = '';
+
     if (token.isEmpty) {
       setState(() {
         isEmailValidated = false;
@@ -33,7 +37,7 @@ class _RegisterEmailValidationState extends State<RegisterEmailValidation> {
   }
 
   void checkRegisterToken(BuildContext context, String token) async {
-    UserService us = UserService();
+    AdminService us = AdminService();
     try {
       var value = await us.verifyEmailToken(token);
       setState(() {
