@@ -52,7 +52,6 @@ class ApiEndpoint {
   static const ratings = '${api}/rating';
   static const serviceRatings = '${api}/service/:id/rating';
   // Booking Endpoints
-  static const bookings = '${api}/booking';
   static const userBookings = '${api}/booking/user/:id';
   // static const userBookings = '${api}/booking/collection';
   // Push Token
