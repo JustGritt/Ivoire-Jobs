@@ -10,6 +10,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/cupertino.dart';
 
+import 'controllers/logs_controller.dart';
+
 class AdminApp extends RouteManager {
   static const String home = '/';
   static const String users = '/admin/users';
@@ -209,6 +211,21 @@ class AdminApp extends RouteManager {
             BlocProvider.of<AuthenticationBloc>(context).state;
         if (authenticationState is! AuthenticationSuccessState) {
           return AdminApp.reports;
+        }
+        return null;
+      },
+    ));
+
+    addRoute(GoRoute(
+      path: AdminApp.logs,
+      pageBuilder: (context, state) {
+        return const CupertinoPage(child: LogsController());
+      },
+      redirect: (context, state) {
+        final authenticationState =
+            BlocProvider.of<AuthenticationBloc>(context).state;
+        if (authenticationState is! AuthenticationSuccessState) {
+          return AdminApp.logs;
         }
         return null;
       },
