@@ -62,8 +62,6 @@ class _SectionNotificationProfileState
       } catch (e) {
         debugPrint("Error updating preferences: $e");
       }
-    } else {
-      debugPrint("Preferences are null, cannot update");
     }
   }
 
@@ -153,7 +151,7 @@ class _SectionNotificationProfileState
                 children: [
                   const Icon(CupertinoIcons.calendar),
                   const SizedBox(width: 20),
-                  Text(appLocalizations.profile_messages,
+                  Text(appLocalizations.profile_push_booking,
                       style: theme.textTheme.labelMedium),
                 ],
               ),
@@ -168,34 +166,36 @@ class _SectionNotificationProfileState
                   })
             ],
           ),
-          Container(
-            color: theme.colorScheme.surface.withOpacity(0.3),
-            height: 1,
-            margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  const Icon(CupertinoIcons.gear),
-                  const SizedBox(width: 20),
-                  Text(appLocalizations.profile_messages,
-                      style: theme.textTheme.labelMedium),
-                ],
-              ),
-              CupertinoSwitch(
-                  value: _preferences?.serviceNotification ?? false,
-                  activeColor: theme.primaryColor,
-                  onChanged: (value) {
-                    setState(() {
-                      _preferences = _preferences?.copyWith(serviceNotification: value);
-                    });
-                    _updatePreferences();
-                  })
-            ],
-          ),
+          // Container(
+          //   color: theme.colorScheme.surface.withOpacity(0.3),
+          //   height: 1,
+          //   margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+          // ),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //   children: [
+          //     Row(
+          //       crossAxisAlignment: CrossAxisAlignment.end,
+          //       children: [
+          //         const Icon(CupertinoIcons.gear),
+          //         const SizedBox(width: 20),
+          //         Text(appLocalizations.profile_push_booking,
+          //             style: theme.textTheme.labelMedium),
+          //       ],
+          //     ),
+          //     CupertinoSwitch(
+          //         value: _preferences?.serviceNotification ?? false,
+          //         activeColor: theme.primaryColor,
+          //         onChanged: (value) {
+          //           setState(() {
+          //             _preferences = _preferences?.copyWith(serviceNotification: value);
+          //           });
+          //           _updatePreferences();
+          //         })
+          //   ],
+          // ),
+        
+        
         ],
       ),
     );
