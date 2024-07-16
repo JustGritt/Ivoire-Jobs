@@ -21,8 +21,7 @@ class _RegisterEmailValidationState extends State<RegisterEmailValidation> {
   @override
   void initState() {
     super.initState();
-    final uri = Uri.parse(web.window.location.href);
-    token = uri.queryParameters['token'] ?? '';
+    token = web.window.location.href.split('token=')[1] ?? '';
     if (token.isEmpty) {
       setState(() {
         isEmailValidated = false;
