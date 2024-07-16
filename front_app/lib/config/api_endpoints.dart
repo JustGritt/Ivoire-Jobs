@@ -22,7 +22,7 @@ class ApiEndpoint {
   static const appRegisterUrl = AuthApp.register;
   static const appForgetUrl = AuthApp.forget;
   static const appProfileUrl = AuthApp.profile;
-  static const appEmailValidationUrl = AuthApp.emailValidation;
+  static const appEmailValidationUrl = '${api}/auth/verify-email';
 
   // Admin App Links
   static const adminUsers = '${api}/auth/users';
@@ -52,7 +52,6 @@ class ApiEndpoint {
   static const ratings = '${api}/rating';
   static const serviceRatings = '${api}/service/:id/rating';
   // Booking Endpoints
-  static const bookings = '${api}/booking';
   static const userBookings = '${api}/booking/user/:id';
   // static const userBookings = '${api}/booking/collection';
   // Push Token
@@ -63,6 +62,7 @@ class ApiEndpoint {
   static const becomeBarasseur = '/member';
   // Booking Services
   static const bookingServices = '/booking';
+  static const bookings = '/booking/collection';
   // Reports Endpoints
   static const reports = '${api}/report/pending';
   static const reportsDetails = '${api}/report/:id';

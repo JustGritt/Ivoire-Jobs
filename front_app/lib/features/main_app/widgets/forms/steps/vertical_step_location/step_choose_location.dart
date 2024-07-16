@@ -9,7 +9,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_place_picker_mb/google_maps_place_picker.dart';
-import 'package:place_picker/entities/location_result.dart';
 import 'package:pushable_button/pushable_button.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 

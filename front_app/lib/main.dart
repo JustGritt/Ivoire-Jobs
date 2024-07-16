@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:barassage_app/core/blocs/authentication/authentication_bloc.dart';
 import 'package:barassage_app/core/blocs/service/service_bloc.dart';
 import 'package:barassage_app/core/classes/language_provider.dart';
@@ -44,8 +42,7 @@ void main() async {
   runApp(MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (_) =>
-              serviceLocator<AuthenticationBloc>()..add(InitiateAuth()),
+          create: (_) => AuthenticationBloc()..add(InitiateAuth()),
         ),
         BlocProvider(
           create: (_) => serviceLocator<ServiceBloc>(),

@@ -194,11 +194,9 @@ class AdminService {
   Future<List<Booking>> getBookings() async {
     try {
       Response res = await _http.get(ApiEndpoint.bookingsCollection);
-      debugPrint('res-bookings: ${res.data}');
       if (res.statusCode == 200) {
         List<Booking> bookings =
         (res.data as List).map((e) => Booking.fromJson(e)).toList();
-        print('AdminService - bookings: $bookings'); // Logging the bookings
         return bookings;
       }
       throw Exception('Failed to load bookings');
@@ -206,5 +204,15 @@ class AdminService {
       print('Error in AdminService: $e'); // Logging the error
       throw Exception('Failed to load bookings');
     }
+  }
+
+  Future<bool> verifyEmailToken(String token) async {
+    Response res = await _http.get(
+      '${ApiEndpoint.appEmailValidationUrl}?token=$token',
+    );
+    if (res.statusCode == 200) {
+      return true;
+    }
+    return false;
   }
 }

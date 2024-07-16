@@ -1,4 +1,4 @@
-import 'package:barassage_app/features/auth_mod/screens/desktop/register_email_validation.dart';
+import 'package:barassage_app/features/admin_app/screens/home/register_email_validation.dart';
 import 'package:flutter/material.dart';
 
 class EmailValidationController extends StatelessWidget {

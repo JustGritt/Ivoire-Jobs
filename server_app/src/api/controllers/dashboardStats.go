@@ -68,5 +68,12 @@ func GetDashboardStats(c *fiber.Ctx) error {
 		},
 	}
 
+	_ = CreateLog(&LogObject{
+		Level:      "info",
+		Type:       "Dashboard",
+		Message:    "Dashboard stats retrieved",
+		RequestURI: c.OriginalURL(),
+	})
+
 	return c.Status(http.StatusOK).JSON(stats)
 }
