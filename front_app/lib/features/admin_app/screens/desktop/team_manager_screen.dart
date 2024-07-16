@@ -2,6 +2,7 @@ import 'package:barassage_app/features/admin_app/services/admin_service.dart';
 import 'package:barassage_app/features/admin_app/widgets/admin_dialog.dart';
 import 'package:barassage_app/features/admin_app/widgets/user_list.dart';
 import 'package:barassage_app/features/admin_app/models/admin_user.dart';
+import 'package:barassage_app/features/admin_app/utils/home_colors.dart';
 import 'package:barassage_app/features/auth_mod/models/user.dart';
 import 'package:flutter/material.dart';
 
@@ -129,10 +130,9 @@ class _TeamManagerScreenState extends State<TeamManagerScreen> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 10),
-                          backgroundColor: Colors.blue,
-                          shadowColor: Colors.blue,
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
+                          backgroundColor: primary,
+                          shadowColor: primary,
                           foregroundColor: Colors.white,
                           textStyle: const TextStyle(
                             fontSize: 16,
