@@ -107,6 +107,12 @@ func GetAllUsers(userType string) ([]user.User, error) {
 	return users, err
 }
 
+func GetAll() ([]user.User, error) {
+	var users []user.User
+	err := database.PgDB.Find(&users).Error
+	return users, err
+}
+
 func CountAll() (int64, error) {
 	//get all user active and not banned, banned is bans table
 	var count int64
