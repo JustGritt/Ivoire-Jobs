@@ -13,16 +13,13 @@ class BookingsProvider with ChangeNotifier {
 
   Future<void> getBookings() async {
     _isLoading = true;
-    notifyListeners();
     try {
       _bookings = await _adminService.getBookings();
-      print('BookingsProvider - bookings: $_bookings');
     } catch (e) {
       print('Error in BookingsProvider: $e');
       _bookings = [];
     } finally {
       _isLoading = false;
-      notifyListeners();
     }
   }
 }
