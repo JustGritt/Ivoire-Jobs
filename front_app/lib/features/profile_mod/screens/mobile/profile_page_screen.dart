@@ -1,3 +1,4 @@
+import 'package:barassage_app/features/profile_mod/widgets/section_booking_history.dart';
 import 'package:barassage_app/features/profile_mod/widgets/section_notification_profile.dart';
 import 'package:barassage_app/features/profile_mod/widgets/section_information_profile.dart';
 import 'package:barassage_app/features/profile_mod/widgets/section_information_app.dart';
@@ -30,7 +31,7 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
 
   @override
   void initState() {
-    context.read<AuthenticationBloc>().add(InitiateAuth());
+    // context.read<AuthenticationBloc>().add(InitiateAuth());
     super.initState();
   }
 
@@ -57,8 +58,7 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
         ],
       ),
       body: SingleChildScrollView(
-        child: BlocConsumer<AuthenticationBloc, AuthenticationState>(
-          listener: (context, state) {},
+        child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
           builder: (context, state) {
             if (state is AuthenticationSuccessState) {
               return Column(
@@ -83,6 +83,8 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
                   const SizedBox(height: 20),
                   SectionNotificationProfile(user: state.user),
                   const SizedBox(height: 20),
+                  // SectionBookingsHistory(user: state.user),
+                  // const SizedBox(height: 20),
                   Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: getStatusUser(context, state.user)),

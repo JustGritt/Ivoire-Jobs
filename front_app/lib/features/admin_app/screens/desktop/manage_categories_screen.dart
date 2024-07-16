@@ -141,70 +141,140 @@ class _ManageCategoriesScreenState extends State<ManageCategoriesScreen> {
                 } else if (categoriesProvider.categories.isEmpty) {
                   return Center(child: Text('No categories available'));
                 } else {
-                  return Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: GridView.builder(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 4,
-                        crossAxisSpacing: 10,
-                        mainAxisSpacing: 10,
-                        childAspectRatio: 3,
-                      ),
-                      itemCount: categoriesProvider.categories.length,
-                      itemBuilder: (context, index) {
-                        final category = categoriesProvider.categories[index];
-                        return Card(
-                          color: Colors.white,
-                          margin: const EdgeInsets.symmetric(vertical: 8.0),
-                          elevation: 6,
-                          shadowColor: Colors.grey.withOpacity(0.4),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(12.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Row(
+                  return LayoutBuilder(
+                    builder: (context, constraints) {
+                      if (constraints.maxWidth < 1366) {
+                        // Use ListView for smaller screens
+                        return ListView.builder(
+                          padding: const EdgeInsets.all(10.0),
+                          itemCount: categoriesProvider.categories.length,
+                          itemBuilder: (context, index) {
+                            final category = categoriesProvider.categories[index];
+                            return Card(
+                              color: Colors.white,
+                              margin: const EdgeInsets.symmetric(vertical: 8.0),
+                              elevation: 4,
+                              shadowColor: Colors.grey.withOpacity(0.4),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    Container(
-                                      padding: const EdgeInsets.all(8.0),
-                                      decoration: BoxDecoration(
-                                        color: theme.primaryColor.withOpacity(0.1),
-                                        borderRadius: BorderRadius.circular(5),
-                                      ),
-                                      child: Icon(
-                                        Icons.category,
-                                        color: theme.primaryColor,
-                                        size: 20,
-                                      ),
+                                    Row(
+                                      children: [
+                                        Container(
+                                          padding: const EdgeInsets.all(8.0),
+                                          decoration: BoxDecoration(
+                                            color: theme.primaryColor.withOpacity(0.1),
+                                            borderRadius: BorderRadius.circular(5),
+                                          ),
+                                          child: Icon(
+                                            Icons.category,
+                                            color: theme.primaryColor,
+                                            size: 20,
+                                          ),
+                                        ),
+                                        SizedBox(width: 8),
+                                        Expanded(
+                                          child: Text(
+                                            category.name,
+                                            style: theme.textTheme.bodyLarge?.copyWith(fontSize: 16),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    SizedBox(width: 8),
-                                    Expanded(
+                                    const SizedBox(height: 8),
+                                    Align(
+                                      alignment: Alignment.centerRight,
                                       child: Text(
-                                        category.name,
-                                        style: theme.textTheme.bodyLarge?.copyWith(fontSize: 16),
-                                        overflow: TextOverflow.ellipsis,
+                                        category.status ? 'Active' : 'Inactive',
+                                        style: theme.textTheme.bodyMedium?.copyWith(
+                                          fontSize: 14,
+                                          color: category.status ? Colors.green : Colors.red,
+                                        ),
                                       ),
                                     ),
                                   ],
                                 ),
-                                Spacer(),
-                                Text(
-                                  category.status ? 'Active' : 'Inactive',
-                                  style: theme.textTheme.bodyMedium?.copyWith(
-                                    fontSize: 14,
-                                    color: category.status ? Colors.green : Colors.red,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+                              ),
+                            );
+                          },
                         );
-                      },
-                    ),
+                      } else {
+                        // Use GridView for larger screens
+                        return GridView.builder(
+                          padding: const EdgeInsets.all(10.0),
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 4,
+                            crossAxisSpacing: 10,
+                            mainAxisSpacing: 10,
+                            childAspectRatio: 3,
+                          ),
+                          itemCount: categoriesProvider.categories.length,
+                          itemBuilder: (context, index) {
+                            final category = categoriesProvider.categories[index];
+                            return Card(
+                              color: Colors.white,
+                              margin: const EdgeInsets.symmetric(vertical: 8.0),
+                              elevation: 4,
+                              shadowColor: Colors.grey.withOpacity(0.4),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Container(
+                                          padding: const EdgeInsets.all(8.0),
+                                          decoration: BoxDecoration(
+                                            color: theme.primaryColor.withOpacity(0.1),
+                                            borderRadius: BorderRadius.circular(5),
+                                          ),
+                                          child: Icon(
+                                            Icons.category,
+                                            color: theme.primaryColor,
+                                            size: 20,
+                                          ),
+                                        ),
+                                        SizedBox(width: 8),
+                                        Expanded(
+                                          child: Text(
+                                            category.name,
+                                            style: theme.textTheme.bodyLarge?.copyWith(fontSize: 16),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Align(
+                                      alignment: Alignment.centerRight,
+                                      child: Text(
+                                        category.status ? 'Active' : 'Inactive',
+                                        style: theme.textTheme.bodyMedium?.copyWith(
+                                          fontSize: 14,
+                                          color: category.status ? Colors.green : Colors.red,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      }
+                    },
                   );
                 }
               },

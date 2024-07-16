@@ -1,4 +1,5 @@
 import 'package:barassage_app/core/blocs/authentication/authentication_bloc.dart';
+import 'package:barassage_app/features/admin_app/utils/home_colors.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
@@ -17,8 +18,8 @@ class AdminScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        iconTheme: const IconThemeData(
-          color: Colors.black,
+        iconTheme: IconThemeData(
+          color: primary,
         ),
         title: Text(
           title,
@@ -28,7 +29,7 @@ class AdminScaffold extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.logout),
+            icon: Icon(Icons.logout, color: primary),
             onPressed: () {
               BlocProvider.of<AuthenticationBloc>(context).add(AdminSignOut());
             },
@@ -40,20 +41,26 @@ class AdminScaffold extends StatelessWidget {
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.black,
-              ),
-              child: Text(
-                'Admin Menu',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
+            GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+                context.go('/admin/dashboard');
+              },
+              child: DrawerHeader(
+                decoration: BoxDecoration(
+                  color: primary,
+                ),
+                child: const Text(
+                  'Barassage Dashboard',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                  ),
                 ),
               ),
             ),
             ListTile(
-              leading: const Icon(Icons.people),
+              leading: Icon(Icons.people, color: primary),
               title: const Text('Manage Users'),
               onTap: () {
                 Navigator.pop(context);
@@ -61,7 +68,7 @@ class AdminScaffold extends StatelessWidget {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.build),
+              leading: Icon(Icons.build, color: primary),
               title: const Text('Manage Services'),
               onTap: () {
                 Navigator.pop(context);
@@ -69,7 +76,7 @@ class AdminScaffold extends StatelessWidget {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.warning),
+              leading: Icon(Icons.warning, color: primary),
               title: const Text('Reports'),
               onTap: () {
                 Navigator.pop(context);
@@ -77,7 +84,7 @@ class AdminScaffold extends StatelessWidget {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.block),
+              leading: Icon(Icons.block, color: primary),
               title: const Text('Ban List'),
               onTap: () {
                 Navigator.pop(context);
@@ -85,7 +92,7 @@ class AdminScaffold extends StatelessWidget {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.people),
+              leading: Icon(Icons.people, color: primary),
               title: const Text('Manage members'),
               onTap: () {
                 Navigator.pop(context);
@@ -93,7 +100,7 @@ class AdminScaffold extends StatelessWidget {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.category),
+              leading: Icon(Icons.category, color: primary),
               title: const Text('Manage Categories'),
               onTap: () {
                 Navigator.pop(context);
@@ -101,7 +108,7 @@ class AdminScaffold extends StatelessWidget {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.book),
+              leading: Icon(Icons.book, color: primary),
               title: const Text('Manage Bookings'),
               onTap: () {
                 Navigator.pop(context);
@@ -109,7 +116,7 @@ class AdminScaffold extends StatelessWidget {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.people_alt_outlined),
+              leading: Icon(Icons.people_alt_outlined, color: primary),
               title: const Text('Manage Teams'),
               onTap: () {
                 Navigator.pop(context);
@@ -117,7 +124,7 @@ class AdminScaffold extends StatelessWidget {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.analytics),
+              leading: const Icon(Icons.analytics, color: primary),
               title: const Text('Logs'),
               onTap: () {
                 Navigator.pop(context);
@@ -125,7 +132,7 @@ class AdminScaffold extends StatelessWidget {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.settings),
+              leading: Icon(Icons.settings, color: primary),
               title: const Text('Settings'),
               onTap: () {
                 Navigator.pop(context);
@@ -134,7 +141,7 @@ class AdminScaffold extends StatelessWidget {
             ),
             const Divider(),
             ListTile(
-              leading: const Icon(Icons.logout),
+              leading: Icon(Icons.logout, color: primary),
               title: const Text('Logout'),
               onTap: () {
                 BlocProvider.of<AuthenticationBloc>(context)

@@ -3,6 +3,9 @@ package log
 import (
 	db "barassage/api/database"
 	"barassage/api/models/log"
+
+	"github.com/gofiber/fiber/v2"
+	"github.com/morkid/paginate"
 )
 
 // Create Log
@@ -20,12 +23,14 @@ func GetAll() ([]log.Log, error) {
 }
 
 // Get by query params
-func GetByQueryParams(queryParams map[string]interface{}) ([]log.Log, error) {
-	var logs []log.Log
-	if err := db.PgDB.Where(queryParams).Find(&logs).Error; err != nil {
-		return nil, err
-	}
-	return logs, nil
+func GetByQueryParams(queryParams map[string]interface{}, c *fiber.Ctx) paginate.Page {
+	pg := paginate.New(&paginate.Config{
+		PageStart:   1,
+		DefaultSize: 20,
+	})
+	stmt := db.PgDB.Where(queryParams).Find(&[]log.Log{})
+	page := pg.With(stmt).Request(c.Request()).Response(&[]log.Log{})
+	return page
 }
 
 // Update Log

@@ -674,6 +674,53 @@ func UpdateBooking(c *fiber.Ctx) error {
 
 }
 
+// GetBooking Godoc
+// @Summary GetAllBookingsForUser
+// @Description Get all bookings for a user
+// @Tags Booking
+// @Produce json
+// @Success 200 {array} BookingOutput
+// @Failure 400 {array} ErrorResponse
+// @Failure 401 {array} ErrorResponse
+// @Failure 500 {array} ErrorResponse
+// @Router /booking/user [get]
+func GetAllBookingsForUser(c *fiber.Ctx) error {
+	var errorList []*fiber.Error
+	user := c.Locals("user").(*jwt.Token)
+	claims := user.Claims.(jwt.MapClaims)
+	userID := claims["userID"]
+	if userID == nil {
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusBadRequest,
+				Message: "can't extract user info from request",
+			},
+		)
+		return c.Status(fiber.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
+	}
+	// get the bookings
+	bookings, err := bookingRepo.GetBookingsByUserID(userID.(string))
+	if err != nil {
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusBadRequest,
+				Message: "Error while fetching bookings",
+			},
+		)
+		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
+	//if bookings is empty return empty array
+	if len(bookings) == 0 {
+		return c.Status(http.StatusOK).JSON([]BookingOutput{})
+	}
+
+	// Return the bookings
+	return c.Status(http.StatusOK).JSON(bookings)
+}
+
 // ============================================================
 // =================== Private Methods ========================
 // ============================================================

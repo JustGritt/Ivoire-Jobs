@@ -45,6 +45,12 @@ func GetAllCategories(c *fiber.Ctx) error {
 	if len(output) == 0 {
 		output = []*CategoryOutput{}
 	}
+	_ = CreateLog(&LogObject{
+		Level:      "info",
+		Type:       "Category",
+		Message:    "User not found",
+		RequestURI: c.OriginalURL(),
+	})
 
 	return c.JSON(output)
 }
@@ -95,6 +101,13 @@ func CreateCategory(c *fiber.Ctx) error {
 				Message: err.Error(),
 			},
 		)
+		_ = CreateLog(&LogObject{
+			Level:      "warn",
+			Type:       "Category",
+			Message:    "Error creating category",
+			RequestURI: c.OriginalURL(),
+		})
+
 		return c.Status(fiber.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
 	}
 

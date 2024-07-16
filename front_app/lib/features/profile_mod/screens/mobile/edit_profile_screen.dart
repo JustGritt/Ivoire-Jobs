@@ -1,7 +1,6 @@
 import 'package:barassage_app/core/blocs/authentication/authentication_bloc.dart';
 import 'package:barassage_app/features/auth_mod/models/user_update.dart';
 import 'package:barassage_app/features/auth_mod/widgets/app_button.dart';
-import 'package:barassage_app/core/init_dependencies.dart';
 import 'package:barassage_app/config/app_colors.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -9,8 +8,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ez_validator/ez_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-AuthenticationBloc authenticationBloc = serviceLocator<AuthenticationBloc>();
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({super.key});
@@ -52,14 +49,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   @override
   void dispose() {
-    // firstNameController.dispose();
-    // lastNameController.dispose();
-    // emailController.dispose();
-    // bioController.dispose();
+    firstNameController.dispose();
+    lastNameController.dispose();
+    emailController.dispose();
+    bioController.dispose();
     super.dispose();
   }
 
-  void validate() {
+  void validate(BuildContext context) {
     Map<String, dynamic> form = {
       "firstName": firstNameController.text,
       "lastName": lastNameController.text,
@@ -72,7 +69,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         errors = errors_;
       });
       if (errors_.entries.every((element) => element.value == null)) {
-        authenticationBloc.add(UpdateUserEvent(UserUpdate(
+        context.read<AuthenticationBloc>().add(UpdateUserEvent(UserUpdate(
           firstName: firstNameController.text,
           lastName: lastNameController.text,
           email: emailController.text,
@@ -97,7 +94,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               color: theme.primaryColorDark,
             ),
             onPressed: () {
-              context.read<AuthenticationBloc>().add(InitiateAuth());
               Navigator.of(context).pop();
             },
           ),
@@ -286,7 +282,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       return AppButton(
                         isLoading: state is AuthenticationLoadingState ||
                             state is UpdateProfileLoadingState,
-                        onPressed: validate,
+                        onPressed: () => validate(context),
                         label: 'Save',
                         backgroundColor: theme.primaryColor,
                       );

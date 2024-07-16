@@ -82,6 +82,12 @@ func CreateReport(c *fiber.Ctx) error {
 	if err := reportRepo.Create(&newReport); err != nil {
 		return c.Status(http.StatusInternalServerError).JSON(HTTPResponse(http.StatusInternalServerError, "Report Not Registered", err.Error()))
 	}
+	_ = CreateLog(&LogObject{
+		Level:      "info",
+		Message:    "Report Created",
+		Type:       "Report",
+		RequestURI: c.OriginalURL(),
+	})
 
 	reportOutput := mapReportToOutput(&newReport)
 	return c.Status(http.StatusCreated).JSON(HTTPResponse(http.StatusCreated, "Report Created", reportOutput))
@@ -108,6 +114,13 @@ func GetAllReports(c *fiber.Ctx) error {
 		reportOutputs = append(reportOutputs, *mapReportToOutput(&r))
 	}
 
+	_ = CreateLog(&LogObject{
+		Level:      "info",
+		Message:    "Reports retrieved",
+		Type:       "Report",
+		RequestURI: c.OriginalURL(),
+	})
+
 	return c.Status(http.StatusOK).JSON(reportOutputs)
 }
 
@@ -131,6 +144,13 @@ func GetAllPendingReports(c *fiber.Ctx) error {
 	for _, r := range reports {
 		reportOutputs = append(reportOutputs, *mapReportToOutput(&r))
 	}
+
+	_ = CreateLog(&LogObject{
+		Level:      "info",
+		Message:    "Pending Reports retrieved",
+		Type:       "Report",
+		RequestURI: c.OriginalURL(),
+	})
 
 	return c.Status(http.StatusOK).JSON(reportOutputs)
 }
@@ -187,6 +207,13 @@ func ValidateReport(c *fiber.Ctx) error {
 	if err := reportRepo.Update(report); err != nil {
 		return c.Status(http.StatusInternalServerError).JSON(HTTPResponse(http.StatusInternalServerError, "Error updating report", nil))
 	}
+
+	_ = CreateLog(&LogObject{
+		Level:      "info",
+		Message:    "Report validated",
+		Type:       "Report",
+		RequestURI: c.OriginalURL(),
+	})
 
 	return c.SendStatus(http.StatusOK)
 }

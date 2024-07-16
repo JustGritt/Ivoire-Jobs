@@ -27,6 +27,7 @@ class AdminApp extends RouteManager {
   static const String banlist = '/admin/banlist';
   static const String members = '/admin/members';
   static const String reports = '/admin/reports';
+  static const String emailValidation = '/auth/verify-email';
   static const String logs = '/admin/logs';
 
   AdminApp() {
@@ -214,6 +215,12 @@ class AdminApp extends RouteManager {
         return null;
       },
     ));
+
+    addRoute(GoRoute(
+        path: AdminApp.emailValidation,
+        pageBuilder: (context, state) {
+          return const CupertinoPage(child: EmailValidationController());
+        }));
 
     addRoute(GoRoute(
       path: AdminApp.logs,

@@ -195,11 +195,9 @@ class AdminService {
   Future<List<Booking>> getBookings() async {
     try {
       Response res = await _http.get(ApiEndpoint.bookingsCollection);
-      debugPrint('res-bookings: ${res.data}');
       if (res.statusCode == 200) {
         List<Booking> bookings =
         (res.data as List).map((e) => Booking.fromJson(e)).toList();
-        print('AdminService - bookings: $bookings'); // Logging the bookings
         return bookings;
       }
       throw Exception('Failed to load bookings');

@@ -1,3 +1,4 @@
+import 'package:barassage_app/features/admin_app/utils/home_colors.dart';
 import 'package:barassage_app/features/auth_mod/models/user.dart';
 import 'package:flutter/material.dart';
 
@@ -16,9 +17,9 @@ class UserCard extends StatelessWidget {
   Color _getBadgeColor(String role) {
     switch (role.toLowerCase()) {
       case 'admin':
-        return Colors.green;
+        return secondary;
       default:
-        return Colors.blue;
+        return primary;
     }
   }
 
@@ -27,8 +28,8 @@ class UserCard extends StatelessWidget {
     return Card(
       elevation: 4,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      color: Colors.grey[200],
+      margin: const EdgeInsets.all(8),
+      color: Colors.grey[100],
       child: ListTile(
         contentPadding: const EdgeInsets.all(16),
         leading: CircleAvatar(
@@ -42,7 +43,7 @@ class UserCard extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black,
+                    color: primary,
                   ),
                 )
               : null,
@@ -52,7 +53,7 @@ class UserCard extends StatelessWidget {
           style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
-            color: Colors.black,
+            color: primary,
           ),
         ),
         subtitle: Text(user.email),
@@ -79,6 +80,7 @@ class UserCard extends StatelessWidget {
               IconButton(
                 icon: const Icon(Icons.search),
                 onPressed: () => onDetailsPressed(user),
+                color: primary,
               ),
           ],
         ),

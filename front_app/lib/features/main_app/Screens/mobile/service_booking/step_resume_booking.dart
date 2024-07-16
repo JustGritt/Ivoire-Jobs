@@ -33,7 +33,7 @@ class _StepResumeBookingState extends State<StepResumeBooking> {
 
   @override
   void initState() {
-    controller.text = widget.defaultPhone?.phoneNumber ?? '';
+    controller.text = widget.defaultPhone?.parseNumber() ?? '';
     super.initState();
   }
 

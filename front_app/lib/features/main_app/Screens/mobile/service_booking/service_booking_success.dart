@@ -6,6 +6,7 @@ import 'package:barassage_app/features/main_app/models/service_models/booking_se
 import 'package:barassage_app/features/main_app/models/service_models/service_created_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 
@@ -153,7 +154,12 @@ class ServiceBookingSuccess extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 15),
                   borderRadius: BorderRadius.circular(12),
                   onPressed: () {
-                    context.pushReplacement(App.bookingServices);
+                    HapticFeedback.lightImpact();
+                    context.go(App.bookingServices);
+                    // TODO: Ask the tech lead how to pop the current screen
+                    // Future.delayed(const Duration(milliseconds: 500), () {
+                    //   context.pop();
+                    // });
                   },
                   color: theme.primaryColor,
                   child: Text(

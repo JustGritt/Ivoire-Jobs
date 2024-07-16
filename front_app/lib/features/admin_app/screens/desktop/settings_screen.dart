@@ -1,4 +1,5 @@
 import 'package:barassage_app/features/admin_app/services/dashboard_settings_service.dart';
+import 'package:barassage_app/features/admin_app/utils/home_colors.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'dart:convert';
@@ -179,70 +180,95 @@ class _DashboardSettingsState extends State<DashboardSettings> {
 
   @override
   Widget build(BuildContext context) {
-    final double maxWidth = MediaQuery.of(context).size.width * 2 / 3;
+    double maxWidth = MediaQuery.of(context).size.width * 0.9;
+    if (maxWidth < 800) {
+      maxWidth = 800;
+    }
 
     return Scaffold(
       body: Center(
         child: Container(
-          width: maxWidth,
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Card(
                 elevation: 4,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                color: Colors.grey[200],
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  child: Row(
                     children: [
                       const Text(
-                        'Maintenance Mode',
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
+                        'Maintenance mode',
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                       ),
-                      const SizedBox(height: 10),
-                      Switch(
-                        value: isMaintenanceMode,
-                        onChanged: toggleMaintenanceMode,
+                      const Spacer(),
+                      Container(
+                        color: Colors.transparent,
+                        child: Switch(
+                          value: isMaintenanceMode,
+                          onChanged: toggleMaintenanceMode,
+                          inactiveTrackColor: tertiary,
+                        ),
                       ),
                     ],
                   ),
                 ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 8),
               Card(
                 elevation: 4,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                color: Colors.grey[200],
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
-                        'Add User IP to List',
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
+                        'Add your IP to whitelist',
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                       ),
-                      const SizedBox(height: 10),
+                      const SizedBox(height: 8),
                       Row(
                         children: [
                           Expanded(
                             child: TextField(
                               controller: ipController,
-                              decoration: const InputDecoration(
+                              decoration: InputDecoration(
+                                filled: true,
+                                fillColor: Colors.transparent,
                                 labelText: 'User IP',
-                                border: OutlineInputBorder(),
+                                border: const OutlineInputBorder(
+                                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                ),
                               ),
                             ),
                           ),
-                          const SizedBox(width: 10),
-                          IconButton(
-                            icon: const Icon(Icons.add),
+                          const SizedBox(width: 8),
+                          ElevatedButton(
                             onPressed: addIpFromController,
+                            style: ElevatedButton.styleFrom(
+                              shape: const CircleBorder(),
+                              padding: const EdgeInsets.all(16),
+                              backgroundColor: tertiary,
+                            ),
+                            child: Icon(Icons.add, color: primary),
                           ),
-                          IconButton(
-                            icon: const Icon(Icons.person_add),
+                          ElevatedButton(
                             onPressed: addIpsToList,
+                            style: ElevatedButton.styleFrom(
+                              shape: const CircleBorder(),
+                              padding: const EdgeInsets.all(16),
+                              backgroundColor: tertiary,
+                            ),
+                            child: Icon(Icons.person_add, color: primary),
                           ),
                         ],
                       ),
@@ -250,10 +276,14 @@ class _DashboardSettingsState extends State<DashboardSettings> {
                   ),
                 ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 8),
               Expanded(
                 child: Card(
                   elevation: 4,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  color: Colors.grey[200],
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
@@ -262,9 +292,9 @@ class _DashboardSettingsState extends State<DashboardSettings> {
                         const Text(
                           'User IP List',
                           style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold),
+                              fontSize: 16, fontWeight: FontWeight.bold),
                         ),
-                        const SizedBox(height: 10),
+                        const SizedBox(height: 8),
                         Expanded(
                           child: ListView.builder(
                             itemCount: ipList.length,
@@ -272,9 +302,8 @@ class _DashboardSettingsState extends State<DashboardSettings> {
                               return ListTile(
                                 title: Text(ipList[index]),
                                 trailing: IconButton(
-                                  icon: const Icon(Icons.delete),
-                                  onPressed: () =>
-                                      removeIpFromList(ipList[index]),
+                                  icon: Icon(Icons.delete, color: primary),
+                                  onPressed: () => removeIpFromList(ipList[index]),
                                 ),
                               );
                             },

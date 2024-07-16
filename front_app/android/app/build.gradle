@@ -5,18 +5,6 @@ plugins {
     id 'com.google.gms.google-services'
 }
 
-subprojects {
-    afterEvaluate { project ->
-        if (project.hasProperty('android')) {
-            project.android {
-                if (namespace == null) {
-                    namespace project.group
-                }
-            }
-        }
-    }
-}
-
 def localProperties = new Properties()
 def localPropertiesFile = rootProject.file('local.properties')
 if (localPropertiesFile.exists()) {
@@ -38,16 +26,12 @@ if (flutterVersionName == null) {
 android {
     compileSdkVersion 34  // Correct version, only one should be defined
     namespace "app.barassage.com"
-    ndkVersion "25.1.8937393"  // Correct version
+    ndkVersion "25.1.8937393"
 
     compileOptions {
         coreLibraryDesugaringEnabled true
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-
-    kotlinOptions {
-        jvmTarget = '1.8'
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     sourceSets {
@@ -56,8 +40,8 @@ android {
 
     defaultConfig {
         applicationId "app.barassage.com"
-        minSdkVersion 25  // You should define minSdkVersion as well
-        targetSdkVersion 34  // Correct version
+        minSdkVersion 23  // You should define minSdkVersion as well
+        targetSdkVersion flutter.targetSdkVersion  // Correct version
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         multiDexEnabled true
@@ -77,4 +61,5 @@ flutter {
 dependencies {
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.2'
     implementation platform('com.google.firebase:firebase-bom:33.1.1')
+    implementation 'androidx.window:window:1.0.0' // Add this line
 }

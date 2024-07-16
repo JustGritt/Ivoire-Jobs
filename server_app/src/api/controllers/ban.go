@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"barassage/api/models/ban"
-	"log"
 
 	banRepo "barassage/api/repositories/ban"
 	userRepo "barassage/api/repositories/user"
@@ -57,6 +56,12 @@ func CreateBan(c *fiber.Ctx) error {
 			Code:    http.StatusNotFound,
 			Message: "User not found",
 		})
+		_ = CreateLog(&LogObject{
+			Level:      "warn",
+			Type:       "Ban",
+			Message:    "User not found with ID: " + newBan.UserID,
+			RequestURI: c.OriginalURL(),
+		})
 		return c.Status(http.StatusNotFound).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
@@ -64,6 +69,12 @@ func CreateBan(c *fiber.Ctx) error {
 		errorList = append(errorList, &fiber.Error{
 			Code:    http.StatusBadRequest,
 			Message: "Cannot ban an admin",
+		})
+		_ = CreateLog(&LogObject{
+			Level:      "warn",
+			Type:       "Ban",
+			Message:    "Cannot ban an admin",
+			RequestURI: c.OriginalURL(),
 		})
 		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
 	}
@@ -75,6 +86,12 @@ func CreateBan(c *fiber.Ctx) error {
 			Code:    http.StatusBadRequest,
 			Message: "User is already banned",
 		})
+		_ = CreateLog(&LogObject{
+			Level:      "warn",
+			Type:       "Ban",
+			Message:    "User is already banned with ID: " + newBan.UserID,
+			RequestURI: c.OriginalURL(),
+		})
 		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
@@ -82,6 +99,12 @@ func CreateBan(c *fiber.Ctx) error {
 		errorList = append(errorList, &fiber.Error{
 			Code:    http.StatusInternalServerError,
 			Message: "Failed to create ban",
+		})
+		_ = CreateLog(&LogObject{
+			Level:      "warn",
+			Type:       "Ban",
+			Message:    "Failed to create ban with ID: " + newBan.UserID,
+			RequestURI: c.OriginalURL(),
 		})
 		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
 	}
@@ -148,14 +171,18 @@ func GetAllBans(c *fiber.Ctx) error {
 func DeleteBan(c *fiber.Ctx) error {
 	var errorList []*fiber.Error
 	banID := c.Params("id")
-	log.Println("banID: ", banID)
-
 	//chek if the ban exists
 	isBanned := banRepo.IsAlreadyDeleted(banID)
 	if isBanned {
 		errorList = append(errorList, &fiber.Error{
 			Code:    http.StatusBadRequest,
 			Message: "Already deleted",
+		})
+		_ = CreateLog(&LogObject{
+			Level:      "warn",
+			Type:       "Ban",
+			Message:    "Ban already deleted with ID: " + banID,
+			RequestURI: c.OriginalURL(),
 		})
 		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
 	}
@@ -165,6 +192,14 @@ func DeleteBan(c *fiber.Ctx) error {
 			Code:    http.StatusInternalServerError,
 			Message: "Failed to delete ban",
 		})
+
+		_ = CreateLog(&LogObject{
+			Level:      "info",
+			Type:       "Ban",
+			Message:    "Failed to delete ban with ID: " + banID,
+			RequestURI: c.OriginalURL(),
+		})
+
 		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
