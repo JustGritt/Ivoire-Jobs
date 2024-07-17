@@ -360,7 +360,7 @@ func ValidateMember(c *fiber.Ctx) error {
 	}
 
 	// Send FCM notification
-	domain := notification.ServiceDomain
+	domain := notification.PushNotification
 	resp, err := notification.Send(c.Context(), message, user, domain)
 	if err != nil {
 		log.Printf("error sending message: %v", err)

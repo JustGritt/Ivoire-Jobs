@@ -20,9 +20,10 @@ var notif *fcm.Client
 type Domain string
 
 const (
-	ServiceDomain Domain = "service"
-	BookingDomain Domain = "booking"
-	MessageDomain Domain = "message"
+	ServiceDomain    Domain = "service"
+	BookingDomain    Domain = "booking"
+	MessageDomain    Domain = "message"
+	PushNotification Domain = "push"
 )
 
 // InitFCM initializes the FCM client
@@ -96,6 +97,10 @@ func Send(ctx context.Context, data map[string]string, user *user.User, domain D
 	case MessageDomain:
 		if !userNotif.MessageNotification {
 			return nil, errors.New("MessageNotification is false, not sending notification")
+		}
+	case PushNotification:
+		if !userNotif.PushNotification {
+			return nil, errors.New("PushNotification is false, not sending notification")
 		}
 	default:
 		return nil, fmt.Errorf("unknown domain: %s", domain)
