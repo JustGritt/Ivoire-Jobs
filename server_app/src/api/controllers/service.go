@@ -5,6 +5,7 @@ import (
 	"barassage/api/models/category"
 	"barassage/api/models/image"
 	"barassage/api/models/service"
+	"math"
 
 	categoryRepo "barassage/api/repositories/category"
 	serviceRepo "barassage/api/repositories/service"
@@ -155,6 +156,7 @@ func CreateService(c *fiber.Ctx) error {
 		)
 		_ = CreateLog(&LogObject{
 			Level:      "warn",
+			Type:       "Service",
 			Message:    "User is not a member",
 			RequestURI: c.OriginalURL(),
 		})
@@ -173,6 +175,7 @@ func CreateService(c *fiber.Ctx) error {
 		)
 		_ = CreateLog(&LogObject{
 			Level:      "warn",
+			Type:       "Service",
 			Message:    "User membership request is still pending" + dbUser.ID,
 			RequestURI: c.OriginalURL(),
 		})
@@ -208,6 +211,7 @@ func CreateService(c *fiber.Ctx) error {
 		)
 		_ = CreateLog(&LogObject{
 			Level:      "warn",
+			Type:       "Service",
 			Message:    "Service Already Exist",
 			RequestURI: c.OriginalURL(),
 		})
@@ -239,6 +243,7 @@ func CreateService(c *fiber.Ctx) error {
 			)
 			_ = CreateLog(&LogObject{
 				Level:      "warn",
+				Type:       "Service",
 				Message:    "total size of images should not exceed 15MB",
 				RequestURI: c.OriginalURL(),
 			})
@@ -255,6 +260,7 @@ func CreateService(c *fiber.Ctx) error {
 			)
 			_ = CreateLog(&LogObject{
 				Level:      "warn",
+				Type:       "Service",
 				Message:    "maximum of 3 images allowed",
 				RequestURI: c.OriginalURL(),
 			})
@@ -278,6 +284,7 @@ func CreateService(c *fiber.Ctx) error {
 				)
 				_ = CreateLog(&LogObject{
 					Level:      "warn",
+					Type:       "Service",
 					Message:    "unable to upload images to S3",
 					RequestURI: c.OriginalURL(),
 				})
@@ -304,6 +311,7 @@ func CreateService(c *fiber.Ctx) error {
 			)
 			_ = CreateLog(&LogObject{
 				Level:      "warn",
+				Type:       "Service",
 				Message:    "invalid category id",
 				RequestURI: c.OriginalURL(),
 			})
@@ -337,6 +345,7 @@ func CreateService(c *fiber.Ctx) error {
 
 		_ = CreateLog(&LogObject{
 			Level:      "warn",
+			Type:       "Service",
 			Message:    "this service already exist",
 			RequestURI: c.OriginalURL(),
 		})
@@ -373,6 +382,7 @@ func GetAll(c *fiber.Ctx) error {
 		)
 		_ = CreateLog(&LogObject{
 			Level:      "warn",
+			Type:       "Service",
 			Message:    "error getting services",
 			RequestURI: c.OriginalURL(),
 		})
@@ -392,6 +402,7 @@ func GetAll(c *fiber.Ctx) error {
 
 	_ = CreateLog(&LogObject{
 		Level:      "info",
+		Type:       "Service",
 		Message:    "services fetched successfully",
 		RequestURI: c.OriginalURL(),
 	})
@@ -427,6 +438,7 @@ func GetServiceByUserId(c *fiber.Ctx) error {
 
 		_ = CreateLog(&LogObject{
 			Level:      "warn",
+			Type:       "Service",
 			Message:    "error getting services",
 			RequestURI: c.OriginalURL(),
 		})
@@ -444,6 +456,7 @@ func GetServiceByUserId(c *fiber.Ctx) error {
 
 	_ = CreateLog(&LogObject{
 		Level:      "info",
+		Type:       "Service",
 		Message:    "services fetched successfully",
 		RequestURI: c.OriginalURL(),
 	})
@@ -477,6 +490,7 @@ func GetServiceById(c *fiber.Ctx) error {
 
 		_ = CreateLog(&LogObject{
 			Level:      "warn",
+			Type:       "Service",
 			Message:    "service id is required",
 			RequestURI: c.OriginalURL(),
 		})
@@ -496,6 +510,7 @@ func GetServiceById(c *fiber.Ctx) error {
 
 		_ = CreateLog(&LogObject{
 			Level:      "warn",
+			Type:       "Service",
 			Message:    "error getting service",
 			RequestURI: c.OriginalURL(),
 		})
@@ -504,6 +519,7 @@ func GetServiceById(c *fiber.Ctx) error {
 
 	_ = CreateLog(&LogObject{
 		Level:      "info",
+		Type:       "Service",
 		Message:    "service fetched successfully",
 		RequestURI: c.OriginalURL(),
 	})
@@ -540,6 +556,7 @@ func UpdateService(c *fiber.Ctx) error {
 
 		_ = CreateLog(&LogObject{
 			Level:      "warn",
+			Type:       "Service",
 			Message:    "service id is required",
 			RequestURI: c.OriginalURL(),
 		})
@@ -586,6 +603,7 @@ func UpdateService(c *fiber.Ctx) error {
 			)
 			_ = CreateLog(&LogObject{
 				Level:      "warn",
+				Type:       "Service",
 				Message:    "Unable to find service with the given ID",
 				RequestURI: c.OriginalURL(),
 			})
@@ -600,6 +618,7 @@ func UpdateService(c *fiber.Ctx) error {
 		)
 		_ = CreateLog(&LogObject{
 			Level:      "warn",
+			Type:       "Service",
 			Message:    "An error occurred while updating service",
 			RequestURI: c.OriginalURL(),
 		})
@@ -789,6 +808,7 @@ func DeleteService(c *fiber.Ctx) error {
 		)
 		_ = CreateLog(&LogObject{
 			Level:      "warn",
+			Type:       "Service",
 			Message:    "service id is required",
 			RequestURI: c.OriginalURL(),
 		})
@@ -872,6 +892,7 @@ func DeleteService(c *fiber.Ctx) error {
 
 	_ = CreateLog(&LogObject{
 		Level:      "info",
+		Type:       "Service",
 		Message:    "service deleted successfully",
 		RequestURI: c.OriginalURL(),
 	})
@@ -889,6 +910,8 @@ func DeleteService(c *fiber.Ctx) error {
 // @Param city query string false "Service City"
 // @Param country query string false "Service Country"
 // @Param categories query string false "Service Categories (comma separated)"
+// @Param latitude query number false "Service Latitude"
+// @Param longitude query number false "Service Longitude"
 // @Success 200 {array} ServiceOutput
 // @Failure 400 {array} ErrorResponse
 // @Failure 401 {array} ErrorResponse
@@ -903,6 +926,9 @@ func SearchService(c *fiber.Ctx) error {
 	maxPriceStr := c.Query("max_price")
 	serviceCity := c.Query("city")
 	serviceCountry := c.Query("country")
+	latitudeStr := c.Query("latitude")
+	longitudeStr := c.Query("longitude")
+	radiusStr := c.Query("radius")
 	categoriesStr := c.Query("categories")
 
 	// Validate and sanitize string inputs
@@ -1000,6 +1026,53 @@ func SearchService(c *fiber.Ctx) error {
 		)
 	}
 
+	// Validate and convert latitude and longitude
+	var latitude, longitude float64
+	if latitudeStr != "" {
+		latitude, err = strconv.ParseFloat(latitudeStr, 64)
+		if err != nil {
+			errorList = append(
+				errorList,
+				&fiber.Error{
+					Code:    fiber.StatusBadRequest,
+					Message: "Invalid latitude value",
+				},
+			)
+		}
+	}
+
+	if longitudeStr != "" {
+		longitude, err = strconv.ParseFloat(longitudeStr, 64)
+		if err != nil {
+			errorList = append(
+				errorList,
+				&fiber.Error{
+					Code:    fiber.StatusBadRequest,
+					Message: "Invalid longitude value",
+				},
+			)
+		}
+	}
+
+	// Validate and convert radius
+	const DefaultRadius = 10.0
+	var radius float64 = DefaultRadius
+	if radiusStr != "" {
+		radius, err = strconv.ParseFloat(radiusStr, 64)
+		if err != nil {
+			errorList = append(
+				errorList,
+				&fiber.Error{
+					Code:    fiber.StatusBadRequest,
+					Message: "Invalid radius value",
+				},
+			)
+		}
+		if radius < 0 {
+			radius = DefaultRadius
+		}
+	}
+
 	// Return if any validation errors occurred
 	if len(errorList) > 0 {
 		return c.Status(fiber.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
@@ -1016,6 +1089,11 @@ func SearchService(c *fiber.Ctx) error {
 			},
 		)
 		return c.Status(fiber.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
+	// Filter services based on distance if latitude and longitude are provided
+	if latitude != 0 && longitude != 0 {
+		services = filterServicesByDistance(services, latitude, longitude, radius)
 	}
 
 	// Map services to ServiceOutput
@@ -1196,4 +1274,38 @@ func isValidLocation(location string) bool {
 	}
 	re := regexp.MustCompile(`^[\p{L}\s]+$`)
 	return re.MatchString(location)
+}
+
+// haversine calculates the distance between two points specified by latitude/longitude using the Haversine formula
+func haversine(lat1, lon1, lat2, lon2 float64) float64 {
+	const EarthRadius = 6371.0097714 // Earth's radius in kilometers
+	dLat := degreesToRadians(lat2 - lat1)
+	dLon := degreesToRadians(lon2 - lon1)
+
+	lat1 = degreesToRadians(lat1)
+	lat2 = degreesToRadians(lat2)
+
+	a := math.Sin(dLat/2)*math.Sin(dLat/2) +
+		math.Sin(dLon/2)*math.Sin(dLon/2)*math.Cos(lat1)*math.Cos(lat2)
+	c := 2 * math.Atan2(math.Sqrt(a), math.Sqrt(1-a))
+
+	return EarthRadius * c
+}
+
+func degreesToRadians(degrees float64) float64 {
+	return degrees * math.Pi / 180
+}
+
+func filterServicesByDistance(services []service.Service, latitude, longitude float64, maxDistanceKm float64) []service.Service {
+	var filteredServices []service.Service
+
+	for _, s := range services {
+		distance := haversine(latitude, longitude, s.Latitude, s.Longitude)
+		fmt.Println("Distance:", distance)
+		if distance <= maxDistanceKm {
+			filteredServices = append(filteredServices, s)
+		}
+	}
+
+	return filteredServices
 }
