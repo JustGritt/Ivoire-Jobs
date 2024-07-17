@@ -25,11 +25,11 @@ class LogsProvider with ChangeNotifier {
   int get currentPage => _currentPage;
   int get totalPages => _totalPages;
 
-  Future<void> getAllLogs({int page = 1}) async {
+  Future<void> getAllLogs({int page = 1, String? level, String? type}) async {
     _isLoading = true;
     notifyListeners();
     try {
-      _logs = await _adminService.getLogs(page: page);
+      _logs = await _adminService.getLogs(page: page, level: level, type: type);
       debugPrint('logs: ${_logs.items.length}');
       _currentPage = _logs.currentPage;
       _totalPages = _logs.totalPages;
@@ -53,21 +53,25 @@ class LogsProvider with ChangeNotifier {
     }
   }
 
-  void nextPage() {
+  void nextPage(String? level, String? type) {
     if (_currentPage < _totalPages) {
-      getAllLogs(page: ++_currentPage);
+      getAllLogs(page: ++_currentPage, level: level, type: type);
     }
   }
 
-  void previousPage() {
+  void previousPage(String? level, String? type) {
     if (_currentPage > 1) {
-      getAllLogs(page: --_currentPage);
+      getAllLogs(page: --_currentPage, level: level, type: type);
     }
   }
 
-  void jumpToPage(int page) {
+  void jumpToPage(int page, String? level, String? type) {
     if (page > 0 && page <= _totalPages) {
-      getAllLogs(page: page);
+      getAllLogs(page: page, level: level, type: type);
     }
+  }
+
+  void filterLogs({String? level, String? type}) {
+    getAllLogs(page: 1, level: level, type: type);
   }
 }
