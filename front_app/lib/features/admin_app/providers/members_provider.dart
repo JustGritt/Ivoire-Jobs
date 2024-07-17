@@ -11,13 +11,15 @@ class MembersProvider with ChangeNotifier {
   List<Member> get members => _members;
   bool get isLoading => _isLoading;
 
-  Future<void> getMemberRequests() async {
+  Future<List<Member>> getMemberRequests() async {
     _isLoading = true;
     notifyListeners();
     try {
       _members = await _adminService.getMemberRequests();
+      return _members;
     } catch (e) {
       _members = [];
+      return _members;
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -27,8 +29,7 @@ class MembersProvider with ChangeNotifier {
   Future<void> approveMemberRequest(String id, String action) async {
     try {
       await _adminService.approveMemberRequest(id, action);
-      _members.removeWhere((element) => element.id == id);
-      notifyListeners();
+      await getMemberRequests(); // Fetch the updated list of members
     } catch (e) {
       debugPrint('Error approving member request: $e');
     }
