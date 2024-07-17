@@ -25,6 +25,9 @@
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
+	<array>
+      <string>mailto</string>
+    </array>
 	<true/>
 	<key>NSAppTransportSecurity</key>
 	<dict>
