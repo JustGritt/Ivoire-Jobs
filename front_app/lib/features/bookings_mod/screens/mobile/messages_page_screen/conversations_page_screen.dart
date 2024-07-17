@@ -11,7 +11,6 @@ class ConversationsPageScreen extends StatefulWidget {
 
   @override
   State<ConversationsPageScreen> createState() =>
-     
       _ConversationsPageScreenState();
 }
 
@@ -24,6 +23,34 @@ class _ConversationsPageScreenState extends State<ConversationsPageScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    ThemeData theme = Theme.of(context);
+
+    return CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(
+        middle: Text('Conversations (18)'),
+        previousPageTitle: 'Bookings',
+        backgroundColor: AppColors.primaryBlueFair,
+        border: Border(bottom: BorderSide(color: Colors.transparent)),
+      ),
+      child: BlocBuilder<MessagingChatsBloc, MessagingChatsState>(
+          builder: (context, state) {
+        if (state is MessagingChatsLoadingState) {
+          return Center(child: CircularProgressIndicator());
+        }
+        if (state is MessagingChatsLoadedState) {
+          if (state.chats.isEmpty) {
+            return Center(child: Text('No Conversations Found !'));
+          }
+
+          return ListView.builder(
+            itemCount: state.chats.length,
+            itemBuilder: (context, index) {
+              return MessagingConversationCard(chatRoom: state.chats[index]);
+            },
+          );
+        }
+        return Center(child: Text('No Conversations Found!'));
+      }),
+    );
   }
 }

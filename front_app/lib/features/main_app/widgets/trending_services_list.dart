@@ -1,9 +1,9 @@
-import 'package:barassage_app/features/main_app/models/service_models/service_model.dart';
+import 'package:barassage_app/features/main_app/models/service_models/service_created_model.dart';
 import 'package:barassage_app/features/main_app/widgets/trending_service.dart';
 import 'package:flutter/material.dart';
 
 class TrendingServicesList extends StatelessWidget {
-  final List<ServiceModel> services;
+  final List<ServiceCreatedModel> services;
 
   const TrendingServicesList({super.key, required this.services});
 
