@@ -6,6 +6,7 @@ import 'package:barassage_app/core/init_dependencies.dart';
 import 'package:barassage_app/config/api_endpoints.dart';
 import 'package:barassage_app/config/app_cache.dart';
 import 'package:barassage_app/config/app_http.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart';
 import 'dart:developer';
@@ -63,7 +64,8 @@ class MyServicesProvider extends ChangeNotifier {
     } catch (e) {
       print(e);
       showMyDialog(appContext.navigatorContext,
-          title: 'Service', content: 'An error occurred while deleting service');
+          title: 'Service',
+          content: 'An error occurred while deleting service');
       return false;
     } finally {
       isLoading = false;
@@ -81,7 +83,8 @@ class MyServicesProvider extends ChangeNotifier {
     }
     try {
       final user = await appCache.getUser();
-      Response res = await _http.get('${ApiEndpoint.services}/search?categories=$filter');
+      Response res =
+          await _http.get('${ApiEndpoint.services}/search?categories=$filter');
       if (res.statusCode == 200) {
         _serviceModel = servicesFromJson(res.data);
         hasNoServices = _serviceModel.isEmpty;
@@ -109,7 +112,8 @@ class MyServicesProvider extends ChangeNotifier {
     }
     try {
       final user = await appCache.getUser();
-      Response res = await _http.get('${ApiEndpoint.services}/search?name=$query');
+      Response res =
+          await _http.get('${ApiEndpoint.services}/search?name=$query');
       if (res.statusCode == 200) {
         _serviceModel = servicesFromJson(res.data);
         hasNoServices = _serviceModel.isEmpty;
@@ -132,6 +136,35 @@ class MyServicesProvider extends ChangeNotifier {
       }
     } catch (e) {
       print(e);
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> getNearbyServices() async {
+    isLoading = true;
+    notifyListeners();
+    try {
+      final user = await appCache.getUser();
+      Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+      print(position.latitude);
+      print(position.longitude);
+      Response res = await _http.get('${ApiEndpoint.services}/search', params: {
+        "latitude": position.latitude,
+        "longitude": position.longitude,
+        // "latitude": 48.8488336,
+        // "longitude": 32.3891768
+      });
+      print(res.data);
+      if (res.statusCode == 200) {
+        _serviceModel = servicesFromJson(res.data);
+        hasNoServices = _serviceModel.isEmpty;
+      }
+    } catch (e) {
+      print(e);
+      _serviceModel = [];
+      hasNoServices = true;
     } finally {
       isLoading = false;
       notifyListeners();
