@@ -126,19 +126,7 @@ func Send(ctx context.Context, data map[string]string, user *user.User, domain D
 		tokens = append(tokens, token.Token)
 	}
 
-	message := &messaging.MulticastMessage{
-		Data: data,
-		Android: &messaging.AndroidConfig{
-			Priority: "high",
-			Notification: &messaging.AndroidNotification{
-				Title: "Barassage",
-				Body:  "You have a new notification",
-			},
-		},
-		Tokens: tokens,
-	}
-
-	// Send message using SendEachForMulticast	
+	// Send message using SendEachForMulticast
 	responses, err := notif.SendEachForMulticast(ctx, &messaging.MulticastMessage{
 		Data: data,
 		Android: &messaging.AndroidConfig{
@@ -160,7 +148,7 @@ func Send(ctx context.Context, data map[string]string, user *user.User, domain D
 			},
 		},
 	})
-	
+
 	if err != nil {
 		return nil, fmt.Errorf("error sending message: %w", err)
 	}
