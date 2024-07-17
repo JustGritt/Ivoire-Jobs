@@ -4,16 +4,20 @@ import 'package:intl/intl.dart';
 
 class TagFilterSection extends StatelessWidget {
   final String selectedLevel;
+  final String selectedType;
   final DateTime? startDate;
   final DateTime? endDate;
   final ValueChanged<String?> onLevelChanged;
+  final ValueChanged<String?> onTypeChanged;
   final VoidCallback onDateRangeSelected;
 
   const TagFilterSection({
     required this.selectedLevel,
+    required this.selectedType,
     required this.startDate,
     required this.endDate,
     required this.onLevelChanged,
+    required this.onTypeChanged,
     required this.onDateRangeSelected,
     super.key,
   });
@@ -27,7 +31,7 @@ class TagFilterSection extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            'Manage Logs',
+            'Filter Logs',
             style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
@@ -37,7 +41,8 @@ class TagFilterSection extends StatelessWidget {
           Row(
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(8),
@@ -47,7 +52,44 @@ class TagFilterSection extends StatelessWidget {
                   child: DropdownButton<String>(
                     value: selectedLevel,
                     onChanged: onLevelChanged,
-                    items: <String>['All', 'info', 'warn', 'error']
+                    items: <String>['Level', 'info', 'warn', 'error']
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(
+                          value,
+                          style: const TextStyle(fontSize: 16, color: primary),
+                        ),
+                      );
+                    }).toList(),
+                    icon: Icon(Icons.arrow_drop_down, color: primary),
+                    dropdownColor: Colors.white,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 16),
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: primary, width: 2.0),
+                ),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<String>(
+                    value: selectedType,
+                    onChanged: onTypeChanged,
+                    items: <String>[
+                      'Type',
+                      'Booking',
+                      'Rating',
+                      'Dashboard',
+                      'Report',
+                      'Category',
+                      'Room',
+                      'Service'
+                    ]
                         .map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
@@ -74,7 +116,8 @@ class TagFilterSection extends StatelessWidget {
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: primary,
-                  padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 24.0),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 32.0, vertical: 24.0),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),

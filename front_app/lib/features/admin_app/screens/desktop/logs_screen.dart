@@ -20,7 +20,8 @@ class LogsScreen extends StatefulWidget {
 
 class _LogsScreenState extends State<LogsScreen> {
   late Future<void> logsFuture;
-  String selectedLevel = 'All';
+  String selectedLevel = 'Level';
+  String selectedType = 'Type';
   DateTime? startDate;
   DateTime? endDate;
 
@@ -120,11 +121,17 @@ class _LogsScreenState extends State<LogsScreen> {
         children: [
           TagFilterSection(
             selectedLevel: selectedLevel,
+            selectedType: selectedType,
             startDate: startDate,
             endDate: endDate,
             onLevelChanged: (String? newValue) {
               setState(() {
                 selectedLevel = newValue!;
+              });
+            },
+            onTypeChanged: (String? newValue) {
+              setState(() {
+                selectedType = newValue!;
               });
             },
             onDateRangeSelected: () => _selectDateRange(context),
@@ -146,14 +153,16 @@ class _LogsScreenState extends State<LogsScreen> {
                         return Center(child: Text('No logs available'));
                       } else {
                         List<Log> filteredLogs = logsProvider.logs.items.where((log) {
-                          bool levelMatch = selectedLevel == 'All' ||
+                          bool levelMatch = selectedLevel == 'Level' ||
                               log.level.toLowerCase() == selectedLevel.toLowerCase();
+                          bool typeMatch = selectedType == 'Type' ||
+                              log.type.toLowerCase() == selectedType.toLowerCase();
                           bool dateMatch = true;
                           if (startDate != null && endDate != null) {
                             DateTime logDate = DateTime.parse(log.createdAt);
                             dateMatch = logDate.isAfter(startDate!) && logDate.isBefore(endDate!);
                           }
-                          return levelMatch && dateMatch;
+                          return levelMatch && typeMatch && dateMatch;
                         }).toList();
                         return SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
