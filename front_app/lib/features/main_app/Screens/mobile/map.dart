@@ -1,3 +1,4 @@
+import 'package:barassage_app/features/main_app/providers/my_services_provider.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -5,6 +6,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'dart:convert';
 
 class MapScreen extends StatefulWidget {
@@ -23,12 +25,16 @@ class _MapScreenState extends State<MapScreen> {
   late stt.SpeechToText _speech;
   bool _isListening = false;
   String _recognizedText = '';
+  String _selectedFilter = "All";
 
   @override
   void initState() {
     super.initState();
     _getCurrentLocation();
     _initializeSpeechRecognizer();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<MyServicesProvider>(context, listen: false).getCategories();
+    });
   }
 
   void _initializeSpeechRecognizer() async {
@@ -173,6 +179,24 @@ class _MapScreenState extends State<MapScreen> {
     }
   }
 
+  void _filterServices(String filter) async {
+    final myServicesProvider =
+        Provider.of<MyServicesProvider>(context, listen: false);
+    await myServicesProvider.filterServices(filter);
+    setState(() {
+      markers.clear();
+      _setMarkerToCurrentPosition();
+      myServicesProvider.services.forEach((service) {
+        markers.add(Marker(
+          point: LatLng(service.latitude, service.longitude),
+          width: 80,
+          height: 80,
+          child: const Icon(Icons.location_on),
+        ));
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -181,7 +205,8 @@ class _MapScreenState extends State<MapScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.only(
+                  top: 40.0, left: 8.0, right: 8.0, bottom: 8.0),
               child: Container(
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.grey[300]!),
@@ -200,7 +225,8 @@ class _MapScreenState extends State<MapScreen> {
                         decoration: const InputDecoration(
                           contentPadding: EdgeInsets.only(left: 8),
                           border: InputBorder.none,
-                          hintText: 'Search location',
+                          hintText: 'Your location',
+                          helperStyle: TextStyle(color: Colors.grey, fontSize: 12),
                         ),
                         onSubmitted: (value) {
                           _performSearch();
@@ -237,19 +263,55 @@ class _MapScreenState extends State<MapScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    // TODO: Replace with API categories
-                    _buildFilterChip('All'),
-                    const SizedBox(width: 8),
-                    _buildFilterChip('Pet care'),
-                    const SizedBox(width: 8),
-                    _buildFilterChip('Gardening'),
-                    const SizedBox(width: 8),
-                    _buildFilterChip('Cooking'),
-                    const SizedBox(width: 8),
-                    _buildFilterChip('Teaching'),
-                  ],
+                child: Consumer<MyServicesProvider>(
+                  builder: (context, myServicesProvider, child) {
+                    List<String> filters = ["All"];
+                    filters.addAll(myServicesProvider.categories
+                        .map((category) => category.name)
+                        .toList());
+
+                    return Row(
+                      children: filters.map((filter) {
+                        return Padding(
+                          padding: const EdgeInsets.only(right: 8.0),
+                          child: ChoiceChip(
+                            label: Text(
+                              filter,
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: _selectedFilter == filter
+                                    ? Colors.white
+                                    : Colors.black,
+                              ),
+                            ),
+                            selected: _selectedFilter == filter,
+                            onSelected: (bool selected) {
+                              setState(() {
+                                _selectedFilter = filter;
+                              });
+                              _filterServices(_selectedFilter);
+                            },
+                            selectedColor: Colors.black,
+                            backgroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(24),
+                              side: BorderSide(
+                                color: _selectedFilter == filter
+                                    ? Colors.black
+                                    : Colors.black,
+                              ),
+                            ),
+                            elevation: 4,
+                            pressElevation: 6,
+                            checkmarkColor: _selectedFilter == filter
+                                ? Colors.white
+                                : Colors.black,
+                          ),
+                        );
+                      }).toList(),
+                    );
+                  },
                 ),
               ),
             ),
@@ -257,9 +319,12 @@ class _MapScreenState extends State<MapScreen> {
               child: FlutterMap(
                 mapController: mapController,
                 options: MapOptions(
-                  initialCenter: _currentPosition,
-                  initialZoom: 16,
-                ),
+                    initialCenter: _currentPosition,
+                    initialZoom: 16,
+                    minZoom: 10,
+                    maxZoom: 20,
+                    interactionOptions: InteractionOptions(
+                        flags: InteractiveFlag.all & ~InteractiveFlag.rotate)),
                 children: [
                   TileLayer(
                     urlTemplate:
@@ -291,7 +356,7 @@ class _MapScreenState extends State<MapScreen> {
       backgroundColor: Colors.grey[300],
       selectedColor: Colors.blue,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(24),
       ),
     );
   }
