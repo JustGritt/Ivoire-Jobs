@@ -9,6 +9,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"os"
 
 	firebase "firebase.google.com/go/v4"
 	"firebase.google.com/go/v4/messaging"
@@ -52,7 +53,20 @@ func InitFCM() *messaging.Client {
 		log.Fatalf("error marshaling credentials: %v", err)
 	}
 
-	app, err := firebase.NewApp(ctx, nil, option.WithCredentialsJSON(credentialsJSON))
+	// Write the JSON credentials to a temporary file
+	tempFile, err := os.CreateTemp("", "serviceAccountKey-*.json")
+	if err != nil {
+		log.Fatalf("error creating temp file: %v", err)
+	}
+	defer tempFile.Close()
+
+	_, err = tempFile.Write(credentialsJSON)
+	if err != nil {
+		log.Fatalf("error writing to temp file: %v", err)
+	}
+
+	// Initialize Firebase App
+	app, err := firebase.NewApp(ctx, nil, option.WithCredentialsFile(tempFile.Name()))
 	if err != nil {
 		log.Fatalf("error initializing Firebase app: %v", err)
 	}
@@ -84,7 +98,6 @@ func Send(ctx context.Context, data map[string]string, user *user.User, domain D
 	if userNotif == nil {
 		return nil, errors.New("user notification preference is nil")
 	}
-	fmt.Println("userNotif", notif)
 
 	switch domain {
 	case ServiceDomain:
