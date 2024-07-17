@@ -1,4 +1,4 @@
-import 'package:barassage_app/features/main_app/models/service_models/service_model.dart';
+import 'package:barassage_app/features/main_app/models/service_models/service_created_model.dart';
 import 'package:barassage_app/core/helpers/extentions/string_extension.dart';
 import 'package:barassage_app/core/helpers/constants_helper.dart';
 import 'package:barassage_app/core/helpers/services_helper.dart';
@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 // import 'package:barassage_app/config/app_colors.dart';
 
 class MyServiceItem extends StatelessWidget {
-  final ServiceModel serviceModel;
+  final ServiceCreatedModel serviceModel;
   const MyServiceItem({super.key, required this.serviceModel});
 
   @override

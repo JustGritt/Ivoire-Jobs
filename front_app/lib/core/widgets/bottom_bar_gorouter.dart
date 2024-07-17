@@ -1,5 +1,6 @@
 import 'package:barassage_app/core/blocs/authentication/authentication_bloc.dart';
 import 'package:barassage_app/features/auth_mod/models/user.dart';
+import 'package:barassage_app/features/main_app/app.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:barassage_app/core/classes/app_context.dart';
 import 'package:barassage_app/core/init_dependencies.dart';
@@ -90,7 +91,10 @@ class _BottomBarGoRouterState extends State<BottomBarGoRouter> {
       '/app/home/detailService',
       '/app/home/serviceBookingSuccess',
       '/app/home/bookingService',
+      '/app/home/bookingService',
+      '${App.bookingServices}/${App.messagingChat}'
     ];
+
 
     final currentPath =
         widget.navigationShell.shellRouteContext.routerState.uri;

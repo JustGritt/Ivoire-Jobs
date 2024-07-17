@@ -1,5 +1,7 @@
 import 'package:barassage_app/features/admin_app/providers/members_provider.dart';
 import 'package:barassage_app/features/admin_app/services/admin_service.dart';
+import 'package:barassage_app/features/admin_app/utils/home_colors.dart';
+import 'package:barassage_app/features/admin_app/models/member.dart';
 import 'package:barassage_app/core/init_dependencies.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +16,7 @@ class ManageMembersScreen extends StatefulWidget {
 }
 
 class _ManageMembersScreenState extends State<ManageMembersScreen> {
-  late Future<void> membersFuture;
+  late Future<List<Member>> membersFuture;
 
   @override
   void initState() {
@@ -22,17 +24,18 @@ class _ManageMembersScreenState extends State<ManageMembersScreen> {
     membersFuture = fetchMembers();
   }
 
-  Future<void> fetchMembers() async {
+  Future<List<Member>> fetchMembers() async {
     final membersProvider =
         Provider.of<MembersProvider>(context, listen: false);
     await membersProvider.getMemberRequests();
+    return membersProvider.members;
   }
 
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
     return Scaffold(
-      body: FutureBuilder<void>(
+      body: FutureBuilder<List<Member>>(
         future: membersFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -116,15 +119,30 @@ class _ManageMembersScreenState extends State<ManageMembersScreen> {
                                     ),
                                   ),
                                 ),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 0, vertical: 10.0),
+                                child: Text(
+                                  'Reason : ${member.reason}',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
                               const Spacer(),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   if (member.status == 'processing') ...[
                                     ElevatedButton(
-                                      onPressed: () {
-                                        membersProvider.approveMemberRequest(
-                                            member.id, 'accepted');
+                                      onPressed: () async {
+                                        await membersProvider
+                                            .approveMemberRequest(
+                                                member.id, 'accepted');
+                                        setState(() {
+                                          membersFuture = fetchMembers();
+                                        });
                                       },
                                       style: ElevatedButton.styleFrom(
                                         foregroundColor: Colors.white,
@@ -139,9 +157,13 @@ class _ManageMembersScreenState extends State<ManageMembersScreen> {
                                     const SizedBox(width: 8),
                                   ],
                                   ElevatedButton(
-                                    onPressed: () {
-                                      membersProvider.approveMemberRequest(
-                                          member.id, 'rejected');
+                                    onPressed: () async {
+                                      await membersProvider
+                                          .approveMemberRequest(
+                                              member.id, 'rejected');
+                                      setState(() {
+                                        membersFuture = fetchMembers();
+                                      });
                                     },
                                     style: ElevatedButton.styleFrom(
                                       foregroundColor: Colors.white,

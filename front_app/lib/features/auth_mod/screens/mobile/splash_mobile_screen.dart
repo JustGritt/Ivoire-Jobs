@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:barassage_app/core/blocs/authentication/authentication_bloc.dart';
 import 'package:barassage_app/features/auth_mod/auth_app.dart';
 import 'package:barassage_app/features/main_app/app.dart';
@@ -5,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
-// import '../../../main_app/app.dart';
 
 class SplashMobileScreen extends StatefulWidget {
   const SplashMobileScreen({super.key});
@@ -17,12 +18,15 @@ class SplashMobileScreen extends StatefulWidget {
 class _SplashMobileScreenState extends State<SplashMobileScreen>
     with TickerProviderStateMixin {
   late final AuthenticationBloc _authenticationBloc;
+  late final StreamSubscription _authSubscription;
 
   @override
   void initState() {
     super.initState();
     _authenticationBloc = context.read<AuthenticationBloc>()..add(InitiateAuth());
-    _authenticationBloc.stream.listen((state) {
+
+    _authSubscription = _authenticationBloc.stream.listen((state) {
+      if (!mounted) return;
       if (state is AuthenticationSuccessState) {
         context.go(App.home);
       } else if (state is AuthenticationFailureState) {
@@ -32,13 +36,21 @@ class _SplashMobileScreenState extends State<SplashMobileScreen>
   }
 
   @override
+  void dispose() {
+    _authSubscription.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     return Scaffold(
-        body: Center(
-            child: LoadingAnimationWidget.prograssiveDots(
-      color: theme.primaryColor,
-      size: 70,
-    )));
+      body: Center(
+        child: LoadingAnimationWidget.prograssiveDots(
+          color: theme.primaryColor,
+          size: 70,
+        ),
+      ),
+    );
   }
 }
