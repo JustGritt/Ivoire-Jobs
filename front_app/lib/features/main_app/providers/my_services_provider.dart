@@ -1,6 +1,5 @@
-import 'package:barassage_app/features/main_app/models/service_models/service_created_model.dart';
-import 'package:barassage_app/features/main_app/models/service_models/service_model.dart';
 import 'package:barassage_app/features/main_app/models/service_models/service_category_model.dart';
+import 'package:barassage_app/features/main_app/models/service_models/service_created_model.dart';
 import 'package:barassage_app/core/helpers/utils_helper.dart';
 import 'package:barassage_app/core/classes/app_context.dart';
 import 'package:barassage_app/core/init_dependencies.dart';
@@ -36,15 +35,14 @@ class MyServicesProvider extends ChangeNotifier {
         notifyListeners();
         return;
       }
-      Response res = await _http.get(ApiEndpoint.myServices.replaceAll(':id', user.id.toString()));
+      Response res = await _http.get(ApiEndpoint.servicesCollection);
       if (res.statusCode == 200) {
         _serviceModel = servicesFromJson(res.data);
         hasNoServices = _serviceModel.isEmpty;
-        isLoading = false;
-        notifyListeners();
       }
     } catch (e) {
       print(e);
+    } finally {
       isLoading = false;
       notifyListeners();
     }
@@ -52,21 +50,24 @@ class MyServicesProvider extends ChangeNotifier {
 
   Future<bool> deleteService(String id) async {
     isLoading = true;
+    notifyListeners();
     try {
       Response res = await _http.delete(
           ApiEndpoint.serviceDetails.replaceAll(':id', id),
           params: {"serviceId": id});
       if (res.statusCode == 200) {
         _serviceModel.removeWhere((element) => element.id == id);
-        isLoading = false;
         return true;
       }
       throw res.data['message'];
     } catch (e) {
-      isLoading = false;
+      print(e);
       showMyDialog(appContext.navigatorContext,
-          title: 'Service', content: 'An error occured while deleting service');
+          title: 'Service', content: 'An error occurred while deleting service');
       return false;
+    } finally {
+      isLoading = false;
+      notifyListeners();
     }
   }
 
@@ -84,18 +85,15 @@ class MyServicesProvider extends ChangeNotifier {
       if (res.statusCode == 200) {
         _serviceModel = servicesFromJson(res.data);
         hasNoServices = _serviceModel.isEmpty;
-        isLoading = false;
-        notifyListeners();
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 404) {
         _serviceModel = [];
         hasNoServices = true;
       }
-      isLoading = false;
-      notifyListeners();
     } catch (e) {
       print(e);
+    } finally {
       isLoading = false;
       notifyListeners();
     }
@@ -105,7 +103,7 @@ class MyServicesProvider extends ChangeNotifier {
     isLoading = true;
     hasNoServices = false;
     notifyListeners();
-    if (query == '') {
+    if (query.isEmpty) {
       getAll();
       return;
     }
@@ -115,11 +113,10 @@ class MyServicesProvider extends ChangeNotifier {
       if (res.statusCode == 200) {
         _serviceModel = servicesFromJson(res.data);
         hasNoServices = _serviceModel.isEmpty;
-        isLoading = false;
-        notifyListeners();
       }
     } catch (e) {
       print(e);
+    } finally {
       isLoading = false;
       notifyListeners();
     }
@@ -127,15 +124,15 @@ class MyServicesProvider extends ChangeNotifier {
 
   Future<void> getCategories() async {
     isLoading = true;
+    notifyListeners();
     try {
       Response res = await _http.get(ApiEndpoint.serviceCategories);
       if (res.statusCode == 200) {
-        _categories = serviceCategoryFromJson(res.data);
-        isLoading = false;
-        notifyListeners();
+        _categories = serviceCategoryFromJson(res.data as List<dynamic>);
       }
     } catch (e) {
       print(e);
+    } finally {
       isLoading = false;
       notifyListeners();
     }

@@ -44,24 +44,27 @@ class ServiceModel {
     required this.userId,
   });
 
-  ServiceModel.fromJson(Map<String, dynamic> json)
-      : address = json['address'],
-        category = List<String>.from(json['category']),
-        city = json['city'],
-        country = json['country'],
-        createdAt = json['createdAt'],
-        description = json['description'],
-        duration = json['duration'],
-        id = json['id'],
-        images = List<String>.from(json['images']),
-        isBanned = json['isBanned'],
-        latitude = json['latitude'],
-        longitude = json['longitude'],
-        name = json['name'],
-        postalCode = json['postalCode'],
-        price = ServicesHelper.getFormattedPrice(json['price']),
-        status = json['status'],
-        userId = json['userId'];
+  factory ServiceModel.fromJson(Map<String, dynamic> json) {
+    return ServiceModel(
+      address: json['address'],
+      category: List<String>.from(json['category']),
+      city: json['city'],
+      country: json['country'],
+      createdAt: json['createdAt'],
+      description: json['description'],
+      duration: json['duration'],
+      id: json['id'],
+      images: List<String>.from(json['images']),
+      isBanned: json['isBanned'],
+      latitude: json['latitude'],
+      longitude: json['longitude'],
+      name: json['name'],
+      postalCode: json['postalCode'],
+      price: ServicesHelper.getFormattedPrice(json['price']),
+      status: json['status'],
+      userId: json['userId'],
+    );
+  }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
