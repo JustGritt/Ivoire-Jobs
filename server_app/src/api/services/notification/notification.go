@@ -10,11 +10,10 @@ import (
 	"fmt"
 	"log"
 
+	firebase "firebase.google.com/go/v4"
 	"firebase.google.com/go/v4/messaging"
-	"github.com/appleboy/go-fcm"
+	"google.golang.org/api/option"
 )
-
-var notif *fcm.Client
 
 // Domain type for notification domains
 type Domain string
@@ -26,10 +25,13 @@ const (
 	PushNotification Domain = "push"
 )
 
+var notif *messaging.Client
+
 // InitFCM initializes the FCM client
-func InitFCM() *fcm.Client {
+func InitFCM() *messaging.Client {
 	cfg := configs.GetConfig().FCM
 	ctx := context.Background()
+
 	credentials := map[string]string{
 		"type":                        cfg.Type,
 		"project_id":                  cfg.ProjectId,
@@ -50,15 +52,18 @@ func InitFCM() *fcm.Client {
 		log.Fatalf("error marshaling credentials: %v", err)
 	}
 
-	client, err := fcm.NewClient(
-		ctx,
-		fcm.WithCredentialsJSON(credentialsJSON),
-	)
-
+	app, err := firebase.NewApp(ctx, nil, option.WithCredentialsJSON(credentialsJSON))
 	if err != nil {
-		log.Fatalf("error initializing FCM client: %v", err)
+		log.Fatalf("error initializing Firebase app: %v", err)
 	}
+
+	client, err := app.Messaging(ctx)
+	if err != nil {
+		log.Fatalf("error initializing Firebase Messaging client: %v", err)
+	}
+
 	notif = client
+	log.Println("FCM client initialized successfully")
 	return notif
 }
 
@@ -79,11 +84,7 @@ func Send(ctx context.Context, data map[string]string, user *user.User, domain D
 	if userNotif == nil {
 		return nil, errors.New("user notification preference is nil")
 	}
-
-	// Check the user preference for notification
-	if !userNotif.PushNotification {
-		return nil, errors.New("PushNotification is false, not sending notification")
-	}
+	fmt.Println("userNotif", notif)
 
 	switch domain {
 	case ServiceDomain:
@@ -106,32 +107,51 @@ func Send(ctx context.Context, data map[string]string, user *user.User, domain D
 		return nil, fmt.Errorf("unknown domain: %s", domain)
 	}
 
-	//create the Tokens array
+	// Create the Tokens array
 	var tokens []string
 	for _, token := range user.PushToken {
 		tokens = append(tokens, token.Token)
 	}
 
 	message := &messaging.MulticastMessage{
-		Data:   data,
+		Data: data,
+		Android: &messaging.AndroidConfig{
+			Priority: "high",
+			Notification: &messaging.AndroidNotification{
+				Title: "Barassage",
+				Body:  "You have a new notification",
+			},
+		},
 		Tokens: tokens,
 	}
 
-	res, err := notif.SendMulticast(ctx, message)
+	// Send message using SendEachForMulticast
+	responses, err := notif.SendEachForMulticast(ctx, message)
 	if err != nil {
 		return nil, fmt.Errorf("error sending message: %w", err)
 	}
-	// Handle failed tokens
-	if res.FailureCount > 0 {
-		var failedTokens []string
-		for idx, resp := range res.Responses {
-			if !resp.Success {
-				// The order of responses corresponds to the order of the registration tokens.
-				failedTokens = append(failedTokens, tokens[idx])
-			}
+
+	// Handle responses
+	var successCount, failureCount int
+	var failedTokens []string
+	for idx, resp := range responses.Responses {
+		if resp.Success {
+			successCount++
+		} else {
+			failureCount++
+			failedTokens = append(failedTokens, tokens[idx])
+			log.Printf("Error sending message to token %s: %v\n", tokens[idx], resp.Error)
 		}
+	}
+
+	log.Printf("Successfully sent %d messages, failed to send %d messages\n", successCount, failureCount)
+	if failureCount > 0 {
 		log.Printf("List of tokens that caused failures: %v\n", failedTokens)
 	}
 
-	return res, nil
+	return &messaging.BatchResponse{
+		SuccessCount: successCount,
+		FailureCount: failureCount,
+		Responses:    responses.Responses,
+	}, nil
 }
