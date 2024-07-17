@@ -40,7 +40,7 @@ class _FilterChipsState extends State<FilterChips> {
                     selected: _selectedFilter == filter,
                     onSelected: (bool selected) {
                       setState(() {
-                        _selectedFilter = selected ? filter : _selectedFilter;
+                        _selectedFilter = filter;
                       });
                       myServicesProvider.filterServices(_selectedFilter);
                     },

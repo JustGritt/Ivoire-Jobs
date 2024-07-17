@@ -45,10 +45,10 @@ class _HomeState extends State<Home> {
             previousPageTitle: "",
             searchBar: SuperSearchBar(
               onChanged: (query) {
-                Provider.of<MyServicesProvider>(context, listen: false).filterServices(query);
+                Provider.of<MyServicesProvider>(context, listen: false).searchService(query);
               },
               onSubmitted: (query) {
-                Provider.of<MyServicesProvider>(context, listen: false).filterServices(query);
+                Provider.of<MyServicesProvider>(context, listen: false).searchService(query);
               },
             ),
           ),
@@ -120,7 +120,11 @@ class _HomeState extends State<Home> {
                 const SizedBox(height: 16),
                 Consumer<MyServicesProvider>(
                   builder: (context, myServicesProvider, child) {
-                    if (myServicesProvider.hasNoServices) {
+                    if (myServicesProvider.isLoading) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    } else if (myServicesProvider.hasNoServices) {
                       return const Padding(
                         padding: EdgeInsets.symmetric(horizontal: 16.0),
                         child: Text('No services available for this filter.'),

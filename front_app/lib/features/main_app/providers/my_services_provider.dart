@@ -26,6 +26,7 @@ class MyServicesProvider extends ChangeNotifier {
   void getAll() async {
     isLoading = true;
     hasNoServices = false;
+    notifyListeners();
     try {
       final user = await appCache.getUser();
       inspect(user);
@@ -69,12 +70,13 @@ class MyServicesProvider extends ChangeNotifier {
   }
 
   Future<void> filterServices(String filter) async {
+    isLoading = true;
+    hasNoServices = false;
+    notifyListeners();
     if (filter == 'All') {
       getAll();
       return;
     }
-    isLoading = true;
-    hasNoServices = false;
     try {
       final user = await appCache.getUser();
       Response res = await _http.get('${ApiEndpoint.services}/search?categories=$filter');
@@ -84,6 +86,13 @@ class MyServicesProvider extends ChangeNotifier {
         isLoading = false;
         notifyListeners();
       }
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 404) {
+        _serviceModel = [];
+        hasNoServices = true;
+      }
+      isLoading = false;
+      notifyListeners();
     } catch (e) {
       print(e);
       isLoading = false;
@@ -92,12 +101,13 @@ class MyServicesProvider extends ChangeNotifier {
   }
 
   Future<void> searchService(String query) async {
+    isLoading = true;
+    hasNoServices = false;
+    notifyListeners();
     if (query == '') {
       getAll();
       return;
     }
-    isLoading = true;
-    hasNoServices = false;
     try {
       final user = await appCache.getUser();
       Response res = await _http.get('${ApiEndpoint.services}/search?name=$query');
