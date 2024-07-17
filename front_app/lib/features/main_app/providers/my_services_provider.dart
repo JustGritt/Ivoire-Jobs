@@ -1,3 +1,4 @@
+import 'package:barassage_app/features/main_app/models/service_models/service_created_model.dart';
 import 'package:barassage_app/features/main_app/models/service_models/service_model.dart';
 import 'package:barassage_app/features/main_app/models/service_models/service_category_model.dart';
 import 'package:barassage_app/core/helpers/utils_helper.dart';
@@ -14,13 +15,13 @@ AppCache appCache = serviceLocator<AppCache>();
 AppContext appContext = serviceLocator<AppContext>();
 
 class MyServicesProvider extends ChangeNotifier {
-  List<ServiceModel> _serviceModel = [];
+  List<ServiceCreatedModel> _serviceModel = [];
   List<ServiceCategory> _categories = [];
   bool isLoading = false;
   bool hasNoServices = false;
   final AppHttp _http = AppHttp();
 
-  List<ServiceModel> get services => _serviceModel;
+  List<ServiceCreatedModel> get services => _serviceModel;
   List<ServiceCategory> get categories => _categories;
 
   void getAll() async {
@@ -37,7 +38,7 @@ class MyServicesProvider extends ChangeNotifier {
       }
       Response res = await _http.get(ApiEndpoint.myServices.replaceAll(':id', user.id.toString()));
       if (res.statusCode == 200) {
-        _serviceModel = serviceFromJson(res.data);
+        _serviceModel = servicesFromJson(res.data);
         hasNoServices = _serviceModel.isEmpty;
         isLoading = false;
         notifyListeners();
@@ -81,7 +82,7 @@ class MyServicesProvider extends ChangeNotifier {
       final user = await appCache.getUser();
       Response res = await _http.get('${ApiEndpoint.services}/search?categories=$filter');
       if (res.statusCode == 200) {
-        _serviceModel = serviceFromJson(res.data);
+        _serviceModel = servicesFromJson(res.data);
         hasNoServices = _serviceModel.isEmpty;
         isLoading = false;
         notifyListeners();
@@ -112,7 +113,7 @@ class MyServicesProvider extends ChangeNotifier {
       final user = await appCache.getUser();
       Response res = await _http.get('${ApiEndpoint.services}/search?name=$query');
       if (res.statusCode == 200) {
-        _serviceModel = serviceFromJson(res.data);
+        _serviceModel = servicesFromJson(res.data);
         hasNoServices = _serviceModel.isEmpty;
         isLoading = false;
         notifyListeners();
