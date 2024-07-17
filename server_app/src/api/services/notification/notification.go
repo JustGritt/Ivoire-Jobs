@@ -114,9 +114,13 @@ func Send(ctx context.Context, data map[string]string, user *user.User, domain D
 	}
 
 	message := &messaging.MulticastMessage{
-		Data: map[string]string{
-			"title": "Test Notification",
-			"body":  "This is a test notification",
+		Data: data,
+		Android: &messaging.AndroidConfig{
+			Priority: "high",
+			Notification: &messaging.AndroidNotification{
+				Title: "Barassage",
+				Body:  "You have a new notification",
+			},
 		},
 		Tokens: tokens,
 	}
