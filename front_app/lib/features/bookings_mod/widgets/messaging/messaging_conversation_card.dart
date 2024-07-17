@@ -1,10 +1,12 @@
 import 'package:barassage_app/config/app_colors.dart';
 import 'package:barassage_app/core/blocs/authentication/authentication_bloc.dart';
 import 'package:barassage_app/features/bookings_mod/models/chats_room_model.dart';
+import 'package:barassage_app/features/main_app/app.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:barassage_app/core/helpers/extentions/string_extension.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:jiffy/jiffy.dart';
 
@@ -27,7 +29,9 @@ class _MessagingConversationCardState extends State<MessagingConversationCard> {
     int messageSize = widget.isSeen ? 25 : 30;
 
     return CupertinoButton(
-      onPressed: () {},
+      onPressed: () {
+        context.push(App.messagingChat);
+      },
       minSize: 0,
       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       child: Row(

@@ -1,3 +1,4 @@
+import 'package:barassage_app/features/bookings_mod/screens/mobile/messages_page_screen/conversation_chat_screen.dart';
 import 'package:barassage_app/features/main_app/Screens/mobile/service_booking/service_booking_success.dart';
 import 'package:barassage_app/features/main_app/Screens/mobile/service_booking/service_booking.dart';
 import 'package:barassage_app/features/main_app/models/service_models/service_created_model.dart';
@@ -41,8 +42,8 @@ class App extends RouteManager {
   static const String profile = '${App.name}/profile';
   static const String editProfile = 'editProfile';
   static const String becomeWorker = 'becomeWorker';
-  static const String serviceBookingSuccess =
-      '${App.name}/serviceBookingSuccess';
+  static const String serviceBookingSuccess = '${App.name}/serviceBookingSuccess';
+  static const String messagingChat = 'messagingChat';
 
   final _rootKey = serviceLocator<AppContext>().navigatorKey;
   final _shellHomeKey = GlobalKey<NavigatorState>(debugLabel: 'shellHome');
@@ -137,6 +138,11 @@ class App extends RouteManager {
                       name: App.messages,
                       path: App.messages,
                       builder: (context, state) => MessagesController(),
+                    ),
+                    GoRoute(
+                      name: App.messagingChat,
+                      path: App.messagingChat,
+                      builder: (context, state) => ConversationChatScreen(),
                     ),
                   ]),
             ],
