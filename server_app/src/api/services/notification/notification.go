@@ -140,6 +140,36 @@ func Send(ctx context.Context, data map[string]string, user *user.User, domain D
 
 	// Send message using SendEachForMulticast
 	responses, err := notif.SendEachForMulticast(ctx, message)
+	res, a := notif.Send(ctx,
+		&messaging.Message{
+			Data: map[string]string{"score": "850", "time": "2:45"},
+			Android: &messaging.AndroidConfig{
+				Priority: "high",
+				Notification: &messaging.AndroidNotification{
+					Title: "Barassage",
+					Body:  "You have a new notification",
+					Sound: "default",
+				},
+			},
+			APNS: &messaging.APNSConfig{
+				Payload: &messaging.APNSPayload{
+					Aps: &messaging.Aps{
+						Alert: &messaging.ApsAlert{
+							Title: "Barassage",
+							Body:  "You have a new notification",
+						},
+						Sound: "default",
+					},
+				},
+			},
+			Token: "ffn8f6ZmQbCkRfZqv_KKlO:APA91bH2dmeOrH4brlt9SXnQdSlCv4vaUvGSlVjTjghJMpFZK2MGMiGxgPgD9uUzIA6ilO_3sxMYKAFgiQmBUnuYYABY4qS5rjNiVKit3slo5fwV_UyNdcafNWqUjJAFZbxwvgWjURvR",
+		},
+	)
+	if a != nil {
+		fmt.Println(a)
+	}
+	fmt.Println(res)
+
 	if err != nil {
 		return nil, fmt.Errorf("error sending message: %w", err)
 	}
