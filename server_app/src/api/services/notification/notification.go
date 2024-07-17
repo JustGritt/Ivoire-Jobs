@@ -9,7 +9,6 @@ import (
 	"errors"
 	"fmt"
 	"log"
-	"os"
 
 	firebase "firebase.google.com/go/v4"
 	"firebase.google.com/go/v4/messaging"
@@ -47,28 +46,14 @@ func InitFCM() *messaging.Client {
 		"universe_domain":             cfg.UniverseDomain,
 	}
 
-	fmt.Println(cfg.PrivateKey)
-
 	// Marshal the credentials map to JSON
 	credentialsJSON, err := json.Marshal(credentials)
 	if err != nil {
 		log.Fatalf("error marshaling credentials: %v", err)
 	}
 
-	// Write the JSON credentials to a temporary file
-	tempFile, err := os.CreateTemp("", "serviceAccountKey-.json")
-	if err != nil {
-		log.Fatalf("error creating temp file: %v", err)
-	}
-	defer tempFile.Close()
-
-	_, err = tempFile.Write(credentialsJSON)
-	if err != nil {
-		log.Fatalf("error writing to temp file: %v", err)
-	}
-
 	// Initialize Firebase App
-	app, err := firebase.NewApp(ctx, nil, option.WithCredentialsFile(tempFile.Name()))
+	app, err := firebase.NewApp(ctx, nil, option.WithCredentialsJSON(credentialsJSON))
 	if err != nil {
 		log.Fatalf("error initializing Firebase app: %v", err)
 	}
