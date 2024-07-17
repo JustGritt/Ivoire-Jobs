@@ -88,7 +88,8 @@ class TagFilterSection extends StatelessWidget {
                       'Report',
                       'Category',
                       'Room',
-                      'Service'
+                      'Service',
+                      'Member',
                     ]
                         .map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
