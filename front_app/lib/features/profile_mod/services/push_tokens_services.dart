@@ -1,8 +1,8 @@
-import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
-import '../../../config/api_endpoints.dart';
-import '../../../config/app_http.dart';
 import 'package:barassage_app/core/services/device_info_manager/device_info_manager.dart';
+import 'package:barassage_app/config/api_endpoints.dart';
+import 'package:barassage_app/config/app_http.dart';
+import 'package:flutter/material.dart';
+import 'package:dio/dio.dart';
 
 class PushTokensService {
   PushTokensService();

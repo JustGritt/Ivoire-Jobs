@@ -1,11 +1,13 @@
-import 'package:flutter/material.dart';
+import 'package:barassage_app/config/config.dart';
+import 'package:barassage_app/core/core.dart';
 import 'package:provider/provider.dart';
-
-import '../../../../config/config.dart';
-import '../../../../core/core.dart';
-import '../../Screens/desktop/home.dart' as desktop;
-import '../../Screens/mobile/home.dart' as mobile;
-import '../../Screens/tablet/home.dart' as tablet;
+import 'package:flutter/material.dart';
+import 'package:barassage_app/features/main_app/Screens/mobile/home.dart'
+    as mobile;
+import 'package:barassage_app/features/main_app/Screens/tablet/home.dart'
+    as tablet;
+import 'package:barassage_app/features/main_app/Screens/desktop/home.dart'
+    as desktop;
 
 class HomeController extends StatelessController {
   final String _title = 'Home Page';

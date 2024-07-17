@@ -53,17 +53,14 @@ class Member {
     if (identical(this, other)) return true;
 
     return other is Member &&
-      other.id == id &&
-      other.reason == reason &&
-      other.status == status &&
-      other.createdAt == createdAt;
+        other.id == id &&
+        other.reason == reason &&
+        other.status == status &&
+        other.createdAt == createdAt;
   }
 
   @override
   int get hashCode {
-    return id.hashCode ^
-      reason.hashCode ^
-      status.hashCode ^
-      createdAt.hashCode;
+    return id.hashCode ^ reason.hashCode ^ status.hashCode ^ createdAt.hashCode;
   }
 }

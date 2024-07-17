@@ -1,4 +1,5 @@
 import 'package:barassage_app/features/admin_app/services/admin_service.dart';
+import 'package:barassage_app/features/admin_app/widgets/search_input.dart';
 import 'package:barassage_app/features/admin_app/widgets/user_detail.dart';
 import 'package:barassage_app/features/admin_app/widgets/user_card.dart';
 import 'package:barassage_app/features/admin_app/utils/home_colors.dart';
@@ -58,7 +59,8 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
   void _handleSearch(String query) {
     setState(() {
       filteredUsers = users.where((user) {
-        final userName = user.firstName.toLowerCase() + ' ' + user.lastName.toLowerCase();
+        final userName =
+            user.firstName.toLowerCase() + ' ' + user.lastName.toLowerCase();
         final searchQuery = query.toLowerCase();
         return userName.contains(searchQuery);
       }).toList();
@@ -92,8 +94,9 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
                             child: Text(
                               'Number of users: ${filteredUsers.length}',
                               style: const TextStyle(
-                                fontSize: 18,
+                                fontSize: 16,
                                 fontWeight: FontWeight.bold,
+                                color: primary,
                               ),
                             ),
                           ),
@@ -106,9 +109,10 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
                         ],
                       ),
                       const SizedBox(height: 8),
-                      UserSearchInput(
+                      SearchInput(
                         textController: _searchController,
                         hintText: 'Search Users',
+                        onChanged: _handleSearch,
                       ),
                     ],
                   ),
@@ -132,54 +136,6 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
                 ),
               ],
             ),
-    );
-  }
-}
-
-class UserSearchInput extends StatelessWidget {
-  final TextEditingController textController;
-  final String hintText;
-  const UserSearchInput({required this.textController, required this.hintText, super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(boxShadow: [
-        BoxShadow(
-          offset: const Offset(12, 26),
-          blurRadius: 50,
-          spreadRadius: 0,
-          color: Colors.grey.withOpacity(.1),
-        ),
-      ]),
-      child: TextField(
-        controller: textController,
-        onChanged: (value) {
-          if (context.findAncestorStateOfType<_ManageUsersScreenState>() != null) {
-            context.findAncestorStateOfType<_ManageUsersScreenState>()!._handleSearch(value);
-          }
-        },
-        decoration: InputDecoration(
-          prefixIcon: Icon(Icons.search, color: primary),
-          filled: true,
-          fillColor: Colors.white,
-          hintText: hintText,
-          hintStyle: const TextStyle(color: Colors.grey),
-          contentPadding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-          border: OutlineInputBorder(
-            borderRadius: const BorderRadius.all(Radius.circular(16.0)),
-            borderSide: BorderSide(color: primary),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: primary, width: 2.0),
-            borderRadius: const BorderRadius.all(Radius.circular(16.0)),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: primary, width: 2.0),
-            borderRadius: const BorderRadius.all(Radius.circular(16.0)),
-          ),
-        ),
-      ),
     );
   }
 }

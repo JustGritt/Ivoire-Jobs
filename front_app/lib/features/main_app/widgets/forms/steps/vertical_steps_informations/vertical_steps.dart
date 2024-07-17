@@ -1,5 +1,5 @@
-import 'package:barassage_app/features/main_app/widgets/forms/steps/vertical_steps_informations/step_information.dart';
 import 'package:barassage_app/features/main_app/widgets/forms/steps/vertical_steps_informations/step_time_service.dart';
+import 'package:barassage_app/features/main_app/widgets/forms/steps/vertical_steps_informations/step_information.dart';
 import 'package:flutter/material.dart';
 
 class VerticalSteps extends StatefulWidget {

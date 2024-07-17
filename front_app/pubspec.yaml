@@ -7,6 +7,7 @@ environment:
   sdk: ">=3.4.0 <4.0.0"
 
 dependencies:
+  android_intent_plus: ^5.0.2
   animate_gradient: ^0.0.3
   avatar_glow: ^3.0.1
   bloc: ^8.1.4

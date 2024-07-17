@@ -1,8 +1,7 @@
-import 'package:flutter/cupertino.dart';
+import 'package:barassage_app/features/feature-2/controllers/controller.dart';
+import 'package:barassage_app/core/classes/route_manager.dart';
 import 'package:go_router/go_router.dart';
-
-import '../../core/classes/route_manager.dart';
-import 'controllers/controller.dart';
+import 'package:flutter/cupertino.dart';
 
 class FeatureApp extends RouteManager {
   static const String name = '/feature';

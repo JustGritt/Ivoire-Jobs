@@ -10,7 +10,7 @@ class AdminSettingsController extends StatelessWidget {
     return Title(
       color: Colors.blue,
       child: AdminScaffold(
-        title: 'Admin Settings',
+        title: 'Settings',
         body: const DashboardSettings(),
       ),
     );

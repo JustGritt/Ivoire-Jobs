@@ -1,6 +1,5 @@
+import 'package:barassage_app/features/auth_mod/screens/mobile/login_mobile_screen.dart';
 import 'package:flutter/material.dart';
-
-import '../screens/mobile/login_mobile_screen.dart';
 
 class LoginController extends StatelessWidget {
   const LoginController({super.key});

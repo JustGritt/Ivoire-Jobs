@@ -6,7 +6,8 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 
 class HomeScreenContent extends StatefulWidget {
-  static _HomeScreenContentState? of(BuildContext context) => context.findAncestorStateOfType<_HomeScreenContentState>();
+  static _HomeScreenContentState? of(BuildContext context) =>
+      context.findAncestorStateOfType<_HomeScreenContentState>();
 
   @override
   _HomeScreenContentState createState() => _HomeScreenContentState();

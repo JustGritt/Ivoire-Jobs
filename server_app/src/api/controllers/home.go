@@ -19,24 +19,26 @@ import (
 func HomeController(c *fiber.Ctx) error {
 	//SendNotificationMessage("service", "created")
 	//get the user from the context
-	user, err := userRepo.GetById("d4e1f48c-8afc-458a-a63b-e08e5ffbae12")
+	users, err := userRepo.GetAll()
 	if err != nil {
 		log.Fatalf("error getting user: %v", err)
 	}
-	domain := notification.ServiceDomain
-	resp, err := notification.Send(
-		context.TODO(),
-		map[string]string{
-			"Indexeur": "Le poulet c'est delicieux",
-		},
-		user,
-		domain,
-	)
-	if err != nil {
-		log.Printf("error sending message: %v", err)
-		return c.Status(http.StatusInternalServerError).JSON(HTTPResponse(http.StatusInternalServerError, "Error", err.Error()))
+	for _, user := range users {
+		domain := notification.ServiceDomain
+		resp, err := notification.Send(
+			context.TODO(),
+			map[string]string{
+				"Indexeur": "Le poulet c'est delicieux",
+			},
+			&user,
+			domain,
+		)
+		if err != nil {
+			log.Printf("error sending message: %v", err)
+		} else {
+			log.Printf("%d messages were sent successfully\n", resp.SuccessCount)
+		}
 	}
-	log.Printf("%d messages were sent successfully\n", resp.SuccessCount)
 	response := HTTPResponse(http.StatusOK, "Success", "Welcome Home")
 	return c.JSON(response)
 }

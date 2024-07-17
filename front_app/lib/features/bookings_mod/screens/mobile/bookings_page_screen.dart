@@ -44,7 +44,6 @@ class _BookingsPageScreenState extends State<BookingsPageScreen> {
         20,
         (index) => Align(
               key: ValueKey(index),
-              alignment: Alignment.center,
               child: LoadingAnimationWidget.prograssiveDots(
                 color: theme.primaryColor,
                 size: 70,

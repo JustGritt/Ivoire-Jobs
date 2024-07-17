@@ -10,7 +10,7 @@ class UsersController extends StatelessWidget {
     return Title(
       color: Colors.blue,
       child: AdminScaffold(
-        title: 'Manage Users',
+        title: 'Users',
         body: const ManageUsersScreen(),
       ),
     );

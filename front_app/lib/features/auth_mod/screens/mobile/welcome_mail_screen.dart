@@ -1,14 +1,25 @@
-import 'package:barassage_app/architect.dart';
-import 'package:barassage_app/core/helpers/utils_helper.dart';
 import 'package:barassage_app/features/auth_mod/widgets/app_button.dart' as btn;
+import 'package:barassage_app/core/helpers/utils_helper.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:barassage_app/architect.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:android_intent_plus/android_intent.dart';
+import 'dart:io' show Platform;
 
 class WelcomeMailScreen extends StatelessWidget {
   const WelcomeMailScreen({super.key});
+
+  void openMailApp(String email) async {
+    final Uri emailUri = Uri(
+      scheme: 'mailto',
+      path: email,
+    );
+    await launch(emailUri.toString());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,8 +67,18 @@ class WelcomeMailScreen extends StatelessWidget {
               ),
               CupertinoButton(
                   child: Text(appLocalizations.btn_go_to_mail),
-                  onPressed: () {
-                    openUrl('mailto:sejpalbhargav67@gmail.com');
+                  onPressed: () async {
+                    if (Platform.isAndroid) {
+                      AndroidIntent intent = AndroidIntent(
+                        action: 'android.intent.action.MAIN',
+                        category: 'android.intent.category.APP_EMAIL',
+                      );
+                      intent.launch().catchError((e) {
+                        print("Error opening email app: $e");
+                      });
+                    } else {
+                      openMailApp('live@admin.com');
+                    }
                   }),
               btn.AppButton(
                 onPressed: () {

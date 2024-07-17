@@ -1,10 +1,8 @@
-// ignore_for_file: deprecated_member_use
-
+import 'package:barassage_app/features/main_app/widgets/day_night_switch.dart';
+import 'package:barassage_app/features/main_app/widgets/menu_buttons.dart';
+import 'package:barassage_app/core/classes/route_manager.dart';
 import 'package:flutter/material.dart';
-
-import '../../../../core/classes/route_manager.dart';
-import '../../widgets/day_night_switch.dart';
-import '../../widgets/menu_buttons.dart';
+// ignore_for_file: deprecated_member_use
 
 class About extends StatefulWidget {
   final String? title;

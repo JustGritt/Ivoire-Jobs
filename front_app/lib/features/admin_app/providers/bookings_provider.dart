@@ -1,6 +1,6 @@
+import 'package:barassage_app/features/admin_app/services/admin_service.dart';
 import 'package:barassage_app/features/admin_app/models/booking.dart';
 import 'package:flutter/material.dart';
-import 'package:barassage_app/features/admin_app/services/admin_service.dart';
 
 class BookingsProvider with ChangeNotifier {
   final AdminService _adminService = AdminService();

@@ -14,7 +14,8 @@ class DashboardSettingsService {
 
   Future<bool> getMaintenanceMode() async {
     try {
-      Response res = await _http.get(ApiEndpoint.dashboardSettings + '/mode_maintenance');
+      Response res =
+          await _http.get(ApiEndpoint.dashboardSettings + '/mode_maintenance');
       debugPrint('Maintenance mode status: ${res.data}');
       if (res.statusCode == 200 && res.data != null) {
         final value = res.data['body']['value'][0];
@@ -32,7 +33,8 @@ class DashboardSettingsService {
 
   Future<List<String>> getWhitelistIps() async {
     try {
-      Response res = await _http.get(ApiEndpoint.dashboardSettings + '/whitelist');
+      Response res =
+          await _http.get(ApiEndpoint.dashboardSettings + '/whitelist');
       debugPrint('Ip list: ${res.data}');
       if (res.statusCode == 200 && res.data != null) {
         final value = res.data['body']['value'];

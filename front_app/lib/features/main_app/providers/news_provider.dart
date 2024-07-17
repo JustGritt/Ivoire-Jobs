@@ -1,5 +1,5 @@
+import 'package:barassage_app/features/main_app/models/model.dart';
 import 'package:flutter/foundation.dart';
-import '../models/model.dart';
 
 class NewsProvider extends ChangeNotifier {
   NewsResponseModel? _nrm;

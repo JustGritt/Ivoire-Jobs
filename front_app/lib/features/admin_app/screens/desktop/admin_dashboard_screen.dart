@@ -1,3 +1,7 @@
+import 'package:barassage_app/features/admin_app/screens/desktop/manage_categories_screen.dart';
+import 'package:barassage_app/features/admin_app/screens/desktop/manage_bookings_screen.dart';
+import 'package:barassage_app/features/admin_app/screens/desktop/manage_members_screen.dart';
+import 'package:barassage_app/features/admin_app/screens/desktop/logs_screen.dart';
 import 'package:barassage_app/features/admin_app/widgets/admin_menu.dart';
 import 'package:barassage_app/features/admin_app/screens/screens.dart';
 import 'package:go_router/go_router.dart';
@@ -19,14 +23,16 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     '/admin/reports',
     '/admin/banlist',
     '/admin/settings',
-    '/admin/members'
+    '/admin/members',
+    '/admin/categories',
+    '/admin/bookings',
+    '/admin/logs',
   ];
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
-
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.go(_routes[index]);
@@ -57,6 +63,14 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
         return const BanListScreen();
       case 4:
         return const DashboardSettings();
+      case 5:
+        return const ManageMembersScreen();
+      case 6:
+        return const ManageCategoriesScreen();
+      case 7:
+        return const ManageBookingsScreen();
+      case 8:
+        return const LogsScreen();
       default:
         return const DashboardScreen();
     }

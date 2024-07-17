@@ -1,10 +1,9 @@
-import 'package:flutter/material.dart';
+import 'package:barassage_app/core/classes/controller_manager.dart';
+import 'package:barassage_app/core/classes/display_manager.dart';
+import 'package:barassage_app/features/lead_mod/lead_mod.dart';
+import 'package:barassage_app/config/app_theme.dart';
 import 'package:provider/provider.dart';
-
-import '../../../config/app_theme.dart';
-import '../../../core/classes/controller_manager.dart';
-import '../../../core/classes/display_manager.dart';
-import '../lead_mod.dart';
+import 'package:flutter/material.dart';
 
 class DashboardController extends StatelessController {
   const DashboardController({super.key});

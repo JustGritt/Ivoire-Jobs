@@ -1,13 +1,13 @@
-import 'dart:developer';
+import 'package:barassage_app/features/main_app/models/service_models/service_model.dart';
+import 'package:barassage_app/core/helpers/utils_helper.dart';
+import 'package:barassage_app/core/classes/app_context.dart';
+import 'package:barassage_app/core/init_dependencies.dart';
 import 'package:barassage_app/config/api_endpoints.dart';
 import 'package:barassage_app/config/app_cache.dart';
 import 'package:barassage_app/config/app_http.dart';
-import 'package:barassage_app/core/classes/app_context.dart';
-import 'package:barassage_app/core/helpers/utils_helper.dart';
-import 'package:barassage_app/core/init_dependencies.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import '../models/service_models/service_model.dart';
+import 'package:dio/dio.dart';
+import 'dart:developer';
 
 AppCache appCache = serviceLocator<AppCache>();
 AppContext appContext = serviceLocator<AppContext>();

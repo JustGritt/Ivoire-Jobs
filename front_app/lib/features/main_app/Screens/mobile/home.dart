@@ -1,12 +1,11 @@
-import 'package:barassage_app/core/services/firebase_api/firebaseAPI.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:barassage_app/features/main_app/widgets/trending_services_list.dart';
 import 'package:super_cupertino_navigation_bar/super_cupertino_navigation_bar.dart';
-
-import '../../../../config/config.dart';
-import '../../widgets/trending_services_list.dart';
-import '../../widgets/services_entries_list.dart';
-import './map.dart';
+import 'package:barassage_app/features/main_app/widgets/services_entries_list.dart';
+import 'package:barassage_app/core/services/firebase_api/firebaseAPI.dart';
+import 'package:barassage_app/features/main_app/Screens/mobile/map.dart';
+import 'package:barassage_app/config/config.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
   final String? title;

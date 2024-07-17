@@ -1,7 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:barassage_app/features/admin_app/services/admin_service.dart';
-
-import '../models/member.dart';
+import 'package:barassage_app/features/admin_app/models/member.dart';
+import 'package:flutter/material.dart';
 
 class MembersProvider with ChangeNotifier {
   final AdminService _adminService = AdminService();

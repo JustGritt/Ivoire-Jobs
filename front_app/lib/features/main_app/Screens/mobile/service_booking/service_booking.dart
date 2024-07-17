@@ -1,24 +1,24 @@
-import 'dart:async';
-import 'package:barassage_app/core/init_dependencies.dart';
-import 'package:barassage_app/core/widgets/toast_message.dart';
-import 'package:barassage_app/features/main_app/Screens/mobile/service_booking/service_booking_success.dart';
-import 'package:barassage_app/features/main_app/Screens/mobile/service_booking/step_date_booking.dart';
-import 'package:barassage_app/features/main_app/Screens/mobile/service_booking/step_resume_booking.dart';
-import 'package:barassage_app/features/main_app/app.dart';
+import 'package:barassage_app/features/main_app/models/service_models/booking_service_model/booking_service_created_model.dart';
 import 'package:barassage_app/features/main_app/models/service_models/booking_service_model/booking_service_create_model.dart';
+import 'package:barassage_app/features/main_app/Screens/mobile/service_booking/service_booking_success.dart';
+import 'package:barassage_app/features/main_app/Screens/mobile/service_booking/step_location_booking.dart';
+import 'package:barassage_app/features/main_app/Screens/mobile/service_booking/step_resume_booking.dart';
+import 'package:barassage_app/features/main_app/Screens/mobile/service_booking/step_date_booking.dart';
+import 'package:barassage_app/features/main_app/models/service_models/service_created_model.dart';
 import 'package:barassage_app/features/main_app/providers/booking_services_provider.dart';
 import 'package:barassage_app/features/main_app/services/booking_service_services.dart';
 import 'package:barassage_app/features/payments/stripe/stripe_service.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:barassage_app/core/widgets/toast_message.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:barassage_app/core/init_dependencies.dart';
+import 'package:barassage_app/features/main_app/app.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:go_router/go_router.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:provider/provider.dart';
-import '../../../models/service_models/booking_service_model/booking_service_created_model.dart';
-import '../../../models/service_models/service_created_model.dart';
-import 'step_location_booking.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'dart:async';
 
 final BookingServiceServices bookingServiceServices =
     serviceLocator<BookingServiceServices>();

@@ -1,17 +1,14 @@
 import 'package:barassage_app/core/blocs/authentication/authentication_bloc.dart';
-import 'package:barassage_app/features/auth_mod/models/user_signup.dart';
-import 'package:flutter/material.dart';
-
-import 'dart:ui';
-
+import 'package:barassage_app/features/auth_mod/widgets/widget_functions.dart';
 import 'package:barassage_app/features/auth_mod/widgets/app_button.dart';
-import 'package:flutter/gestures.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:barassage_app/features/auth_mod/models/user_signup.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-
-import '../../widgets/widget_functions.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/gestures.dart';
+import 'package:flutter_svg/svg.dart';
+import 'dart:ui';
 
 class RegisterMobileScreen extends StatefulWidget {
   const RegisterMobileScreen({

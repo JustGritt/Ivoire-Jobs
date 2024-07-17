@@ -1,8 +1,7 @@
+import 'package:barassage_app/core/widgets/day_night_switch.dart';
 import 'package:barassage_app/features/auth_mod/auth_mod.dart';
+import 'package:barassage_app/core/classes/route_manager.dart';
 import 'package:flutter/material.dart';
-
-import '../../../../core/classes/route_manager.dart';
-import '../../../../core/widgets/day_night_switch.dart';
 
 class ForgetMobileScreen extends StatelessWidget {
   const ForgetMobileScreen({super.key});

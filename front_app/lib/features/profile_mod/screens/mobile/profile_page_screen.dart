@@ -4,12 +4,11 @@ import 'package:barassage_app/features/profile_mod/widgets/section_information_a
 import 'package:barassage_app/core/blocs/authentication/authentication_bloc.dart';
 import 'package:barassage_app/features/profile_mod/widgets/avatar_profile.dart';
 import 'package:barassage_app/core/classes/language_provider.dart';
-import 'package:barassage_app/core/helpers/constants_helper.dart';
 import 'package:barassage_app/features/auth_mod/models/user.dart';
+import 'package:barassage_app/core/helpers/constants_helper.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:barassage_app/features/main_app/app.dart';
 import 'package:barassage_app/config/app_colors.dart';
-
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';

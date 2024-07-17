@@ -15,7 +15,8 @@ class _DashboardSettingsState extends State<DashboardSettings> {
   bool isMaintenanceMode = false;
   final TextEditingController ipController = TextEditingController();
   List<String> ipList = [];
-  final DashboardSettingsService _dashboardSettingsService = DashboardSettingsService();
+  final DashboardSettingsService _dashboardSettingsService =
+      DashboardSettingsService();
   String? currentUserIpV4;
   String? currentUserIpV6;
 
@@ -62,7 +63,8 @@ class _DashboardSettingsState extends State<DashboardSettings> {
 
   Future<String?> getClientIpV4() async {
     try {
-      final response = await http.get(Uri.parse('https://api.ipify.org?format=json'));
+      final response =
+          await http.get(Uri.parse('https://api.ipify.org?format=json'));
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         return data['ip'];
@@ -75,7 +77,8 @@ class _DashboardSettingsState extends State<DashboardSettings> {
 
   Future<String?> getClientIpV6() async {
     try {
-      final response = await http.get(Uri.parse('https://api64.ipify.org?format=json'));
+      final response =
+          await http.get(Uri.parse('https://api64.ipify.org?format=json'));
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         return data['ip'];
@@ -204,7 +207,8 @@ class _DashboardSettingsState extends State<DashboardSettings> {
                     children: [
                       const Text(
                         'Maintenance mode',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                       const Spacer(),
                       Container(
@@ -233,7 +237,8 @@ class _DashboardSettingsState extends State<DashboardSettings> {
                     children: [
                       const Text(
                         'Add your IP to whitelist',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 8),
                       Row(
@@ -246,7 +251,8 @@ class _DashboardSettingsState extends State<DashboardSettings> {
                                 fillColor: Colors.transparent,
                                 labelText: 'User IP',
                                 border: const OutlineInputBorder(
-                                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10.0)),
                                 ),
                               ),
                             ),
@@ -303,7 +309,8 @@ class _DashboardSettingsState extends State<DashboardSettings> {
                                 title: Text(ipList[index]),
                                 trailing: IconButton(
                                   icon: Icon(Icons.delete, color: primary),
-                                  onPressed: () => removeIpFromList(ipList[index]),
+                                  onPressed: () =>
+                                      removeIpFromList(ipList[index]),
                                 ),
                               );
                             },

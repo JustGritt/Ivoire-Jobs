@@ -1,6 +1,5 @@
 import "package:barassage_app/features/admin_app/models/service_booking.dart";
-
-import "contact.dart";
+import 'package:barassage_app/features/admin_app/models/contact.dart';
 
 class Booking {
   final String id;

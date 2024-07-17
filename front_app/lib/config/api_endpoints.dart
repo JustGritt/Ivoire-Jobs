@@ -1,5 +1,5 @@
-// import 'package:barassage_app/features/admin_app/admin_app.dart';
 import 'package:barassage_app/features/features.dart';
+// import 'package:barassage_app/features/admin_app/admin_app.dart';
 
 /// In this file we will be writing all API Endpoints using this application
 
@@ -22,7 +22,7 @@ class ApiEndpoint {
   static const appRegisterUrl = AuthApp.register;
   static const appForgetUrl = AuthApp.forget;
   static const appProfileUrl = AuthApp.profile;
-  static const appEmailValidationUrl = AuthApp.emailValidation;
+  static const appEmailValidationUrl = '${api}/auth/verify-email';
 
   // Admin App Links
   static const adminUsers = '${api}/auth/users';
@@ -78,4 +78,8 @@ class ApiEndpoint {
 
   // bookings collection
   static const bookingsCollection = '${api}/booking/collection';
+
+  // Logs Endpoints
+  // logs collection
+  static const logsCollection = '${api}/log/collection';
 }

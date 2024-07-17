@@ -21,7 +21,7 @@ class AdditionalContent extends StatelessWidget {
   }
 
   String _extractVersionFromUrl(String url) {
-    final regex = RegExp(r'v(\d+\.\d+\.\d+)\.apk');
+    final regex = RegExp(r'v(\d+\.\d+\.\d+)/app-release\.apk');
     final match = regex.firstMatch(url);
     return match != null
         ? match.group(1) ?? 'Unknown version'

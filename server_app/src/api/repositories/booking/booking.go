@@ -86,7 +86,7 @@ func GetErrors() error {
 
 func CountAll() (int64, error) {
 	var count int64
-	if err := db.PgDB.Model(&booking.Booking{}).Where("status = ?", "completed").Count(&count).Error; err != nil {
+	if err := db.PgDB.Model(&booking.Booking{}).Where("status = ?", "fulfilled").Count(&count).Error; err != nil {
 		return 0, err
 	}
 	return count, nil
@@ -94,11 +94,11 @@ func CountAll() (int64, error) {
 
 func CountBookingsInRange(startDate, endDate time.Time) (int, error) {
 	var count int64
-	err := db.PgDB.Model(&booking.Booking{}).Where("created_at BETWEEN ? AND ? AND status = ?", startDate, endDate, "completed").Count(&count).Error
+	err := db.PgDB.Model(&booking.Booking{}).Where("created_at BETWEEN ? AND ? AND status = ?", startDate, endDate, "fulfilled").Count(&count).Error
 	return int(count), err
 }
 
-// Fetch bookings within the 15-minute window that need to be canceled adn offset by 15 minutes
+// Fetch bookings within the 15-minute window that need to be canceled and offset by 15 minutes
 func GetBookingsOlderThan(offset time.Time) ([]booking.Booking, error) {
 	var bookings []booking.Booking
 	if err := db.PgDB.Where("created_at < ? AND status = ?", offset, "created").Find(&bookings).Error; err != nil {

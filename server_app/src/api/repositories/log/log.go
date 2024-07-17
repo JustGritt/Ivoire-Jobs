@@ -27,6 +27,7 @@ func GetByQueryParams(queryParams map[string]interface{}, c *fiber.Ctx) paginate
 	pg := paginate.New(&paginate.Config{
 		PageStart:   1,
 		DefaultSize: 20,
+		OrderParams: []string{"created_at desc"},
 	})
 	stmt := db.PgDB.Where(queryParams).Find(&[]log.Log{})
 	page := pg.With(stmt).Request(c.Request()).Response(&[]log.Log{})
