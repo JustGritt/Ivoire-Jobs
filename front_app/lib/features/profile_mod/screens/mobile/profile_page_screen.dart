@@ -29,7 +29,6 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
 
   @override
   void initState() {
-    // context.read<AuthenticationBloc>().add(InitiateAuth());
     super.initState();
   }
 
@@ -81,8 +80,6 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
                   const SizedBox(height: 20),
                   SectionNotificationProfile(user: state.user),
                   const SizedBox(height: 20),
-                  // SectionBookingsHistory(user: state.user),
-                  // const SizedBox(height: 20),
                   Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: getStatusUser(context, state.user)),

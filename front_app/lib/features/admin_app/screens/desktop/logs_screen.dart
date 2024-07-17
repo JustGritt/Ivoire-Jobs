@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../models/log.dart';
+import 'package:barassage_app/features/admin_app/models/log.dart';
 
 AdminService adminService = serviceLocator<AdminService>();
 
@@ -28,12 +28,15 @@ class _LogsScreenState extends State<LogsScreen> {
   @override
   void initState() {
     super.initState();
-    logsFuture = fetchLogs();
+    logsFuture = fetchLogs(null, null);
   }
 
-  Future<void> fetchLogs() async {
+  Future<void> fetchLogs(String? level, String? type) async {
     final logsProvider = Provider.of<LogsProvider>(context, listen: false);
-    await logsProvider.getAllLogs();
+    await logsProvider.getAllLogs(
+      level: level,
+      type: type,
+    );
   }
 
   String formatDate(DateTime date) {
@@ -127,11 +130,13 @@ class _LogsScreenState extends State<LogsScreen> {
             onLevelChanged: (String? newValue) {
               setState(() {
                 selectedLevel = newValue!;
+                logsFuture = fetchLogs(selectedLevel, selectedType);
               });
             },
             onTypeChanged: (String? newValue) {
               setState(() {
                 selectedType = newValue!;
+                logsFuture = fetchLogs(selectedLevel, selectedType);
               });
             },
             onDateRangeSelected: () => _selectDateRange(context),
@@ -152,15 +157,19 @@ class _LogsScreenState extends State<LogsScreen> {
                       } else if (logsProvider.logs.items.isEmpty) {
                         return Center(child: Text('No logs available'));
                       } else {
-                        List<Log> filteredLogs = logsProvider.logs.items.where((log) {
+                        List<Log> filteredLogs =
+                            logsProvider.logs.items.where((log) {
                           bool levelMatch = selectedLevel == 'Level' ||
-                              log.level.toLowerCase() == selectedLevel.toLowerCase();
+                              log.level.toLowerCase() ==
+                                  selectedLevel.toLowerCase();
                           bool typeMatch = selectedType == 'Type' ||
-                              log.type.toLowerCase() == selectedType.toLowerCase();
+                              log.type.toLowerCase() ==
+                                  selectedType.toLowerCase();
                           bool dateMatch = true;
                           if (startDate != null && endDate != null) {
                             DateTime logDate = DateTime.parse(log.createdAt);
-                            dateMatch = logDate.isAfter(startDate!) && logDate.isBefore(endDate!);
+                            dateMatch = logDate.isAfter(startDate!) &&
+                                logDate.isBefore(endDate!);
                           }
                           return levelMatch && typeMatch && dateMatch;
                         }).toList();
@@ -208,29 +217,35 @@ class _LogsScreenState extends State<LogsScreen> {
                                     ),
                                   ),
                                 ],
-                                rows: filteredLogs.map((log) => DataRow(
-                                  cells: [
-                                    DataCell(_buildLevelChip(log.level)),
-                                    DataCell(Text(log.type)),
-                                    DataCell(
-                                      Tooltip(
-                                        message: log.message,
-                                        child: Text(
-                                          log.message.length > 50
-                                              ? log.message.substring(0, 50) + '...'
-                                              : log.message,
-                                        ),
-                                      ),
-                                    ),
-                                    DataCell(
-                                      Text(formatDate(DateTime.parse(log.createdAt))),
-                                    ),
-                                  ],
-                                )).toList(),
+                                rows: filteredLogs
+                                    .map((log) => DataRow(
+                                          cells: [
+                                            DataCell(
+                                                _buildLevelChip(log.level)),
+                                            DataCell(Text(log.type)),
+                                            DataCell(
+                                              Tooltip(
+                                                message: log.message,
+                                                child: Text(
+                                                  log.message.length > 50
+                                                      ? log.message.substring(
+                                                              0, 50) +
+                                                          '...'
+                                                      : log.message,
+                                                ),
+                                              ),
+                                            ),
+                                            DataCell(
+                                              Text(formatDate(DateTime.parse(
+                                                  log.createdAt))),
+                                            ),
+                                          ],
+                                        ))
+                                    .toList(),
                                 headingRowColor: MaterialStateProperty.all(
                                     theme.primaryColor.withOpacity(0.1)),
                                 dataRowColor:
-                                MaterialStateProperty.all(Colors.white),
+                                    MaterialStateProperty.all(Colors.white),
                                 horizontalMargin: 12,
                                 headingTextStyle: TextStyle(
                                   fontWeight: FontWeight.bold,
@@ -238,7 +253,8 @@ class _LogsScreenState extends State<LogsScreen> {
                                 ),
                                 border: TableBorder(
                                   horizontalInside: BorderSide(
-                                    color: Colors.grey.shade300, // Light gray line
+                                    color:
+                                        Colors.grey.shade300, // Light gray line
                                   ),
                                 ),
                               ),
@@ -263,30 +279,35 @@ class _LogsScreenState extends State<LogsScreen> {
                       IconButton(
                         icon: Icon(Icons.first_page, color: theme.primaryColor),
                         onPressed: () {
-                          logsProvider.jumpToPage(1);
+                          logsProvider.jumpToPage(
+                              1, selectedLevel, selectedType);
                         },
                       ),
                     if (!logsProvider.logs.first)
                       IconButton(
-                        icon: Icon(Icons.chevron_left, color: theme.primaryColor),
+                        icon:
+                            Icon(Icons.chevron_left, color: theme.primaryColor),
                         onPressed: () {
-                          logsProvider.previousPage();
+                          logsProvider.previousPage(
+                              selectedLevel, selectedType);
                         },
                       ),
                     Text(
                         '${logsProvider.logs.currentPage} / ${logsProvider.logs.totalPages}'),
                     if (!logsProvider.logs.last)
                       IconButton(
-                        icon: Icon(Icons.chevron_right, color: theme.primaryColor),
+                        icon: Icon(Icons.chevron_right,
+                            color: theme.primaryColor),
                         onPressed: () {
-                          logsProvider.nextPage();
+                          logsProvider.nextPage(selectedLevel, selectedType);
                         },
                       ),
                     if (!logsProvider.logs.last)
                       IconButton(
                         icon: Icon(Icons.last_page, color: theme.primaryColor),
                         onPressed: () {
-                          logsProvider.jumpToPage(logsProvider.logs.totalPages);
+                          logsProvider.jumpToPage(logsProvider.logs.totalPages,
+                              selectedLevel, selectedType);
                         },
                       ),
                   ],

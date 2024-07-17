@@ -7,9 +7,6 @@ class MessagesController extends StatelessController {
   const MessagesController({super.key});
 
   @override
-  bool get auth => true;
-
-  @override
   Display view(BuildContext context) {
     return Display(
       title: 'Messages Area',

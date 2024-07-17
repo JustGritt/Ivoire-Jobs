@@ -215,10 +215,11 @@ class AdminService {
     return false;
   }
 
-  Future<LogResponse> getLogs({required int page}) async {
+  Future<LogResponse> getLogs(
+      {required int page, String? level, String? type}) async {
     try {
-      Response res =
-          await _http.get('${ApiEndpoint.logsCollection}?page=$page');
+      Response res = await _http.get(
+          '${ApiEndpoint.logsCollection}?page=$page${level != null && level != 'Level' ? '&level=$level' : ''}${type != null && type != 'Type' ? '&type=$type' : ''}');
       debugPrint('res-logs: ${res.data}');
       if (res.statusCode == 200) {
         LogResponse logs = LogResponse.fromJson(res.data);

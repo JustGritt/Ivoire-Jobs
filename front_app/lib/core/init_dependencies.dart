@@ -7,6 +7,7 @@ import 'package:barassage_app/features/main_app/services/service_services.dart';
 import 'package:barassage_app/features/auth_mod/services/user_service.dart';
 import 'package:barassage_app/core/blocs/service/service_bloc.dart';
 import 'package:barassage_app/core/classes/app_context.dart';
+import 'package:barassage_app/features/bookings_mod/services/messaging_services.dart';
 import 'package:barassage_app/config/app_cache.dart';
 import 'package:get_it/get_it.dart';
 

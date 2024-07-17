@@ -40,6 +40,9 @@ Future<void> _initAuth() async {
     )
     ..registerLazySingleton(
       () => BookingsServices(),
+    )
+    ..registerLazySingleton(
+      () => MessagingServices(),
     );
   // // Bloc
   // ..registerLazySingleton(

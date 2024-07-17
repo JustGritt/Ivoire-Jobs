@@ -10,7 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/cupertino.dart';
 
-import 'controllers/logs_controller.dart';
+import 'package:barassage_app/features/admin_app/controllers/logs_controller.dart';
 
 class AdminApp extends RouteManager {
   static const String home = '/';

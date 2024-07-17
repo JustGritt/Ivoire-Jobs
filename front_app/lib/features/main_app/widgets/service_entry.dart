@@ -1,9 +1,9 @@
-import 'package:barassage_app/features/main_app/models/service_models/service_created_model.dart';
+import 'package:barassage_app/features/main_app/models/service_models/service_model.dart';
 import 'package:barassage_app/core/helpers/extentions/string_extension.dart';
 import 'package:flutter/material.dart';
 
 class ServiceEntry extends StatelessWidget {
-  final ServiceCreatedModel service;
+  final ServiceModel service;
 
   const ServiceEntry({super.key, required this.service});
 
@@ -49,8 +49,7 @@ class ServiceEntry extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(right: 16.0),
                   child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
                       color: Colors.black,
                       borderRadius: BorderRadius.circular(8),
@@ -85,9 +84,9 @@ class ServiceEntry extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(width: 8),
                 const Text('-'),
-                const SizedBox(height: 8),
+                const SizedBox(width: 8),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: Text(

@@ -6,6 +6,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:barassage_app/core/classes/router/go_router.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:barassage_app/core/init_dependencies.dart';
+import 'package:barassage_app/features/bookings_mod/blocs/messaging_chats_bloc/messaging_chats_bloc.dart';
 import 'package:barassage_app/firebase_options.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -42,6 +43,9 @@ void main() async {
       providers: [
         BlocProvider(
           create: (_) => AuthenticationBloc()..add(InitiateAuth()),
+        ),
+        BlocProvider(
+          create: (_) => MessagingChatsBloc(),
         ),
         BlocProvider(
           create: (_) => serviceLocator<ServiceBloc>(),
