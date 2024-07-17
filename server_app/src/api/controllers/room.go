@@ -27,6 +27,7 @@ type RoomOutput struct {
 }
 
 type Message struct {
+	MessageID       string `json:"message_id"`
 	SenderID        string `json:"sender_id"`
 	SenderName      string `json:"sender_firstname"`
 	ReceiverID      string `json:"receiver_id"`
@@ -243,6 +244,7 @@ func GetRoomMessages(c *fiber.Ctx) error {
 		sender, _ := userRepo.GetById(m.SenderID)
 		receiver, _ := userRepo.GetById(m.ReceiverID)
 		messagesOutput = append(messagesOutput, Message{
+			MessageID:       m.ID,
 			SenderID:        m.SenderID,
 			ReceiverID:      m.ReceiverID,
 			SenderName:      sender.Firstname + " " + sender.Lastname,
@@ -282,6 +284,7 @@ func mapRoomToOutput(room room.Room) RoomOutput {
 			sender, _ := userRepo.GetById(m.SenderID)
 			receiver, _ := userRepo.GetById(m.ReceiverID)
 			messages = append(messages, Message{
+				MessageID:       m.ID,
 				SenderID:        m.SenderID,
 				ReceiverID:      m.ReceiverID,
 				SenderName:      sender.Firstname + " " + sender.Lastname,
