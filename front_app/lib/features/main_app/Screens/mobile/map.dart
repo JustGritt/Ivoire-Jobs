@@ -1,9 +1,10 @@
+import 'package:barassage_app/features/main_app/Screens/mobile/services_details.dart';
 import 'package:barassage_app/features/main_app/providers/my_services_provider.dart';
+import 'package:barassage_app/features/main_app/models/service_models/service_created_model.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -27,14 +28,25 @@ class _MapScreenState extends State<MapScreen> {
   String _recognizedText = '';
   String _selectedFilter = "All";
 
+  get http => null;
+
   @override
   void initState() {
     super.initState();
     _getCurrentLocation();
     _initializeSpeechRecognizer();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<MyServicesProvider>(context, listen: false).getCategories();
+      final myServicesProvider = Provider.of<MyServicesProvider>(context, listen: false);
+      myServicesProvider.getCategories();
+      _loadNearbyServices();
     });
+  }
+
+  @override
+  void dispose() {
+    _speech.stop();
+    _searchController.dispose();
+    super.dispose();
   }
 
   void _initializeSpeechRecognizer() async {
@@ -45,16 +57,55 @@ class _MapScreenState extends State<MapScreen> {
     }
   }
 
-  void _setMarkerToCurrentPosition() async {
+  void _setMarkerToCurrentPosition() {
     Marker newMarker = Marker(
       point: _currentPosition,
       width: 80,
       height: 80,
-      child: const Icon(Icons.location_on),
+      child: const Icon(Icons.location_on, color: Colors.blue),
     );
-    setState(() {
-      markers.add(newMarker);
-    });
+    if (mounted) {
+      setState(() {
+        markers.add(newMarker);
+      });
+    }
+  }
+
+  void _loadNearbyServices() async {
+    final myServicesProvider = Provider.of<MyServicesProvider>(context, listen: false);
+    await myServicesProvider.getNearbyServices();
+    if (mounted) {
+      _addServiceMarkers(myServicesProvider.services);
+    }
+  }
+
+  void _addServiceMarkers(List<ServiceCreatedModel> services) {
+    if (mounted) {
+      setState(() {
+        markers.clear();
+        _setMarkerToCurrentPosition();
+        for (var service in services) {
+          markers.add(
+            Marker(
+              point: LatLng(service.latitude, service.longitude),
+              width: 80,
+              height: 80,
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ServiceDetailPage(service: service),
+                    ),
+                  );
+                },
+                child: const Icon(Icons.location_on, color: Colors.red),
+              ),
+            ),
+          );
+        }
+      });
+    }
   }
 
   void animatePosition() {
@@ -89,38 +140,42 @@ class _MapScreenState extends State<MapScreen> {
     try {
       Position position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high);
-      setState(() {
-        _currentPosition = LatLng(position.latitude, position.longitude);
-        _searchController.text = '';
-        _setMarkerToCurrentPosition();
-      });
-      mapController.move(_currentPosition, 18); // Move map to current location
+      if (mounted) {
+        setState(() {
+          _currentPosition = LatLng(position.latitude, position.longitude);
+          _searchController.text = '';
+          _setMarkerToCurrentPosition();
+        });
+        mapController.move(_currentPosition, 18);
+        _loadNearbyServices();
+      }
     } catch (e) {
       _showErrorDialog('Failed to get current location: $e');
     }
   }
 
   void _showErrorDialog(String message) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Error'),
-          content: Text(message),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
+    if (mounted) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Error'),
+            content: Text(message),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
 
-  // Speech to text functions
   void _listen() async {
     if (!_isListening) {
       bool available = await _speech.initialize(
@@ -133,7 +188,7 @@ class _MapScreenState extends State<MapScreen> {
           onResult: (val) => setState(() {
             _recognizedText = val.recognizedWords;
             _searchController.text = _recognizedText;
-            _performSearch(); // Perform search based on recognized text
+            _performSearch();
           }),
         );
       }
@@ -165,12 +220,15 @@ class _MapScreenState extends State<MapScreen> {
         final lng = center[0];
         final lat = center[1];
 
-        setState(() {
-          _currentPosition = LatLng(lat, lng);
-          markers.clear();
-          _setMarkerToCurrentPosition();
-          mapController.move(_currentPosition, 18);
-        });
+        if (mounted) {
+          setState(() {
+            _currentPosition = LatLng(lat, lng);
+            markers.clear();
+            _setMarkerToCurrentPosition();
+            mapController.move(_currentPosition, 18);
+          });
+          _loadNearbyServices();
+        }
       } else {
         _showErrorDialog('No results found for "$query".');
       }
@@ -183,18 +241,9 @@ class _MapScreenState extends State<MapScreen> {
     final myServicesProvider =
         Provider.of<MyServicesProvider>(context, listen: false);
     await myServicesProvider.filterServices(filter);
-    setState(() {
-      markers.clear();
-      _setMarkerToCurrentPosition();
-      myServicesProvider.services.forEach((service) {
-        markers.add(Marker(
-          point: LatLng(service.latitude, service.longitude),
-          width: 80,
-          height: 80,
-          child: const Icon(Icons.location_on),
-        ));
-      });
-    });
+    if (mounted) {
+      _addServiceMarkers(myServicesProvider.services);
+    }
   }
 
   @override
@@ -245,7 +294,6 @@ class _MapScreenState extends State<MapScreen> {
                         animatePosition();
                       },
                     ),
-                    // Handle the speech to text here
                     IconButton(
                       icon: Icon(
                         Icons.mic,
@@ -319,12 +367,14 @@ class _MapScreenState extends State<MapScreen> {
               child: FlutterMap(
                 mapController: mapController,
                 options: MapOptions(
-                    initialCenter: _currentPosition,
-                    initialZoom: 16,
-                    minZoom: 10,
-                    maxZoom: 20,
-                    interactionOptions: InteractionOptions(
-                        flags: InteractiveFlag.all & ~InteractiveFlag.rotate)),
+                  initialCenter: _currentPosition,
+                  initialZoom: 16,
+                  minZoom: 10,
+                  maxZoom: 20,
+                  interactionOptions: InteractionOptions(
+                    flags: InteractiveFlag.all & ~InteractiveFlag.rotate,
+                  ),
+                ),
                 children: [
                   TileLayer(
                     urlTemplate:
