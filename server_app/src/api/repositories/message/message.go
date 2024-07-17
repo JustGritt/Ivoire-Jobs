@@ -29,6 +29,10 @@ func GetByRoomID(roomID string) ([]message.Message, error) {
 	return messages, nil
 }
 
+func Update(message *message.Message) error {
+	return db.PgDB.Save(message).Error
+}
+
 func GetErrors() error {
 	return db.PgDB.Error
 }

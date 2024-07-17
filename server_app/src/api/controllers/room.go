@@ -257,6 +257,14 @@ func GetRoomMessages(c *fiber.Ctx) error {
 		})
 	}
 
+	// Mark all messages as seen
+	for _, m := range messages {
+		if m.ReceiverID == userID {
+			m.Seen = true
+			_ = messageRepo.Update(&m)
+		}
+	}
+
 	return c.Status(http.StatusOK).JSON(HTTPResponse(http.StatusOK, "Messages", messagesOutput))
 }
 
