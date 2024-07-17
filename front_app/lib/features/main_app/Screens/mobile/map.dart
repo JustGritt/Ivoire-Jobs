@@ -1,6 +1,9 @@
 import 'package:barassage_app/features/main_app/Screens/mobile/services_details.dart';
 import 'package:barassage_app/features/main_app/providers/my_services_provider.dart';
 import 'package:barassage_app/features/main_app/models/service_models/service_created_model.dart';
+import 'package:barassage_app/features/main_app/widgets/map_filters.dart';
+import 'package:barassage_app/features/main_app/widgets/map_searchbar.dart';
+import 'package:barassage_app/features/main_app/widgets/map_widget.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -9,6 +12,10 @@ import 'package:latlong2/latlong.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'dart:convert';
+
+// import 'filter_chips_widget.dart';
+// import 'map_widget.dart';
+// import 'search_bar_widget.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
@@ -253,160 +260,29 @@ class _MapScreenState extends State<MapScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(
-                  top: 40.0, left: 8.0, right: 8.0, bottom: 8.0),
-              child: Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey[300]!),
-                  borderRadius: BorderRadius.circular(8),
-                  color: Colors.white,
-                ),
-                child: Row(
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.arrow_back, color: Colors.black),
-                      onPressed: () => Navigator.of(context).pop(),
-                    ),
-                    Expanded(
-                      child: TextField(
-                        controller: _searchController,
-                        decoration: const InputDecoration(
-                          contentPadding: EdgeInsets.only(left: 8),
-                          border: InputBorder.none,
-                          hintText: 'Your location',
-                          helperStyle: TextStyle(color: Colors.grey, fontSize: 12),
-                        ),
-                        onSubmitted: (value) {
-                          _performSearch();
-                        },
-                      ),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.search),
-                      onPressed: () {
-                        _performSearch();
-                      },
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.location_on),
-                      onPressed: () {
-                        animatePosition();
-                      },
-                    ),
-                    IconButton(
-                      icon: Icon(
-                        Icons.mic,
-                        color: _isListening ? Colors.red : Colors.black,
-                      ),
-                      onPressed: () {
-                        _listen();
-                      },
-                    ),
-                  ],
-                ),
-              ),
+            MapSearchBar(
+              searchController: _searchController,
+              onSearch: _performSearch,
+              onAnimatePosition: animatePosition,
+              onListen: _listen,
+              isListening: _isListening,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Consumer<MyServicesProvider>(
-                  builder: (context, myServicesProvider, child) {
-                    List<String> filters = ["All"];
-                    filters.addAll(myServicesProvider.categories
-                        .map((category) => category.name)
-                        .toList());
-
-                    return Row(
-                      children: filters.map((filter) {
-                        return Padding(
-                          padding: const EdgeInsets.only(right: 8.0),
-                          child: ChoiceChip(
-                            label: Text(
-                              filter,
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: _selectedFilter == filter
-                                    ? Colors.white
-                                    : Colors.black,
-                              ),
-                            ),
-                            selected: _selectedFilter == filter,
-                            onSelected: (bool selected) {
-                              setState(() {
-                                _selectedFilter = filter;
-                              });
-                              _filterServices(_selectedFilter);
-                            },
-                            selectedColor: Colors.black,
-                            backgroundColor: Colors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(24),
-                              side: BorderSide(
-                                color: _selectedFilter == filter
-                                    ? Colors.black
-                                    : Colors.black,
-                              ),
-                            ),
-                            elevation: 4,
-                            pressElevation: 6,
-                            checkmarkColor: _selectedFilter == filter
-                                ? Colors.white
-                                : Colors.black,
-                          ),
-                        );
-                      }).toList(),
-                    );
-                  },
-                ),
-              ),
+            MapFilterChips(
+              selectedFilter: _selectedFilter,
+              onFilterSelected: (filter) {
+                setState(() {
+                  _selectedFilter = filter;
+                });
+                _filterServices(filter);
+              },
             ),
-            Expanded(
-              child: FlutterMap(
-                mapController: mapController,
-                options: MapOptions(
-                  initialCenter: _currentPosition,
-                  initialZoom: 16,
-                  minZoom: 10,
-                  maxZoom: 20,
-                  interactionOptions: InteractionOptions(
-                    flags: InteractiveFlag.all & ~InteractiveFlag.rotate,
-                  ),
-                ),
-                children: [
-                  TileLayer(
-                    urlTemplate:
-                        'https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=${dotenv.env['MAPBOX_ACCESS_TOKEN']}',
-                  ),
-                  MarkerLayer(
-                    markers: markers,
-                  ),
-                ],
-              ),
+            MapWidget(
+              mapController: mapController,
+              markers: markers,
+              currentPosition: _currentPosition,
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildFilterChip(String label) {
-    return FilterChip(
-      label: Text(
-        label,
-        style: TextStyle(
-          color: Colors.black,
-          fontWeight: FontWeight.bold,
-          fontSize: 16,
-        ),
-      ),
-      onSelected: (bool value) {},
-      backgroundColor: Colors.grey[300],
-      selectedColor: Colors.blue,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(24),
       ),
     );
   }
