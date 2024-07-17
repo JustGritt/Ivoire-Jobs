@@ -1,4 +1,5 @@
 import 'package:barassage_app/features/main_app/models/service_models/service_model.dart';
+import 'package:barassage_app/features/main_app/models/service_models/service_category_model.dart';
 import 'package:barassage_app/core/helpers/utils_helper.dart';
 import 'package:barassage_app/core/classes/app_context.dart';
 import 'package:barassage_app/core/init_dependencies.dart';
@@ -14,13 +15,18 @@ AppContext appContext = serviceLocator<AppContext>();
 
 class MyServicesProvider extends ChangeNotifier {
   List<ServiceModel> _serviceModel = [];
+  List<ServiceCategory> _categories = [];
   bool isLoading = false;
+  bool hasNoServices = false;
   final AppHttp _http = AppHttp();
 
   List<ServiceModel> get services => _serviceModel;
+  List<ServiceCategory> get categories => _categories;
 
   void getAll() async {
     isLoading = true;
+    hasNoServices = false;
+    notifyListeners();
     try {
       final user = await appCache.getUser();
       inspect(user);
@@ -29,10 +35,10 @@ class MyServicesProvider extends ChangeNotifier {
         notifyListeners();
         return;
       }
-      Response res = await _http
-          .get(ApiEndpoint.myServices.replaceAll(':id', user.id.toString()));
+      Response res = await _http.get(ApiEndpoint.myServices.replaceAll(':id', user.id.toString()));
       if (res.statusCode == 200) {
         _serviceModel = serviceFromJson(res.data);
+        hasNoServices = _serviceModel.isEmpty;
         isLoading = false;
         notifyListeners();
       }
@@ -60,6 +66,77 @@ class MyServicesProvider extends ChangeNotifier {
       showMyDialog(appContext.navigatorContext,
           title: 'Service', content: 'An error occured while deleting service');
       return false;
+    }
+  }
+
+  Future<void> filterServices(String filter) async {
+    isLoading = true;
+    hasNoServices = false;
+    notifyListeners();
+    if (filter == 'All') {
+      getAll();
+      return;
+    }
+    try {
+      final user = await appCache.getUser();
+      Response res = await _http.get('${ApiEndpoint.services}/search?categories=$filter');
+      if (res.statusCode == 200) {
+        _serviceModel = serviceFromJson(res.data);
+        hasNoServices = _serviceModel.isEmpty;
+        isLoading = false;
+        notifyListeners();
+      }
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 404) {
+        _serviceModel = [];
+        hasNoServices = true;
+      }
+      isLoading = false;
+      notifyListeners();
+    } catch (e) {
+      print(e);
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> searchService(String query) async {
+    isLoading = true;
+    hasNoServices = false;
+    notifyListeners();
+    if (query == '') {
+      getAll();
+      return;
+    }
+    try {
+      final user = await appCache.getUser();
+      Response res = await _http.get('${ApiEndpoint.services}/search?name=$query');
+      if (res.statusCode == 200) {
+        _serviceModel = serviceFromJson(res.data);
+        hasNoServices = _serviceModel.isEmpty;
+        isLoading = false;
+        notifyListeners();
+      }
+    } catch (e) {
+      print(e);
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> getCategories() async {
+    isLoading = true;
+    try {
+      Response res = await _http.get(ApiEndpoint.serviceCategories);
+      if (res.statusCode == 200) {
+        _categories = serviceCategoryFromJson(res.data);
+        isLoading = false;
+        notifyListeners();
+      }
+    } catch (e) {
+      print(e);
+      isLoading = false;
+      notifyListeners();
     }
   }
 }

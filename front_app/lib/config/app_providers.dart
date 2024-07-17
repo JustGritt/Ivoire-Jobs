@@ -17,8 +17,6 @@ import 'package:provider/single_child_widget.dart';
 import 'package:barassage_app/core/core.dart';
 import 'package:provider/provider.dart';
 
-import '../features/admin_app/providers/logs_provider.dart';
-
 List<SingleChildWidget> appProviders = [
   ChangeNotifierProvider<ThemeProvider>(
     create: (context) => ThemeProvider(),

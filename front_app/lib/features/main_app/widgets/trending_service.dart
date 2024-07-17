@@ -1,10 +1,10 @@
-import 'package:barassage_app/features/main_app/models/service_models/service_created_model.dart';
+import 'package:barassage_app/features/main_app/models/service_models/service_model.dart';
 import 'package:barassage_app/features/main_app/app.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 
 class TrendingService extends StatelessWidget {
-  final ServiceCreatedModel service;
+  final ServiceModel service;
 
   const TrendingService({
     super.key,
@@ -47,7 +47,7 @@ class TrendingService extends StatelessWidget {
                           topLeft: Radius.circular(8),
                           topRight: Radius.circular(8),
                         ),
-                        image: service.images.length > 0
+                        image: service.images.isNotEmpty
                             ? DecorationImage(
                                 image: NetworkImage(service.images.first),
                                 fit: BoxFit.fill,
@@ -60,14 +60,13 @@ class TrendingService extends StatelessWidget {
                     top: 8,
                     left: 8,
                     child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
                         color: Colors.black54,
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
-                        service.category.first, // Use the label property
+                        service.category.isNotEmpty ? service.category.first : 'N/A', // Use the label property
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 12,
@@ -76,36 +75,6 @@ class TrendingService extends StatelessWidget {
                       ),
                     ),
                   ),
-                  // Positioned(
-                  //   top: 8,
-                  //   right: 8,
-                  //   child: Container(
-                  //     padding:
-                  //         const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  //     decoration: BoxDecoration(
-                  //       color: Colors.black54,
-                  //       borderRadius: BorderRadius.circular(8),
-                  //     ),
-                  //     child: Row(
-                  //       children: [
-                  //         Text(
-                  //           service.rating.toString(),
-                  //           style: const TextStyle(
-                  //             color: Colors.white,
-                  //             fontSize: 12,
-                  //             fontWeight: FontWeight.bold,
-                  //           ),
-                  //         ),
-                  //         const SizedBox(width: 4),
-                  //         const Icon(
-                  //           Icons.star,
-                  //           color: Colors.white,
-                  //           size: 12,
-                  //         ),
-                  //       ],
-                  //     ),
-                  //   ),
-                  // ),
                 ],
               ),
             ),
@@ -128,8 +97,7 @@ class TrendingService extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(left: 8.0),
                     child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
                         color: Colors.black,
                         borderRadius: BorderRadius.circular(8),
