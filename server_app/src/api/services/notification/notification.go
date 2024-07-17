@@ -47,6 +47,8 @@ func InitFCM() *messaging.Client {
 		"universe_domain":             cfg.UniverseDomain,
 	}
 
+	fmt.Println(cfg.PrivateKey)
+
 	// Marshal the credentials map to JSON
 	credentialsJSON, err := json.Marshal(credentials)
 	if err != nil {
@@ -54,7 +56,7 @@ func InitFCM() *messaging.Client {
 	}
 
 	// Write the JSON credentials to a temporary file
-	tempFile, err := os.CreateTemp("", "serviceAccountKey-*.json")
+	tempFile, err := os.CreateTemp("", "serviceAccountKey-.json")
 	if err != nil {
 		log.Fatalf("error creating temp file: %v", err)
 	}
