@@ -5,6 +5,7 @@ import 'package:barassage_app/core/blocs/service/service_bloc.dart';
 import 'package:barassage_app/core/classes/language_provider.dart';
 import 'package:barassage_app/core/classes/router/go_router.dart';
 import 'package:barassage_app/core/init_dependencies.dart';
+import 'package:barassage_app/features/bookings_mod/blocs/messaging_chats_bloc/messaging_chats_bloc.dart';
 import 'package:barassage_app/firebase_options.dart';
 import 'package:barassage_app/l10n/l10n.dart';
 import 'package:flutter/foundation.dart';
@@ -45,6 +46,9 @@ void main() async {
       providers: [
         BlocProvider(
           create: (_) => AuthenticationBloc()..add(InitiateAuth()),
+        ),
+        BlocProvider(
+          create: (_) => MessagingChatsBloc(),
         ),
         BlocProvider(
           create: (_) => serviceLocator<ServiceBloc>(),

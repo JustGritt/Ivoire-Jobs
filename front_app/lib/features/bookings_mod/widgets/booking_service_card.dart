@@ -26,7 +26,6 @@ class _BookingServiceCardState extends State<BookingServiceCard> {
         print('he');
       },
       child: Container(
-        height: 130,
         clipBehavior: Clip.hardEdge,
         margin: const EdgeInsets.all(10),
         padding: const EdgeInsets.all(8),
@@ -48,6 +47,7 @@ class _BookingServiceCardState extends State<BookingServiceCard> {
           children: [
             Container(
               width: 110,
+              height: 130,
               clipBehavior: Clip.hardEdge,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
@@ -147,7 +147,7 @@ class _BookingServiceCardState extends State<BookingServiceCard> {
                               size: 18,
                               color: theme.colorScheme.surface,
                             ),
-                            Text('Abidjan'),
+                            Text('Not populated'),
                           ],
                         ),
                       ],

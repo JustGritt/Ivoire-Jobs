@@ -8,7 +8,6 @@ import 'package:barassage_app/core/widgets/toast_message.dart';
 import 'package:barassage_app/features/bookings_mod/models/booking_appointment.dart';
 import 'package:barassage_app/features/bookings_mod/services/bookings_services.dart';
 import 'package:barassage_app/features/main_app/models/request_info_base_model.dart';
-import 'package:barassage_app/features/main_app/models/service_models/booking_service_model/booking_service_created_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 
