@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:barassage_app/core/init_dependencies.dart';
 import 'package:barassage_app/config/api_endpoints.dart';
 import 'package:barassage_app/config/app_cache.dart';
@@ -5,7 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'dart:developer';
-import 'dart:io';
+
 
 // import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 

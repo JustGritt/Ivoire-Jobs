@@ -8,3 +8,4 @@ export './home_controller.dart';
 export './team_manager_controller.dart';
 export './banlist_controller.dart';
 export './reports_controller.dart';
+export './register_email_validation_controller.dart';

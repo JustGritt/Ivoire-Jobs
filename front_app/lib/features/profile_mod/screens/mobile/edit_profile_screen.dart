@@ -48,10 +48,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   @override
   void dispose() {
-    firstNameController.dispose();
-    lastNameController.dispose();
-    emailController.dispose();
-    bioController.dispose();
+    // firstNameController.dispose();
+    // lastNameController.dispose();
+    // emailController.dispose();
+    // bioController.dispose();
     super.dispose();
   }
 

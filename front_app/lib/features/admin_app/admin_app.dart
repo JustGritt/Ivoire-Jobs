@@ -6,6 +6,7 @@ import 'package:barassage_app/features/admin_app/screens/desktop/splash_screen.d
 import 'package:barassage_app/core/blocs/authentication/authentication_bloc.dart';
 import 'package:barassage_app/features/admin_app/controllers/controllers.dart';
 import 'package:barassage_app/core/classes/route_manager.dart';
+import 'package:barassage_app/features/auth_mod/controllers/register_email_validation_controller_mobile.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/cupertino.dart';

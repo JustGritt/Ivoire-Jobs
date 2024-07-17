@@ -10,9 +10,9 @@ BookingStatus bookingStatusFromString(String status) {
   switch (status) {
     case 'created':
       return BookingStatus.created;
-    case 'completed':
-      return BookingStatus.fulfilled;
     case 'fulfilled':
+      return BookingStatus.fulfilled;
+    case 'cancelled':
       return BookingStatus.cancelled;
     default:
       return BookingStatus.created;
@@ -22,7 +22,6 @@ BookingStatus bookingStatusFromString(String status) {
 class BookingAppointment {
   String id;
   String userId;
-  String serviceId;
   BookingStatus status;
   DateTime startTime;
   DateTime endTime;
@@ -32,7 +31,6 @@ class BookingAppointment {
   BookingAppointment({
     required this.id,
     required this.userId,
-    required this.serviceId,
     required this.status,
     required this.startTime,
     required this.endTime,
@@ -44,7 +42,6 @@ class BookingAppointment {
       BookingAppointment(
         id: json["ID"],
         userId: json["userID"],
-        serviceId: json["serviceID"],
         status: bookingStatusFromString(json["status"]),
         startTime: DateTime.parse(json["startTime"]),
         endTime: DateTime.parse(json["endTime"]),
@@ -55,7 +52,6 @@ class BookingAppointment {
   Map<String, dynamic> toJson() => {
         "ID": id,
         "userID": userId,
-        "serviceID": serviceId,
         "status": status,
         "startTime": startTime.toIso8601String(),
         "endTime": endTime.toIso8601String(),
