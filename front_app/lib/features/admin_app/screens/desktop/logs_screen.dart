@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../models/log.dart';
+import 'package:barassage_app/features/admin_app/models/log.dart';
 
 AdminService adminService = serviceLocator<AdminService>();
 
