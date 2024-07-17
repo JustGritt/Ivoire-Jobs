@@ -12,9 +12,7 @@ class ServicesEntriesList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (services.isEmpty) {
-      return const Center(
-        child: Text('No data found'),
-      );
+      return Text('No data found');
     }
 
     return Column(

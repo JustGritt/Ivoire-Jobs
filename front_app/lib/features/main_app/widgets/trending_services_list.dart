@@ -10,8 +10,9 @@ class TrendingServicesList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (services.isEmpty) {
-      return const Center(
-        child: Text('No data found'),
+      return Container(
+        margin: const EdgeInsets.only(left: 16),
+        child: Text('No services available for this filter.'),
       );
     }
 

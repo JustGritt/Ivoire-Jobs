@@ -112,8 +112,12 @@ class MyServicesProvider extends ChangeNotifier {
     }
     try {
       final user = await appCache.getUser();
-      Response res =
-          await _http.get('${ApiEndpoint.services}/search?name=$query');
+      Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+      Response res = await _http.get('${ApiEndpoint.services}/search', params: {
+            "query": query,
+            "latitude": position.latitude,
+            "longitude": position.longitude,
+          });
       if (res.statusCode == 200) {
         _serviceModel = servicesFromJson(res.data);
         hasNoServices = _serviceModel.isEmpty;
@@ -148,13 +152,9 @@ class MyServicesProvider extends ChangeNotifier {
     try {
       final user = await appCache.getUser();
       Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-      print(position.latitude);
-      print(position.longitude);
       Response res = await _http.get('${ApiEndpoint.services}/search', params: {
         "latitude": position.latitude,
         "longitude": position.longitude,
-        // "latitude": 48.8488336,
-        // "longitude": 32.3891768
       });
       print(res.data);
       if (res.statusCode == 200) {
