@@ -10,7 +10,7 @@ class ApiEndpoint {
   // static const baseUrl = 'http://localhost:8000';
   // static const baseUrl = 'http://10.0.2.2:8000';
   static const baseUrl = 'https://api.barassage.com';
-  //static const baseUrl = 'https://fantastic-space-doodle-w59vv7w5w7pfp9j-8000.app.github.dev';
+  // static const baseUrl = 'https://fantastic-space-doodle-w59vv7w5w7pfp9j-8000.app.github.dev';
   static const api = '${baseUrl}/api/v1';
 
   // Enqueries Endpoints
@@ -32,7 +32,7 @@ class ApiEndpoint {
   static const adminLogin = '${api}/auth/admin-login';
   static const adminUser = '${api}/auth/admin';
   static const addAdmin = '${api}/auth/register-admin';
-  static const memberRequests = '${api}/member';
+  static const memberRoute = '${api}/member';
   static const approveMember = '${api}/member/:id/validate';
   static const adminDashboardStats = '${api}/dashboard/stats';
 

@@ -7,7 +7,6 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-// ignore_for_file: deprecated_member_use
 
 class Service extends StatefulWidget {
   final String? title;
@@ -19,13 +18,15 @@ class Service extends StatefulWidget {
 
 class _ServiceState extends State<Service> {
   late TextEditingController _name;
+
   @override
   void initState() {
     super.initState();
-    final myServicesProvider =
-        Provider.of<MyServicesProvider>(context, listen: false);
-    myServicesProvider.getAll();
     _name = TextEditingController(text: 'Guest');
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final myServicesProvider = Provider.of<MyServicesProvider>(context, listen: false);
+      myServicesProvider.getAll();
+    });
   }
 
   @override
@@ -67,12 +68,9 @@ class _ServiceState extends State<Service> {
         searchBar: SuperSearchBar(
           enabled: false,
           onChanged: (query) {
-            // Search Bar Changes
           },
           onSubmitted: (query) {
-            // On Search Bar submitted
           },
-          // Add other search bar properties as needed
         ),
       ),
       body: Consumer<MyServicesProvider>(
@@ -92,8 +90,7 @@ class _ServiceState extends State<Service> {
               itemBuilder: (_, index) {
                 return MyServiceSlidable(
                     onDelete: (handler) async {
-                      bool success =
-                          await np.deleteService(np.services[index].id);
+                      bool success = await np.deleteService(np.services[index].id);
                       await handler(success);
                     },
                     child: MyServiceItem(

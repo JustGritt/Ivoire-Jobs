@@ -14,6 +14,10 @@ class ServiceCategory {
     required this.status,
   });
 
+  String toString() {
+    return "ServiceCategory: {id: $id, name: $name, status: $status}";
+  }
+
   factory ServiceCategory.fromJson(Map<String, dynamic> json) =>
       ServiceCategory(
         id: json["id"],
