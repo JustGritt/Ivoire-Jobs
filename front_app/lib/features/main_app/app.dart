@@ -1,3 +1,4 @@
+import 'package:barassage_app/features/auth_mod/screens/mobile/under_maintenance_screen.dart';
 import 'package:barassage_app/features/bookings_mod/screens/mobile/messages_page_screen/conversation_chat_screen.dart';
 import 'package:barassage_app/features/main_app/Screens/mobile/service_booking/service_booking_success.dart';
 import 'package:barassage_app/features/main_app/Screens/mobile/service_booking/service_booking.dart';
@@ -47,6 +48,7 @@ class App extends RouteManager {
   static const String serviceBookingSuccess =
       '${App.name}/serviceBookingSuccess';
   static const String messagingChat = 'messagingChat';
+  static const String maintenanceMode = 'maintenanceMode';
 
   final _rootKey = serviceLocator<AppContext>().navigatorKey;
   final _shellHomeKey = GlobalKey<NavigatorState>(debugLabel: 'shellHome');
