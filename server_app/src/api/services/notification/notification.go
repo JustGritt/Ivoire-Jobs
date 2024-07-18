@@ -5,6 +5,7 @@ import (
 	"barassage/api/models/user"
 	notifRepo "barassage/api/repositories/notificationPreference"
 	"context"
+	"encoding/base64"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -32,11 +33,17 @@ func InitFCM() *messaging.Client {
 	cfg := configs.GetConfig().FCM
 	ctx := context.Background()
 
+	privateKeyBytes, err := base64.StdEncoding.DecodeString(cfg.PrivateKey)
+	if err != nil {
+		log.Fatalf("error decoding private key: %v", err)
+	}
+	privateKey := string(privateKeyBytes)
+
 	credentials := map[string]string{
 		"type":                        cfg.Type,
 		"project_id":                  cfg.ProjectId,
 		"private_key_id":              cfg.PrivateId,
-		"private_key":                 cfg.PrivateKey,
+		"private_key":                 privateKey,
 		"client_email":                cfg.ClientEmail,
 		"client_id":                   cfg.ClientId,
 		"auth_uri":                    cfg.AuthUri,
