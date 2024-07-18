@@ -178,7 +178,7 @@ class _ServiceDetailPageState extends State<ServiceDetailPage> {
                           children: [
                             SectionTopDetailService(service: widget.service),
                             SizedBox(height: 16),
-                            if (!isUserLoaded) ...[
+                            if (isUserLoaded && userId != widget.service.userId) ...[
                               SectionBarasseurDetailService(
                                   service: widget.service),
                               SizedBox(height: 16),
@@ -218,7 +218,7 @@ class _ServiceDetailPageState extends State<ServiceDetailPage> {
                   ],
                 ),
               ),
-              if (isUserLoaded) ...[
+              if (isUserLoaded && userId == widget.service.userId) ...[
                 Container(
                   clipBehavior: Clip.antiAlias,
                   padding: const EdgeInsets.only(top: 15, bottom: 20),
@@ -284,7 +284,7 @@ class _ServiceDetailPageState extends State<ServiceDetailPage> {
                   ),
                 ),
               ],
-              if (!isUserLoaded) ...[
+              if (isUserLoaded && userId != widget.service.userId) ...[
                 Container(
                   clipBehavior: Clip.antiAlias,
                   padding: const EdgeInsets.only(top: 15, bottom: 20),
