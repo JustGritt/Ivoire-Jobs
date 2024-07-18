@@ -26,14 +26,16 @@ class ServiceDetailPage extends StatefulWidget {
 class _ServiceDetailPageState extends State<ServiceDetailPage> {
   late Future<List<Rating>> _ratingsFuture;
   String? userId;
+  bool? _currentStatus;
 
-  static int getUnformattedPrice(String price) {
-    return int.parse(price.replaceAll(RegExp(r'\D'), ''));
+  static double getUnformattedPrice(String price) {
+    return double.parse(price.replaceAll(RegExp(r'[^0-9.]'), ''));
   }
 
   @override
   void initState() {
     super.initState();
+    _currentStatus = widget.service.status;
     _ratingsFuture = _fetchRatings();
     _fetchUserId();
   }
@@ -57,13 +59,15 @@ class _ServiceDetailPageState extends State<ServiceDetailPage> {
     final myServicesProvider =
         Provider.of<MyServicesProvider>(context, listen: false);
     await myServicesProvider.updateMyServiceStatus(
-      widget.service.id,
-      widget.service.name,
-      widget.service.description,
-      getUnformattedPrice(widget.service.price),
-      !currentStatus,
-      widget.service.duration
-    );
+        widget.service.id,
+        widget.service.name,
+        widget.service.description,
+        getUnformattedPrice(widget.service.price),
+        !currentStatus,
+        widget.service.duration);
+    setState(() {
+      _currentStatus = !_currentStatus!;
+    });
   }
 
   @override
@@ -178,7 +182,8 @@ class _ServiceDetailPageState extends State<ServiceDetailPage> {
                           children: [
                             SectionTopDetailService(service: widget.service),
                             SizedBox(height: 16),
-                            if (isUserLoaded && userId != widget.service.userId) ...[
+                            if (isUserLoaded &&
+                                userId != widget.service.userId) ...[
                               SectionBarasseurDetailService(
                                   service: widget.service),
                               SizedBox(height: 16),
@@ -248,37 +253,32 @@ class _ServiceDetailPageState extends State<ServiceDetailPage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        CupertinoButton(
-                            color: widget.service.status
-                                ? Colors.red
-                                : Colors.green,
-                            minSize: 0,
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 12, horizontal: 20),
-                            onPressed: () async {
-                              await _updateServiceStatus(widget.service.status);
+                        Text(
+                          _currentStatus! ? 'Active' : 'Non-Active',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                        Switch(
+                          value: _currentStatus!,
+                          onChanged: (value) async {
+                            await _updateServiceStatus(_currentStatus!);
+                          },
+                          activeColor: theme.primaryColor,
+                          inactiveThumbColor:
+                              theme.primaryColor.withOpacity(0.4),
+                          inactiveTrackColor: Colors.grey[300],
+                          trackOutlineColor: MaterialStateProperty.resolveWith(
+                            (final Set<MaterialState> states) {
+                              if (states.contains(MaterialState.selected)) {
+                                return null;
+                              }
+                              return Colors.grey[300];
                             },
-                            child: Row(
-                              children: [
-                                Icon(
-                                  widget.service.status
-                                      ? CupertinoIcons.xmark
-                                      : CupertinoIcons.check_mark,
-                                  color: Colors.white,
-                                ),
-                                const SizedBox(width: 10),
-                                Text(
-                                  widget.service.status
-                                      ? 'Deactivate'
-                                      : 'Activate',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            )),
+                          ),
+                        ),
                       ],
                     ),
                   ),

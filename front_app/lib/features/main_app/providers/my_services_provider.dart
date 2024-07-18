@@ -139,7 +139,7 @@ class MyServicesProvider extends ChangeNotifier {
   }
 
   Future<void> updateMyServiceStatus(String id, String name, String description,
-      int price, bool status, int duration) async {
+      double price, bool status, int duration) async {
     isLoading = true;
     _safeNotifyListeners();
     try {
@@ -151,7 +151,7 @@ class MyServicesProvider extends ChangeNotifier {
         'status': status,
         'duration': duration
       };
-      debugPrint('Data: $_data');
+      debugPrint('Data: ${jsonEncode(_data)}');
       Response res = await _http.put('${ApiEndpoint.services}/$id',
           data: jsonEncode(_data));
       if (res.statusCode == 200) {
