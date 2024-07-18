@@ -263,6 +263,10 @@ func GetRoomMessages(c *fiber.Ctx) error {
 		})
 	}
 
+	if len(messagesOutput) == 0 {
+		messagesOutput = []Message{}
+	}
+
 	// Mark all messages as seen
 	for _, m := range messages {
 		if m.ReceiverID == userID {
