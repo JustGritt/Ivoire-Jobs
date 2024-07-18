@@ -29,6 +29,7 @@ type Config struct {
 	S3               S3Config     `json:"s3"`
 	Stripe           StripeConfig `json:"stripe"`
 	FCM              FCMConfig    `json:"fcm"`
+	Google           string       `env:"GOOGLE_APPLICATION_CREDENTIALS"`
 }
 
 // IsProd Checks if env is production
@@ -46,7 +47,7 @@ func LoadConfig() {
 	fmt.Println("Loading .env file from ", environmentPath)
 
 	if err := godotenv.Load(environmentPath); err != nil {
-		log.Fatal("Error loading .env file")  
+		log.Fatal("Error loading .env file")
 		log.Fatal(err)
 	}
 }
@@ -71,5 +72,6 @@ func GetConfig() Config {
 		S3:               GetS3Config(),
 		Stripe:           GetStripeConfig(),
 		FCM:              GetFCMConfig(),
+		Google:           os.Getenv("GOOGLE_CONTENT"),
 	}
 }
