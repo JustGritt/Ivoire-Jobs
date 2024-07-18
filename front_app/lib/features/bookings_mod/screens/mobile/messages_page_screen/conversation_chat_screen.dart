@@ -116,38 +116,42 @@ class _ConversationChatScreenState extends State<ConversationChatScreen> {
       body:
           BlocBuilder<MessagingChatsMessagesBloc, MessagingChatsMessagesState>(
         builder: (context, state) {
-          if (state is MessagingRoomMessagesLoading) {
+          if (state is MessagingRoomMessagesLoading ||
+              state is MessagingRoomMessagesInitial) {
             return Center(child: CircularProgressIndicator());
           }
           if (state is MessagingRoomMessagesError) {
             return Center(child: Text('Error: ${state.message}'));
           }
-          return Chat(
-            messages: ((state as MessagingRoomMessagesLoaded).messages)
-                .reversed
-                .toList(),
-            onSendPressed: _handleSendPressed,
-            showUserNames: true,
-            theme: DefaultChatTheme(
-              backgroundColor: theme.scaffoldBackgroundColor,
-              inputBackgroundColor: theme.primaryColor,
-              primaryColor: theme.primaryColor,
-              secondaryColor: theme.secondaryHeaderColor,
-            ),
-            textMessageBuilder: (
-              textMessage, {
-              messageWidth = 0,
-              showName = false,
-            }) {
-              return DefaultTextMessageWidget(
-                textMessage,
-                messageWidth: messageWidth,
-                showName: showName,
-                context: context,
-              );
-            },
-            user: user,
-          );
+          if (state is MessagingRoomMessagesLoaded) {
+            return Chat(
+              messages: ((state as MessagingRoomMessagesLoaded).messages)
+                  .reversed
+                  .toList(),
+              onSendPressed: _handleSendPressed,
+              showUserNames: true,
+              theme: DefaultChatTheme(
+                backgroundColor: theme.scaffoldBackgroundColor,
+                inputBackgroundColor: theme.primaryColor,
+                primaryColor: theme.primaryColor,
+                secondaryColor: theme.secondaryHeaderColor,
+              ),
+              textMessageBuilder: (
+                textMessage, {
+                messageWidth = 0,
+                showName = false,
+              }) {
+                return DefaultTextMessageWidget(
+                  textMessage,
+                  messageWidth: messageWidth,
+                  showName: showName,
+                  context: context,
+                );
+              },
+              user: user,
+            );
+          }
+          return Container();
         },
       ),
     );

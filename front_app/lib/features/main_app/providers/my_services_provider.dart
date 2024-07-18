@@ -10,7 +10,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:dio/dio.dart';
-import 'dart:developer';
 
 AppCache appCache = serviceLocator<AppCache>();
 AppContext appContext = serviceLocator<AppContext>();
@@ -37,11 +36,9 @@ class MyServicesProvider extends ChangeNotifier {
 
   Future<void> getAll() async {
     isLoading = true;
-    hasNoServices = false;
     _safeNotifyListeners();
     try {
       final user = await appCache.getUser();
-      inspect(user);
       if (user == null) {
         isLoading = false;
         _safeNotifyListeners();
@@ -82,6 +79,11 @@ class MyServicesProvider extends ChangeNotifier {
       isLoading = false;
       _safeNotifyListeners();
     }
+  }
+
+  void addService(ServiceCreatedModel service) {
+    _serviceModel.add(service);
+    _safeNotifyListeners();
   }
 
   Future<void> filterServices(String filter) async {
