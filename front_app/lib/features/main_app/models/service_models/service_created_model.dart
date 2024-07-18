@@ -11,7 +11,7 @@ class ServiceCreatedModel {
   final String name;
   final String description;
   final String price;
-  final bool status;
+  late final bool status;
   final int duration;
   final bool isBanned;
   final double latitude;
@@ -66,5 +66,27 @@ class ServiceCreatedModel {
       category:
           (json['category'] as List<dynamic>).map((e) => e.toString()).toList(),
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'userId': userId,
+      'name': name,
+      'description': description,
+      'price': price,
+      'status': status,
+      'duration': duration,
+      'isBanned': isBanned,
+      'latitude': latitude,
+      'longitude': longitude,
+      'address': "$address",
+      'city': city,
+      'postalCode': postalCode,
+      'country': country,
+      'images': images,
+      'createdAt': createdAt,
+      'category': category,
+    };
   }
 }

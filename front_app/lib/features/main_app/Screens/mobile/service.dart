@@ -100,7 +100,7 @@ class _ServiceState extends State<Service> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => ServiceDetailPage(service: np.services[index]),
+                            builder: (context) => ServiceDetailPage(service: np.myServices[index]),
                           ),
                         );
                       },
