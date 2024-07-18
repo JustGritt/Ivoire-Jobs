@@ -17,6 +17,18 @@ class ServicesHelper {
     return formattedPrice;
   }
 
+  static double getUnformattedPrice(dynamic price) {
+    double _price = 0;
+    if (price is int) {
+      _price = price.toDouble();
+    } else if (price is double) {
+      _price = price;
+    } else if (price is String) {
+      _price = double.parse(price);
+    }
+    return _price;
+  }
+
   static Color getColorStatus(bool status) {
     return status ? Colors.green : AppColors.greyFair;
   }

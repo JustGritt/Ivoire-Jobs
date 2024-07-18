@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:barassage_app/features/main_app/models/service_models/service_category_model.dart';
 import 'package:barassage_app/features/main_app/models/service_models/service_created_model.dart';
 import 'package:barassage_app/core/helpers/utils_helper.dart';
@@ -127,6 +129,33 @@ class MyServicesProvider extends ChangeNotifier {
       if (e.response?.statusCode == 404) {
         _serviceModel = [];
         hasNoServices = true;
+      }
+    } catch (e) {
+      print(e);
+    } finally {
+      isLoading = false;
+      _safeNotifyListeners();
+    }
+  }
+
+  Future<void> updateMyServiceStatus(String id, String name, String description,
+      double price, bool status, int duration) async {
+    isLoading = true;
+    _safeNotifyListeners();
+    try {
+      final user = await appCache.getUser();
+      Map<String, dynamic> _data = {
+        'name': name.toString(),
+        'description': description.toString(),
+        'price': price,
+        'status': status,
+        'duration': duration
+      };
+      debugPrint('Data: ${jsonEncode(_data)}');
+      Response res = await _http.put('${ApiEndpoint.services}/$id',
+          data: jsonEncode(_data));
+      if (res.statusCode == 200) {
+        getMyServices();
       }
     } catch (e) {
       print(e);

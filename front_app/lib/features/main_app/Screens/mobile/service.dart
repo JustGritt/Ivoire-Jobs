@@ -1,3 +1,4 @@
+import 'package:barassage_app/features/main_app/Screens/mobile/services_details.dart';
 import 'package:barassage_app/features/main_app/widgets/services/my_service_slidable_item.dart';
 import 'package:barassage_app/features/main_app/widgets/services/my_service_item.dart';
 import 'package:barassage_app/features/main_app/providers/my_services_provider.dart';
@@ -95,6 +96,14 @@ class _ServiceState extends State<Service> {
                     },
                     child: MyServiceItem(
                       serviceModel: np.myServices[index],
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ServiceDetailPage(service: np.myServices[index]),
+                          ),
+                        );
+                      },
                     ));
               },
             );
