@@ -21,7 +21,12 @@ class TrendingServicesList extends StatelessWidget {
       itemCount: services.length,
       shrinkWrap: true,
       itemBuilder: (context, index) {
-        return TrendingService(service: services[index]);
+        return index == 0
+            ? Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: TrendingService(service: services[index]),
+              )
+            : TrendingService(service: services[index]);
       },
     );
   }
