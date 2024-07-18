@@ -38,7 +38,7 @@ func CheckAppStatus() fiber.Handler {
 				errorList,
 				&fiber.Error{
 					Code:    http.StatusServiceUnavailable,
-					Message: "Service is currently under maintenance",
+					Message: "SERVICE_CURRENTLY_UNDER_MAINTENANCE",
 				},
 			)
 			whiteList, err := configRepo.GetByKey("whitelist")
