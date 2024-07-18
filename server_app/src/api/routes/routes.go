@@ -14,12 +14,6 @@ import (
 	swagger "github.com/gofiber/swagger"
 )
 
-//go:embed index.html
-var indexHTML string
-
-//go:embed message.html
-var messageHTML string
-
 // SetupRoutes setups router
 func SetupRoutes(app *fiber.App) {
 
@@ -145,12 +139,4 @@ func SetupRoutes(app *fiber.App) {
 	dashboard := v1.Group("/dashboard")
 	dashboard.Get("/stats", ctl.GetDashboardStats)
 
-	// Serve the embedded HTML file at /test
-	app.Get("/test", func(c *fiber.Ctx) error {
-		return c.Type("html").SendString(indexHTML)
-	})
-
-	app.Get("/message", func(c *fiber.Ctx) error {
-		return c.Type("html").SendString(messageHTML)
-	})
 }
