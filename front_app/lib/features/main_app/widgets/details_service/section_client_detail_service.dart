@@ -1,6 +1,9 @@
+import 'package:barassage_app/features/main_app/widgets/details_service/report_dialog.dart' as report_dialog;
 import 'package:barassage_app/features/main_app/models/service_models/service_created_model.dart';
+import 'package:barassage_app/features/main_app/providers/reports_service_provider.dart';
 import 'package:barassage_app/config/config.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
 class SectionBarasseurDetailService extends StatefulWidget {
@@ -14,7 +17,39 @@ class SectionBarasseurDetailService extends StatefulWidget {
 
 class _SectionBarasseurDetailServiceState
     extends State<SectionBarasseurDetailService> {
-  int hours = 0;
+  TextEditingController _reportController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+
+  @override
+  void dispose() {
+    _reportController.dispose();
+    super.dispose();
+  }
+
+  void _showReportDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return report_dialog.ReportDialog(
+          title: "Report Service",
+          description: "Enter the reason for the report",
+          onCancel: () {
+            Navigator.of(context).pop();
+          },
+          onConfirm: () {
+            if (_formKey.currentState?.validate() ?? false) {
+              String reportReason = _reportController.text;
+              Provider.of<ReportsServiceProvider>(context, listen: false)
+                  .submitReport(widget.service.id, reportReason);
+              Navigator.of(context).pop();
+            }
+          },
+          formKey: _formKey,
+          reportController: _reportController,
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +68,7 @@ class _SectionBarasseurDetailServiceState
               fontSize: 16,
             ),
           ),
-          SizedBox(height: 10),
+          SizedBox(height: 16),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -41,15 +76,15 @@ class _SectionBarasseurDetailServiceState
                 children: [
                   Container(
                     clipBehavior: Clip.antiAlias,
-                    margin: const EdgeInsets.only(right: 10),
+                    margin: const EdgeInsets.only(right: 16),
                     decoration: BoxDecoration(
                       color: Colors.grey[200],
-                      borderRadius: BorderRadius.circular(90),
+                      borderRadius: BorderRadius.circular(40),
                     ),
                     child: Image.network(
                       widget.service.images.first,
-                      width: 70,
-                      height: 70,
+                      width: 72,
+                      height: 72,
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -89,16 +124,34 @@ class _SectionBarasseurDetailServiceState
                   ),
                 ],
               ),
-              CupertinoButton(
-                color: AppColors.greyLight,
-                minSize: 0,
-                borderRadius: BorderRadius.circular(90),
-                padding: EdgeInsets.all(8),
-                onPressed: () {},
-                child: Icon(
-                  CupertinoIcons.mail_solid,
-                  color: theme.primaryColor,
-                ),
+              Row(
+                children: [
+                  CupertinoButton(
+                    color: Colors.red[600],
+                    minSize: 0,
+                    borderRadius: BorderRadius.circular(40),
+                    padding: EdgeInsets.all(12),
+                    onPressed: _showReportDialog,
+                    child: Icon(
+                      size: 16,
+                      CupertinoIcons.flag_fill,
+                      color: Colors.grey[100],
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  CupertinoButton(
+                    color: AppColors.greyLight,
+                    minSize: 0,
+                    borderRadius: BorderRadius.circular(40),
+                    padding: EdgeInsets.all(12),
+                    onPressed: () {},
+                    child: Icon(
+                      size: 16,
+                      CupertinoIcons.mail_solid,
+                      color: theme.primaryColor,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

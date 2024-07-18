@@ -16,83 +16,69 @@ class _SectionTopDetailServiceState extends State<SectionTopDetailService> {
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              widget.service.category.first,
-              style: const TextStyle(
-                color: Colors.grey,
-                fontSize: 16,
-              ),
-            ),
-            const SizedBox(height: 6),
-            Text(
-              widget.service.name,
-              style: const TextStyle(
-                color: Colors.black,
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
-        Row(
-          children: [
-            // CupertinoButton(
-            //   color: AppColors.greyLight,
-            //   minSize: 0,
-            //   padding: EdgeInsets.all(8),
-            //   onPressed: () {
-            //     if (hours > 0) {
-            //       setState(() {
-            //         hours--;
-            //       });
-            //     }
-            //   },
-            //   child: const Icon(
-            //     Icons.remove,
-            //     color: Colors.black,
-            //   ),
-            // ),
-            SizedBox(
-              width: 15,
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              decoration: BoxDecoration(
-                color: theme.primaryColor,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Text(
-                '${widget.service.duration}'.durationToTime,
-                style: TextStyle(
-                  color: theme.scaffoldBackgroundColor,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Icon(
+                      Icons.category,
+                      color: Colors.grey,
+                      size: 20,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      widget.service.category.first,
+                      style: const TextStyle(
+                        color: Colors.grey,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ],
                 ),
-              ),
+                const SizedBox(height: 8),
+                Text(
+                  widget.service.name,
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    overflow: TextOverflow.visible,
+                  ),
+                ),
+              ],
             ),
-            // SizedBox(width: 15,),
-            // CupertinoButton(
-            //   color: AppColors.primaryBlue,
-            //   minSize: 0,
-            //   padding: EdgeInsets.all(8),
-            //   onPressed: () {
-            //     setState(() {
-            //       hours++;
-            //     });
-            //   },
-            //   child: const Icon(
-            //     Icons.add,
-            //     color: AppColors.white,
-            //   ),
-            // ),
-          ],
-        )
-      ],
+          ),
+          const SizedBox(width: 16),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            decoration: BoxDecoration(
+              color: theme.primaryColor,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.timer,
+                  color: theme.scaffoldBackgroundColor,
+                  size: 16,
+                ),
+                const SizedBox(width: 4),
+                Text(
+                  '${widget.service.duration}'.durationToTime,
+                  style: TextStyle(
+                    color: theme.scaffoldBackgroundColor,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
     );
   }
 }
