@@ -216,100 +216,112 @@ class _ManageCategoriesScreenState extends State<ManageCategoriesScreen> {
                         return const Center(
                             child: Text('No categories available'));
                       } else {
-                        return Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: GridView.builder(
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3,
-                              crossAxisSpacing: 10,
-                              mainAxisSpacing: 10,
-                            ),
-                            itemCount: _filteredCategories.length,
-                            itemBuilder: (context, index) {
-                              final category = _filteredCategories[index];
-                              return ConstrainedBox(
-                                constraints: const BoxConstraints(
-                                  maxHeight: 300,
+                        return LayoutBuilder(
+                          builder: (context, constraints) {
+                            int crossAxisCount = constraints.maxWidth > 1280
+                                ? 4
+                                : constraints.maxWidth > 1024
+                                    ? 3
+                                    : constraints.maxWidth > 635
+                                        ? 2
+                                        : 1;
+                            return Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: GridView.builder(
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: crossAxisCount,
+                                  crossAxisSpacing: 10,
+                                  mainAxisSpacing: 10,
+                                  childAspectRatio: 3,
                                 ),
-                                child: Card(
-                                  color: Colors.grey[100],
-                                  elevation: 4,
-                                  shadowColor: Colors.grey.withOpacity(0.4),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(12.0),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Container(
-                                              padding: const EdgeInsets.all(8.0),
-                                              decoration: BoxDecoration(
-                                                color: theme.primaryColor
-                                                    .withOpacity(0.1),
-                                                borderRadius:
-                                                    BorderRadius.circular(5),
-                                              ),
-                                              child: Icon(
-                                                Icons.category,
-                                                color: theme.primaryColor,
-                                                size: 20,
-                                              ),
-                                            ),
-                                            const SizedBox(width: 8),
-                                            Expanded(
-                                              child: Text(
-                                                category.name,
-                                                style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: primary,
+                                itemCount: _filteredCategories.length,
+                                itemBuilder: (context, index) {
+                                  final category = _filteredCategories[index];
+                                  return Card(
+                                    color: Colors.grey[100],
+                                    margin: const EdgeInsets.symmetric(
+                                        vertical: 8.0),
+                                    elevation: 4,
+                                    shadowColor: Colors.grey.withOpacity(0.4),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(12.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Container(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                decoration: BoxDecoration(
+                                                  color: theme.primaryColor
+                                                      .withOpacity(0.1),
+                                                  borderRadius:
+                                                      BorderRadius.circular(5),
                                                 ),
-                                                overflow: TextOverflow.ellipsis,
+                                                child: Icon(
+                                                  Icons.category,
+                                                  color: theme.primaryColor,
+                                                  size: 20,
+                                                ),
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                        const Spacer(),
-                                        Row(
-                                          children: [
-                                            Icon(
-                                              category.status
-                                                  ? Icons.check_circle
-                                                  : Icons.cancel,
-                                              color: category.status
-                                                  ? Colors.green
-                                                  : Colors.red,
-                                              size: 16,
-                                            ),
-                                            const SizedBox(width: 4),
-                                            Text(
-                                              category.status
-                                                  ? 'Active'
-                                                  : 'Inactive',
-                                              style: theme.textTheme.bodyMedium
-                                                  ?.copyWith(
-                                                fontSize: 14,
+                                              const SizedBox(width: 8),
+                                              Expanded(
+                                                child: Text(
+                                                  category.name,
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: primary,
+                                                  ),
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          const Spacer(),
+                                          Row(
+                                            children: [
+                                              Icon(
+                                                category.status
+                                                    ? Icons.check_circle
+                                                    : Icons.cancel,
                                                 color: category.status
                                                     ? Colors.green
                                                     : Colors.red,
+                                                size: 16,
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
+                                              const SizedBox(width: 4),
+                                              Text(
+                                                category.status
+                                                    ? 'Active'
+                                                    : 'Inactive',
+                                                style: theme
+                                                    .textTheme.bodyMedium
+                                                    ?.copyWith(
+                                                  fontSize: 14,
+                                                  color: category.status
+                                                      ? Colors.green
+                                                      : Colors.red,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
+                                  );
+                                },
+                              ),
+                            );
+                          },
                         );
                       }
                     },
