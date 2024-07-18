@@ -162,12 +162,10 @@ func GetRooms(c *fiber.Ctx) error {
 		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
+	fmt.Println(rooms)
 	var roomsOutput []RoomOutput
 	for _, r := range rooms {
 		roomsOutput = append(roomsOutput, mapRoomToOutput(r))
-	}
-	if len(roomsOutput) == 0 {
-		roomsOutput = []RoomOutput{}
 	}
 
 	return c.Status(http.StatusOK).JSON(HTTPResponse(http.StatusOK, "Rooms", roomsOutput))
