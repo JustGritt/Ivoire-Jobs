@@ -5,10 +5,10 @@ import (
 	"barassage/api/models/user"
 	notifRepo "barassage/api/repositories/notificationPreference"
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"log"
-	"os"
 
 	firebase "firebase.google.com/go/v4"
 	"firebase.google.com/go/v4/messaging"
@@ -29,27 +29,33 @@ var notif *messaging.Client
 
 // InitFCM initializes the FCM client
 func InitFCM() *messaging.Client {
-	cfg := configs.GetConfig().Google
+	cfg := configs.GetConfig().FCM
 	ctx := context.Background()
-	fmt.Println("Google application credentials: ", cfg)
 
-	tmpFile, err := os.CreateTemp("", "serviceAccountKey-.json")
+	credentials := map[string]string{
+		"type":                        cfg.Type,
+		"project_id":                  cfg.ProjectId,
+		"private_key_id":              cfg.PrivateId,
+		"private_key":                 cfg.PrivateKey,
+		"client_email":                cfg.ClientEmail,
+		"client_id":                   cfg.ClientId,
+		"auth_uri":                    cfg.AuthUri,
+		"token_uri":                   cfg.TokenUri,
+		"auth_provider_x509_cert_url": cfg.AuthProviderX509CertUrl,
+		"client_x509_cert_url":        cfg.ClientX509CertUrl,
+		"universe_domain":             cfg.UniverseDomain,
+	}
+
+	// Marshal the credentials map to JSON
+	credentialsJSON, err := json.Marshal(credentials)
 	if err != nil {
-		log.Println("error creating temporary file")
-	}
-	defer os.Remove(tmpFile.Name()) // Clean up the file afterwards
-
-	if _, err := tmpFile.Write([]byte(cfg)); err != nil {
-		log.Println("error writing to temporary file")
-	}
-	if err := tmpFile.Close(); err != nil {
-		log.Println("error closing temporary file")
+		log.Fatalf("error marshaling credentials: %v", err)
 	}
 
-	opt := option.WithCredentialsFile(tmpFile.Name())
-	app, err := firebase.NewApp(context.Background(), nil, opt)
+	// Initialize Firebase App
+	app, err := firebase.NewApp(ctx, nil, option.WithCredentialsJSON(credentialsJSON))
 	if err != nil {
-		log.Println("error initializing app")
+		log.Fatalf("error initializing Firebase app: %v", err)
 	}
 
 	client, err := app.Messaging(ctx)
