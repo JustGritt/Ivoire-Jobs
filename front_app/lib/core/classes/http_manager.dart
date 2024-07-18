@@ -51,7 +51,7 @@ class HttpManager {
         return handler.next(response);
       },
       onError: (DioError e, handler) {
-        if (DioExceptionHandler(e).title == "SERVICE_CURRENTLY_UNDER_MAINTENANCE") {
+        if (DioExceptionHandler(e).title == "SERVICE_CURRENTLY_UNDER_MAINTENANCE" && !kIsWeb) {
           HandleMaintenance(serviceLocator<AppContext>().navigatorContext);
         }
         return handler.next(e);
