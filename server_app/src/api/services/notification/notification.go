@@ -6,7 +6,6 @@ import (
 	notifRepo "barassage/api/repositories/notificationPreference"
 	"context"
 	"encoding/base64"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"log"
@@ -39,28 +38,24 @@ func InitFCM() *messaging.Client {
 	}
 	privateKey := string(privateKeyBytes)
 
-	credentials := map[string]string{
-		"type":                        cfg.Type,
-		"project_id":                  cfg.ProjectId,
-		"private_key_id":              cfg.PrivateId,
-		"private_key":                 privateKey,
-		"client_email":                cfg.ClientEmail,
-		"client_id":                   cfg.ClientId,
-		"auth_uri":                    cfg.AuthUri,
-		"token_uri":                   cfg.TokenUri,
-		"auth_provider_x509_cert_url": cfg.AuthProviderX509CertUrl,
-		"client_x509_cert_url":        cfg.ClientX509CertUrl,
-		"universe_domain":             cfg.UniverseDomain,
-	}
+	credentialsJSON := fmt.Sprintf(`{
+		"type": "%s",
+		"project_id": "%s",
+		"private_key_id": "%s",
+		"private_key": "%s",
+		"client_email": "%s",
+		"client_id": "%s",
+		"auth_uri": "%s",
+		"token_uri": "%s",
+		"auth_provider_x509_cert_url": "%s",
+		"client_x509_cert_url": "%s",
+		"universe_domain": "%s"
+	}`, cfg.Type, cfg.ProjectId, cfg.PrivateId, privateKey, cfg.ClientEmail, cfg.ClientId, cfg.AuthUri, cfg.TokenUri, cfg.AuthProviderX509CertUrl, cfg.ClientX509CertUrl, cfg.UniverseDomain)
 
-	// Marshal the credentials map to JSON
-	credentialsJSON, err := json.Marshal(credentials)
-	if err != nil {
-		log.Fatalf("error marshaling credentials: %v", err)
-	}
+	fmt.Println(credentialsJSON)
 
 	// Initialize Firebase App
-	app, err := firebase.NewApp(ctx, nil, option.WithCredentialsJSON(credentialsJSON))
+	app, err := firebase.NewApp(ctx, nil, option.WithCredentialsJSON([]byte(credentialsJSON)))
 	if err != nil {
 		log.Fatalf("error initializing Firebase app: %v", err)
 	}
