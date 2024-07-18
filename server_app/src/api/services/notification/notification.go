@@ -52,8 +52,6 @@ func InitFCM() *messaging.Client {
 		"universe_domain": "%s"
 	}`, cfg.Type, cfg.ProjectId, cfg.PrivateId, privateKey, cfg.ClientEmail, cfg.ClientId, cfg.AuthUri, cfg.TokenUri, cfg.AuthProviderX509CertUrl, cfg.ClientX509CertUrl, cfg.UniverseDomain)
 
-	fmt.Println(credentialsJSON)
-
 	// Initialize Firebase App
 	app, err := firebase.NewApp(ctx, nil, option.WithCredentialsJSON([]byte(credentialsJSON)))
 	if err != nil {
