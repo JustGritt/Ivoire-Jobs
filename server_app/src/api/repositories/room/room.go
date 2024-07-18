@@ -2,6 +2,7 @@ package room
 
 import (
 	// user model
+	"barassage/api/models/message"
 	"barassage/api/models/room"
 
 	// db
@@ -54,14 +55,29 @@ func CreateOrGetRoom(u room.Room) (*room.Room, error) {
 
 func GetRoomsForUser(userID string) ([]room.Room, error) {
 	var rooms []room.Room
-	// Find the unique rooms by user ID where at least one message has been seen
-	if err := db.PgDB.Preload("Messages").
-		Joins("JOIN messages ON messages.room_id = rooms.id").
-		Where("(rooms.creator_id = ? OR rooms.client_id = ?) AND messages.seen = ?", userID, userID, false).
-		Group("rooms.id").
+
+	// Find the rooms where the user is either the creator or the client
+	if err := db.PgDB.
+		Where("creator_id = ? OR client_id = ?", userID, userID).
 		Find(&rooms).Error; err != nil {
 		return nil, err
 	}
+
+	// Preload messages for these rooms
+	for i := range rooms {
+		var messages []message.Message
+		if err := db.PgDB.
+			Where("room_id = ?", rooms[i].ID).
+			Find(&messages).Error; err != nil {
+			return nil, err
+		}
+		if len(messages) > 0 {
+			rooms[i].Messages = messages
+		} else {
+			rooms[i].Messages = nil
+		}
+	}
+
 	return rooms, nil
 }
 
