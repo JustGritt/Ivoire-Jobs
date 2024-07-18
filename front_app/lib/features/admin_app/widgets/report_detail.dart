@@ -71,7 +71,17 @@ class _ReportDetailsScreenState extends State<ReportDetailsScreen> {
                   children: <Widget>[
                     ElevatedButton(
                       onPressed: () {
-                        print('Removing report...');
+                        final reportProvider = Provider.of<ReportsProvider>(
+                            context,
+                            listen: false);
+                        reportProvider
+                            .deleteReport(widget.report.id)
+                            .then((_) {
+                          Navigator.of(context).pop();
+                        }).catchError((error) {
+                          print('Error deleting report: $error');
+                        });
+                        print('Deleting report... ${widget.report.id}');
                       },
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
