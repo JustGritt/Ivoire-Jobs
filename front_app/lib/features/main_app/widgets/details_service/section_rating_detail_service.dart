@@ -41,9 +41,8 @@ class _SectionRatingDetailServiceState
           return Center(child: Text('Error: ${snapshot.error}'));
         } else if (snapshot.hasData && snapshot.data!.isEmpty) {
           return Padding(
-            padding: const EdgeInsets.only(top: 16.0),
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
@@ -74,7 +73,7 @@ class _SectionRatingDetailServiceState
                 child: Text(
                   'Ratings (${ratings.length})',
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -82,10 +81,14 @@ class _SectionRatingDetailServiceState
               ListView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
+                padding: EdgeInsets.zero,
                 itemCount: ratings.length,
                 itemBuilder: (context, index) {
                   final rating = ratings[index];
-                  return RatingCard(rating: rating);
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4.0),
+                    child: RatingCard(rating: rating),
+                  );
                 },
               ),
             ],

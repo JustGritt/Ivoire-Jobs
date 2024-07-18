@@ -64,6 +64,7 @@ class ApiEndpoint {
   static const bookingServices = '/booking';
   static const bookings = '/booking/collection';
   // Reports Endpoints
+  static const report = '${api}/report';
   static const reports = '${api}/report/pending';
   static const reportsDetails = '${api}/report/:id';
   // Ban Endpoints
