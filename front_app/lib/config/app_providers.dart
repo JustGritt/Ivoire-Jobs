@@ -10,6 +10,7 @@ import 'package:barassage_app/features/admin_app/providers/bookings_provider.dar
 import 'package:barassage_app/features/admin_app/providers/reports_provider.dart';
 import 'package:barassage_app/features/main_app/providers/ratings_provider.dart';
 import 'package:barassage_app/core/classes/language_provider.dart';
+import 'package:barassage_app/features/main_app/providers/reports_service_provider.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:provider/provider.dart';
 import '../core/core.dart';
@@ -59,6 +60,9 @@ List<SingleChildWidget> appProviders = [
   ),
   ChangeNotifierProvider<BookingsProvider>(
     create: (context) => BookingsProvider(),
+  ),
+  ChangeNotifierProvider<ReportsServiceProvider>(
+    create: (context) => ReportsServiceProvider(),
   ),
   ChangeNotifierProvider<bookingsProviderAll.BookingServicesProvider>(
     create: (context) => bookingsProviderAll.BookingServicesProvider(),
