@@ -1,6 +1,8 @@
 import 'package:barassage_app/features/admin_app/models/banned_user.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:barassage_app/features/admin_app/providers/banned_users_provider.dart';
 
 class BannedUserCard extends StatelessWidget {
   final BannedUser bannedUser;
@@ -58,26 +60,35 @@ class BannedUserCard extends StatelessWidget {
             Positioned(
               top: 0,
               right: 0,
-              child: ElevatedButton(
-                onPressed: () {
-                  // TODO: Handle unban user
-                  print('Unbanning user...');
+              child: Consumer<BannedUsersProvider>(
+                builder: (context, provider, child) {
+                  return ElevatedButton(
+                    onPressed: !provider.isLoading ? () async {
+                      await provider.unbanUser(bannedUser.userId);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('User ${bannedUser.userId} has been unbanned.'),
+                        ),
+                      );
+                    } : null,
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                      backgroundColor: Colors.redAccent,
+                      shadowColor: Colors.redAccent,
+                      foregroundColor: Colors.white,
+                      textStyle: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    child: provider.isLoading
+                      ? CircularProgressIndicator(color: Colors.white)
+                      : const Text('Unban'),
+                  );
                 },
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  backgroundColor: Colors.redAccent,
-                  shadowColor: Colors.redAccent,
-                  foregroundColor: Colors.white,
-                  textStyle: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                child: const Text('Unban'),
               ),
             ),
           ],

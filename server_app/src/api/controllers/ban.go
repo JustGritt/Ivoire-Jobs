@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"barassage/api/models/ban"
+	"fmt"
 
 	banRepo "barassage/api/repositories/ban"
 	userRepo "barassage/api/repositories/user"
@@ -171,21 +172,7 @@ func GetAllBans(c *fiber.Ctx) error {
 func DeleteBan(c *fiber.Ctx) error {
 	var errorList []*fiber.Error
 	banID := c.Params("id")
-	//chek if the ban exists
-	isBanned := banRepo.IsAlreadyDeleted(banID)
-	if isBanned {
-		errorList = append(errorList, &fiber.Error{
-			Code:    http.StatusBadRequest,
-			Message: "Already deleted",
-		})
-		_ = CreateLog(&LogObject{
-			Level:      "warn",
-			Type:       "Ban",
-			Message:    "Ban already deleted with ID: " + banID,
-			RequestURI: c.OriginalURL(),
-		})
-		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
-	}
+	fmt.Println(banID)
 
 	if err := banRepo.Delete(banID); err != nil {
 		errorList = append(errorList, &fiber.Error{
