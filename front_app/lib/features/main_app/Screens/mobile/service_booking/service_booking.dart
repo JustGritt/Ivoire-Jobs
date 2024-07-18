@@ -1,4 +1,3 @@
-import 'package:barassage_app/features/main_app/models/service_models/booking_service_model/booking_service_created_model.dart';
 import 'package:barassage_app/features/main_app/models/service_models/booking_service_model/booking_service_create_model.dart';
 import 'package:barassage_app/features/main_app/Screens/mobile/service_booking/service_booking_success.dart';
 import 'package:barassage_app/features/main_app/Screens/mobile/service_booking/step_location_booking.dart';
@@ -7,7 +6,6 @@ import 'package:barassage_app/features/main_app/Screens/mobile/service_booking/s
 import 'package:barassage_app/features/main_app/models/service_models/service_created_model.dart';
 import 'package:barassage_app/features/main_app/providers/booking_services_provider.dart';
 import 'package:barassage_app/features/main_app/services/booking_service_services.dart';
-import 'package:barassage_app/features/payments/stripe/stripe_service.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:barassage_app/core/widgets/toast_message.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -18,7 +16,6 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'dart:async';
 
 final BookingServiceServices bookingServiceServices =
     serviceLocator<BookingServiceServices>();
@@ -42,18 +39,15 @@ class _ServiceBookingScreenState extends State<ServiceBookingScreen> {
     super.dispose();
   }
 
-  Completer<BookingServiceCreatedModel> _completer =
-      Completer<BookingServiceCreatedModel>();
-
   void _createBooking(BuildContext context,
       BookingServiceCreateModel bookingServiceCreateModel) async {
     final myBookingServiceProvider =
         Provider.of<BookingServicesProvider>(context, listen: false);
+
     try {
       final booking = await myBookingServiceProvider
           .createBooking(bookingServiceCreateModel);
-      final result =
-          await StripeService.presentPaymentSheet(booking.paymentIntent);
+
       context.go(App.serviceBookingSuccess,
           extra: ServiceBookingSuccessModel(
               bookingService: booking, service: widget.service));
@@ -137,8 +131,8 @@ class _ServiceBookingScreenState extends State<ServiceBookingScreen> {
               )),
               Consumer<BookingServicesProvider>(builder: (_, np, __) {
                 return bottomHandlerPage(context,
-                    disabled: isButtonDisabled(form, _currentPage) ||
-                        np.bookingServiceRequest.isLoading,
+                    disabled: np.bookingServiceRequest.isLoading ||
+                        isButtonDisabled(form, _currentPage),
                     text: _currentPage == 2
                         ? appLocalizations.book
                         : appLocalizations.next,

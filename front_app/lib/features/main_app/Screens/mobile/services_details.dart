@@ -30,7 +30,8 @@ class _ServiceDetailPageState extends State<ServiceDetailPage> {
   }
 
   Future<List<Rating>> _fetchRatings() async {
-    final ratingsProvider = Provider.of<RatingsProvider>(context, listen: false);
+    final ratingsProvider =
+        Provider.of<RatingsProvider>(context, listen: false);
     return await ratingsProvider.getServiceRatings(widget.service.id);
   }
 
@@ -66,10 +67,14 @@ class _ServiceDetailPageState extends State<ServiceDetailPage> {
                             builder: (context, snapshot) {
                               double averageRating = 0.0;
                               String ratingDisplay = 'No ratings yet';
-                              if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
+                              if (snapshot.connectionState ==
+                                      ConnectionState.done &&
+                                  snapshot.hasData) {
                                 if (ratingsProvider.ratings.isNotEmpty) {
-                                  averageRating = ratingsProvider.getAverageRating();
-                                  ratingDisplay = averageRating.toStringAsFixed(1);
+                                  averageRating =
+                                      ratingsProvider.getAverageRating();
+                                  ratingDisplay =
+                                      averageRating.toStringAsFixed(1);
                                 }
                               }
                               return FlexibleSpaceBar(
@@ -97,10 +102,12 @@ class _ServiceDetailPageState extends State<ServiceDetailPage> {
                                               horizontal: 15, vertical: 8),
                                           decoration: BoxDecoration(
                                             color: Colors.black54,
-                                            borderRadius: BorderRadius.circular(8),
+                                            borderRadius:
+                                                BorderRadius.circular(8),
                                           ),
                                           child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
                                             children: [
                                               Icon(
                                                 CupertinoIcons.star_fill,
@@ -137,7 +144,8 @@ class _ServiceDetailPageState extends State<ServiceDetailPage> {
                           children: [
                             SectionTopDetailService(service: widget.service),
                             SizedBox(height: 16),
-                            SectionBarasseurDetailService(service: widget.service),
+                            SectionBarasseurDetailService(
+                                service: widget.service),
                             SizedBox(height: 16),
                             Align(
                               alignment: Alignment.centerLeft,
@@ -146,7 +154,8 @@ class _ServiceDetailPageState extends State<ServiceDetailPage> {
                                 children: [
                                   Text(
                                     'Description',
-                                    style: theme.textTheme.labelMedium?.copyWith(
+                                    style:
+                                        theme.textTheme.labelMedium?.copyWith(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 16,
                                     ),
@@ -154,7 +163,8 @@ class _ServiceDetailPageState extends State<ServiceDetailPage> {
                                   SizedBox(height: 10),
                                   Text(
                                     widget.service.description,
-                                    style: theme.textTheme.labelMedium?.copyWith(
+                                    style:
+                                        theme.textTheme.labelMedium?.copyWith(
                                       fontSize: 16,
                                       color: Colors.grey,
                                     ),
@@ -163,7 +173,8 @@ class _ServiceDetailPageState extends State<ServiceDetailPage> {
                               ),
                             ),
                             SizedBox(height: 16),
-                            SectionRatingDetailService(serviceId: widget.service.id),
+                            SectionRatingDetailService(
+                                serviceId: widget.service.id),
                           ],
                         ),
                       ),
@@ -195,7 +206,8 @@ class _ServiceDetailPageState extends State<ServiceDetailPage> {
                   ],
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 8.0, horizontal: 16.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -237,7 +249,8 @@ class _ServiceDetailPageState extends State<ServiceDetailPage> {
                           padding: const EdgeInsets.symmetric(
                               vertical: 12, horizontal: 20),
                           onPressed: () {
-                            context.pushNamed(App.bookingService, extra: widget.service);
+                            context.pushNamed(App.bookingService,
+                                extra: widget.service);
                           },
                           child: Row(
                             children: [
