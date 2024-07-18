@@ -139,7 +139,7 @@ func HandleWebSocket(c *websocket.Conn) {
 	defer removeParticipantFromRoom(room, userID)
 
 	for {
-		mt, message, err := c.ReadMessage()
+		mt, messageContent, err := c.ReadMessage()
 		if err != nil {
 			log.Println("read error:", err)
 			break
@@ -154,13 +154,13 @@ func HandleWebSocket(c *websocket.Conn) {
 		}
 
 		// Save the message to the database
-		err = saveMessage(roomID, userID, receiverID, message)
+		msg, err := saveMessage(roomID, userID, receiverID, messageContent)
 		if err != nil {
 			sendError(c, fmt.Sprintf("Error saving message: %v", err))
 			continue
 		}
 
-		broadcastToRoom(room, mt, message)
+		broadcastToRoom(room, mt, msg)
 	}
 }
 
@@ -197,18 +197,24 @@ func removeParticipantFromRoom(room *Room, userID string) {
 	delete(room.Participants, userID)
 }
 
-func broadcastToRoom(room *Room, messageType int, message []byte) {
+func broadcastToRoom(room *Room, messageType int, msg message.Message) {
 	room.mu.Lock()
 	defer room.mu.Unlock()
 
+	msgJSON, err := json.Marshal(msg)
+	if err != nil {
+		log.Println("Error marshalling message:", err)
+		return
+	}
+
 	for _, conn := range room.Participants {
-		if err := conn.WriteMessage(messageType, message); err != nil {
+		if err := conn.WriteMessage(messageType, msgJSON); err != nil {
 			log.Println("write error:", err)
 		}
 	}
 }
 
-func saveMessage(roomID string, senderID string, receiverID string, content []byte) error {
+func saveMessage(roomID string, senderID string, receiverID string, content []byte) (message.Message, error) {
 	room := getRoom(roomID)
 	room.mu.Lock()
 	defer room.mu.Unlock()
@@ -221,8 +227,10 @@ func saveMessage(roomID string, senderID string, receiverID string, content []by
 		Seen:       len(room.Participants) >= 2,
 	}
 
-	return messageRepo.Create(&msg)
+	err := messageRepo.Create(&msg)
+	return msg, err
 }
+
 func sendError(c *websocket.Conn, errorMsg string) {
 	errMsg := ErrorMessage{Error: errorMsg}
 	errMsgJSON, _ := json.Marshal(errMsg)
