@@ -2,6 +2,8 @@ import 'package:barassage_app/features/admin_app/utils/home_colors.dart';
 import 'package:barassage_app/features/admin_app/models/service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:barassage_app/features/admin_app/providers/banned_services_provider.dart';
 
 class BanCard extends StatelessWidget {
   final Service service;
@@ -10,7 +12,7 @@ class BanCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+      margin: const EdgeInsets.all(8.0),
       color: Colors.grey[100],
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15.0),
@@ -88,9 +90,9 @@ class BanCard extends StatelessWidget {
               top: 0,
               right: 0,
               child: ElevatedButton(
-                onPressed: () {
-                  // TODO: Handle remove ban
-                  print('Removing ban...');
+                onPressed: () async {
+                  final provider = Provider.of<BannedServicesProvider>(context, listen: false);
+                  await provider.unbanService(service.id);
                 },
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(

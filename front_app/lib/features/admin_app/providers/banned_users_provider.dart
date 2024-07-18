@@ -32,4 +32,21 @@ class BannedUsersProvider extends ChangeNotifier {
     }
     return _users;
   }
+
+  Future<void> unbanUser(String id) async {
+    isLoading = true;
+    notifyListeners();
+    try {
+      Response res = await _http.delete('${ApiEndpoint.ban}/$id');
+      print(res.data);
+      _users.removeWhere((user) => user.userId == id);
+      notifyListeners();
+    } catch (e) {
+      errorMessage = "Error unbanning user: $e";
+      notifyListeners();
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
 }
