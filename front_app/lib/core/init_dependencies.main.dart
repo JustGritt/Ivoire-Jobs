@@ -43,6 +43,9 @@ Future<void> _initAuth() async {
     )
     ..registerLazySingleton(
       () => MessagingServices(),
+    )
+    ..registerLazySingleton(
+      () => MessagingChatMessagesServices(),
     );
   // // Bloc
   // ..registerLazySingleton(
