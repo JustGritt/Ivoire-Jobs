@@ -30,7 +30,7 @@ class _MessagingConversationCardState extends State<MessagingConversationCard> {
 
     return CupertinoButton(
       onPressed: () {
-        context.pushNamed(App.messagingChat);
+        context.pushNamed(App.messagingChat, extra: widget.chatRoom);
       },
       minSize: 0,
       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -58,11 +58,7 @@ class _MessagingConversationCardState extends State<MessagingConversationCard> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Text(
-                        widget.chatRoom.messages
-                                .where((msg) => msg.senderId != state.user.id)
-                                .first
-                                .senderFirstname ??
-                            'No Name',
+                        widget.chatRoom.clientName ?? 'No Name',
                         style: TextStyle(
                             color: theme.primaryColorDark,
                             fontSize: 18,
@@ -83,7 +79,7 @@ class _MessagingConversationCardState extends State<MessagingConversationCard> {
                                 )
                               : Container(),
                           Text(
-                            widget.chatRoom.messages.firstOrNull?.content ??
+                            widget.chatRoom.messages.lastOrNull?.content ??
                                 'No Messages'.truncateTo(messageSize),
                             style: theme.textTheme.labelMedium?.copyWith(
                               fontSize: 14,
@@ -104,9 +100,11 @@ class _MessagingConversationCardState extends State<MessagingConversationCard> {
             children: [
               SizedBox(height: 2),
               Text(
-                Jiffy.parse(widget.chatRoom.messages.firstOrNull?.createdAt
-                            .toString() ??
-                        DateTime.now().toString())
+                Jiffy.parse(widget.chatRoom.messages.isEmpty
+                        ? widget.chatRoom.createdAt.toString()
+                        : (widget.chatRoom.messages.lastOrNull?.createdAt
+                                .toString() ??
+                            DateTime.now().toString()))
                     .Hm,
                 style: TextStyle(
                     color: theme.colorScheme.surface,

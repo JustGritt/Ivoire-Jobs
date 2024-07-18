@@ -20,11 +20,11 @@ class _ConversationsPageScreenState extends State<ConversationsPageScreen> {
     context.read<MessagingChatsBloc>().add(GetAllChats());
     super.initState();
   }
+  
 
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: Text('Conversations (18)'),
