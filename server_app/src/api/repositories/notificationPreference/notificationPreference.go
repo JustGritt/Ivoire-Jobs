@@ -25,6 +25,15 @@ func GetByUserID(userID string) (*notificationPreference.NotificationPreference,
 	return notificationPreference, nil
 }
 
+func GetAll() ([]notificationPreference.NotificationPreference, error) {
+	var notificationPreferences []notificationPreference.NotificationPreference
+	if err := db.PgDB.Find(&notificationPreferences).Error; err != nil {
+		return nil, err
+	}
+
+	return notificationPreferences, nil
+}
+
 // Update function updates a notificationPreference
 func Update(notificationPreference *notificationPreference.NotificationPreference) error {
 	return db.PgDB.Save(notificationPreference).Error

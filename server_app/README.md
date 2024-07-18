@@ -50,28 +50,3 @@ chmod +x docker-build.sh
 ```
 
 ---
-
-### Todo
-
-- [ ] Data Migrations ?
-- [ ] Logger
-- [ ] Unit tests
-
-maybe?
-
-- [ ] SMS notification (2FA ,Reset password code)
-- [ ] GraphQL
-- [ ] Deploy on Kubernetes
-- [ ] Write an article
-
----
-
-### Gotcha's
-
-- Building Swago from source code - `go build -o swag.exe cmd/swag/main.go`
-
-### Contribution
-
-Open to Suggestions and Pull Requests
-
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)

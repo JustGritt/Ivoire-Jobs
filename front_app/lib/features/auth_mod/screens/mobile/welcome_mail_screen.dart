@@ -1,5 +1,4 @@
 import 'package:barassage_app/features/auth_mod/widgets/app_button.dart' as btn;
-import 'package:barassage_app/core/helpers/utils_helper.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:barassage_app/architect.dart';
 import 'package:go_router/go_router.dart';

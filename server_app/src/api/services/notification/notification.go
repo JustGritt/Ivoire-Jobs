@@ -5,7 +5,7 @@ import (
 	"barassage/api/models/user"
 	notifRepo "barassage/api/repositories/notificationPreference"
 	"context"
-	"encoding/json"
+	"encoding/base64"
 	"errors"
 	"fmt"
 	"log"
@@ -32,28 +32,28 @@ func InitFCM() *messaging.Client {
 	cfg := configs.GetConfig().FCM
 	ctx := context.Background()
 
-	credentials := map[string]string{
-		"type":                        cfg.Type,
-		"project_id":                  cfg.ProjectId,
-		"private_key_id":              cfg.PrivateId,
-		"private_key":                 cfg.PrivateKey,
-		"client_email":                cfg.ClientEmail,
-		"client_id":                   cfg.ClientId,
-		"auth_uri":                    cfg.AuthUri,
-		"token_uri":                   cfg.TokenUri,
-		"auth_provider_x509_cert_url": cfg.AuthProviderX509CertUrl,
-		"client_x509_cert_url":        cfg.ClientX509CertUrl,
-		"universe_domain":             cfg.UniverseDomain,
-	}
-
-	// Marshal the credentials map to JSON
-	credentialsJSON, err := json.Marshal(credentials)
+	privateKeyBytes, err := base64.StdEncoding.DecodeString(cfg.PrivateKey)
 	if err != nil {
-		log.Fatalf("error marshaling credentials: %v", err)
+		log.Fatalf("error decoding private key: %v", err)
 	}
+	privateKey := string(privateKeyBytes)
+
+	credentialsJSON := fmt.Sprintf(`{
+		"type": "%s",
+		"project_id": "%s",
+		"private_key_id": "%s",
+		"private_key": "%s",
+		"client_email": "%s",
+		"client_id": "%s",
+		"auth_uri": "%s",
+		"token_uri": "%s",
+		"auth_provider_x509_cert_url": "%s",
+		"client_x509_cert_url": "%s",
+		"universe_domain": "%s"
+	}`, cfg.Type, cfg.ProjectId, cfg.PrivateId, privateKey, cfg.ClientEmail, cfg.ClientId, cfg.AuthUri, cfg.TokenUri, cfg.AuthProviderX509CertUrl, cfg.ClientX509CertUrl, cfg.UniverseDomain)
 
 	// Initialize Firebase App
-	app, err := firebase.NewApp(ctx, nil, option.WithCredentialsJSON(credentialsJSON))
+	app, err := firebase.NewApp(ctx, nil, option.WithCredentialsJSON([]byte(credentialsJSON)))
 	if err != nil {
 		log.Fatalf("error initializing Firebase app: %v", err)
 	}

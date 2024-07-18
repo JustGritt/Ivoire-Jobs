@@ -1,3 +1,4 @@
+import 'package:barassage_app/core/helpers/extentions/string_extension.dart';
 import 'package:barassage_app/features/bookings_mod/models/booking_appointment.dart';
 import 'package:barassage_app/config/app_colors.dart';
 import 'package:flutter/material.dart';
@@ -144,7 +145,10 @@ class _BookingServiceCardState extends State<BookingServiceCard> {
                               size: 18,
                               color: theme.colorScheme.surface,
                             ),
-                            Text('Not populated'),
+                            Text(widget.appointment.contact.city.truncateTo(8),
+                                style: theme.textTheme.labelMedium?.copyWith(
+                                  color: theme.colorScheme.surface,
+                                )),
                           ],
                         ),
                       ],

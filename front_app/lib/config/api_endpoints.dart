@@ -78,6 +78,7 @@ class ApiEndpoint {
   // Room chat messages Endpoint
   static const roomChatMessages = '/room/:id/messages';
   static const roomChatMessagesWs = '$wsApi/room/:id/ws';
+  static const appMaintenanceWs = '$wsApi/appMaintenance/ws';
 
   // categories Endpoints
   static const categories = '${api}/category';
