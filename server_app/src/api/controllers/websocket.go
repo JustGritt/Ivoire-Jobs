@@ -252,10 +252,10 @@ func saveMessage(roomID string, senderID string, receiverID string, content []by
 	messageOutput := messagesOutput{
 		MessageID:       msg.ID,
 		SenderID:        msg.SenderID,
-		SenderName:      senderDb.Firstname,
+		SenderName:      senderDb.Firstname + " " + senderDb.Lastname,
 		SenderProfile:   senderDb.ProfilePicture,
 		ReceiverID:      msg.ReceiverID,
-		ReceiverName:    reciverDb.Firstname,
+		ReceiverName:    reciverDb.Firstname + " " + reciverDb.Lastname,
 		ReceiverProfile: reciverDb.ProfilePicture,
 		Content:         msg.Content,
 		CreatedAt:       msg.CreatedAt.Format("2006-01-02 15:04:05"),
