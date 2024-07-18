@@ -25,7 +25,7 @@ func HomeController(c *fiber.Ctx) error {
 	}
 	for _, user := range users {
 		fmt.Println(user.Email)
-		domain := notification.ServiceDomain
+		domain := notification.PushNotification
 		resp, err := notification.Send(
 			c.Context(),
 			map[string]string{
