@@ -25,7 +25,7 @@ class _ServiceState extends State<Service> {
     _name = TextEditingController(text: 'Guest');
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final myServicesProvider = Provider.of<MyServicesProvider>(context, listen: false);
-      myServicesProvider.getAll();
+      myServicesProvider.getMyServices();
     });
   }
 
@@ -76,7 +76,7 @@ class _ServiceState extends State<Service> {
       body: Consumer<MyServicesProvider>(
         builder: (_, np, __) {
           if (np.isLoading == false) {
-            if (np.services.isEmpty) {
+            if (np.myServices.isEmpty) {
               return const Center(
                 child: Text(
                   'No services found',
@@ -86,15 +86,15 @@ class _ServiceState extends State<Service> {
             return ListView.separated(
               padding: const EdgeInsets.only(top: 2, bottom: 10),
               separatorBuilder: (_, index) => const SizedBox(height: 14),
-              itemCount: np.services.length,
+              itemCount: np.myServices.length,
               itemBuilder: (_, index) {
                 return MyServiceSlidable(
                     onDelete: (handler) async {
-                      bool success = await np.deleteService(np.services[index].id);
+                      bool success = await np.deleteService(np.myServices[index].id);
                       await handler(success);
                     },
                     child: MyServiceItem(
-                      serviceModel: np.services[index],
+                      serviceModel: np.myServices[index],
                     ));
               },
             );

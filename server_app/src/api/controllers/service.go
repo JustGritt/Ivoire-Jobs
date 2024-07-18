@@ -573,6 +573,7 @@ func UpdateService(c *fiber.Ctx) error {
 	user := c.Locals("user").(*jwt.Token)
 	claims := user.Claims.(jwt.MapClaims)
 	userID := claims["userID"]
+	role := claims["role"].(string)
 	// Validate Input
 	if userID == nil {
 		errorList = append(
@@ -591,7 +592,13 @@ func UpdateService(c *fiber.Ctx) error {
 	}
 
 	// Check if the service exists and the user is the owner
-	existingService, err := serviceRepo.GetByID(serviceID)
+	var existingService *service.Service
+	var err error
+	if role != "admin" {
+		existingService, err = serviceRepo.GetByID(serviceID)
+	} else {
+		existingService, err = serviceRepo.GetByIDUnscoped(serviceID)
+	}
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
 			errorList = append(
@@ -625,7 +632,7 @@ func UpdateService(c *fiber.Ctx) error {
 		return c.Status(http.StatusForbidden).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
-	if existingService.UserID != userID {
+	if existingService.UserID != userID && role != "admin" {
 		errorList = append(
 			errorList,
 			&fiber.Error{
@@ -636,21 +643,19 @@ func UpdateService(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusForbidden).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
-	if updateInput.IsBanned && existingService.IsBanned != updateInput.IsBanned {
-		role := claims["role"].(string)
+	if updateInput.IsBanned || !updateInput.IsBanned {
 		if role != "admin" {
 			errorList = append(
 				errorList,
 				&fiber.Error{
 					Code:    fiber.StatusForbidden,
-					Message: "You must be an admin to edit isBanned",
+					Message: "you are not authorized to update this field",
 				},
 			)
-			return c.Status(http.StatusForbidden).JSON(HTTPFiberErrorResponse(errorList))
+			return c.Status(fiber.StatusForbidden).JSON(HTTPFiberErrorResponse(errorList))
+		} else {
+			existingService.IsBanned = updateInput.IsBanned
 		}
-
-		existingService.IsBanned = updateInput.IsBanned
-
 	}
 
 	//remove the images from the service

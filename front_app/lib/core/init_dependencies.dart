@@ -1,3 +1,4 @@
+import 'package:barassage_app/features/bookings_mod/services/messaging_chat_messages_services.dart';
 import 'package:barassage_app/features/main_app/services/service_category_services.dart';
 import 'package:barassage_app/features/main_app/services/booking_service_services.dart';
 import 'package:barassage_app/features/profile_mod/services/push_tokens_services.dart';

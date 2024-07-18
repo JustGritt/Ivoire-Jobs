@@ -19,10 +19,9 @@ class BannedServicesProvider extends ChangeNotifier {
     try {
       Response res = await _http.get('${ApiEndpoint.services}/bans');
       if (res.statusCode == 200 && res.data is List) {
-        _services =
-            List<Service>.from(res.data.map((item) => Service.fromJson(item)));
+        _services = List<Service>.from(res.data.map((item) => Service.fromJson(item)));
       } else {
-        errorMessage = "Unexpected response format";
+        errorMessage = "No banned services found";
       }
     } catch (e) {
       errorMessage = "Error fetching banned services: $e";
@@ -31,5 +30,24 @@ class BannedServicesProvider extends ChangeNotifier {
       notifyListeners();
     }
     return _services;
+  }
+
+  // Unban a service by id
+  Future<void> unbanService(String id) async {
+    try {
+      Response res = await _http.put('${ApiEndpoint.services}/$id', data: {
+        'name': _services.firstWhere((service) => service.id == id).name,
+        'description': _services.firstWhere((service) => service.id == id).description,
+        'price': _services.firstWhere((service) => service.id == id).price,
+        'duration': _services.firstWhere((service) => service.id == id).duration,
+        'is_banned': false
+      });
+      print(res.data);
+      _services.removeWhere((service) => service.id == id);
+      notifyListeners();
+    } catch (e) {
+      errorMessage = "Error unbanning service: $e";
+      notifyListeners();
+    }
   }
 }
