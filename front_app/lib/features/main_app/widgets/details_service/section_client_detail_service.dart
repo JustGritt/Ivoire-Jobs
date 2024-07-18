@@ -96,7 +96,7 @@ class _SectionBarasseurDetailServiceState
                           maxWidth: MediaQuery.of(context).size.width * 0.4,
                         ),
                         child: Text(
-                          widget.service.name,
+                          widget.service.userId,
                           style: TextStyle(
                             color: theme.primaryColorDark,
                             fontWeight: FontWeight.bold,
