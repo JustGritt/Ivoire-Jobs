@@ -29,7 +29,7 @@ type Config struct {
 	S3               S3Config     `json:"s3"`
 	Stripe           StripeConfig `json:"stripe"`
 	FCM              FCMConfig    `json:"fcm"`
-	Google           string       `env:"GOOGLE_APPLICATION_CREDENTIALS"`
+	Google           string       `env:"GOOGLE_CONTENT"`
 }
 
 // IsProd Checks if env is production
