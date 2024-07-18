@@ -145,14 +145,22 @@ func HandleWebSocket(c *websocket.Conn) {
 			break
 		}
 
+		//get the receiver id from the room
+		var receiverID string
+		if dbRoom.ClientID == userID {
+			receiverID = dbRoom.CreatorID
+		} else {
+			receiverID = dbRoom.ClientID
+		}
+
 		// Save the message to the database
-		err = saveMessage(roomID, userID, dbRoom.CreatorID, message)
+		err = saveMessage(roomID, userID, receiverID, message)
 		if err != nil {
 			sendError(c, fmt.Sprintf("Error saving message: %v", err))
 			continue
 		}
 
-		broadcastToRoom(room, userID, mt, message)
+		broadcastToRoom(room, mt, message)
 	}
 }
 
@@ -189,15 +197,13 @@ func removeParticipantFromRoom(room *Room, userID string) {
 	delete(room.Participants, userID)
 }
 
-func broadcastToRoom(room *Room, senderID string, messageType int, message []byte) {
+func broadcastToRoom(room *Room, messageType int, message []byte) {
 	room.mu.Lock()
 	defer room.mu.Unlock()
 
-	for userID, conn := range room.Participants {
-		if userID != senderID {
-			if err := conn.WriteMessage(messageType, message); err != nil {
-				log.Println("write error:", err)
-			}
+	for _, conn := range room.Participants {
+		if err := conn.WriteMessage(messageType, message); err != nil {
+			log.Println("write error:", err)
 		}
 	}
 }
