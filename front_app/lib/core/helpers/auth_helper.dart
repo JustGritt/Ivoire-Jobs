@@ -78,7 +78,7 @@ Future<User?> getMyProfile() async {
     return user;
   } on DioException catch (e) {
     logger.e(DioExceptionHandler(e).error.message);
-    showError(context, DioExceptionHandler(e).title);
+  //  showError(context, DioExceptionHandler(e).title);
     return null;
   } catch (e) {
     logger.e(e);

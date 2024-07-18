@@ -31,9 +31,8 @@ class _ConversationChatScreenState extends State<ConversationChatScreen> {
         id: ((context.read<AuthenticationBloc>().state.props as List)[0]
                 as User)
             .id);
-    AppWs ws = AppWs(widget.chatRoom.id);
-
-    ws.connectRoomMessages().then((value) => {
+    AppWs ws = AppWs();
+    ws.connectRoomMessages(widget.chatRoom.id).then((value) => {
           value
             ..stream.listen(
               (message) {

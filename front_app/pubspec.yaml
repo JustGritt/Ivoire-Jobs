@@ -149,6 +149,7 @@ flutter:
     - assets/svg/confirmed.svg
     - assets/svg/gift_ico.svg
     - assets/svg/gift.svg
+    - assets/svg/not_available_ill.svg
     - assets/svg/test_gift.svg
     - assets/lotties/success_animation.json
     - assets/images/app-logo.png
