@@ -86,6 +86,7 @@ func SetupRoutes(app *fiber.App) {
 	report.Get("/collection", middlewares.RequireAdmin(), ctl.GetAllReports)
 	report.Get("/pending", middlewares.RequireAdmin(), ctl.GetAllPendingReports)
 	report.Put("/:id", middlewares.RequireAdmin(), ctl.ValidateReport)
+	report.Delete("/:id", middlewares.RequireAdmin(), ctl.DeleteReport)
 	report.Post("/", middlewares.RequireLoggedIn(), ctl.CreateReport)
 
 	// Category Group
