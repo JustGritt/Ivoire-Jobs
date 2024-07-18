@@ -130,8 +130,7 @@ class _TeamManagerScreenState extends State<TeamManagerScreen> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8.0, vertical: 8),
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
                           backgroundColor: primary,
                           shadowColor: primary,
                           foregroundColor: Colors.white,
@@ -145,9 +144,11 @@ class _TeamManagerScreenState extends State<TeamManagerScreen> {
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
+
                           ),
                         ),
                       ),
+                      const SizedBox(width: 8),
                     ],
                   ),
                   Expanded(
