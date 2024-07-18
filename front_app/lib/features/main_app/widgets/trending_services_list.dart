@@ -10,8 +10,9 @@ class TrendingServicesList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (services.isEmpty) {
-      return const Center(
-        child: Text('No data found'),
+      return Container(
+        margin: const EdgeInsets.only(left: 16),
+        child: Text('No services available for this filter.'),
       );
     }
 
@@ -20,7 +21,12 @@ class TrendingServicesList extends StatelessWidget {
       itemCount: services.length,
       shrinkWrap: true,
       itemBuilder: (context, index) {
-        return TrendingService(service: services[index]);
+        return index == 0
+            ? Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: TrendingService(service: services[index]),
+              )
+            : TrendingService(service: services[index]);
       },
     );
   }
