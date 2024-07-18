@@ -3,7 +3,7 @@ package controllers
 import (
 	userRepo "barassage/api/repositories/user"
 	"barassage/api/services/notification"
-	"context"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -24,11 +24,13 @@ func HomeController(c *fiber.Ctx) error {
 		log.Fatalf("error getting user: %v", err)
 	}
 	for _, user := range users {
+		fmt.Println(user.Email)
 		domain := notification.ServiceDomain
 		resp, err := notification.Send(
-			context.TODO(),
+			c.Context(),
 			map[string]string{
-				"Indexeur": "Le poulet c'est delicieux",
+				"title": "Welcome Home",
+				"body":  "Welcome Home",
 			},
 			&user,
 			domain,

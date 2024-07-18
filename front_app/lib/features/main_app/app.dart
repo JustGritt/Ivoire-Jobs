@@ -67,16 +67,18 @@ class App extends RouteManager {
                 routes: [
                   GoRoute(
                     path: App.detailService,
-                    builder: (context, state) => ServiceDetailPage(
-                      service: state.extra as ServiceCreatedModel,
-                    ),
+                    builder: (context, state) {
+                      final service = state.extra as ServiceCreatedModel;
+                      return ServiceDetailPage(service: service);
+                    },
                   ),
                   GoRoute(
                     name: App.bookingService,
                     path: App.bookingService,
-                    builder: (context, state) => ServiceBookingScreen(
-                      service: state.extra as ServiceCreatedModel,
-                    ),
+                    builder: (context, state) {
+                      final service = state.extra as ServiceCreatedModel;
+                      return ServiceBookingScreen(service: service);
+                    },
                   ),
                 ],
               ),
@@ -119,9 +121,10 @@ class App extends RouteManager {
                   GoRoute(
                     name: App.serviceNewSuccess,
                     path: App.serviceNewSuccess,
-                    builder: (context, state) => NewServiceSuccess(
-                      service: (state.extra as CreateServiceSuccess),
-                    ),
+                    builder: (context, state) {
+                      final service = state.extra as CreateServiceSuccess;
+                      return NewServiceSuccess(service: service);
+                    },
                   ),
                 ],
               ),
@@ -174,12 +177,9 @@ class App extends RouteManager {
         }));
     addRoute(GoRoute(
         path: App.serviceBookingSuccess,
-        builder: (context, state) => ServiceBookingSuccess(
-              service: (state.extra as ServiceBookingSuccessModel),
-            )));
-
-    // addRoute(App.about, (context) => const AboutController());
-    // addRoute(App.contact, (context) => const ContactController());
-    // addRoute(App.news, (context) => const NewsController());
+        builder: (context, state) {
+          final service = state.extra as ServiceBookingSuccessModel;
+          return ServiceBookingSuccess(service: service);
+        }));
   }
 }

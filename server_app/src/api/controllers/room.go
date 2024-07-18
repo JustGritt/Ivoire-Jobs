@@ -4,6 +4,7 @@ import (
 	"barassage/api/models/room"
 	"fmt"
 
+	messageRepo "barassage/api/repositories/message"
 	roomRepo "barassage/api/repositories/room"
 	serviceRepo "barassage/api/repositories/service"
 	userRepo "barassage/api/repositories/user"
@@ -26,6 +27,7 @@ type RoomOutput struct {
 }
 
 type Message struct {
+	MessageID       string `json:"message_id"`
 	SenderID        string `json:"sender_id"`
 	SenderName      string `json:"sender_firstname"`
 	ReceiverID      string `json:"receiver_id"`
@@ -171,6 +173,101 @@ func GetRooms(c *fiber.Ctx) error {
 	return c.Status(http.StatusOK).JSON(HTTPResponse(http.StatusOK, "Rooms", roomsOutput))
 }
 
+// GetRoomMessages handles the retrieval of all messages for a room
+// @Summary GetRoomMessages
+// @Description Get all messages for a room
+// @Tags Room
+// @Produce json
+// @Param id path string true "Room ID"
+// @Success 200 {array} Message
+// @Failure 400 {array} ErrorResponse
+// @Failure 401 {array} ErrorResponse
+// @Failure 500 {array} ErrorResponse
+// @Router /room/{id}/messages [get]
+func GetRoomMessages(c *fiber.Ctx) error {
+	var errorList []*fiber.Error
+	user := c.Locals("user").(*jwt.Token)
+	claims := user.Claims.(jwt.MapClaims)
+	userID := claims["userID"]
+
+	if userID == nil {
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusBadRequest,
+				Message: "Can't extract user info from request",
+			},
+		)
+		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
+	roomID := c.Params("id")
+	if roomID == "" {
+		errorList = append(errorList, &fiber.Error{
+			Code:    fiber.StatusBadRequest,
+			Message: "Room ID is required",
+		})
+		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
+	// Get all messages for room
+	room, err := roomRepo.GetByID(roomID)
+	if err != nil {
+		errorList = append(errorList, &fiber.Error{
+			Code:    fiber.StatusInternalServerError,
+			Message: "Failed to get room",
+		})
+		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
+	if room.ClientID != userID && room.CreatorID != userID {
+		errorList = append(errorList, &fiber.Error{
+			Code:    fiber.StatusBadRequest,
+			Message: "You are not allowed to access this room",
+		})
+		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
+	// Get all messages for room
+	messages, err := messageRepo.GetByRoomID(roomID)
+	if err != nil {
+		errorList = append(errorList, &fiber.Error{
+			Code:    fiber.StatusInternalServerError,
+			Message: "Failed to get messages",
+		})
+		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
+	var messagesOutput []Message
+	for _, m := range messages {
+		//get sendID firstname
+		sender, _ := userRepo.GetById(m.SenderID)
+		receiver, _ := userRepo.GetById(m.ReceiverID)
+		messagesOutput = append(messagesOutput, Message{
+			MessageID:       m.ID,
+			SenderID:        m.SenderID,
+			ReceiverID:      m.ReceiverID,
+			SenderName:      sender.Firstname + " " + sender.Lastname,
+			SenderProfile:   sender.ProfilePicture,
+			ReceiverName:    receiver.Firstname + " " + receiver.Lastname,
+			ReceiverProfile: receiver.ProfilePicture,
+			Content:         m.Content,
+			CreatedAt:       m.CreatedAt.Format("2006-01-02 15:04:05"),
+			Seen:            m.Seen,
+		})
+	}
+
+	// Mark all messages as seen
+	for _, m := range messages {
+		if m.ReceiverID == userID {
+			m.Seen = true
+			_ = messageRepo.Update(&m)
+		}
+	}
+
+	return c.Status(http.StatusOK).JSON(HTTPResponse(http.StatusOK, "Messages", messagesOutput))
+}
+
 // ============================================================
 // =================== Private Methods ========================
 // ============================================================
@@ -195,6 +292,7 @@ func mapRoomToOutput(room room.Room) RoomOutput {
 			sender, _ := userRepo.GetById(m.SenderID)
 			receiver, _ := userRepo.GetById(m.ReceiverID)
 			messages = append(messages, Message{
+				MessageID:       m.ID,
 				SenderID:        m.SenderID,
 				ReceiverID:      m.ReceiverID,
 				SenderName:      sender.Firstname + " " + sender.Lastname,

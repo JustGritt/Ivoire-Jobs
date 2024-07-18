@@ -32,6 +32,22 @@ type MemberOutput struct {
 	CreatedAt string `json:"createdAt"`
 }
 
+type MemberOutputWithUser struct {
+	ID        string            `json:"id"`
+	UserID    string            `json:"userId"`
+	User      MemberUserDetails `json:"user"`
+	Reason    string            `json:"reason"`
+	Status    string            `json:"status"`
+	CreatedAt string            `json:"createdAt"`
+}
+
+type MemberUserDetails struct {
+	ID        string `json:"id"`
+	Firstname string `json:"firstname"`
+	Lastname  string `json:"lastname"`
+	Email     string `json:"email"`
+}
+
 // CreateMember handles the creation of a new member.
 // @Summary Create Member
 // @Description Create a member
@@ -218,9 +234,9 @@ func GetAllRequests(c *fiber.Ctx) error {
 	}
 
 	//map the members to output
-	var memberOutputs []*MemberOutput
+	var memberOutputs []*MemberOutputWithUser
 	for _, member := range members {
-		memberOutputs = append(memberOutputs, mapMemberToOutput(&member))
+		memberOutputs = append(memberOutputs, mapMemberToOutputWithUser(&member))
 	}
 	if len(memberOutputs) == 0 {
 		//return empty array
@@ -445,6 +461,23 @@ func mapMemberToOutput(b *member.Member) *MemberOutput {
 	return &MemberOutput{
 		ID:        b.ID,
 		UserID:    b.UserID,
+		Reason:    b.Reason,
+		Status:    b.Status,
+		CreatedAt: b.CreatedAt.Format("2006-01-02"),
+	}
+}
+
+func mapMemberToOutputWithUser(b *member.Member) *MemberOutputWithUser {
+	u, _ := userRepo.GetById(b.UserID)
+	return &MemberOutputWithUser{
+		ID:     b.ID,
+		UserID: b.UserID,
+		User: MemberUserDetails{
+			ID:        u.ID,
+			Firstname: u.Firstname,
+			Lastname:  u.Lastname,
+			Email:     u.Email,
+		},
 		Reason:    b.Reason,
 		Status:    b.Status,
 		CreatedAt: b.CreatedAt.Format("2006-01-02"),

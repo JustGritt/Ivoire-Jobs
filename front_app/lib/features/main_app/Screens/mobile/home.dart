@@ -23,8 +23,10 @@ class _HomeState extends State<Home> {
     Firebaseapi().initNotifications();
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<MyServicesProvider>(context, listen: false).getAll();
-      Provider.of<MyServicesProvider>(context, listen: false).getCategories();
+      final myServicesProvider = Provider.of<MyServicesProvider>(context, listen: false);
+      myServicesProvider.getAll();
+      myServicesProvider.getCategories();
+      myServicesProvider.getNearbyServices();
     });
   }
 

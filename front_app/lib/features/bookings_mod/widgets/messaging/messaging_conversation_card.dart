@@ -30,7 +30,7 @@ class _MessagingConversationCardState extends State<MessagingConversationCard> {
 
     return CupertinoButton(
       onPressed: () {
-        context.push(App.messagingChat);
+        context.pushNamed(App.messagingChat);
       },
       minSize: 0,
       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),

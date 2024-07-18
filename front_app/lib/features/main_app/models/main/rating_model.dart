@@ -1,7 +1,7 @@
 class Rating {
   final String id;
   final String serviceId;
-  final int rating;
+  final double rating;
   final String comment;
   final String firstname;
   final String createdAt;
@@ -23,12 +23,12 @@ class Rating {
     return Rating(
       id: json['id'],
       serviceId: json['serviceId'],
-      rating: json['rating'],
+      rating: (json['rating'] is int) ? (json['rating'] as int).toDouble() : json['rating'],
       comment: json['comment'],
       firstname: json['firstname'],
       createdAt: json['createdAt'],
       status: json['status'],
-      score: json['score'],
+      score: (json['score'] is int) ? (json['score'] as int).toDouble() : json['score'],
     );
   }
 }

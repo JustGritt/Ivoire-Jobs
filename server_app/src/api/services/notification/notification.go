@@ -52,6 +52,7 @@ func InitFCM() *messaging.Client {
 		log.Fatalf("error marshaling credentials: %v", err)
 	}
 
+	// Initialize Firebase App
 	app, err := firebase.NewApp(ctx, nil, option.WithCredentialsJSON(credentialsJSON))
 	if err != nil {
 		log.Fatalf("error initializing Firebase app: %v", err)
@@ -84,7 +85,6 @@ func Send(ctx context.Context, data map[string]string, user *user.User, domain D
 	if userNotif == nil {
 		return nil, errors.New("user notification preference is nil")
 	}
-	fmt.Println("userNotif", notif)
 
 	switch domain {
 	case ServiceDomain:
@@ -113,7 +113,8 @@ func Send(ctx context.Context, data map[string]string, user *user.User, domain D
 		tokens = append(tokens, token.Token)
 	}
 
-	message := &messaging.MulticastMessage{
+	// Send message using SendEachForMulticast
+	responses, err := notif.SendEachForMulticast(ctx, &messaging.MulticastMessage{
 		Data: data,
 		Android: &messaging.AndroidConfig{
 			Priority: "high",
@@ -123,10 +124,18 @@ func Send(ctx context.Context, data map[string]string, user *user.User, domain D
 			},
 		},
 		Tokens: tokens,
-	}
+		APNS: &messaging.APNSConfig{
+			Payload: &messaging.APNSPayload{
+				Aps: &messaging.Aps{
+					Alert: &messaging.ApsAlert{
+						Title: "Barassage",
+						Body:  "You have a new notification",
+					},
+				},
+			},
+		},
+	})
 
-	// Send message using SendEachForMulticast
-	responses, err := notif.SendEachForMulticast(ctx, message)
 	if err != nil {
 		return nil, fmt.Errorf("error sending message: %w", err)
 	}

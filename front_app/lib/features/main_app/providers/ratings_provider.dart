@@ -6,6 +6,7 @@ import 'package:barassage_app/config/app_cache.dart';
 import 'package:barassage_app/config/app_http.dart';
 import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/scheduler.dart';
 
 AppCache appCache = serviceLocator<AppCache>();
 AppContext appContext = serviceLocator<AppContext>();
@@ -19,7 +20,7 @@ class RatingsProvider extends ChangeNotifier {
 
   Future<List<Rating>> getAllRatings() async {
     isLoading = true;
-    notifyListeners();
+    _safeNotifyListeners();
     try {
       Response res = await _http.get('${ApiEndpoint.ratings}/collection');
       if (res.statusCode == 200 && res.data is List) {
@@ -32,7 +33,7 @@ class RatingsProvider extends ChangeNotifier {
       print("Error: $e");
     } finally {
       isLoading = false;
-      notifyListeners();
+      _safeNotifyListeners();
     }
     return _ratings;
   }
@@ -40,16 +41,14 @@ class RatingsProvider extends ChangeNotifier {
   Future<List<Rating>> getServiceRatings(String serviceId) async {
     print('Fetching ratings for service ID: $serviceId');
     isLoading = true;
-    notifyListeners();
+    _safeNotifyListeners();
     List<Rating> ratings = [];
     try {
-      Response res = await _http
-          .get(ApiEndpoint.serviceRatings.replaceAll(':id', serviceId));
+      Response res = await _http.get(ApiEndpoint.serviceRatings.replaceAll(':id', serviceId));
       print('URL: ${ApiEndpoint.serviceRatings.replaceAll(':id', serviceId)}');
       print('Response status: ${res.data}');
       if (res.statusCode == 200 && res.data is List) {
-        ratings =
-            List<Rating>.from(res.data.map((item) => Rating.fromJson(item)));
+        ratings = List<Rating>.from(res.data.map((item) => Rating.fromJson(item)));
         _ratings = ratings;
         print(_ratings);
         print('Fetched ${_ratings.length} ratings');
@@ -63,11 +62,17 @@ class RatingsProvider extends ChangeNotifier {
       print("Error fetching ratings: $e");
     } finally {
       isLoading = false;
-      notifyListeners();
+      _safeNotifyListeners();
       print('Ratings loading complete');
       print('Current ratings: $ratings');
     }
     return ratings;
+  }
+
+  double getAverageRating() {
+    if (_ratings.isEmpty) return 0.0;
+    double sum = _ratings.fold(0, (total, rating) => total + rating.rating);
+    return sum / _ratings.length;
   }
 
   Future<void> submitComment(String bookingId, String comment, int rating,
@@ -89,6 +94,16 @@ class RatingsProvider extends ChangeNotifier {
       }
     } catch (e) {
       print("Error submitting comment and rating: $e");
+    }
+  }
+
+  void _safeNotifyListeners() {
+    if (SchedulerBinding.instance.schedulerPhase == SchedulerPhase.idle) {
+      notifyListeners();
+    } else {
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        notifyListeners();
+      });
     }
   }
 }

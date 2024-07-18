@@ -77,6 +77,7 @@ jobs:
           echo "FCM_CLIENT_X509_CERT_URL=${{ secrets.FCM_CLIENT_X509_CERT_URL }}" >> ./server_app/src/.env
           echo "FCM_PRIVATE_KEY=${{ secrets.FCM_PRIVATE_KEY }}" >> ./server_app/src/.env
           echo "FCM_UNIVERSE_DOMAIN=${{ secrets.FCM_UNIVERSE_DOMAIN }}" >> ./server_app/src/.env
+          echo "GOOGLE_CONTENT=${{ secrets.GOOGLE_CONTENT }}" >> ./server_app/src/.env
 
 
 
