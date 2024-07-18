@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 
-class AdminScaffold extends StatelessWidget {
+class AdminScaffold extends StatefulWidget {
   final Widget body;
   final String title;
 
@@ -13,6 +13,13 @@ class AdminScaffold extends StatelessWidget {
     required this.body,
     required this.title,
   });
+
+  @override
+  _AdminScaffoldState createState() => _AdminScaffoldState();
+}
+
+class _AdminScaffoldState extends State<AdminScaffold> {
+  Color _drawerHeaderColor = primary;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +31,7 @@ class AdminScaffold extends StatelessWidget {
           color: Colors.white,
         ),
         title: Text(
-          title,
+          widget.title,
           style: const TextStyle(
             color: Colors.white,
           ),
@@ -43,20 +50,24 @@ class AdminScaffold extends StatelessWidget {
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-                context.go('/admin/dashboard');
-              },
-              child: DrawerHeader(
-                decoration: BoxDecoration(
-                  color: primary,
-                ),
-                child: const Text(
-                  'Barassage Dashboard',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
+            MouseRegion(
+              onEnter: (_) => setState(() => _drawerHeaderColor = Color.fromARGB(255, 28, 58, 65)),
+              onExit: (_) => setState(() => _drawerHeaderColor = primary),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                  context.go('/admin/dashboard');
+                },
+                child: DrawerHeader(
+                  decoration: BoxDecoration(
+                    color: _drawerHeaderColor,
+                  ),
+                  child: const Text(
+                    'Barassage Dashboard',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 24,
+                    ),
                   ),
                 ),
               ),
@@ -153,7 +164,7 @@ class AdminScaffold extends StatelessWidget {
           ],
         ),
       ),
-      body: body,
+      body: widget.body,
     );
   }
 }

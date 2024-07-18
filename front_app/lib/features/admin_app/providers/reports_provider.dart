@@ -57,4 +57,20 @@ class ReportsProvider extends ChangeNotifier {
       print("Error: $e");
     }
   }
+
+  // Delete a report by id
+  Future<void> deleteReport(String id) async {
+    try {
+      Response res = await _http.delete('${ApiEndpoint.reportsDetails.replaceAll(':id', id)}');
+      if (res.statusCode == 200) {
+        _reports.removeWhere((r) => r.id == id);
+        print("Report deleted successfully");
+        notifyListeners();
+      } else {
+        print("Unexpected response format");
+      }
+    } catch (e) {
+      print("Error: $e");
+    }
+  }
 }

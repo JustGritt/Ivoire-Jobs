@@ -30,6 +30,7 @@ type RoomOutput struct {
 	CreatorProfile string    `json:"creator_profile"`
 	Messages       []Message `json:"messages"`
 	Count          int       `json:"count"`
+	CreatedAt      string    `json:"created_at"`
 }
 
 type Message struct {
@@ -262,6 +263,10 @@ func GetRoomMessages(c *fiber.Ctx) error {
 		})
 	}
 
+	if len(messagesOutput) == 0 {
+		messagesOutput = []Message{}
+	}
+
 	// Mark all messages as seen
 	for _, m := range messages {
 		if m.ReceiverID == userID {
@@ -323,5 +328,6 @@ func mapRoomToOutput(room room.Room) RoomOutput {
 		CreatorProfile: creator.ProfilePicture,
 		Messages:       messages,
 		Count:          count,
+		CreatedAt:      room.CreatedAt.Format("2006-01-02 15:04:05"),
 	}
 }

@@ -25,6 +25,8 @@ import 'package:barassage_app/config/app_config.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 
+import '../bookings_mod/models/chats_room_model.dart';
+
 class App extends RouteManager {
   static const String name = '/app';
   static const String home = '${App.name}/home';
@@ -42,7 +44,8 @@ class App extends RouteManager {
   static const String profile = '${App.name}/profile';
   static const String editProfile = 'editProfile';
   static const String becomeWorker = 'becomeWorker';
-  static const String serviceBookingSuccess = '${App.name}/serviceBookingSuccess';
+  static const String serviceBookingSuccess =
+      '${App.name}/serviceBookingSuccess';
   static const String messagingChat = 'messagingChat';
 
   final _rootKey = serviceLocator<AppContext>().navigatorKey;
@@ -145,7 +148,9 @@ class App extends RouteManager {
                     GoRoute(
                       name: App.messagingChat,
                       path: App.messagingChat,
-                      builder: (context, state) => ConversationChatScreen(),
+                      builder: (context, state) => ConversationChatScreen(
+                        chatRoom: state.extra as ChatRoom,
+                      ),
                     ),
                   ]),
             ],

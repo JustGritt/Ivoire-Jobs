@@ -218,6 +218,43 @@ func ValidateReport(c *fiber.Ctx) error {
 	return c.SendStatus(http.StatusOK)
 }
 
+// DeleteReport deletes a report from the database.
+// @Summary Delete a report
+// @Description Delete a report
+// @Tags Report
+// @Produce json
+// @Param reportId path string true "Report ID"
+// @Success 200 {object} Response
+// @Failure 400 {array} ErrorResponse
+// @Failure 401 {array} ErrorResponse
+// @Failure 500 {array} ErrorResponse
+// @Router /report/{reportId} [delete]
+// @Security Bearer
+func DeleteReport(c *fiber.Ctx) error {
+	reportID := c.Params("id")
+	if reportID == "" {
+		return c.Status(http.StatusBadRequest).JSON(HTTPResponse(http.StatusBadRequest, "Report ID is required", nil))
+	}
+
+	report, err := reportRepo.GetByID(reportID)
+	if err != nil {
+		return c.Status(http.StatusBadRequest).JSON(HTTPResponse(http.StatusBadRequest, "Report not found", nil))
+	}
+
+	if err := reportRepo.Delete(report); err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(HTTPResponse(http.StatusInternalServerError, "Error deleting report", nil))
+	}
+
+	_ = CreateLog(&LogObject{
+		Level:      "info",
+		Message:    "Report deleted",
+		Type:       "Report",
+		RequestURI: c.OriginalURL(),
+	})
+
+	return c.SendStatus(http.StatusOK)
+}
+
 // ============================================================
 // =================== Private Methods ========================
 // ============================================================
