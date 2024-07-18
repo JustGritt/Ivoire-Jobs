@@ -130,18 +130,6 @@ class _LoginDesktopScreenState extends State<LoginDesktopScreen> {
                               });
                             },
                           ),
-                          const SizedBox(height: 10),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              forgetButton(
-                                context,
-                                onForget: () {
-                                  return true;
-                                },
-                              ),
-                            ],
-                          ),
                           const SizedBox(height: 15),
                           Container(
                             padding:
@@ -149,7 +137,7 @@ class _LoginDesktopScreenState extends State<LoginDesktopScreen> {
                             child: ConstrainedBox(
                               constraints: const BoxConstraints(
                                 maxHeight: 64,
-                                maxWidth: 400,
+                                maxWidth: 412,
                               ),
                               child: AppButton(
                                 isLoading: state is AuthenticationLoadingState,
@@ -165,26 +153,6 @@ class _LoginDesktopScreenState extends State<LoginDesktopScreen> {
                                 width: 400,
                               ),
                             ),
-                          ),
-                          const SizedBox(height: 30),
-                          Text.rich(
-                            TextSpan(
-                              text: '${appLocalizations.no_account_text} ',
-                              children: <InlineSpan>[
-                                TextSpan(
-                                  text: appLocalizations.btn_create,
-                                  style:
-                                      theme.textTheme.displayMedium?.copyWith(
-                                    color: theme.primaryColorDark,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  recognizer: TapGestureRecognizer()
-                                    ..onTap =
-                                        () => context.push(AuthApp.register),
-                                )
-                              ],
-                            ),
-                            style: theme.textTheme.displayMedium,
                           ),
                         ],
                       ),

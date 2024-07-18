@@ -47,7 +47,7 @@ class _ManageCategoriesScreenState extends State<ManageCategoriesScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Add Category'),
+          title: const Text('Add new category'),
           content: Container(
             width: MediaQuery.of(context).size.width * 0.8,
             child: Form(
@@ -75,13 +75,26 @@ class _ManageCategoriesScreenState extends State<ManageCategoriesScreen> {
             ),
           ),
           actions: [
-            TextButton(
+            ElevatedButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                backgroundColor: Colors.redAccent,
+                shadowColor: Colors.redAccent,
+                foregroundColor: Colors.white,
+                textStyle: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
               child: const Text('Cancel'),
             ),
-            TextButton(
+            ElevatedButton(
               onPressed: () async {
                 if (_formKey.currentState!.validate()) {
                   _formKey.currentState!.save();
@@ -95,7 +108,20 @@ class _ManageCategoriesScreenState extends State<ManageCategoriesScreen> {
                   });
                 }
               },
-              child: const Text('Add'),
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                backgroundColor: primary,
+                shadowColor: primary,
+                foregroundColor: Colors.white,
+                textStyle: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              child: const Text('Confirm'),
             ),
           ],
         );
@@ -136,25 +162,31 @@ class _ManageCategoriesScreenState extends State<ManageCategoriesScreen> {
                   ),
                 ),
                 ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: primary,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0, vertical: 8.0),
-                  ),
-                  onPressed: () {
+                        onPressed: () {
                     showAddCategoryDialog(context);
                   },
-                  child: const Text(
-                    'New category',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                    ),
-                  ),
-                ),
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
+                          backgroundColor: primary,
+                          shadowColor: primary,
+                          foregroundColor: Colors.white,
+                          textStyle: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        child: const Text(
+                          'Create new category',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+
+                          ),
+                        ),
+                      ),
               ],
             ),
           ),
@@ -189,88 +221,90 @@ class _ManageCategoriesScreenState extends State<ManageCategoriesScreen> {
                           child: GridView.builder(
                             gridDelegate:
                                 const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 4,
+                              crossAxisCount: 3,
                               crossAxisSpacing: 10,
                               mainAxisSpacing: 10,
-                              childAspectRatio: 3,
                             ),
                             itemCount: _filteredCategories.length,
                             itemBuilder: (context, index) {
                               final category = _filteredCategories[index];
-                              return Card(
-                                color: Colors.grey[100],
-                                margin:
-                                    const EdgeInsets.symmetric(vertical: 8.0),
-                                elevation: 4,
-                                shadowColor: Colors.grey.withOpacity(0.4),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
+                              return ConstrainedBox(
+                                constraints: const BoxConstraints(
+                                  maxHeight: 300,
                                 ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(12.0),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Container(
-                                            padding: const EdgeInsets.all(8.0),
-                                            decoration: BoxDecoration(
-                                              color: theme.primaryColor
-                                                  .withOpacity(0.1),
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                            ),
-                                            child: Icon(
-                                              Icons.category,
-                                              color: theme.primaryColor,
-                                              size: 20,
-                                            ),
-                                          ),
-                                          const SizedBox(width: 8),
-                                          Expanded(
-                                            child: Text(
-                                              category.name,
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                                color: primary,
+                                child: Card(
+                                  color: Colors.grey[100],
+                                  elevation: 4,
+                                  shadowColor: Colors.grey.withOpacity(0.4),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(12.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Container(
+                                              padding: const EdgeInsets.all(8.0),
+                                              decoration: BoxDecoration(
+                                                color: theme.primaryColor
+                                                    .withOpacity(0.1),
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
                                               ),
-                                              overflow: TextOverflow.ellipsis,
+                                              child: Icon(
+                                                Icons.category,
+                                                color: theme.primaryColor,
+                                                size: 20,
+                                              ),
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                      const Spacer(),
-                                      Row(
-                                        children: [
-                                          Icon(
-                                            category.status
-                                                ? Icons.check_circle
-                                                : Icons.cancel,
-                                            color: category.status
-                                                ? Colors.green
-                                                : Colors.red,
-                                            size: 16,
-                                          ),
-                                          const SizedBox(width: 4),
-                                          Text(
-                                            category.status
-                                                ? 'Active'
-                                                : 'Inactive',
-                                            style: theme.textTheme.bodyMedium
-                                                ?.copyWith(
-                                              fontSize: 14,
+                                            const SizedBox(width: 8),
+                                            Expanded(
+                                              child: Text(
+                                                category.name,
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: primary,
+                                                ),
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        const Spacer(),
+                                        Row(
+                                          children: [
+                                            Icon(
+                                              category.status
+                                                  ? Icons.check_circle
+                                                  : Icons.cancel,
                                               color: category.status
                                                   ? Colors.green
                                                   : Colors.red,
+                                              size: 16,
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
+                                            const SizedBox(width: 4),
+                                            Text(
+                                              category.status
+                                                  ? 'Active'
+                                                  : 'Inactive',
+                                              style: theme.textTheme.bodyMedium
+                                                  ?.copyWith(
+                                                fontSize: 14,
+                                                color: category.status
+                                                    ? Colors.green
+                                                    : Colors.red,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               );
