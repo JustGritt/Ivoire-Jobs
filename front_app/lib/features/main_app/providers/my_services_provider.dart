@@ -8,6 +8,7 @@ import 'package:barassage_app/config/app_cache.dart';
 import 'package:barassage_app/config/app_http.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:dio/dio.dart';
 import 'dart:developer';
 
@@ -24,16 +25,26 @@ class MyServicesProvider extends ChangeNotifier {
   List<ServiceCreatedModel> get services => _serviceModel;
   List<ServiceCategory> get categories => _categories;
 
-  void getAll() async {
+  void _safeNotifyListeners() {
+    if (SchedulerBinding.instance.schedulerPhase == SchedulerPhase.idle) {
+      notifyListeners();
+    } else {
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        notifyListeners();
+      });
+    }
+  }
+
+  Future<void> getAll() async {
     isLoading = true;
     hasNoServices = false;
-    notifyListeners();
+    _safeNotifyListeners();
     try {
       final user = await appCache.getUser();
       inspect(user);
       if (user == null) {
         isLoading = false;
-        notifyListeners();
+        _safeNotifyListeners();
         return;
       }
       Response res = await _http.get(ApiEndpoint.servicesCollection);
@@ -45,13 +56,13 @@ class MyServicesProvider extends ChangeNotifier {
       print(e);
     } finally {
       isLoading = false;
-      notifyListeners();
+      _safeNotifyListeners();
     }
   }
 
   Future<bool> deleteService(String id) async {
     isLoading = true;
-    notifyListeners();
+    _safeNotifyListeners();
     try {
       Response res = await _http.delete(
           ApiEndpoint.serviceDetails.replaceAll(':id', id),
@@ -69,14 +80,14 @@ class MyServicesProvider extends ChangeNotifier {
       return false;
     } finally {
       isLoading = false;
-      notifyListeners();
+      _safeNotifyListeners();
     }
   }
 
   Future<void> filterServices(String filter) async {
     isLoading = true;
     hasNoServices = false;
-    notifyListeners();
+    _safeNotifyListeners();
     if (filter == 'All') {
       getAll();
       return;
@@ -98,22 +109,26 @@ class MyServicesProvider extends ChangeNotifier {
       print(e);
     } finally {
       isLoading = false;
-      notifyListeners();
+      _safeNotifyListeners();
     }
   }
 
   Future<void> searchService(String query) async {
     isLoading = true;
     hasNoServices = false;
-    notifyListeners();
+    _safeNotifyListeners();
     if (query.isEmpty) {
       getAll();
       return;
     }
     try {
       final user = await appCache.getUser();
-      Response res =
-          await _http.get('${ApiEndpoint.services}/search?name=$query');
+      Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+      Response res = await _http.get('${ApiEndpoint.services}/search', params: {
+            "query": query,
+            "latitude": position.latitude,
+            "longitude": position.longitude,
+          });
       if (res.statusCode == 200) {
         _serviceModel = servicesFromJson(res.data);
         hasNoServices = _serviceModel.isEmpty;
@@ -122,13 +137,13 @@ class MyServicesProvider extends ChangeNotifier {
       print(e);
     } finally {
       isLoading = false;
-      notifyListeners();
+      _safeNotifyListeners();
     }
   }
 
   Future<void> getCategories() async {
     isLoading = true;
-    notifyListeners();
+    _safeNotifyListeners();
     try {
       Response res = await _http.get(ApiEndpoint.serviceCategories);
       if (res.statusCode == 200) {
@@ -138,23 +153,19 @@ class MyServicesProvider extends ChangeNotifier {
       print(e);
     } finally {
       isLoading = false;
-      notifyListeners();
+      _safeNotifyListeners();
     }
   }
 
   Future<void> getNearbyServices() async {
     isLoading = true;
-    notifyListeners();
+    _safeNotifyListeners();
     try {
       final user = await appCache.getUser();
       Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-      print(position.latitude);
-      print(position.longitude);
       Response res = await _http.get('${ApiEndpoint.services}/search', params: {
         "latitude": position.latitude,
         "longitude": position.longitude,
-        // "latitude": 48.8488336,
-        // "longitude": 32.3891768
       });
       print(res.data);
       if (res.statusCode == 200) {
@@ -167,7 +178,7 @@ class MyServicesProvider extends ChangeNotifier {
       hasNoServices = true;
     } finally {
       isLoading = false;
-      notifyListeners();
+      _safeNotifyListeners();
     }
   }
 }

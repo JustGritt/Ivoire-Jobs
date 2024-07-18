@@ -30,7 +30,8 @@ class _LoginMobileScreenState extends State<LoginMobileScreen> {
     ThemeData theme = Theme.of(context);
     AppLocalizations appLocalizations = AppLocalizations.of(context)!;
     return Scaffold(
-        backgroundColor: theme.cardColor,
+        // backgroundColor: theme.cardColor,
+        backgroundColor: Colors.white,
         body: SafeArea(
           child: BlocConsumer<AuthenticationBloc, AuthenticationState>(
             listener: (context, state) {
