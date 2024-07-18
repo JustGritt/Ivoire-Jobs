@@ -8,6 +8,7 @@ import 'package:barassage_app/core/classes/app_context.dart';
 import 'package:barassage_app/core/init_dependencies.dart';
 import 'package:barassage_app/config/app_cache.dart';
 import 'package:barassage_app/config/app_http.dart';
+import 'package:barassage_app/features/payments/stripe/stripe_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart';
 
@@ -24,9 +25,12 @@ class BookingServicesProvider extends ChangeNotifier {
   Future<BookingServiceCreatedModel> createBooking(
       BookingServiceCreateModel bookingServiceCreateModel) async {
     bookingServiceRequest.isLoading = true;
+    notifyListeners();
     try {
       final booking =
           await bookingServiceServices.create(bookingServiceCreateModel);
+      final result =
+          await StripeService.presentPaymentSheet(booking.paymentIntent);
       bookingServiceRequest.isLoading = false;
       notifyListeners();
       return booking;
@@ -36,8 +40,6 @@ class BookingServicesProvider extends ChangeNotifier {
       if (error is DioException) {
         showError(
             appContext.navigatorContext, DioExceptionHandler(error).title);
-      } else if (error is Exception) {
-        showError(appContext.navigatorContext, error.toString());
       }
       notifyListeners();
       rethrow;

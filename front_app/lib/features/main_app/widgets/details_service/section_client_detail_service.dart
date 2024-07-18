@@ -1,8 +1,12 @@
-import 'package:barassage_app/features/main_app/widgets/details_service/report_dialog.dart' as report_dialog;
+import 'package:barassage_app/features/main_app/app.dart';
+import 'package:barassage_app/features/main_app/providers/chat_room_services_provider.dart';
+import 'package:barassage_app/features/main_app/widgets/details_service/report_dialog.dart'
+    as report_dialog;
 import 'package:barassage_app/features/main_app/models/service_models/service_created_model.dart';
 import 'package:barassage_app/features/main_app/providers/reports_service_provider.dart';
 import 'package:barassage_app/config/config.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
@@ -139,17 +143,44 @@ class _SectionBarasseurDetailServiceState
                     ),
                   ),
                   const SizedBox(width: 8),
-                  CupertinoButton(
-                    color: AppColors.greyLight,
-                    minSize: 0,
-                    borderRadius: BorderRadius.circular(40),
-                    padding: EdgeInsets.all(12),
-                    onPressed: () {},
-                    child: Icon(
-                      size: 16,
-                      CupertinoIcons.mail_solid,
-                      color: theme.primaryColor,
-                    ),
+                  Consumer<ChatRoomServicesProvider>(
+                    builder: (context, chatRoomProvider, child) {
+                      return CupertinoButton(
+                        color: AppColors.greyLight,
+                        minSize: 0,
+                        disabledColor: AppColors.greyLight,
+                        borderRadius: BorderRadius.circular(40),
+                        padding: EdgeInsets.all(12),
+                        onPressed: chatRoomProvider
+                                .bookingServiceRequest.isLoading
+                            ? null
+                            : () {
+                                Provider.of<ChatRoomServicesProvider>(context,
+                                        listen: false)
+                                    .createRoom(widget.service.id)
+                                    .then((chatRoom) {
+                                  if (chatRoom != null) {
+                                    GoRouter.of(context).go(
+                                        '${App.bookingServices}/${App.messages}/${App.messagingChat}',
+                                        extra: chatRoom);
+                                  }
+                                });
+                              },
+                        child: chatRoomProvider.bookingServiceRequest.isLoading
+                            ? Container(
+                                height: 16,
+                                width: 16,
+                                child: CupertinoActivityIndicator(
+                                  color: theme.primaryColor,
+                                ),
+                              )
+                            : Icon(
+                                size: 16,
+                                CupertinoIcons.mail_solid,
+                                color: theme.primaryColor,
+                              ),
+                      );
+                    },
                   ),
                 ],
               ),

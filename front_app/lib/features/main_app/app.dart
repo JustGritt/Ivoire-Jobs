@@ -141,17 +141,18 @@ class App extends RouteManager {
                   builder: (context, state) => BookingsController(),
                   routes: [
                     GoRoute(
-                      name: App.messages,
-                      path: App.messages,
-                      builder: (context, state) => MessagesController(),
-                    ),
-                    GoRoute(
-                      name: App.messagingChat,
-                      path: App.messagingChat,
-                      builder: (context, state) => ConversationChatScreen(
-                        chatRoom: state.extra as ChatRoom,
-                      ),
-                    ),
+                        name: App.messages,
+                        path: App.messages,
+                        builder: (context, state) => MessagesController(),
+                        routes: [
+                          GoRoute(
+                            name: App.messagingChat,
+                            path: App.messagingChat,
+                            builder: (context, state) => ConversationChatScreen(
+                              chatRoom: state.extra as ChatRoom,
+                            ),
+                          ),
+                        ]),
                   ]),
             ],
           ),
