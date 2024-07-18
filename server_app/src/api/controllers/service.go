@@ -594,11 +594,7 @@ func UpdateService(c *fiber.Ctx) error {
 	// Check if the service exists and the user is the owner
 	var existingService *service.Service
 	var err error
-	if role != "admin" {
-		existingService, err = serviceRepo.GetByID(serviceID)
-	} else {
-		existingService, err = serviceRepo.GetByIDUnscoped(serviceID)
-	}
+	existingService, err = serviceRepo.GetByIDUnscoped(serviceID)
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
 			errorList = append(
@@ -643,101 +639,12 @@ func UpdateService(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusForbidden).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
-	if updateInput.IsBanned || !updateInput.IsBanned {
-		if role != "admin" {
-			errorList = append(
-				errorList,
-				&fiber.Error{
-					Code:    fiber.StatusForbidden,
-					Message: "you are not authorized to update this field",
-				},
-			)
-			return c.Status(fiber.StatusForbidden).JSON(HTTPFiberErrorResponse(errorList))
-		} else {
+	fmt.Println("input", updateInput)
+	if role == "admin" {
+		if updateInput.IsBanned || !updateInput.IsBanned {
 			existingService.IsBanned = updateInput.IsBanned
 		}
 	}
-
-	//remove the images from the service
-	if len(updateInput.DeleteImage) > 0 {
-		for _, img := range updateInput.DeleteImage {
-			if err := serviceRepo.DeleteImage(existingService, img); err != nil {
-				errorList = append(
-					errorList,
-					&fiber.Error{
-						Code:    fiber.StatusBadRequest,
-						Message: "unable to delete image from service",
-					},
-				)
-				return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
-			}
-
-		}
-
-	}
-
-	/*
-		// Handle images upload
-		form, err := c.MultipartForm()
-		var images []image.Image
-		if err == nil {
-			formImages := form.File["images"]
-			allowedMimeTypes := []string{"jpeg", "png", "jpg"}
-			maxFileSize := "4MB"
-			fileCount := len(formImages)
-			totalSize := 0
-			maxTotalSize := 15 * 1024 * 1024 // 15MB
-
-			for _, imageFile := range formImages {
-				totalSize += int(imageFile.Size)
-			}
-
-			if totalSize > maxTotalSize {
-				errorList = append(
-					errorList,
-					&fiber.Error{
-						Code:    fiber.StatusBadRequest,
-						Message: "total size of images should not exceed 15MB",
-					},
-				)
-				return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
-			}
-
-			if fileCount > 3 || len(existingService.Images)+fileCount > 3 {
-				errorList = append(
-					errorList,
-					&fiber.Error{
-						Code:    fiber.StatusBadRequest,
-						Message: "maximum of 3 images allowed",
-					},
-				)
-				return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
-			}
-
-			for _, imageFile := range formImages {
-				if err := validator.ValidateFile(imageFile, maxFileSize, allowedMimeTypes); err != nil {
-					return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(err))
-				}
-
-				// Upload each image to S3
-				imageURL, err := bucket.UploadFile(imageFile)
-				if err != nil {
-					errorList = append(
-						errorList,
-						&fiber.Error{
-							Code:    fiber.StatusBadRequest,
-							Message: "unable to upload images to S3",
-						},
-					)
-					return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
-				}
-				images = append(images, image.Image{
-					URL:       imageURL,
-					ServiceID: existingService.ID,
-				})
-			}
-		}
-	*/
 
 	// Update the service model
 	existingService.Name = updateInput.Name

@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	notifRepo "barassage/api/repositories/notificationPreference"
 	userRepo "barassage/api/repositories/user"
 	"barassage/api/services/notification"
 	"fmt"
@@ -19,12 +20,13 @@ import (
 func HomeController(c *fiber.Ctx) error {
 	//SendNotificationMessage("service", "created")
 	//get the user from the context
-	users, err := userRepo.GetAll()
+	userNotif, err := notifRepo.GetAll()
 	if err != nil {
 		log.Fatalf("error getting user: %v", err)
 	}
-	for _, user := range users {
-		fmt.Println(user.Email)
+	for _, user := range userNotif {
+		dbUser, _ := userRepo.GetById(user.UserID)
+		fmt.Println(dbUser.Email)
 		domain := notification.PushNotification
 		resp, err := notification.Send(
 			c.Context(),
@@ -32,7 +34,7 @@ func HomeController(c *fiber.Ctx) error {
 				"title": "Welcome Home",
 				"body":  "Welcome Home",
 			},
-			&user,
+			dbUser,
 			domain,
 		)
 		if err != nil {
