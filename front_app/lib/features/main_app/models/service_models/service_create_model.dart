@@ -29,6 +29,10 @@ class ServiceCreateModel extends LocationService {
       super.postCode,
       super.country});
 
+  String toString() {
+    return "ServiceCreateModel: {latitude: $latitude, longitude: $longitude, city: $city, address: $address, categories: ${categories.toString()}, title: $title, description: $description, price: $price, illustrations: $illustrations, duration: $duration, postCode: $postCode, country: $country}";
+  }
+
   Future<FormData> toFormData() async {
     return FormData.fromMap({
       "latitude": latitude,
