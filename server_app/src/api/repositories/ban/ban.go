@@ -56,8 +56,8 @@ func Ban(id string) error {
 	return db.PgDB.Model(&ban.Ban{}).Where("id = ?", id).Update("is_banned", true).Error
 }
 
-func Delete(id string) error {
-	return db.PgDB.Unscoped().Where("id = ?", id).Delete(&ban.Ban{}).Error
+func Delete(userId string) error {
+	return db.PgDB.Unscoped().Where("user_id = ?", userId).Delete(&ban.Ban{}).Error
 }
 
 // GetErrors gets the errors
