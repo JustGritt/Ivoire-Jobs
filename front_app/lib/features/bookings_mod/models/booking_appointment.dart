@@ -69,6 +69,8 @@ class BookingAppointmentContact {
   String id;
   String firstName;
   String lastName;
+  String address;
+  String city;
   String email;
   DateTime createdAt;
 
@@ -76,6 +78,8 @@ class BookingAppointmentContact {
     required this.id,
     required this.firstName,
     required this.lastName,
+    required this.address,
+    required this.city,
     required this.email,
     required this.createdAt,
   });
@@ -85,6 +89,8 @@ class BookingAppointmentContact {
         id: json["ID"],
         firstName: json["firstName"],
         lastName: json["lastName"],
+        address: json["address"],
+        city: json["city"],
         email: json["email"],
         createdAt: DateTime.parse(json["createdAt"]),
       );
