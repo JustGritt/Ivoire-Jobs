@@ -8,7 +8,9 @@ import 'package:flutter/material.dart';
 
 class MyServiceItem extends StatelessWidget {
   final ServiceCreatedModel serviceModel;
-  const MyServiceItem({super.key, required this.serviceModel});
+  final VoidCallback? onTap;
+
+  const MyServiceItem({super.key, required this.serviceModel, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +19,7 @@ class MyServiceItem extends StatelessWidget {
 
     return CupertinoButton(
       padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 10),
-      onPressed: () {},
+      onPressed: onTap, // Call the onTap callback here
       child: SizedBox(
         height: 140,
         child: Row(
