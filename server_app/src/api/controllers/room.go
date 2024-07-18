@@ -21,9 +21,15 @@ type RoomObject struct {
 }
 
 type RoomOutput struct {
-	ID       string    `json:"id"`
-	Messages []Message `json:"messages"`
-	Count    int       `json:"count"`
+	ID             string    `json:"id"`
+	ClientID       string    `json:"client_id"`
+	ClientName     string    `json:"client_name"`
+	CreatorID      string    `json:"creator_id"`
+	CreatorName    string    `json:"creator_name"`
+	ClientProfile  string    `json:"client_profile"`
+	CreatorProfile string    `json:"creator_profile"`
+	Messages       []Message `json:"messages"`
+	Count          int       `json:"count"`
 }
 
 type Message struct {
@@ -81,6 +87,7 @@ func CreateOrGetRoom(c *fiber.Ctx) error {
 
 	// retrive the service
 	service, err := serviceRepo.GetByID(serviceID)
+	fmt.Println(service, serviceID)
 	if err != nil {
 		errorList = append(errorList, &fiber.Error{
 			Code:    fiber.StatusBadRequest,
@@ -281,6 +288,8 @@ func mapInputToRoomObject(input RoomObject) room.Room {
 func mapRoomToOutput(room room.Room) RoomOutput {
 	var messages []Message
 	var count int
+	client, _ := userRepo.GetById(room.ClientID)
+	creator, _ := userRepo.GetById(room.CreatorID)
 	//there is no message please return empty array
 	if len(room.Messages) == 0 {
 		messages = []Message{}
@@ -305,8 +314,14 @@ func mapRoomToOutput(room room.Room) RoomOutput {
 		}
 	}
 	return RoomOutput{
-		ID:       room.ID,
-		Messages: messages,
-		Count:    count,
+		ID:             room.ID,
+		ClientID:       room.ClientID,
+		CreatorID:      room.CreatorID,
+		ClientName:     client.Firstname + " " + client.Lastname,
+		CreatorName:    creator.Firstname + " " + creator.Lastname,
+		ClientProfile:  client.ProfilePicture,
+		CreatorProfile: creator.ProfilePicture,
+		Messages:       messages,
+		Count:          count,
 	}
 }
