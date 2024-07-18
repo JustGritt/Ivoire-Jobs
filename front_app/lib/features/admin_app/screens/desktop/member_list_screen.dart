@@ -27,7 +27,7 @@ class _MemberListScreenState extends State<MemberListScreen> {
 
   Future<List<Member>> fetchMembersList() async {
     final membersProvider =
-        Provider.of<MembersProvider>(context, listen: false);
+    Provider.of<MembersProvider>(context, listen: false);
     await membersProvider.getMembers();
     return membersProvider.members;
   }
@@ -78,7 +78,7 @@ class _MemberListScreenState extends State<MemberListScreen> {
                           child: Text(
                             value,
                             style:
-                                const TextStyle(fontSize: 16, color: primary),
+                            const TextStyle(fontSize: 16, color: primary),
                           ),
                         );
                       }).toList(),
@@ -112,22 +112,22 @@ class _MemberListScreenState extends State<MemberListScreen> {
                         List<Member> filteredMembers = selectedStatus == 'All'
                             ? membersProvider.members
                             : membersProvider.members
-                                .where(
-                                    (member) => member.status == selectedStatus)
-                                .toList();
+                            .where(
+                                (member) => member.status == selectedStatus)
+                            .toList();
 
                         return LayoutBuilder(
                           builder: (context, constraints) {
                             int crossAxisCount = constraints.maxWidth > 1280
                                 ? 3
                                 : constraints.maxWidth > 1024
-                                    ? 2
-                                    : 1;
+                                ? 2
+                                : 1;
                             return Padding(
                               padding: const EdgeInsets.all(10.0),
                               child: GridView.builder(
                                 gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                SliverGridDelegateWithFixedCrossAxisCount(
                                   crossAxisCount: crossAxisCount,
                                   crossAxisSpacing: 10,
                                   mainAxisSpacing: 10,
@@ -231,18 +231,18 @@ class _MemberListScreenState extends State<MemberListScreen> {
               member.status,
               style: member.status == 'member'
                   ? const TextStyle(
-                      fontSize: 16,
-                      color: Colors.green,
-                    )
+                fontSize: 16,
+                color: Colors.green,
+              )
                   : member.status == 'processing'
-                      ? const TextStyle(
-                          fontSize: 16,
-                          color: Colors.orange,
-                        )
-                      : const TextStyle(
-                          fontSize: 16,
-                          color: Colors.red,
-                        ),
+                  ? const TextStyle(
+                fontSize: 16,
+                color: Colors.orange,
+              )
+                  : const TextStyle(
+                fontSize: 16,
+                color: Colors.red,
+              ),
               overflow: TextOverflow.ellipsis,
             ),
           ],

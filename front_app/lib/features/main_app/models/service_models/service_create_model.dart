@@ -8,7 +8,7 @@ List<String> serviceCategoryToJson(List<ServiceCategory> data) {
 }
 
 class ServiceCreateModel extends LocationService {
-  final List<ServiceCategory> categories;
+  final List<String> categories;
   final String title;
   final String description;
   final double price;
@@ -41,7 +41,7 @@ class ServiceCreateModel extends LocationService {
       "country": country,
       "city": city,
       "address": address,
-      "categoryIds": serviceCategoryToJson(categories),
+      "categoryIds": categories,
       "name": title,
       "description": description,
       "duration": duration,
