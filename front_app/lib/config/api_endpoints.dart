@@ -39,6 +39,7 @@ class ApiEndpoint {
   static const updateProfile = '/auth/update-profile';
 
   // My Services Endpoints
+  static const userDetail = '${api}/user/detail/:id';
   static const myServices = '${api}/user/:id/service';
   // Services Endpoints
   static const services = '${api}/service';

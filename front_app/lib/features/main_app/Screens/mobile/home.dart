@@ -99,16 +99,6 @@ class _HomeState extends State<Home> {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(right: 16.0),
-                    child: Text(
-                      'View all',
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
                 ],
               ),
               const SizedBox(height: 16),
