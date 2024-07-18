@@ -31,7 +31,7 @@ class _LoginDesktopScreenState extends State<LoginDesktopScreen> {
     ThemeData theme = Theme.of(context);
     AppLocalizations appLocalizations = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: theme.cardColor,
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: BlocConsumer<AuthenticationBloc, AuthenticationState>(
           listener: (context, state) {
