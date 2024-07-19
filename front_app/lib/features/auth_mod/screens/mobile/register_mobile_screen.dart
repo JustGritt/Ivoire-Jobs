@@ -181,7 +181,8 @@ class _RegisterMobileScreenState extends State<RegisterMobileScreen> {
                                           color: theme.primaryColorDark,
                                           fontWeight: FontWeight.bold),
                                   recognizer: TapGestureRecognizer()
-                                    ..onTap = () => context.pop(),
+                                    ..onTap =
+                                        () => GoRouter.of(context).go('/auth/login'),
                                 )
                               ]),
                           style: theme.textTheme.displayMedium),
