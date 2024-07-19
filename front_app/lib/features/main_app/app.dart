@@ -1,4 +1,3 @@
-import 'package:barassage_app/features/auth_mod/screens/mobile/under_maintenance_screen.dart';
 import 'package:barassage_app/features/bookings_mod/screens/mobile/messages_page_screen/conversation_chat_screen.dart';
 import 'package:barassage_app/features/main_app/Screens/mobile/service_booking/service_booking_success.dart';
 import 'package:barassage_app/features/main_app/Screens/mobile/service_booking/service_booking.dart';
@@ -183,6 +182,7 @@ class App extends RouteManager {
         pageBuilder: (context, state) {
           return const MaterialPage(child: SplashMobileScreen());
         }));
+
     addRoute(GoRoute(
         path: App.serviceBookingSuccess,
         builder: (context, state) {

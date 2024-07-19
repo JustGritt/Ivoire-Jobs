@@ -25,8 +25,8 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     Firebaseapi().initNotifications();
-    HomeHelpers homeHelpers = HomeHelpers();
-    homeHelpers.listenToMaintenanceMode(context);
+    // HomeHelpers homeHelpers = HomeHelpers();
+    // homeHelpers.listenToMaintenanceMode(context);
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final myServicesProvider =

@@ -196,7 +196,6 @@ class MyServicesProvider extends ChangeNotifier {
         "latitude": position.latitude,
         "longitude": position.longitude,
       });
-      print(res.data);
       if (res.statusCode == 200) {
         _serviceModel = servicesFromJson(res.data);
         hasNoServices = _serviceModel.isEmpty;
