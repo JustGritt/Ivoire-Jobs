@@ -5,6 +5,7 @@ import (
 	"math/rand"
 
 	"barassage/api/models/category"
+	"barassage/api/models/image"
 	"barassage/api/models/member"
 	"barassage/api/models/service"
 	"barassage/api/models/user"
@@ -21,6 +22,7 @@ func SeedDatabase(db *gorm.DB) {
 	//excute raw query to insert data
 	db.Exec(`INSERT INTO configurations (key, value) VALUES ('mode_maintenance', '["false"]')`)
 	db.Exec(`INSERT INTO configurations (key, value) VALUES ('whitelist', '["10.2.2.2", "121.0.0.1"]')`)
+	db.Exec(`CREATE TYPE log_level AS ENUM ('info', 'warn', 'error')`)
 
 	// Categories
 	if err := seedCategory(db); err != nil {
@@ -36,13 +38,10 @@ func SeedDatabase(db *gorm.DB) {
 	}
 
 	// Member User With Services
-	if err := seedMemberUser(db, "John", "Wick", "john@wick.com", "password", "standard"); err != nil {
+	if err := seedMemberUserAndService(db, "John", "Wick", "john@wick.com", "password", "standard"); err != nil {
 		log.Printf("Failed to seed user: %v", err)
 	}
-	if err := seedMemberUser(db, "Jane", "Wick", "jane@wick.com", "password", "standard"); err != nil {
-		log.Printf("Failed to seed user: %v", err)
-	}
-	if err := seedMemberUser(db, "Alexis", "Doe", "alexis@doe.com", "password", "standard"); err != nil {
+	if err := seedMemberUserAndService(db, "Jane", "Wick", "jane@wick.com", "password", "standard"); err != nil {
 		log.Printf("Failed to seed user: %v", err)
 	}
 
@@ -68,6 +67,7 @@ func seedUser(db *gorm.DB, firstName, lastName, email, password, role string) er
 		Email:     email,
 		Password:  string(hashedPassword),
 		Role:      role,
+		Active:    true,
 	}
 
 	err = db.Create(&user).Error
@@ -82,7 +82,7 @@ func seedUser(db *gorm.DB, firstName, lastName, email, password, role string) er
 }
 
 // seedUser seeds a user and their services
-func seedMemberUser(db *gorm.DB, firstName, lastName, email, password, role string) error {
+func seedMemberUserAndService(db *gorm.DB, firstName, lastName, email, password, role string) error {
 	log.Printf("Seeding user %s...", email)
 
 	var existingUser user.User
@@ -153,10 +153,30 @@ func seedMemberUser(db *gorm.DB, firstName, lastName, email, password, role stri
 		return err
 	}
 
+	//Create the images for services
+
+	images := []image.Image{
+		{
+			ID:        uuid.New().String(),
+			ServiceID: uuid.New().String(),
+			URL:       "https://placekitten.com/200/300",
+		},
+		{
+			ID:        uuid.New().String(),
+			ServiceID: uuid.New().String(),
+			URL:       "https://placebear.com/640/360",
+		},
+		{
+			ID:        uuid.New().String(),
+			ServiceID: uuid.New().String(),
+			URL:       "https://placebear.com/640/380",
+		},
+	}
+
 	// Create sample services for the user
 	services := []service.Service{
 		{
-			ID:          uuid.New().String(),
+			ID:          images[0].ServiceID,
 			UserID:      existingUser.ID,
 			Name:        firstName + "'s Service " + serviceNames[0],
 			Description: "Description of " + firstName + "'s service " + serviceNames[0],
@@ -164,6 +184,7 @@ func seedMemberUser(db *gorm.DB, firstName, lastName, email, password, role stri
 			Status:      true,
 			Duration:    30,
 			IsBanned:    false,
+			Images:      images,
 			Categories:  []category.Category{categories[rand.Intn(len(categories))], categories[rand.Intn(len(categories))]},
 			City:        "Paris",
 			Country:     "France",
@@ -173,7 +194,7 @@ func seedMemberUser(db *gorm.DB, firstName, lastName, email, password, role stri
 			Longitude:   2.3522,
 		},
 		{
-			ID:          uuid.New().String(),
+			ID:          images[1].ServiceID,
 			UserID:      existingUser.ID,
 			Name:        firstName + "'s Service " + serviceNames[1],
 			Description: "This is a description for " + firstName + "'s service " + serviceNames[1],

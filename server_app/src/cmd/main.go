@@ -12,7 +12,9 @@ import (
 	"barassage/api/models/booking"
 	"barassage/api/models/category"
 	"barassage/api/models/configuration"
+	"barassage/api/models/contact"
 	im "barassage/api/models/image"
+	myLog "barassage/api/models/log"
 	"barassage/api/models/member"
 	"barassage/api/models/message"
 	"barassage/api/models/notificationPreference"
@@ -38,7 +40,8 @@ func main() {
 
 	// Drop all tables
 	//drop the many2many table first
-	db.PgDB.Migrator().DropTable(&myUser.User{},
+	db.PgDB.Migrator().DropTable(
+		&myUser.User{},
 		"service_categories",
 		&category.Category{},
 		&service.Service{},
@@ -54,16 +57,25 @@ func main() {
 		&room.Room{},
 		&message.Message{},
 		&refreshtoken.RefreshToken{},
+		&contact.Contact{},
+		&member.Member{},
+		&pushToken.PushToken{},
+		&configuration.Configuration{},
+		&notificationPreference.NotificationPreference{},
+		&room.Room{},
+		&message.Message{},
+		&refreshtoken.RefreshToken{},
+		&myLog.Log{},
 	)
 
 	// Migration
 	db.PgDB.AutoMigrate(
 		&myUser.User{},
+		&category.Category{},
 		&service.Service{},
 		&booking.Booking{},
 		&im.Image{},
 		&report.Report{},
-		&category.Category{},
 		&ban.Ban{},
 		&rating.Rating{},
 		&member.Member{},
@@ -73,6 +85,15 @@ func main() {
 		&room.Room{},
 		&message.Message{},
 		&refreshtoken.RefreshToken{},
+		&contact.Contact{},
+		&member.Member{},
+		&pushToken.PushToken{},
+		&configuration.Configuration{},
+		&notificationPreference.NotificationPreference{},
+		&room.Room{},
+		&message.Message{},
+		&refreshtoken.RefreshToken{},
+		&myLog.Log{},
 	)
 
 	// Seed the database

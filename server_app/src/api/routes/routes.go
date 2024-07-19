@@ -7,9 +7,6 @@ import (
 	"barassage/api/middlewares"
 
 	"github.com/gofiber/contrib/websocket"
-
-	_ "embed"
-
 	"github.com/gofiber/fiber/v2"
 	swagger "github.com/gofiber/swagger"
 )
