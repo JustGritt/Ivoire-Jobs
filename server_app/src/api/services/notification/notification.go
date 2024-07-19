@@ -120,7 +120,7 @@ func Send(ctx context.Context, data map[string]string, user *user.User, domain D
 			Priority: "high",
 			Notification: &messaging.AndroidNotification{
 				Title: "Barassage",
-				Body:  "You have a new notification",
+				Body:  data["Body"],
 			},
 		},
 		Tokens: tokens,
@@ -129,7 +129,7 @@ func Send(ctx context.Context, data map[string]string, user *user.User, domain D
 				Aps: &messaging.Aps{
 					Alert: &messaging.ApsAlert{
 						Title: "Barassage",
-						Body:  "You have a new notification",
+						Body:  data["Body"],
 					},
 				},
 			},

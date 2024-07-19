@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:barassage_app/features/main_app/models/service_models/service_category_model.dart';
 import 'package:barassage_app/features/main_app/models/service_models/service_created_model.dart';
+import 'package:barassage_app/features/main_app/models/service_models/user_custom_profile_model.dart';
 import 'package:barassage_app/core/helpers/utils_helper.dart';
 import 'package:barassage_app/core/classes/app_context.dart';
 import 'package:barassage_app/core/init_dependencies.dart';
@@ -61,6 +64,26 @@ class MyServicesProvider extends ChangeNotifier {
     }
   }
 
+  Future<bool> getServiceDetails(String id) async {
+    isLoading = true;
+    _safeNotifyListeners();
+    try {
+      Response res = await _http.get(ApiEndpoint.serviceDetails.replaceAll(':id', id),
+          params: {"serviceId": id});
+      if (res.statusCode == 200) {
+        _serviceModel.removeWhere((element) => element.id == id);
+        return true;
+      }
+      throw res.data['message'];
+    } catch (e) {
+      print(e);
+      showMyDialog(appContext.navigatorContext,
+          title: 'Service',
+          content: 'An error occurred while deleting service');
+      return false;
+    }
+  }
+
   Future<List<ServiceCreatedModel>> getMyServices() async {
     isLoading = true;
     _safeNotifyListeners();
@@ -86,8 +109,7 @@ class MyServicesProvider extends ChangeNotifier {
     isLoading = true;
     _safeNotifyListeners();
     try {
-      Response res = await _http.delete(
-          ApiEndpoint.serviceDetails.replaceAll(':id', id),
+      Response res = await _http.delete(ApiEndpoint.serviceDetails.replaceAll(':id', id),
           params: {"serviceId": id});
       if (res.statusCode == 200) {
         _serviceModel.removeWhere((element) => element.id == id);
@@ -131,6 +153,33 @@ class MyServicesProvider extends ChangeNotifier {
       if (e.response?.statusCode == 404) {
         _serviceModel = [];
         hasNoServices = true;
+      }
+    } catch (e) {
+      print(e);
+    } finally {
+      isLoading = false;
+      _safeNotifyListeners();
+    }
+  }
+
+  Future<void> updateMyServiceStatus(String id, String name, String description,
+      double price, bool status, int duration) async {
+    isLoading = true;
+    _safeNotifyListeners();
+    try {
+      final user = await appCache.getUser();
+      Map<String, dynamic> _data = {
+        'name': name.toString(),
+        'description': description.toString(),
+        'price': price,
+        'status': status,
+        'duration': duration
+      };
+      debugPrint('Data: ${jsonEncode(_data)}');
+      Response res = await _http.put('${ApiEndpoint.services}/$id',
+          data: jsonEncode(_data));
+      if (res.statusCode == 200) {
+        getMyServices();
       }
     } catch (e) {
       print(e);
@@ -204,6 +253,27 @@ class MyServicesProvider extends ChangeNotifier {
       print(e);
       _serviceModel = [];
       hasNoServices = true;
+    } finally {
+      isLoading = false;
+      _safeNotifyListeners();
+    }
+  }
+
+  Future<UserCustomProfile> getUserDetails(String userId) async {
+    isLoading = true;
+    _safeNotifyListeners();
+    try {
+      Response res = await _http.get(ApiEndpoint.userDetail.replaceAll(':id', userId),
+          params: {"userId": userId});
+      if (res.statusCode == 200) {
+        // Parse the user detail from the response
+        return UserCustomProfile.fromJson(res.data['body']['user']);
+      } else {
+        throw Exception('Failed to load user details');
+      }
+    } catch (e) {
+      print(e);
+      throw e;
     } finally {
       isLoading = false;
       _safeNotifyListeners();
