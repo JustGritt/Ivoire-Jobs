@@ -1,6 +1,8 @@
+import 'package:barassage_app/core/helpers/auth_helper.dart';
 import 'package:barassage_app/features/profile_mod/services/push_tokens_services.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:barassage_app/core/init_dependencies.dart';
+import 'package:flutter/material.dart';
 
 class Firebaseapi {
   final _firebaseMessaging = FirebaseMessaging.instance;
@@ -18,7 +20,16 @@ class Firebaseapi {
       } on Exception catch (e) {
         print(e);
       }
-      // FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage);
+      FirebaseMessaging.onMessageOpenedApp.listen((message) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Column(
+            children: [
+              Text(message.notification?.title ?? 'No title'),
+              Text(message.notification?.body ?? 'No description'),
+            ],
+          ),
+        ));
+      });
     }
   }
 
