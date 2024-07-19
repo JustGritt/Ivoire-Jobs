@@ -195,6 +195,10 @@ func GetRooms(c *fiber.Ctx) error {
 		roomsOutput = append(roomsOutput, mapRoomToOutput(r))
 	}
 
+	if len(roomsOutput) == 0 {
+		roomsOutput = []RoomOutput{}
+	}
+
 	return c.Status(http.StatusOK).JSON(HTTPResponse(http.StatusOK, "Rooms", roomsOutput))
 }
 

@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -12,6 +13,7 @@ import (
 	messageRepo "barassage/api/repositories/message"
 	roomRepo "barassage/api/repositories/room"
 	userRepo "barassage/api/repositories/user"
+	"barassage/api/services/notification"
 
 	"github.com/gofiber/contrib/websocket"
 	jwt "github.com/golang-jwt/jwt/v4"
@@ -173,6 +175,30 @@ func HandleWebSocket(c *websocket.Conn) {
 		if err != nil {
 			sendError(c, fmt.Sprintf("Error saving message: %v", err))
 			continue
+		}
+
+		//check if the room is full
+		if len(room.Participants) < 2 {
+			//send a push notification to the other user
+			//get the other user
+			var otherUser string
+			if dbRoom.ClientID == userID {
+				otherUser = dbRoom.CreatorID
+			} else {
+				otherUser = dbRoom.ClientID
+			}
+			message := map[string]string{
+				"Title": "New message",
+				"Body":  "You have a new message from " + msg.SenderName,
+			}
+			dbUser, _ := userRepo.GetById(otherUser)
+			domain := notification.PushNotification
+			resp, err := notification.Send(context.Background(), message, dbUser, domain)
+			if err != nil {
+				log.Printf("error sending message")
+			} else {
+				log.Printf("%d messages were sent successfully\n", resp.SuccessCount)
+			}
 		}
 
 		broadcastToRoom(room, mt, msg)
