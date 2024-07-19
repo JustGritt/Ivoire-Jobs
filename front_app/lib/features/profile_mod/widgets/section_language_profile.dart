@@ -39,21 +39,12 @@ class _SectionNotificationProfileState extends State<SectionLanguageProfile> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Language',
-              style: theme.textTheme.displayLarge?.copyWith(fontSize: 20)),
-          const SizedBox(height: 25),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  const Icon(CupertinoIcons.flag),
-                  const SizedBox(width: 20),
-                  Text(appLocalizations.profile_push_notifications,
-                      style: theme.textTheme.labelMedium),
-                ],
-              ),
+              Text('Language',
+                  style: theme.textTheme.displayLarge?.copyWith(fontSize: 20)),
+              const SizedBox(height: 25),
               Consumer<LanguageProvider>(builder: (context, provider, child) {
                 print(provider.locale);
                 return CupertinoButton(
