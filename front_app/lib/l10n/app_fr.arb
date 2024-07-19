@@ -8,6 +8,7 @@
     "welcome_back_description": "Connectez-vous à votre compte pour continuer.",
     "welcome_back_description_admin": "Connectez-vous à votre compte administrateur pour continuer.",
     "welcome_register": "Commencez par vous enregistrer !",
+    "welcome": "Bienvenue",
     "no_account_text": "Vous n'avez pas de compte ?",
     "firstname": "Prénom",
     "lastname": "Nom",
@@ -29,8 +30,16 @@
     "btn_login": "Se connecter",
     "tab_1": "Home",
     "tab_2": "Mes services",
-    "tab_3": "Bookings",
+    "tab_3": "Réservations",
     "tab_4": "Profil",
+    "Bookings": "Réservations",
+    "services_near_you": "Services à proximité",
+    "trending_services": "Services tendances",
+    "view_all": "Voir tout",
+    "my_bookings": "Mes réservations",
+    "booking_pending": "Réservation En attente",
+    "make_booking": "Éffectuer une réservation",
+    "no_booking": "Aucune réservation",
     "permission_denied_camera": "La camera n'est pas accessible. Veuillez l'activer dans les paramètres de l'appareil.",
     "permission_denied_gallery": "La galerie n'est pas accessible. Veuillez l'activer dans les paramètres de l'appareil.",
 
@@ -48,6 +57,8 @@
     "service_status_inactive": "Inactif",
 
     "service_status_deleted": "Supprimé",
+
+    "my_services": "Mes services",
 
     "service_status_suspended": "Suspendu",
 

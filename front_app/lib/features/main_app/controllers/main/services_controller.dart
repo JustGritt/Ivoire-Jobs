@@ -6,6 +6,8 @@ import 'package:barassage_app/features/main_app/Screens/desktop/about.dart'
     as desktop;
 import 'package:barassage_app/features/main_app/Screens/mobile/service.dart'
     as mobile;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class ServicesController extends StatefulController {
   final String _title = 'My services';
@@ -21,10 +23,11 @@ class _ServicesControllerState extends ControllerState<ServicesController> {
 
   @override
   Display view(BuildContext context) {
+    AppLocalizations appLocalizations = AppLocalizations.of(context)!;
     return Display(
-      title: widget._title,
+      title: appLocalizations.my_services,
       mobile: mobile.Service(
-        title: widget._title,
+        title: appLocalizations.my_services,
       ),
       tabletLandscape: tablet.About(title: widget._title),
       desktop: desktop.About(title: widget._title),
