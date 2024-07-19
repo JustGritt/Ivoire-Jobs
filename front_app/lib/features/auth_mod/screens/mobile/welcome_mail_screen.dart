@@ -64,21 +64,21 @@ class WelcomeMailScreen extends StatelessWidget {
               const SizedBox(
                 height: 24,
               ),
-              CupertinoButton(
-                  child: Text(appLocalizations.btn_go_to_mail),
-                  onPressed: () async {
-                    if (Platform.isAndroid) {
-                      AndroidIntent intent = AndroidIntent(
-                        action: 'android.intent.action.MAIN',
-                        category: 'android.intent.category.APP_EMAIL',
-                      );
-                      intent.launch().catchError((e) {
-                        print("Error opening email app: $e");
-                      });
-                    } else {
-                      openMailApp('live@admin.com');
-                    }
-                  }),
+              // CupertinoButton(
+              //     child: Text(appLocalizations.btn_go_to_mail),
+              //     onPressed: () async {
+              //       if (Platform.isAndroid) {
+              //         AndroidIntent intent = AndroidIntent(
+              //           action: 'android.intent.action.MAIN',
+              //           category: 'android.intent.category.APP_EMAIL',
+              //         );
+              //         intent.launch().catchError((e) {
+              //           print("Error opening email app: $e");
+              //         });
+              //       } else {
+              //         openMailApp('live@admin.com');
+              //       }
+              //     }),
               btn.AppButton(
                 onPressed: () {
                   GoRouter.of(context).go(AuthApp.login);
