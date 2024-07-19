@@ -1,7 +1,9 @@
 import 'package:barassage_app/core/blocs/service/service_bloc.dart';
 import 'package:barassage_app/features/main_app/app.dart';
+import 'package:barassage_app/features/main_app/providers/my_services_provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class NewServiceSuccess extends StatefulWidget {
   final CreateServiceSuccess service;
@@ -14,8 +16,11 @@ class NewServiceSuccess extends StatefulWidget {
 class _NewServiceSuccessState extends State<NewServiceSuccess> {
   @override
   void initState() {
+    final myServicesProvider =
+        Provider.of<MyServicesProvider>(context, listen: false);
     Future.delayed(const Duration(seconds: 3), () {
       context.goNamed(App.services);
+      myServicesProvider.getMyServices();
     });
     super.initState();
   }

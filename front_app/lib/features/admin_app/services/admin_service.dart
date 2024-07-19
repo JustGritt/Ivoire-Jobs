@@ -96,7 +96,6 @@ class AdminService {
 
   Future<AdminUser?> createAdminUser(AdminUser user) async {
     try {
-      print(user.toJson());
       Response res = await _http.post(
         ApiEndpoint.addAdmin,
         data: user.toJson(),

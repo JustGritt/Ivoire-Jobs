@@ -48,7 +48,9 @@ class MyServicesProvider extends ChangeNotifier {
       }
       Response res = await _http.get(ApiEndpoint.servicesCollection);
       if (res.statusCode == 200) {
-        _serviceModel = servicesFromJson(res.data);
+        _serviceModel = servicesFromJson(res.data)..sort((a, b) {
+          return b.createdAt.compareTo(a.createdAt);
+        });
         hasNoServices = _serviceModel.isEmpty;
       }
     } catch (e) {
@@ -67,7 +69,9 @@ class MyServicesProvider extends ChangeNotifier {
       Response res = await _http
           .get(ApiEndpoint.myServices.replaceAll(':id', user?.id ?? ''));
       if (res.statusCode == 200) {
-        _myServices = servicesFromJson(res.data);
+        _myServices = servicesFromJson(res.data)..sort((a, b) {
+          return b.createdAt.compareTo(a.createdAt);
+        });
       }
     } catch (e) {
       print(e);
@@ -103,7 +107,7 @@ class MyServicesProvider extends ChangeNotifier {
   }
 
   void addService(ServiceCreatedModel service) {
-    _serviceModel.add(service);
+    _myServices.add(service);
     _safeNotifyListeners();
   }
 
