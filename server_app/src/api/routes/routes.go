@@ -106,6 +106,7 @@ func SetupRoutes(app *fiber.App) {
 	// User Group
 	user := v1.Group("/user")
 	user.Get("/:id/service", middlewares.RequireLoggedIn(), ctl.GetServiceByUserId)
+	user.Get("/detail/:id", middlewares.RequireLoggedIn(), ctl.GetUserDetail)
 	user.Get("/member/status", middlewares.RequireLoggedIn(), ctl.GetUserMemberStatus)
 
 	// Member Group
