@@ -874,6 +874,39 @@ func PatchToken(c *fiber.Ctx) error {
 	return c.SendStatus(http.StatusOK)
 }
 
+// GetUserDetail Godoc
+// @Summary Get User Detail
+// @Description Get the detail of a user
+// @Tags Auth
+// @Produce json
+// @Param id path string true "User ID"
+// @Success 200 {object} Response "User detail"
+// @Failure 400 {array} ErrorResponse "Validation error or user not found"
+// @Failure 401 {array} ErrorResponse "Incorrect email or password"
+// @Failure 500 {array} ErrorResponse "Token issuing error"
+// @Router /user/detail/{id} [get]
+// @Security Bearer
+func GetUserDetail(c *fiber.Ctx) error {
+	userID := c.Params("id")
+	// Check If User Exists
+	dbUser, err := userRepo.GetById(userID)
+	if err != nil {
+		errorList = nil
+		errorList = append(
+			errorList,
+			&Response{
+				Code:    http.StatusNotFound,
+				Message: "User Doesn't Exist",
+				Data:    err.Error(),
+			},
+		)
+		return c.Status(http.StatusNotFound).JSON(HTTPErrorResponse(errorList))
+	}
+
+	// Return User and Token
+	return c.Status(http.StatusOK).JSON(HTTPResponse(http.StatusOK, "This is your profile", fiber.Map{"user": mapUserToOutPut(dbUser)}))
+}
+
 // ============================================================
 // =================== Private Methods ========================
 // ============================================================

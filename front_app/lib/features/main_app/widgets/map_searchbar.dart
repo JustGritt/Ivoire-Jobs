@@ -39,6 +39,7 @@ class MapSearchBar extends StatelessWidget {
                   border: InputBorder.none,
                   hintText: 'Your location',
                   helperStyle: TextStyle(color: Colors.grey, fontSize: 12),
+                  hintStyle: TextStyle(color: Colors.grey, fontWeight: FontWeight.normal),
                 ),
                 onSubmitted: (value) => onSearch(),
               ),
