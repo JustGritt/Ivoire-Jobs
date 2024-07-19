@@ -64,3 +64,13 @@
 - Manage Teams: see and create new admin for the app
 - Trending Section in APK
 - Notification Preference in APK (enable push notifications, etc.)
+
+#### Walid Khalqallah
+- Partie members dashboard admin
+- Approuver ou rejeter les demandes de devenir prestataire
+- Page categories sur la dashboard
+- écran booking
+- Admin logs & pagination
+- Service workflow
+- Bookings workflow
+- Bug Fix
