@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:barassage_app/core/classes/app_context.dart';
+import 'package:barassage_app/core/exceptions/dio_exceptions.dart';
 import 'package:barassage_app/core/init_dependencies.dart';
 import 'package:barassage_app/config/api_endpoints.dart';
 import 'package:barassage_app/config/app_cache.dart';
@@ -8,6 +10,7 @@ import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'dart:developer';
 
+import '../helpers/utils_helper.dart';
 
 // import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
@@ -39,6 +42,21 @@ class HttpManager {
       _dio.options.headers['Access-Control-Allow-Origin'] = '*';
       _dio.options.headers['Access-Control-Allow-Methods'] = '*';
     }
+
+    _dio.interceptors.add(InterceptorsWrapper(
+      onRequest: (options, handler) {
+        return handler.next(options);
+      },
+      onResponse: (response, handler) {
+        return handler.next(response);
+      },
+      onError: (DioError e, handler) {
+        if (DioExceptionHandler(e).title == "SERVICE_CURRENTLY_UNDER_MAINTENANCE") {
+          HandleMaintenance(serviceLocator<AppContext>().navigatorContext);
+        }
+        return handler.next(e);
+      },
+    ));
 
     if (!kIsWeb) {
       // ignore: deprecated_member_use

@@ -1,5 +1,6 @@
 import 'package:barassage_app/features/bookings_mod/blocs/messaging_chats_bloc/messaging_chats_bloc.dart';
 import 'package:barassage_app/core/blocs/authentication/authentication_bloc.dart';
+import 'package:barassage_app/features/bookings_mod/blocs/messaging_room_messages_bloc/messaging_chats_messages_bloc.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:barassage_app/core/blocs/service/service_bloc.dart';
 import 'package:barassage_app/core/classes/language_provider.dart';
@@ -46,6 +47,9 @@ void main() async {
         ),
         BlocProvider(
           create: (_) => MessagingChatsBloc(),
+        ),
+        BlocProvider(
+          create: (_) => MessagingChatsMessagesBloc(),
         ),
         BlocProvider(
           create: (_) => serviceLocator<ServiceBloc>(),

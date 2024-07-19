@@ -12,6 +12,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	jwt "github.com/golang-jwt/jwt/v4"
+	"github.com/google/uuid"
 )
 
 type RoomObject struct {
@@ -21,9 +22,16 @@ type RoomObject struct {
 }
 
 type RoomOutput struct {
-	ID       string    `json:"id"`
-	Messages []Message `json:"messages"`
-	Count    int       `json:"count"`
+	ID             string    `json:"id"`
+	ClientID       string    `json:"client_id"`
+	ClientName     string    `json:"client_name"`
+	CreatorID      string    `json:"creator_id"`
+	CreatorName    string    `json:"creator_name"`
+	ClientProfile  string    `json:"client_profile"`
+	CreatorProfile string    `json:"creator_profile"`
+	Messages       []Message `json:"messages"`
+	Count          int       `json:"count"`
+	CreatedAt      string    `json:"created_at"`
 }
 
 type Message struct {
@@ -69,7 +77,6 @@ func CreateOrGetRoom(c *fiber.Ctx) error {
 	}
 
 	//get the service id from the url
-
 	serviceID := c.Params("id")
 	if serviceID == "" {
 		errorList = append(errorList, &fiber.Error{
@@ -120,8 +127,28 @@ func CreateOrGetRoom(c *fiber.Ctx) error {
 		Message: fmt.Sprintf("Room created with ID: %s", room.ID),
 	})
 
-	roomOutput := mapRoomToOutput(*room)
-	return c.Status(http.StatusCreated).JSON(HTTPResponse(http.StatusCreated, "Room", roomOutput))
+	rooms, err := roomRepo.GetRoomsForUser(userID.(string))
+	if err != nil {
+		errorList = append(errorList, &fiber.Error{
+			Code:    fiber.StatusInternalServerError,
+			Message: "Failed to get rooms",
+		})
+		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
+	var roomsOutput RoomOutput
+	for _, r := range rooms {
+		if r.ID == room.ID {
+			roomsOutput = mapRoomToOutput(r)
+		}
+	}
+
+	//trim the room message to 5
+	if len(roomsOutput.Messages) > 5 {
+		roomsOutput.Messages = roomsOutput.Messages[len(roomsOutput.Messages)-5:]
+	}
+
+	return c.Status(http.StatusOK).JSON(HTTPResponse(http.StatusOK, "Rooms", roomsOutput))
 
 }
 
@@ -162,10 +189,12 @@ func GetRooms(c *fiber.Ctx) error {
 		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
+	fmt.Println(rooms)
 	var roomsOutput []RoomOutput
 	for _, r := range rooms {
 		roomsOutput = append(roomsOutput, mapRoomToOutput(r))
 	}
+
 	if len(roomsOutput) == 0 {
 		roomsOutput = []RoomOutput{}
 	}
@@ -257,6 +286,10 @@ func GetRoomMessages(c *fiber.Ctx) error {
 		})
 	}
 
+	if len(messagesOutput) == 0 {
+		messagesOutput = []Message{}
+	}
+
 	// Mark all messages as seen
 	for _, m := range messages {
 		if m.ReceiverID == userID {
@@ -274,6 +307,7 @@ func GetRoomMessages(c *fiber.Ctx) error {
 
 func mapInputToRoomObject(input RoomObject) room.Room {
 	return room.Room{
+		ID:        uuid.New().String(),
 		ServiceID: input.ServiceID,
 		CreatorID: input.CreatorID,
 		ClientID:  input.ClientID,
@@ -283,6 +317,8 @@ func mapInputToRoomObject(input RoomObject) room.Room {
 func mapRoomToOutput(room room.Room) RoomOutput {
 	var messages []Message
 	var count int
+	client, _ := userRepo.GetById(room.ClientID)
+	creator, _ := userRepo.GetById(room.CreatorID)
 	//there is no message please return empty array
 	if len(room.Messages) == 0 {
 		messages = []Message{}
@@ -307,8 +343,15 @@ func mapRoomToOutput(room room.Room) RoomOutput {
 		}
 	}
 	return RoomOutput{
-		ID:       room.ID,
-		Messages: messages,
-		Count:    count,
+		ID:             room.ID,
+		ClientID:       room.ClientID,
+		CreatorID:      room.CreatorID,
+		ClientName:     client.Firstname + " " + client.Lastname,
+		CreatorName:    creator.Firstname + " " + creator.Lastname,
+		ClientProfile:  client.ProfilePicture,
+		CreatorProfile: creator.ProfilePicture,
+		Messages:       messages,
+		Count:          count,
+		CreatedAt:      room.CreatedAt.Format("2006-01-02 15:04:05"),
 	}
 }

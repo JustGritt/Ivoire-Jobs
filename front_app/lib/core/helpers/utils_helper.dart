@@ -1,3 +1,4 @@
+import 'package:barassage_app/features/auth_mod/screens/mobile/under_maintenance_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
 
@@ -50,4 +51,13 @@ Future<void> showMyDialog(
       );
     },
   );
+}
+
+Future<void> HandleMaintenance(BuildContext context) {
+  return showModalBottomSheet(
+      isDismissible: false,
+      enableDrag: false,
+      isScrollControlled: true,
+      context: context,
+      builder: (ctx) => UnderMaintenanceScreen());
 }

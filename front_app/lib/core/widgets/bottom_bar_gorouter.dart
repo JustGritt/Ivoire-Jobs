@@ -92,7 +92,7 @@ class _BottomBarGoRouterState extends State<BottomBarGoRouter> {
       '/app/home/serviceBookingSuccess',
       '/app/home/bookingService',
       '/app/home/bookingService',
-      '${App.bookingServices}/${App.messagingChat}'
+      '${App.bookingServices}/${App.messages}/${App.messagingChat}'
     ];
 
 

@@ -19,8 +19,8 @@ class BookingCreatedOutput {
     return BookingCreatedOutput(
       bookingId: json['ID'] as String,
       userId: json['userID'] as String,
-      serviceId: json['serviceID'] as String,
-      status: json['status'] as String,
+      serviceId: "",
+      status: "",
       startTime: DateTime.parse(json['startTime'] as String),
       endTime: DateTime.parse(json['endTime'] as String),
     );

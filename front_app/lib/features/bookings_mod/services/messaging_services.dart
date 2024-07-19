@@ -18,7 +18,8 @@ class MessagingServices {
       Response res = await _http.get(ApiEndpoint.roomsChats);
       if (res.statusCode == 200) {
         ApiBaseModel baseModel = ApiBaseModel.fromJson(res.data);
-        List<ChatRoom> chatRooms = ChatRoom.chatRoomsFromJson(baseModel.body);
+        List<ChatRoom> chatRooms =
+            ChatRoom.chatRoomsFromJson(baseModel.body ?? []);
         print(chatRooms);
         return chatRooms;
       }

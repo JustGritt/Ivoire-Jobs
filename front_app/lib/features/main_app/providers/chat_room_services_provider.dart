@@ -1,5 +1,5 @@
-import 'package:barassage_app/features/main_app/models/service_models/booking_service_model/booking_service_created_model.dart';
-import 'package:barassage_app/features/main_app/models/service_models/booking_service_model/booking_service_create_model.dart';
+import 'package:barassage_app/core/helpers/utils_helper.dart';
+import 'package:barassage_app/features/bookings_mod/models/chats_room_model.dart';
 import 'package:barassage_app/features/main_app/services/booking_service_services.dart';
 import 'package:barassage_app/features/main_app/models/request_info_base_model.dart';
 import 'package:barassage_app/core/exceptions/dio_exceptions.dart';
@@ -8,7 +8,7 @@ import 'package:barassage_app/core/classes/app_context.dart';
 import 'package:barassage_app/core/init_dependencies.dart';
 import 'package:barassage_app/config/app_cache.dart';
 import 'package:barassage_app/config/app_http.dart';
-import 'package:barassage_app/features/payments/stripe/stripe_service.dart';
+import 'package:barassage_app/features/main_app/services/chat_room_service_services.dart';
 import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart';
 
@@ -17,20 +17,17 @@ AppContext appContext = serviceLocator<AppContext>();
 BookingServiceServices bookingServiceServices =
     serviceLocator<BookingServiceServices>();
 
-class BookingServicesProvider extends ChangeNotifier {
-  RequestInfoBaseModel<BookingServiceCreatedModel> bookingServiceRequest =
-      RequestInfoBaseModel<BookingServiceCreatedModel>();
+class ChatRoomServicesProvider extends ChangeNotifier {
+  RequestInfoBaseModel<ChatRoom> bookingServiceRequest =
+      RequestInfoBaseModel<ChatRoom>();
   final AppHttp _http = AppHttp();
 
-  Future<BookingServiceCreatedModel> createBooking(
-      BookingServiceCreateModel bookingServiceCreateModel) async {
+  Future<ChatRoom?> createRoom(String serviceId) async {
     bookingServiceRequest.isLoading = true;
     notifyListeners();
     try {
-      final booking =
-          await bookingServiceServices.create(bookingServiceCreateModel);
-      final result =
-          await StripeService.presentPaymentSheet(booking.paymentIntent);
+      ChatRoomServiceServices chatRoomServices = ChatRoomServiceServices();
+      final booking = await chatRoomServices.createOrGet(serviceId);
       bookingServiceRequest.isLoading = false;
       notifyListeners();
       return booking;
@@ -40,9 +37,13 @@ class BookingServicesProvider extends ChangeNotifier {
       if (error is DioException) {
         showError(
             appContext.navigatorContext, DioExceptionHandler(error).title);
+      } else if (error is Exception) {
+        showError(appContext.navigatorContext, error.toString());
       }
+      showMyDialog(appContext.navigatorContext,
+          content: error.toString(), title: 'Error');
       notifyListeners();
-      rethrow;
+      return null;
     }
   }
 }

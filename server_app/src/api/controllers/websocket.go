@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -11,15 +12,31 @@ import (
 	"barassage/api/models/message"
 	messageRepo "barassage/api/repositories/message"
 	roomRepo "barassage/api/repositories/room"
+	userRepo "barassage/api/repositories/user"
+	"barassage/api/services/notification"
 
 	"github.com/gofiber/contrib/websocket"
 	jwt "github.com/golang-jwt/jwt/v4"
+	"github.com/google/uuid"
 )
 
 // Room structure to manage participants
 type Room struct {
 	Participants map[string]*websocket.Conn
 	mu           sync.Mutex
+}
+
+type messagesOutput struct {
+	MessageID       string `json:"message_id"`
+	SenderID        string `json:"sender_id"`
+	SenderName      string `json:"sender_firstname"`
+	ReceiverID      string `json:"receiver_id"`
+	ReceiverName    string `json:"receiver_firstname"`
+	SenderProfile   string `json:"sender_profile"`
+	ReceiverProfile string `json:"receiver_profile"`
+	Content         string `json:"content"`
+	Seen            bool   `json:"seen"`
+	CreatedAt       string `json:"created_at"`
 }
 
 var rooms = make(map[string]*Room)
@@ -139,20 +156,52 @@ func HandleWebSocket(c *websocket.Conn) {
 	defer removeParticipantFromRoom(room, userID)
 
 	for {
-		mt, message, err := c.ReadMessage()
+		mt, messageContent, err := c.ReadMessage()
 		if err != nil {
 			log.Println("read error:", err)
 			break
 		}
 
+		//get the receiver id from the room
+		var receiverID string
+		if dbRoom.ClientID == userID {
+			receiverID = dbRoom.CreatorID
+		} else {
+			receiverID = dbRoom.ClientID
+		}
+
 		// Save the message to the database
-		err = saveMessage(roomID, userID, dbRoom.CreatorID, message)
+		msg, err := saveMessage(roomID, userID, receiverID, messageContent)
 		if err != nil {
 			sendError(c, fmt.Sprintf("Error saving message: %v", err))
 			continue
 		}
 
-		broadcastToRoom(room, userID, mt, message)
+		//check if the room is full
+		if len(room.Participants) < 2 {
+			//send a push notification to the other user
+			//get the other user
+			var otherUser string
+			if dbRoom.ClientID == userID {
+				otherUser = dbRoom.CreatorID
+			} else {
+				otherUser = dbRoom.ClientID
+			}
+			message := map[string]string{
+				"Title": "New message",
+				"Body":  "You have a new message from " + msg.SenderName,
+			}
+			dbUser, _ := userRepo.GetById(otherUser)
+			domain := notification.PushNotification
+			resp, err := notification.Send(context.Background(), message, dbUser, domain)
+			if err != nil {
+				log.Printf("error sending message")
+			} else {
+				log.Printf("%d messages were sent successfully\n", resp.SuccessCount)
+			}
+		}
+
+		broadcastToRoom(room, mt, msg)
 	}
 }
 
@@ -189,25 +238,30 @@ func removeParticipantFromRoom(room *Room, userID string) {
 	delete(room.Participants, userID)
 }
 
-func broadcastToRoom(room *Room, senderID string, messageType int, message []byte) {
+func broadcastToRoom(room *Room, messageType int, msg messagesOutput) {
 	room.mu.Lock()
 	defer room.mu.Unlock()
 
-	for userID, conn := range room.Participants {
-		if userID != senderID {
-			if err := conn.WriteMessage(messageType, message); err != nil {
-				log.Println("write error:", err)
-			}
+	msgJSON, err := json.Marshal(msg)
+	if err != nil {
+		log.Println("Error marshalling message:", err)
+		return
+	}
+
+	for _, conn := range room.Participants {
+		if err := conn.WriteMessage(messageType, msgJSON); err != nil {
+			log.Println("write error:", err)
 		}
 	}
 }
 
-func saveMessage(roomID string, senderID string, receiverID string, content []byte) error {
+func saveMessage(roomID string, senderID string, receiverID string, content []byte) (messagesOutput, error) {
 	room := getRoom(roomID)
 	room.mu.Lock()
 	defer room.mu.Unlock()
 
 	msg := message.Message{
+		ID:         uuid.New().String(),
 		RoomID:     roomID,
 		SenderID:   senderID,
 		ReceiverID: receiverID,
@@ -215,8 +269,28 @@ func saveMessage(roomID string, senderID string, receiverID string, content []by
 		Seen:       len(room.Participants) >= 2,
 	}
 
-	return messageRepo.Create(&msg)
+	err := messageRepo.Create(&msg)
+
+	//get the sender
+	senderDb, _ := userRepo.GetById(senderID)
+	reciverDb, _ := userRepo.GetById(receiverID)
+
+	messageOutput := messagesOutput{
+		MessageID:       msg.ID,
+		SenderID:        msg.SenderID,
+		SenderName:      senderDb.Firstname + " " + senderDb.Lastname,
+		SenderProfile:   senderDb.ProfilePicture,
+		ReceiverID:      msg.ReceiverID,
+		ReceiverName:    reciverDb.Firstname + " " + reciverDb.Lastname,
+		ReceiverProfile: reciverDb.ProfilePicture,
+		Content:         msg.Content,
+		CreatedAt:       msg.CreatedAt.Format("2006-01-02 15:04:05"),
+		Seen:            msg.Seen,
+	}
+
+	return messageOutput, err
 }
+
 func sendError(c *websocket.Conn, errorMsg string) {
 	errMsg := ErrorMessage{Error: errorMsg}
 	errMsgJSON, _ := json.Marshal(errMsg)

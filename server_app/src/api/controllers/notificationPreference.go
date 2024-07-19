@@ -2,6 +2,7 @@ package controllers
 
 import (
 	notificationRepo "barassage/api/repositories/notificationPreference"
+	"errors"
 
 	validator "barassage/api/common/validator"
 	"barassage/api/models/notificationPreference"
@@ -10,6 +11,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	jwt "github.com/golang-jwt/jwt/v4"
+	"gorm.io/gorm"
 )
 
 // NotificationPrefObject struct
@@ -35,14 +37,17 @@ func CreateOrUpdateNotificationPreference(c *fiber.Ctx) error {
 	var notificationPreferenceInput NotificationPrefObject
 	var errorList []*fiber.Error
 
+	// Parse and validate the input
 	if err := validator.ParseBodyAndValidate(c, &notificationPreferenceInput); err != nil {
 		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(err))
 	}
+
+	// Extract user information from JWT
 	user := c.Locals("user").(*jwt.Token)
 	claims := user.Claims.(jwt.MapClaims)
 	userID := claims["userID"]
 
-	// Validate Input
+	// Validate userID
 	if userID == nil {
 		errorList = append(
 			errorList,
@@ -51,12 +56,24 @@ func CreateOrUpdateNotificationPreference(c *fiber.Ctx) error {
 				Message: "User ID is required",
 			},
 		)
+		return c.Status(http.StatusBadRequest).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
-	//check if a preference already exists
+	// Check if a preference already exists
 	notificationPreference, err := notificationRepo.GetByUserID(userID.(string))
-	if err != nil {
-		//create a new preference
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+		errorList = append(
+			errorList,
+			&fiber.Error{
+				Code:    fiber.StatusInternalServerError,
+				Message: "Error retrieving notification preference",
+			},
+		)
+		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
+	}
+
+	// Create a new preference if none exists
+	if notificationPreference == nil {
 		notificationPreferenceInput.UserID = userID.(string)
 
 		err = notificationRepo.Create(mapInputToPreference(notificationPreferenceInput))
@@ -68,14 +85,15 @@ func CreateOrUpdateNotificationPreference(c *fiber.Ctx) error {
 					Message: "Error creating notification preference",
 				},
 			)
+			return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
 		}
-
 	} else {
-		//update the existing preference
+		// Update the existing preference
 		notificationPreference.PushNotification = notificationPreferenceInput.PushNotification
 		notificationPreference.BookingNotification = notificationPreferenceInput.BookingNotification
 		notificationPreference.MessageNotification = notificationPreferenceInput.MessageNotification
 		notificationPreference.ServiceNotification = notificationPreferenceInput.ServiceNotification
+
 		err = notificationRepo.Update(notificationPreference)
 		if err != nil {
 			errorList = append(
@@ -85,11 +103,8 @@ func CreateOrUpdateNotificationPreference(c *fiber.Ctx) error {
 					Message: "Error updating notification preference",
 				},
 			)
+			return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
 		}
-	}
-
-	if len(errorList) > 0 {
-		return c.Status(http.StatusInternalServerError).JSON(HTTPFiberErrorResponse(errorList))
 	}
 
 	return c.Status(http.StatusOK).JSON(notificationPreferenceInput)

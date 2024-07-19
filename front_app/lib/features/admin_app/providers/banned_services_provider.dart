@@ -42,7 +42,6 @@ class BannedServicesProvider extends ChangeNotifier {
         'duration': _services.firstWhere((service) => service.id == id).duration,
         'is_banned': false
       });
-      print(res.data);
       _services.removeWhere((service) => service.id == id);
       notifyListeners();
     } catch (e) {

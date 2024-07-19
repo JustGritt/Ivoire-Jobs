@@ -1,3 +1,7 @@
+import 'package:barassage_app/config/app_ws.dart';
+import 'package:barassage_app/core/blocs/authentication/authentication_bloc.dart';
+import 'package:barassage_app/features/auth_mod/models/user.dart';
+import 'package:barassage_app/features/main_app/utils/home_helpers.dart';
 import 'package:barassage_app/features/main_app/widgets/trending_services_list.dart';
 import 'package:barassage_app/features/main_app/providers/my_services_provider.dart';
 import 'package:barassage_app/features/main_app/widgets/services_entries_list.dart';
@@ -22,9 +26,12 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     Firebaseapi().initNotifications();
+    // HomeHelpers homeHelpers = HomeHelpers();
+    // homeHelpers.listenToMaintenanceMode(context);
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final myServicesProvider = Provider.of<MyServicesProvider>(context, listen: false);
+      final myServicesProvider =
+          Provider.of<MyServicesProvider>(context, listen: false);
       myServicesProvider.getAll();
       myServicesProvider.getCategories();
       myServicesProvider.getNearbyServices();
@@ -34,6 +41,8 @@ class _HomeState extends State<Home> {
   @override
   void dispose() {
     _searchController.dispose();
+    HomeHelpers homeHelpers = HomeHelpers();
+    homeHelpers.dispose();
     super.dispose();
   }
 
@@ -48,6 +57,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeProvider themeProvider = Provider.of<ThemeProvider>(context);
     return Scaffold(
       backgroundColor: Colors.grey[100],
       body: SafeArea(

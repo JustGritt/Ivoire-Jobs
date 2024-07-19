@@ -1,3 +1,4 @@
+import 'package:barassage_app/features/main_app/Screens/mobile/services_details.dart';
 import 'package:barassage_app/features/main_app/widgets/services/my_service_slidable_item.dart';
 import 'package:barassage_app/features/main_app/widgets/services/my_service_item.dart';
 import 'package:barassage_app/features/main_app/providers/my_services_provider.dart';
@@ -7,7 +8,6 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-// ignore_for_file: deprecated_member_use
 
 class Service extends StatefulWidget {
   final String? title;
@@ -19,13 +19,15 @@ class Service extends StatefulWidget {
 
 class _ServiceState extends State<Service> {
   late TextEditingController _name;
+
   @override
   void initState() {
     super.initState();
-    final myServicesProvider =
-        Provider.of<MyServicesProvider>(context, listen: false);
-    myServicesProvider.getAll();
     _name = TextEditingController(text: 'Guest');
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final myServicesProvider = Provider.of<MyServicesProvider>(context, listen: false);
+      myServicesProvider.getMyServices();
+    });
   }
 
   @override
@@ -67,18 +69,15 @@ class _ServiceState extends State<Service> {
         searchBar: SuperSearchBar(
           enabled: false,
           onChanged: (query) {
-            // Search Bar Changes
           },
           onSubmitted: (query) {
-            // On Search Bar submitted
           },
-          // Add other search bar properties as needed
         ),
       ),
       body: Consumer<MyServicesProvider>(
         builder: (_, np, __) {
           if (np.isLoading == false) {
-            if (np.services.isEmpty) {
+            if (np.myServices.isEmpty) {
               return const Center(
                 child: Text(
                   'No services found',
@@ -88,16 +87,23 @@ class _ServiceState extends State<Service> {
             return ListView.separated(
               padding: const EdgeInsets.only(top: 2, bottom: 10),
               separatorBuilder: (_, index) => const SizedBox(height: 14),
-              itemCount: np.services.length,
+              itemCount: np.myServices.length,
               itemBuilder: (_, index) {
                 return MyServiceSlidable(
                     onDelete: (handler) async {
-                      bool success =
-                          await np.deleteService(np.services[index].id);
+                      bool success = await np.deleteService(np.myServices[index].id);
                       await handler(success);
                     },
                     child: MyServiceItem(
-                      serviceModel: np.services[index],
+                      serviceModel: np.myServices[index],
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ServiceDetailPage(service: np.myServices[index]),
+                          ),
+                        );
+                      },
                     ));
               },
             );

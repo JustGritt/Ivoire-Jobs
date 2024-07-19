@@ -30,7 +30,7 @@ class _RegisterMobileScreenState extends State<RegisterMobileScreen> {
     ThemeData theme = Theme.of(context);
     AppLocalizations appLocalizations = AppLocalizations.of(context)!;
     return Scaffold(
-        backgroundColor: theme.cardColor,
+        backgroundColor: theme.scaffoldBackgroundColor,
         body: SafeArea(
           child: BlocConsumer<AuthenticationBloc, AuthenticationState>(
             listener: (context, state) {},

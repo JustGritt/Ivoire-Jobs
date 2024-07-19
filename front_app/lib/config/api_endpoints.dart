@@ -10,8 +10,9 @@ class ApiEndpoint {
   // static const baseUrl = 'http://localhost:8000';
   // static const baseUrl = 'http://10.0.2.2:8000';
   static const baseUrl = 'https://api.barassage.com';
-  //static const baseUrl = 'https://fantastic-space-doodle-w59vv7w5w7pfp9j-8000.app.github.dev';
+  // static const baseUrl = 'https://fantastic-space-doodle-w59vv7w5w7pfp9j-8000.app.github.dev';
   static const api = '${baseUrl}/api/v1';
+  static const wsApi = 'wss://api.barassage.com/api/v1';
 
   // Enqueries Endpoints
   static const enqueries = '${api}enqueries?populate=*&sort[0]=id%3Adesc';
@@ -32,7 +33,7 @@ class ApiEndpoint {
   static const adminLogin = '${api}/auth/admin-login';
   static const adminUser = '${api}/auth/admin';
   static const addAdmin = '${api}/auth/register-admin';
-  static const memberRequests = '${api}/member';
+  static const memberRoute = '${api}/member';
   static const approveMember = '${api}/member/:id/validate';
   static const adminDashboardStats = '${api}/dashboard/stats';
 
@@ -45,6 +46,8 @@ class ApiEndpoint {
   static const services = '${api}/service';
   // Services collection
   static const servicesCollection = '${api}/service/collection';
+  // Service create room
+  static const serviceRoom = '${api}/service/:id/room';
   // Services details Endpoints
   static const serviceDetails = '${api}/service/:id';
   // Services Categories Endpoints
@@ -73,6 +76,10 @@ class ApiEndpoint {
   static const bannedUsers = '${api}/ban/collection';
   // Rooms chats Endpoints
   static const roomsChats = '/room/collection';
+  // Room chat messages Endpoint
+  static const roomChatMessages = '/room/:id/messages';
+  static const roomChatMessagesWs = '$wsApi/room/:id/ws';
+  static const appMaintenanceWs = '$wsApi/appMaintenance/ws';
 
   // categories Endpoints
   static const categories = '${api}/category';

@@ -1,10 +1,24 @@
 class ChatRoom {
   String id;
+  String clientId;
+  String clientName;
+  String creatorId;
+  String creatorName;
+  String clientProfile;
+  String creatorProfile;
+  DateTime createdAt;
   List<ChatRoomMessage> messages;
   int count;
 
   ChatRoom({
     required this.id,
+    required this.clientId,
+    required this.clientName,
+    required this.creatorId,
+    required this.creatorName,
+    required this.clientProfile,
+    required this.creatorProfile,
+    required this.createdAt,
     required this.messages,
     required this.count,
   });
@@ -17,6 +31,13 @@ class ChatRoom {
 
     return ChatRoom(
       id: json['id'],
+      clientId: json['client_id'],
+      clientName: json['client_name'],
+      creatorId: json['creator_id'],
+      creatorName: json['creator_name'],
+      clientProfile: json['client_profile'],
+      creatorProfile: json['creator_profile'],
+      createdAt: DateTime.parse(json['created_at']),
       messages: messagesList,
       count: json['count'],
     );
@@ -29,6 +50,12 @@ class ChatRoom {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
+      'client_id': clientId,
+      'client_name': clientName,
+      'creator_id': creatorId,
+      'creator_name': creatorName,
+      'client_profile': clientProfile,
+      'creator_profile': creatorProfile,
       'messages': messages.map((message) => message.toJson()).toList(),
       'count': count,
     };
@@ -37,6 +64,7 @@ class ChatRoom {
 
 class ChatRoomMessage {
   String senderId;
+  String id;
   String senderFirstname;
   String receiverId;
   String receiverFirstname;
@@ -47,6 +75,7 @@ class ChatRoomMessage {
   DateTime createdAt;
 
   ChatRoomMessage({
+    required this.id,
     required this.senderId,
     required this.senderFirstname,
     required this.receiverId,
@@ -60,6 +89,7 @@ class ChatRoomMessage {
 
   factory ChatRoomMessage.fromJson(Map<String, dynamic> json) {
     return ChatRoomMessage(
+      id: json['message_id'],
       senderId: json['sender_id'],
       senderFirstname: json['sender_firstname'],
       receiverId: json['receiver_id'],
@@ -72,8 +102,13 @@ class ChatRoomMessage {
     );
   }
 
+  static List<ChatRoomMessage> chatRoomsFromJson(List<dynamic> json) {
+    return json.map((chatRoom) => ChatRoomMessage.fromJson(chatRoom)).toList();
+  }
+
   Map<String, dynamic> toJson() {
     return {
+      'message_id': id,
       'sender_id': senderId,
       'sender_firstname': senderFirstname,
       'receiver_id': receiverId,

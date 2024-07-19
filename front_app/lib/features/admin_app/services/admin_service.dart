@@ -96,7 +96,6 @@ class AdminService {
 
   Future<AdminUser?> createAdminUser(AdminUser user) async {
     try {
-      print(user.toJson());
       Response res = await _http.post(
         ApiEndpoint.addAdmin,
         data: user.toJson(),
@@ -151,7 +150,7 @@ class AdminService {
 
   Future<List<Member>> getMemberRequests() async {
     try {
-      Response res = await _http.get(ApiEndpoint.memberRequests);
+      Response res = await _http.get(ApiEndpoint.memberRoute);
       if (res.statusCode == 200) {
         List<Member> members =
             (res.data as List).map((e) => Member.fromJson(e)).toList();
@@ -161,6 +160,21 @@ class AdminService {
     } catch (e) {
       debugPrint('Error: $e');
       throw Exception('Failed to load member requests');
+    }
+  }
+
+  Future<List<Member>> getMembers() async {
+    try {
+      Response res = await _http.get('${ApiEndpoint.memberRoute}?status=all');
+      if (res.statusCode == 200) {
+        List<Member> members =
+            (res.data as List).map((e) => Member.fromJson(e)).toList();
+        return members;
+      }
+      throw Exception('Failed to load members');
+    } catch (e) {
+      debugPrint('Error: $e');
+      throw Exception('Failed to load members');
     }
   }
 

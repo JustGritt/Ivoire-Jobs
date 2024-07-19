@@ -24,10 +24,17 @@ class _ConversationsPageScreenState extends State<ConversationsPageScreen> {
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
+    int count =
+        context.watch<MessagingChatsBloc>().state is MessagingChatsLoadedState
+            ? (context.watch<MessagingChatsBloc>().state
+                    as MessagingChatsLoadedState)
+                .chats
+                .length
+            : 0;
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Text('Conversations (18)'),
+        middle: Text('Conversations ($count)'),
         previousPageTitle: 'Bookings',
         backgroundColor: AppColors.primaryBlueFair,
         border: Border(bottom: BorderSide(color: Colors.transparent)),

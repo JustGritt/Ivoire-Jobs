@@ -27,6 +27,9 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceCreateState> {
         if (e.response?.data['message']?.runtimeType == String &&
             e.response?.data['message'] != null) {
           return emit(CreateServiceFailure(e.response?.data['message']));
+        } else if (e.response?.data['errors']?.runtimeType == List) {
+          return emit(
+              CreateServiceFailure(e.response?.data['errors'][0]['msg']));
         } else {
           return emit(const CreateServiceFailure("An error occurred"));
         }

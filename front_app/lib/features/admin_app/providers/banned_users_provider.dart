@@ -38,7 +38,6 @@ class BannedUsersProvider extends ChangeNotifier {
     notifyListeners();
     try {
       Response res = await _http.delete('${ApiEndpoint.ban}/$id');
-      print(res.data);
       _users.removeWhere((user) => user.userId == id);
       notifyListeners();
     } catch (e) {
