@@ -1,7 +1,10 @@
 import 'package:barassage_app/core/helpers/extentions/string_extension.dart';
 import 'package:barassage_app/features/bookings_mod/models/booking_appointment.dart';
 import 'package:barassage_app/config/app_colors.dart';
+import 'package:barassage_app/features/main_app/app.dart';
+import 'package:barassage_app/features/main_app/models/service_models/service_created_model.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:jiffy/jiffy.dart';
 
 class BookingServiceCard extends StatefulWidget {
@@ -19,9 +22,31 @@ class _BookingServiceCardState extends State<BookingServiceCard> {
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
+    final service = widget.appointment.service;
     return GestureDetector(
       onTap: () {
-        print('he');
+        context.push(
+          '${App.home}/${App.detailService}',
+          extra: ServiceCreatedModel(
+            id: service.id,
+            userId: service.userId,
+            name: service.title,
+            description: service.description,
+            price: service.price,
+            status: true,
+            duration: service.duration,
+            isBanned: false,
+            latitude: 0.0,
+            longitude: 0.0,
+            address: '',
+            city: '',
+            postalCode: '',
+            country: '',
+            category: [''],
+            images: service.images.map((image) => image.url).toList(),
+            createdAt: service.createdAt.toIso8601String(),
+          ),
+        );
       },
       child: Container(
         clipBehavior: Clip.hardEdge,

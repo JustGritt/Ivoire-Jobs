@@ -5,6 +5,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class ConversationsPageScreen extends StatefulWidget {
   const ConversationsPageScreen({super.key});
@@ -24,6 +26,7 @@ class _ConversationsPageScreenState extends State<ConversationsPageScreen> {
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
+    AppLocalizations appLocalizations = AppLocalizations.of(context)!;
     int count =
         context.watch<MessagingChatsBloc>().state is MessagingChatsLoadedState
             ? (context.watch<MessagingChatsBloc>().state
@@ -35,7 +38,7 @@ class _ConversationsPageScreenState extends State<ConversationsPageScreen> {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: Text('Conversations ($count)'),
-        previousPageTitle: 'Bookings',
+        previousPageTitle: appLocalizations.bookings,
         backgroundColor: AppColors.primaryBlueFair,
         border: Border(bottom: BorderSide(color: Colors.transparent)),
       ),

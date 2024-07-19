@@ -7,6 +7,7 @@ import 'package:super_cupertino_navigation_bar/super_cupertino_navigation_bar.da
 import 'package:barassage_app/features/main_app/widgets/services_entries_list.dart';
 import 'package:barassage_app/features/main_app/widgets/filter_chips.dart';
 import 'package:barassage_app/core/services/firebase_api/firebaseAPI.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:barassage_app/features/main_app/Screens/mobile/map.dart';
 import 'package:barassage_app/config/config.dart';
 import 'package:provider/provider.dart';
@@ -44,11 +45,10 @@ class _HomeState extends State<Home> {
     super.dispose();
   }
 
-  
-
   @override
   Widget build(BuildContext context) {
     ThemeProvider themeProvider = Provider.of<ThemeProvider>(context);
+    AppLocalizations appLocalizations = AppLocalizations.of(context)!;
 
     return Scaffold(
       backgroundColor: Colors.grey[100],
@@ -58,7 +58,7 @@ class _HomeState extends State<Home> {
           appBar: SuperAppBar(
             title: const Text(""),
             largeTitle: SuperLargeTitle(
-              largeTitle: "Welcome",
+                largeTitle: appLocalizations.welcome,
             ),
             previousPageTitle: "",
             searchBar: SuperSearchBar(
@@ -88,10 +88,10 @@ class _HomeState extends State<Home> {
                   },
                 ),
                 const FilterChips(),
-                const Padding(
+                Padding(
                   padding: EdgeInsets.only(left: 16.0),
                   child: Text(
-                    'Trending services',
+                    appLocalizations.trending_services,
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 24,
@@ -111,13 +111,13 @@ class _HomeState extends State<Home> {
                   },
                 ),
                 const SizedBox(height: 16),
-                const Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Padding(
                       padding: EdgeInsets.only(left: 16.0),
                       child: Text(
-                        'Services near you',
+                        appLocalizations.services_near_you,
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 24,
@@ -128,7 +128,7 @@ class _HomeState extends State<Home> {
                     Padding(
                       padding: EdgeInsets.only(right: 16.0),
                       child: Text(
-                        'View all',
+                        appLocalizations.view_all,
                         style: TextStyle(
                           color: Colors.grey,
                           fontSize: 16,
