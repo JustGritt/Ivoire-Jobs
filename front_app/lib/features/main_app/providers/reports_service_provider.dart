@@ -29,7 +29,6 @@ class ReportsServiceProvider extends ChangeNotifier {
       if (token == null) {
         throw Exception("Bearer token not found in cache");
       }
-      print("Current user: ${user.id}");
       print("Submitting report for service ID: $serviceId");
 
       Response res = await _http.post(

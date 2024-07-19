@@ -35,7 +35,6 @@ class _LoginDesktopScreenState extends State<LoginDesktopScreen> {
       body: SafeArea(
         child: BlocConsumer<AuthenticationBloc, AuthenticationState>(
           listener: (context, state) {
-            print(state);
             if (state is AuthenticationSuccessState) {
               context.go(AdminApp.dashboard);
             }

@@ -42,6 +42,20 @@ class AppCache {
     return token;
   }
 
+  Future<void> setSeenOnboarding() async {
+    Cache.saveData('seen_onboarding', 'true');
+  }
+
+  Future<bool> isSeenOnboarding() async {
+    var data = await Cache.readData('seen_onboarding');
+    if (data != null) {
+      return true;
+    }
+    return false;
+  }
+
+  
+
   Future<bool> isLogin() async {
     var data = await Cache.readData('token');
     if (data != null) {

@@ -18,7 +18,7 @@ ServiceCategoryService serviceCategoryService =
     serviceLocator<ServiceCategoryService>();
 
 class StepFormCategory extends StatefulWidget {
-  final Function(List<String> selectedCategory) onEnd;
+  final Function(List<ServiceCategory> selectedCategory) onEnd;
   const StepFormCategory({super.key, required this.onEnd});
 
   @override
@@ -32,7 +32,7 @@ class _StepFormCategoryState extends State<StepFormCategory> {
 
   void validate() {
     if (selectedCategory.isNotEmpty) {
-      widget.onEnd(selectedCategory.map((e) => e.id).toList());
+      widget.onEnd(selectedCategory);
     } else {
       showMyDialog(context,
           title: 'Service category',
@@ -123,7 +123,7 @@ class _StepFormCategoryState extends State<StepFormCategory> {
           }
         }, builder: (context, state) {
           return AppButton(
-            //  isLoading: state is CreateServiceLoading,
+            isLoading: state is CreateServiceLoading,
             onPressed: validate,
             backgroundColor: theme.primaryColorDark,
             label: appLocalizations.btn_create,

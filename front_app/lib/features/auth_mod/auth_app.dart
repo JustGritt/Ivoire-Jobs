@@ -1,3 +1,4 @@
+import 'package:barassage_app/features/auth_mod/screens/mobile/onboarding_mobile_screen.dart';
 import 'package:barassage_app/features/auth_mod/screens/mobile/splash_mobile_screen.dart';
 import 'package:barassage_app/features/auth_mod/screens/mobile/welcome_mail_screen.dart';
 import 'package:barassage_app/features/auth_mod/controllers/controllers.dart';
@@ -13,7 +14,7 @@ class AuthApp extends RouteManager {
   static const String forget = '/forget';
   static const String register = '/auth/register';
   static const String splash = '/splash';
-
+  static const String onboarding = '/onboarding';
   AuthApp() {
     addRoute(GoRoute(
         path: AuthApp.login,
@@ -43,5 +44,8 @@ class AuthApp extends RouteManager {
         pageBuilder: (context, state) {
           return const CupertinoPage(child: RegisterController());
         }));
+    addRoute(GoRoute(
+        path: AuthApp.onboarding,
+        builder: (context, state) => const OnboardingMobileScreen()));
   }
 }
