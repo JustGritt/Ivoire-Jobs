@@ -8,6 +8,7 @@ import 'package:barassage_app/features/main_app/widgets/services_entries_list.da
 import 'package:barassage_app/features/main_app/widgets/home_searchbar.dart';
 import 'package:barassage_app/features/main_app/widgets/filter_chips.dart';
 import 'package:barassage_app/core/services/firebase_api/firebaseAPI.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:barassage_app/features/main_app/Screens/mobile/map.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
@@ -57,6 +58,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+  AppLocalizations appLocalizations = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: Colors.grey[100],
       body: SafeArea(
@@ -71,10 +73,10 @@ class _HomeState extends State<Home> {
                 onSearch: _performSearch,
               ),
               const FilterChips(),
-              const Padding(
+              Padding(
                 padding: EdgeInsets.only(left: 16.0),
                 child: Text(
-                  'Trending services',
+                  appLocalizations.trending_services,
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 24,
@@ -94,13 +96,13 @@ class _HomeState extends State<Home> {
                 },
               ),
               const SizedBox(height: 16),
-              const Row(
+              Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
                     padding: EdgeInsets.only(left: 16.0),
                     child: Text(
-                      'Services near you',
+                      appLocalizations.services_near_you,
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 24,

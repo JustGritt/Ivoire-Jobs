@@ -8,6 +8,7 @@
     "welcome_back_description": "Connect to your account to continue.",
     "welcome_back_admin_description": "Connect to your admin account to continue.",
     "welcome_register": "Start by registering !",
+    "welcome": "Welcome",
     "no_account_text": "Don't have an account yet ?",
     "firstname": "Firstname",
     "lastname": "Lastname",
@@ -31,6 +32,14 @@
     "tab_2": "My services",
     "tab_3": "Bookings",
     "tab_4": "Profile",
+    "bookings": "Bookings",
+    "services_near_you": "Services near you",
+    "trending_services": "Trending services",
+    "view_all": "View all",
+    "my_bookings": "My bookings",
+    "booking_pending": "Pending bookings",
+    "no_booking": "No Bookings",
+    "make_booking": "Create a booking",
     "permission_denied_camera": "The camera is not accessible. Please activate it in the camera settings.",
     "permission_denied_gallery": "Gallery is not accessible. Please activate it in the gallery settings.",
 
@@ -48,6 +57,8 @@
     "service_status_inactive": "Inactive",
 
     "service_status_deleted": "Deleted",
+
+    "my_services": "My services",
 
     "service_status_suspended": "Suspended",
 

@@ -9,6 +9,7 @@ import 'package:barassage_app/features/main_app/app.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -40,6 +41,7 @@ class _BookingsPageScreenState extends State<BookingsPageScreen> {
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
+    AppLocalizations appLocalizations = AppLocalizations.of(context)!;
     List<Widget> loadingWidgets = List.generate(
         20,
         (index) => Align(
@@ -62,7 +64,7 @@ class _BookingsPageScreenState extends State<BookingsPageScreen> {
                   border: Border(bottom: BorderSide(color: Colors.transparent)),
                   stretch: true,
                   automaticallyImplyLeading: false,
-                  largeTitle: Text('Bookings',
+                  largeTitle: Text(appLocalizations.bookings,
                       style: TextStyle(color: theme.primaryColor)),
                   trailing: CupertinoButton(
                     onPressed: () {
@@ -109,6 +111,7 @@ class _BookingsPageScreenState extends State<BookingsPageScreen> {
                   )),
               BlocBuilder<AuthenticationBloc, AuthenticationState>(
                 builder: (context, state) {
+                  AppLocalizations appLocalizations = AppLocalizations.of(context)!;
                   return (state is AuthenticationSuccessState &&
                           state.user.member == UserMemberStatusEnum.member)
                       ? SliverPersistentHeader(
@@ -124,8 +127,8 @@ class _BookingsPageScreenState extends State<BookingsPageScreen> {
                                       CupertinoSlidingSegmentedControl(
                                           groupValue: selectedIndex,
                                           children: {
-                                            0: Text('Mes bookings'),
-                                            1: Text('Bookings en attente'),
+                                            0: Text(appLocalizations.my_bookings),
+                                            1: Text(appLocalizations.booking_pending),
                                           },
                                           onValueChanged: (index) {
                                             if (index is int) {
@@ -189,6 +192,7 @@ class _BookingsPageScreenState extends State<BookingsPageScreen> {
 List<Widget> noBookingsWidget(BuildContext context) {
   ThemeData theme = Theme.of(context);
   double height = MediaQuery.of(context).size.height;
+  AppLocalizations appLocalizations = AppLocalizations.of(context)!;
   return [
     Container(
       height: height * 0.5,
@@ -202,7 +206,7 @@ List<Widget> noBookingsWidget(BuildContext context) {
               color: theme.primaryColor,
             ),
             Text(
-              'No Bookings',
+              appLocalizations.no_booking,
               style: TextStyle(
                 color: theme.primaryColor,
                 fontSize: 20,
@@ -220,7 +224,7 @@ List<Widget> noBookingsWidget(BuildContext context) {
                 context.go(App.home);
               },
               child: Text(
-                'Éffectuer une réservation',
+                appLocalizations.make_booking,
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 18,
