@@ -1166,7 +1166,7 @@ func mapServiceToOutPut(u *service.Service) *ServiceOutput {
 		Category:    categoriesNames,
 		User:        CustomUser,
 		Bookings:    customBooking,
-		CreatedAt:   u.CreatedAt.Format("2006-01-02"),
+		CreatedAt:   u.CreatedAt.Format("2006-01-02 15:04:05"),
 	}
 }
 
