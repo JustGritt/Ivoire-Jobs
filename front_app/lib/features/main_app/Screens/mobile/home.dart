@@ -57,7 +57,6 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    ThemeProvider themeProvider = Provider.of<ThemeProvider>(context);
     return Scaffold(
       backgroundColor: Colors.grey[100],
       body: SafeArea(
