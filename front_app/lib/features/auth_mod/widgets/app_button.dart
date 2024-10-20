@@ -102,7 +102,7 @@ class _AppButtonState extends State<AppButton> {
                   ),
                   child: Center(
                     child: widget.isLoading
-                        ? LoadingAnimationWidget.prograssiveDots(
+                        ? LoadingAnimationWidget.progressiveDots(
                             color: Colors.white,
                             size: 40,
                           )

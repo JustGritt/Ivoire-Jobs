@@ -38,7 +38,7 @@ class _SplashMobileScreenState extends State<SplashMobileScreen>
     ThemeData theme = Theme.of(context);
     return Scaffold(
         body: Center(
-            child: LoadingAnimationWidget.prograssiveDots(
+            child: LoadingAnimationWidget.progressiveDots(
       color: theme.primaryColor,
       size: 70,
     )));
